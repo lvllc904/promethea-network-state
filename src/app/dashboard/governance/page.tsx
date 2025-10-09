@@ -12,7 +12,7 @@ import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User, CheckCircle, XCircle, Clock, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase, useUser } from '@/firebase';
 import { collection, query, where, getDocs, doc } from 'firebase/firestore';
 import { Proposal, Vote, Citizen } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -25,12 +25,13 @@ type EnrichedProposal = Proposal & {
 
 export default function GovernancePage() {
   const firestore = useFirestore();
+  const { user } = useUser();
   const [proposals, setProposals] = useState<EnrichedProposal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const proposalsQuery = useMemoFirebase(
-    () => (firestore ? collection(firestore, 'proposals') : null),
-    [firestore]
+    () => (firestore && user ? collection(firestore, 'proposals') : null),
+    [firestore, user]
   );
   const { data: rawProposals, isLoading: proposalsLoading } =
     useCollection<Proposal>(proposalsQuery);

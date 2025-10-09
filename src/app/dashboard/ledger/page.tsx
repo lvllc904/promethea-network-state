@@ -15,16 +15,18 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase, useUser } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { UniversalValueToken } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LedgerPage() {
   const firestore = useFirestore();
+  const { user } = useUser();
+  
   const tokensQuery = useMemoFirebase(
-    () => (firestore ? collection(firestore, 'universal_value_tokens') : null),
-    [firestore]
+    () => (firestore && user ? collection(firestore, 'universal_value_tokens') : null),
+    [firestore, user]
   );
   const { data: tokens, isLoading } =
     useCollection<UniversalValueToken>(tokensQuery);

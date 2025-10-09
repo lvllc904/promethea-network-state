@@ -38,7 +38,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Dashboard() {
   const firestore = useFirestore();
-  const { user } = useUser();
+  const { user, isUserLoading: isUserLoadingAuth } = useUser();
 
   const citizenRef = useMemoFirebase(
     () => (firestore && user ? doc(firestore, 'citizens', user.uid) : null),
@@ -48,21 +48,21 @@ export default function Dashboard() {
 
   const activeProposalsQuery = useMemoFirebase(
     () =>
-      firestore
+      firestore && user
         ? query(
             collection(firestore, 'proposals'),
             where('status', '==', 'Active'),
             limit(3)
           )
         : null,
-    [firestore]
+    [firestore, user]
   );
   const { data: activeProposals, isLoading: areProposalsLoading } =
     useCollection<Proposal>(activeProposalsQuery);
 
   const assetsQuery = useMemoFirebase(
-    () => (firestore ? collection(firestore, 'real_world_assets') : null),
-    [firestore]
+    () => (firestore && user ? collection(firestore, 'real_world_assets') : null),
+    [firestore, user]
   );
   const { data: assets, isLoading: areAssetsLoading } =
     useCollection<RealWorldAsset>(assetsQuery);
@@ -75,6 +75,8 @@ export default function Dashboard() {
 
   const totalAUM =
     assets?.reduce((acc, asset) => acc + (asset.tokenIds?.length || 0), 0) || 0;
+    
+  const isLoading = isUserLoadingAuth || isCitizenLoading || areProposalsLoading || areAssetsLoading || areContributionsLoading;
 
   return (
     <div className="flex flex-col gap-8">
@@ -85,7 +87,7 @@ export default function Dashboard() {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            {isCitizenLoading ? <Skeleton className="h-8 w-20" /> : <div className="text-2xl font-bold">{citizen?.reputationScore || 0}</div>}
+            {isLoading ? <Skeleton className="h-8 w-20" /> : <div className="text-2xl font-bold">{citizen?.reputationScore || 0}</div>}
             <p className="text-xs text-muted-foreground">
               +2.1% from last month
             </p>
@@ -99,7 +101,7 @@ export default function Dashboard() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-             {isCitizenLoading ? <Skeleton className="h-8 w-28" /> : <div className="text-2xl font-bold">
+             {isLoading ? <Skeleton className="h-8 w-28" /> : <div className="text-2xl font-bold">
               {citizen?.contributionScore || 0}
             </div>}
             <p className="text-xs text-muted-foreground">
@@ -113,7 +115,7 @@ export default function Dashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-             {areAssetsLoading ? <Skeleton className="h-8 w-24" /> : <div className="text-2xl font-bold">
+             {isLoading ? <Skeleton className="h-8 w-24" /> : <div className="text-2xl font-bold">
               {totalAUM.toLocaleString()}
             </div>}
             <p className="text-xs text-muted-foreground">
@@ -129,7 +131,7 @@ export default function Dashboard() {
             <Landmark className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            {areProposalsLoading ? <Skeleton className="h-8 w-12" /> : <div className="text-2xl font-bold">+{activeProposals?.length || 0}</div>}
+            {isLoading ? <Skeleton className="h-8 w-12" /> : <div className="text-2xl font-bold">+{activeProposals?.length || 0}</div>}
             <p className="text-xs text-muted-foreground">
               Awaiting community vote
             </p>
@@ -161,7 +163,7 @@ export default function Dashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {areProposalsLoading ? (
+                {isLoading ? (
                     [...Array(3)].map((_, i) => (
                         <TableRow key={i}>
                             <TableCell><Skeleton className="h-5 w-48 mb-1" /><Skeleton className="h-4 w-32" /></TableCell>
@@ -192,7 +194,7 @@ export default function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
-             {areContributionsLoading ? (
+             {isLoading ? (
                 [...Array(2)].map((_, i) => (
                      <div key={i} className="flex items-center gap-4">
                         <Skeleton className="h-9 w-9 rounded-lg" />
