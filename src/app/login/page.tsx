@@ -102,7 +102,7 @@ export default function LoginPage() {
                 </CardContent>
                 <CardFooter className="justify-center">
                     <Button variant="link" asChild>
-                        <Link href="/">Return to Promethea</Link>
+                        <Link href="/dashboard">Return to Dashboard</Link>
                     </Button>
                 </CardFooter>
             </Card>
@@ -157,7 +157,7 @@ export default function LoginPage() {
             </CardContent>
              <CardFooter className="justify-center">
                 <Button variant="link" asChild>
-                    <Link href="/">Return to Promethea</Link>
+                    <Link href="/dashboard">Return to Dashboard</Link>
                 </Button>
             </CardFooter>
           </Card>
@@ -201,7 +201,7 @@ export default function LoginPage() {
             </CardContent>
              <CardFooter className="justify-center">
                 <Button variant="link" asChild>
-                    <Link href="/">Return to Promethea</Link>
+                    <Link href="/dashboard">Return to Dashboard</Link>
                 </Button>
             </CardFooter>
           </Card>>
