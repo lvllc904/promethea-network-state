@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@/firebase";
 
 async function handleRefine(data: RefineProposalInput) {
   "use server";
@@ -21,15 +20,13 @@ async function handleRefine(data: RefineProposalInput) {
 }
 
 export default function NewProposalPage() {
-  const { user } = useUser();
-  const canSubmit = user && !user.isAnonymous;
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-headline font-bold">Create New Proposal</h1>
-          <p className="text-muted-foreground">Draft and submit a new proposal to the Promethean DAC.</p>
+          <p className="text-muted-foreground">Draft and submit a new proposal to the Promethean DAC. All ideas are welcome and will be judged on their merit.</p>
         </div>
         <Card className="shadow-lg">
           <CardHeader>
@@ -48,10 +45,7 @@ export default function NewProposalPage() {
               <Label htmlFor="description">Full Description</Label>
               <Textarea id="description" placeholder="Provide all the details for your proposal here." className="min-h-[200px]" />
             </div>
-            <Button size="lg" disabled={!canSubmit}>Submit Proposal to DAC</Button>
-            {!canSubmit && (
-                <p className="text-xs text-center text-muted-foreground pt-2">You must have a Promethean Passport to submit a proposal.</p>
-            )}
+            <Button size="lg">Submit Proposal to DAC</Button>
           </CardContent>
         </Card>
       </div>
