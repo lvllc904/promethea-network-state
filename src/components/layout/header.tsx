@@ -12,9 +12,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { mainUser } from "@/lib/data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from 'next/image';
+import { useUser } from "@/firebase/provider";
+import { Skeleton } from "../ui/skeleton";
 
 function getPageTitle(pathname: string): string {
   const segments = pathname.split('/').filter(Boolean);
@@ -29,7 +30,9 @@ function getPageTitle(pathname: string): string {
 export function Header() {
   const pathname = usePathname();
   const title = getPageTitle(pathname);
-  const userAvatar = PlaceHolderImages.find(p => p.id === mainUser.avatarUrl);
+  const { user, isUserLoading } = useUser();
+
+  const userAvatar = user ? PlaceHolderImages.find(p => p.id === `user${user.uid}`) : null;
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -39,14 +42,19 @@ export function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
-              <Avatar>
-                {userAvatar && <Image src={userAvatar.imageUrl} alt={mainUser.name} width={36} height={36} data-ai-hint={userAvatar.imageHint} />}
-                <AvatarFallback>{mainUser.name.charAt(0)}</AvatarFallback>
-              </Avatar>
+              {isUserLoading ? (
+                <Skeleton className="h-full w-full rounded-full" />
+              ) : (
+                <Avatar>
+                  {userAvatar && user && <Image src={userAvatar.imageUrl} alt={user.uid} width={36} height={36} data-ai-hint={userAvatar.imageHint} />}
+                  <AvatarFallback>{user ? user.email?.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
+                </Avatar>
+              )}
+
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>{user ? user.email : "My Account"}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Support</DropdownMenuItem>
