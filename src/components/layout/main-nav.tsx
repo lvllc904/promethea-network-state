@@ -56,7 +56,7 @@ export function MainNav() {
             <span className="text-lg font-headline font-semibold">Promethea</span>
         </Link>
       </SidebarHeader>
-      <SidebarContent className="p-2">
+      <SidebarContent className="p-2 justify-center">
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.href}>
