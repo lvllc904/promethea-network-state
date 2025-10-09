@@ -36,7 +36,7 @@ export function MainNav() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader className="flex-grow-0">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +73,7 @@ export function MainNav() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="p-2">
+      <SidebarFooter className="p-2 flex-grow-0">
          <SidebarMenu>
             <SidebarMenuItem>
                 <SidebarMenuButton tooltip={{ children: "Settings" }}>
