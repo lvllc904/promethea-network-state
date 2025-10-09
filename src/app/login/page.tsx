@@ -7,6 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,6 +23,10 @@ import { useToast } from '@/hooks/use-toast';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { createCitizenProfile } from '@/firebase/non-blocking-updates';
 import { doc } from 'firebase/firestore';
+import { Progress } from '@/components/ui/progress';
+import { ArrowLeft, ArrowRight, KeyRound, ShieldCheck, UserCheck, Wallet } from 'lucide-react';
+
+const TOTAL_SIGNUP_STEPS = 4;
 
 export default function LoginPage() {
   const auth = useAuth();
@@ -34,24 +39,31 @@ export default function LoginPage() {
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [isSigningUp, setIsSigningUp] = useState(false);
+  
+  const [signupStep, setSignupStep] = useState(1);
+  const progress = (signupStep / TOTAL_SIGNUP_STEPS) * 100;
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!auth) return;
     initiateEmailSignIn(auth, loginEmail, loginPassword);
   };
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!auth) return;
     setIsSigningUp(true); // Flag that the next auth change is from a signup
     initiateEmailSignUp(auth, signupEmail, signupPassword);
   };
+
+  const handleNextStep = () => setSignupStep(prev => Math.min(prev + 1, TOTAL_SIGNUP_STEPS));
+  const handlePrevStep = () => setSignupStep(prev => Math.max(prev - 1, 1));
 
   useEffect(() => {
     if (!auth || !firestore) return;
 
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       if (user && !user.isAnonymous) {
-        // If this auth change was triggered by our signup form
         if (isSigningUp) {
           const citizenRef = doc(firestore, 'citizens', user.uid);
           const newCitizen = {
@@ -63,7 +75,7 @@ export default function LoginPage() {
             skills: ['Founding Member'],
           };
           createCitizenProfile(citizenRef, newCitizen);
-          setIsSigningUp(false); // Reset the flag
+          setIsSigningUp(false);
           toast({
             title: 'Welcome to Promethea!',
             description: 'Your Passport has been created.',
@@ -81,6 +93,83 @@ export default function LoginPage() {
     return () => unsubscribe();
   }, [auth, firestore, router, toast, isSigningUp]);
 
+
+  const renderSignupStep = () => {
+    switch(signupStep) {
+        case 1:
+            return (
+                <CardContent className="text-center">
+                    <div className="flex justify-center mb-4">
+                        <div className="p-4 rounded-full bg-primary/10">
+                            <UserCheck className="w-10 h-10 text-primary" />
+                        </div>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">The Promethean Passport</h3>
+                    <p className="text-muted-foreground">You are about to create a Self-Sovereign Identity. This is more than a login; it's your verified, portable identity for the new digital economy. You will own and control it, always.</p>
+                </CardContent>
+            );
+        case 2:
+            return (
+                <CardContent className="text-center">
+                    <div className="flex justify-center mb-4">
+                        <div className="p-4 rounded-full bg-primary/10">
+                            <Wallet className="w-10 h-10 text-primary" />
+                        </div>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">The Bridge to Web3</h3>
+                    <p className="text-muted-foreground">Today, you'll create a secure account with an email and password. In the future, this will be upgraded to a crypto wallet (like MetaMask). This ensures your identity is truly yours, secured by a blockchain, not by us.</p>
+                </CardContent>
+            );
+        case 3:
+            return (
+                 <CardContent className="text-center">
+                    <div className="flex justify-center mb-4">
+                        <div className="p-4 rounded-full bg-primary/10">
+                            <ShieldCheck className="w-10 h-10 text-primary" />
+                        </div>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">Your Data, Your Property</h3>
+                    <p className="text-muted-foreground">Your personal data will be stored decentrally on your own terms. You'll be able to explicitly consent to—and be paid for—any use of your data, turning it from a liability into an asset you control.</p>
+                </CardContent>
+            );
+        case 4:
+            return (
+                <CardContent>
+                    <div className="flex justify-center mb-4">
+                        <div className="p-4 rounded-full bg-primary/10">
+                            <KeyRound className="w-10 h-10 text-primary" />
+                        </div>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2 text-center">Create Your Account</h3>
+                    <form onSubmit={handleSignup} className="space-y-4">
+                        <div className="space-y-2">
+                        <Label htmlFor="signup-email">Email</Label>
+                        <Input
+                            id="signup-email"
+                            type="email"
+                            placeholder="citizen@promethea.network"
+                            required
+                            value={signupEmail}
+                            onChange={(e) => setSignupEmail(e.target.value)}
+                        />
+                        </div>
+                        <div className="space-y-2">
+                        <Label htmlFor="signup-password">Password</Label>
+                        <Input
+                            id="signup-password"
+                            type="password"
+                            required
+                            value={signupPassword}
+                            onChange={(e) => setSignupPassword(e.target.value)}
+                        />
+                        </div>
+                    </form>
+                </CardContent>
+            );
+        default:
+            return null;
+    }
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-muted/40">
@@ -130,39 +219,31 @@ export default function LoginPage() {
         <TabsContent value="signup">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline text-2xl">Sign Up</CardTitle>
+              <CardTitle className="font-headline text-2xl">Create Your Passport</CardTitle>
               <CardDescription>
-                Create your Promethean Passport to join the Network State.
+                Join the Promethea Network State by creating your Self-Sovereign Identity.
               </CardDescription>
+              <Progress value={progress} className="mt-2" />
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSignup} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="citizen@promethea.network"
-                    required
-                    value={signupEmail}
-                    onChange={(e) => setSignupEmail(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    required
-                    value={signupPassword}
-                    onChange={(e) => setSignupPassword(e.target.value)}
-                  />
-                </div>
-                <Button type="submit" className="w-full">
-                  Create Passport
+            
+            {renderSignupStep()}
+
+            <CardFooter className="flex justify-between">
+                <Button variant="outline" onClick={handlePrevStep} disabled={signupStep === 1}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back
                 </Button>
-              </form>
-            </CardContent>
+                {signupStep < TOTAL_SIGNUP_STEPS ? (
+                    <Button onClick={handleNextStep}>
+                        Next
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                ) : (
+                    <Button onClick={handleSignup} type="submit">
+                        Create Passport
+                    </Button>
+                )}
+            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
