@@ -1,6 +1,6 @@
 
 'use client';
-import { notFound, useRouter } from 'next/navigation';
+import { notFound, useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import {
@@ -51,6 +51,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
   const firestore = useFirestore();
   const { user } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
 
   const assetRef = useMemoFirebase(
     () => (firestore ? doc(firestore, 'real_world_assets', params.id) : null),
@@ -76,7 +77,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
       // In a real implementation, this would trigger the application logic.
       console.log("User is authenticated, proceeding with action.");
     } else {
-      router.push('/login');
+      router.push(`/login?redirect=${pathname}`);
     }
   };
 

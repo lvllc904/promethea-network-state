@@ -1,6 +1,6 @@
 
 'use client';
-import { notFound, useRouter } from 'next/navigation';
+import { notFound, useRouter, usePathname } from 'next/navigation';
 import {
   Card,
   CardHeader,
@@ -30,6 +30,7 @@ export default function ProposalDetailPage({
   const firestore = useFirestore();
   const { user } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
   const [votes, setVotes] = useState<Vote[]>([]);
   const [proposer, setProposer] = useState<Citizen | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,7 +78,7 @@ export default function ProposalDetailPage({
       // In a real implementation, this would trigger the voting logic.
       console.log("User is authenticated, proceeding with action.");
     } else {
-      router.push('/login');
+      router.push(`/login?redirect=${pathname}`);
     }
   };
 

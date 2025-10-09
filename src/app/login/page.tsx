@@ -1,6 +1,7 @@
 
 'use client';
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -32,6 +33,8 @@ export default function LoginPage() {
   const auth = useAuth();
   const firestore = useFirestore();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect') || '/dashboard';
   const { toast } = useToast();
 
   const [loginEmail, setLoginEmail] = useState('');
@@ -55,7 +58,6 @@ export default function LoginPage() {
     e.preventDefault();
     if (!auth || !firestore) return;
     setIsSigningUp(true);
-    // This function will now only be responsible for calling firebase
     initiateEmailSignUp(auth, signupEmail, signupPassword);
   };
 
@@ -67,14 +69,12 @@ export default function LoginPage() {
 
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
         if (user && !user.isAnonymous) {
-            // This is the key change. We check if `isSigningUp` flag is true,
-            // which means this auth change came from our sign-up form.
             if (isSigningUp) {
                 const citizenRef = doc(firestore, 'citizens', user.uid);
                 const newCitizen = {
                     id: user.uid,
                     decentralizedId: `did:prmth:${user.uid}`,
-                    reputationScore: 100, // Starting reputation
+                    reputationScore: 100,
                     contributionScore: 0,
                     personhoodScore: 1,
                     skills: ['Founding Member'],
@@ -86,22 +86,19 @@ export default function LoginPage() {
                     description: 'Your Passport has been created. You can now access all features.',
                 });
                 setIsSignupComplete(true);
-                // We no longer redirect here. The UI will update to show completion.
             } else {
-                 // This is a standard login
                  toast({
                     title: 'Login Successful!',
                     description: 'Welcome back.',
                   });
-                  router.push('/dashboard');
+                  router.push(redirectUrl);
             }
-            // Reset the flag
             setIsSigningUp(false);
         }
     });
 
     return () => unsubscribe();
-  }, [auth, firestore, router, toast, isSigningUp]);
+  }, [auth, firestore, router, toast, isSigningUp, redirectUrl]);
 
 
   const renderSignupStep = () => {
@@ -115,7 +112,7 @@ export default function LoginPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Passport Created!</h3>
                 <p className="text-muted-foreground mb-4">You are now a citizen of Promethea. Welcome to the network state.</p>
-                <Button onClick={() => router.push('/dashboard')}>Go to Dashboard</Button>
+                <Button onClick={() => router.push(redirectUrl)}>Continue</Button>
             </CardContent>
         );
     }
