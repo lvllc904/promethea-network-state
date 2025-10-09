@@ -20,8 +20,9 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
-export default function LoginPage() {
+function LoginPageContent() {
   const auth = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -202,3 +203,13 @@ export default function LoginPage() {
     </div>
   );
 }
+
+
+export default function LoginPage() {
+  return (
+    <FirebaseClientProvider>
+      <LoginPageContent />
+    </FirebaseClientProvider>
+  );
+}
+
