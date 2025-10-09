@@ -38,7 +38,7 @@ export function MainNav() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2" prefetch={false}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -55,7 +55,7 @@ export function MainNav() {
                 <path d="M12 2.5v19" />
             </svg>
             <span className="text-lg font-headline font-semibold">Promethea</span>
-        </div>
+        </Link>
       </SidebarHeader>
       <SidebarContent className="p-2">
         <SidebarMenu>
