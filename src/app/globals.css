@@ -89,20 +89,19 @@ body {
     counter-reset: section;
   }
   .prose-numbered .prose-section {
-    counter-increment: section;
-    counter-reset: paragraph;
+    counter-reset: sentence;
   }
   .prose-numbered .prose-section p {
     text-indent: 2em;
-    position: relative;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
   }
-  .prose-numbered .prose-section p::before {
-    counter-increment: paragraph;
-    content: counter(section) ':' counter(paragraph);
+  .prose-numbered .prose-section .sentence {
+    position: relative;
+  }
+  .prose-numbered .prose-section .sentence::before {
+    counter-increment: sentence;
+    content: attr(data-section-number) '.' counter(sentence);
     position: absolute;
-    left: -3.5rem;
+    left: -4.5rem;
     top: 0;
     font-size: 0.75rem;
     line-height: 1.75;
