@@ -29,7 +29,7 @@ export default function LandingPage() {
           <span className="sr-only">Promethea</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link href="/dashboard" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
+          <Link href="/whitepaper" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
             Whitepaper
           </Link>
           <Link href="/dashboard/governance" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
@@ -71,7 +71,7 @@ export default function LandingPage() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="bg-transparent text-white border-white hover:bg-white hover:text-black">
-                  <Link href="#">Read the Whitepaper</Link>
+                  <Link href="/whitepaper">Read the Whitepaper</Link>
                 </Button>
               </div>
             </div>
