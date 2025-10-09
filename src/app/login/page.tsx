@@ -85,32 +85,6 @@ export default function LoginPage() {
     }
   };
 
-  if (!auth) {
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-muted/40">
-            <Card className="w-full max-w-md">
-                 <CardHeader>
-                    <CardTitle className="font-headline text-2xl">Auth Unavailable</CardTitle>
-                 </CardHeader>
-                <CardContent>
-                    <Alert variant="destructive" className="max-w-md">
-                        <AlertTitle>Authentication Service Unavailable</AlertTitle>
-                        <AlertDescription>
-                            The Firebase authentication service is not connected. Login and Sign-up are currently disabled.
-                        </AlertDescription>
-                    </Alert>
-                </CardContent>
-                <CardFooter className="justify-center">
-                    <Button variant="link" asChild>
-                        <Link href="/">Return to Promethea</Link>
-                    </Button>
-                </CardFooter>
-            </Card>
-        </div>
-    )
-  }
-
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-muted/40">
       <Tabs defaultValue="login" className="w-full max-w-md">
@@ -127,38 +101,47 @@ export default function LoginPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
-                  <Input
-                    id="login-email"
-                    type="email"
-                    placeholder="citizen@promethea.network"
-                    required
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    required
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={isLoggingIn}>
-                  {isLoggingIn ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  Login
-                </Button>
-              </form>
+              {!auth ? (
+                <Alert variant="destructive">
+                  <AlertTitle>Authentication Service Unavailable</AlertTitle>
+                  <AlertDescription>
+                    Login and Sign-up are currently disabled.
+                  </AlertDescription>
+                </Alert>
+              ) : (
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="login-email">Email</Label>
+                    <Input
+                      id="login-email"
+                      type="email"
+                      placeholder="citizen@promethea.network"
+                      required
+                      value={loginEmail}
+                      onChange={(e) => setLoginEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="login-password">Password</Label>
+                    <Input
+                      id="login-password"
+                      type="password"
+                      required
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                    {isLoggingIn ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                    Login
+                  </Button>
+                </form>
+              )}
             </CardContent>
-             <CardFooter className="justify-center">
-                <Button variant="link" asChild>
-                    <Link href="/dashboard">Return to Dashboard</Link>
-                </Button>
+            <CardFooter className="justify-center">
+              <Button variant="link" asChild>
+                <Link href="/">Return to Promethea</Link>
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -171,40 +154,49 @@ export default function LoginPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSignup} className="space-y-4">
-                <div className="space-y-2">
-                <Label htmlFor="signup-email">Email</Label>
-                <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="citizen@promethea.network"
-                    required
-                    value={signupEmail}
-                    onChange={(e) => setSignupEmail(e.target.value)}
-                />
-                </div>
-                <div className="space-y-2">
-                <Label htmlFor="signup-password">Password</Label>
-                <Input
-                    id="signup-password"
-                    type="password"
-                    required
-                    value={signupPassword}
-                    onChange={(e) => setSignupPassword(e.target.value)}
-                />
-                </div>
-                 <Button type="submit" className="w-full" disabled={isSigningUp}>
-                    {isSigningUp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                    Create Passport
-                </Button>
-              </form>
+              {!auth ? (
+                  <Alert variant="destructive">
+                    <AlertTitle>Authentication Service Unavailable</AlertTitle>
+                    <AlertDescription>
+                      Login and Sign-up are currently disabled.
+                    </AlertDescription>
+                  </Alert>
+              ) : (
+                <form onSubmit={handleSignup} className="space-y-4">
+                  <div className="space-y-2">
+                  <Label htmlFor="signup-email">Email</Label>
+                  <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="citizen@promethea.network"
+                      required
+                      value={signupEmail}
+                      onChange={(e) => setSignupEmail(e.target.value)}
+                  />
+                  </div>
+                  <div className="space-y-2">
+                  <Label htmlFor="signup-password">Password</Label>
+                  <Input
+                      id="signup-password"
+                      type="password"
+                      required
+                      value={signupPassword}
+                      onChange={(e) => setSignupPassword(e.target.value)}
+                  />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isSigningUp}>
+                      {isSigningUp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                      Create Passport
+                  </Button>
+                </form>
+              )}
             </CardContent>
-             <CardFooter className="justify-center">
-                <Button variant="link" asChild>
-                    <Link href="/dashboard">Return to Dashboard</Link>
-                </Button>
+            <CardFooter className="justify-center">
+              <Button variant="link" asChild>
+                  <Link href="/">Return to Promethea</Link>
+              </Button>
             </CardFooter>
-          </Card>>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
