@@ -16,8 +16,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from 'next/image';
-import { useUser } from "@/firebase/provider";
 import { Skeleton } from "../ui/skeleton";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 
 function getPageTitle(pathname: string): string {
   const segments = pathname.split('/').filter(Boolean);
@@ -32,11 +32,16 @@ function getPageTitle(pathname: string): string {
 export function Header() {
   const pathname = usePathname();
   const title = getPageTitle(pathname);
-  const { user, isUserLoading } = useUser();
+  const { isAuthenticated, isAuthStatusLoading } = useAuthStatus();
 
-  const userAvatar = user ? PlaceHolderImages.find(p => p.id === `user${user.uid}`) : null;
+  // In this decoupled system, we don't have direct access to user details here.
+  // We'll show a generic authenticated state. A real implementation might
+  // fetch user details via a separate API call if needed.
+  const userEmail = "citizen@promethea.network"; 
+  const userAvatar = PlaceHolderImages.find(p => p.id === `user1`);
 
-  if (isUserLoading) {
+
+  if (isAuthStatusLoading) {
     return (
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
             <SidebarTrigger className="md:hidden" />
@@ -53,18 +58,18 @@ export function Header() {
       <SidebarTrigger className="md:hidden" />
       <h1 className="text-2xl font-headline font-semibold">{title}</h1>
       <div className="ml-auto flex items-center gap-4">
-       {user ? (
+       {isAuthenticated ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
                 <Avatar>
-                  {userAvatar && !user.isAnonymous && <Image src={userAvatar.imageUrl} alt={user.uid} width={36} height={36} data-ai-hint={userAvatar.imageHint} />}
-                  <AvatarFallback>{user.isAnonymous ? 'A' : user.email?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+                  {userAvatar && <Image src={userAvatar.imageUrl} alt={"user avatar"} width={36} height={36} data-ai-hint={userAvatar.imageHint} />}
+                  <AvatarFallback>{userEmail?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>{user.isAnonymous ? "Anonymous User" : user.email}</DropdownMenuLabel>
+              <DropdownMenuLabel>{userEmail}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>

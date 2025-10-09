@@ -4,7 +4,7 @@
 import { Header } from "@/components/layout/header";
 import { MainNav } from "@/components/layout/main-nav";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { useUser } from "@/firebase";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function DashboardSkeleton() {
@@ -30,7 +30,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isUserLoading } = useUser();
+  const { isAuthStatusLoading } = useAuthStatus();
 
   return (
     <SidebarProvider>
@@ -40,8 +40,7 @@ export default function DashboardLayout({
             <SidebarInset>
                 <Header />
                 <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 pt-16">
-                    {/* With auth disconnected, we never show the skeleton */}
-                    {children}
+                    {isAuthStatusLoading ? <DashboardSkeleton /> : children}
                 </main>
             </SidebarInset>
         </div>
