@@ -5,6 +5,7 @@ const Section = ({ children }: { children: React.ReactNode }) => (
   <div className="prose-section">{children}</div>
 );
 
+let sectionCounter = 0;
 let sentenceCounter = 0;
 const P = ({ children }: { children: React.ReactNode }) => {
   if (typeof children !== 'string') {
@@ -16,8 +17,8 @@ const P = ({ children }: { children: React.ReactNode }) => {
       {sentences.map((sentence, index) => {
         sentenceCounter++;
         return (
-          <span key={index} data-sentence-number={sentenceCounter} className="sentence">
-            {sentence}
+          <span key={index} data-section-number={sectionCounter} className="sentence">
+            {sentence.trim()}{' '}
           </span>
         );
       })}
@@ -28,7 +29,7 @@ const P = ({ children }: { children: React.ReactNode }) => {
 
 export function WhitepaperContent() {
   sentenceCounter = 0; // Reset for each render
-  let sectionCounter = 0;
+  sectionCounter = 0;
   const startSection = () => {
     sectionCounter++;
     sentenceCounter = 0;
