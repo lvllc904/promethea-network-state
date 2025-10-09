@@ -17,9 +17,12 @@ const P = ({ children }: { children: React.ReactNode }) => {
       {sentences.map((sentence, index) => {
         sentenceCounter++;
         return (
-          <span key={index} data-section-number={sectionCounter} className="sentence">
-            {sentence.trim()}{' '}
-          </span>
+          <React.Fragment key={index}>
+            {' '}
+            <span data-section-number={sectionCounter} className="sentence">
+              {sentence.trim()}
+            </span>
+          </React.Fragment>
         );
       })}
     </p>
