@@ -82,7 +82,7 @@ export function Header() {
           </DropdownMenu>
        ) : (
           <Button asChild>
-            <Link href="/#/auth">Login</Link>
+            <Link href="/login">Login</Link>
           </Button>
        )}
       </div>

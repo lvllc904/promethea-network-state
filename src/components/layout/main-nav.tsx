@@ -100,7 +100,7 @@ export function MainNav() {
                         <span>Logout</span>
                     </SidebarMenuButton>
                 ) : (
-                    <Link href="/#/auth">
+                    <Link href="/login">
                         <SidebarMenuButton tooltip={{ children: "Login" }}>
                             <LogIn />
                             <span>Login</span>

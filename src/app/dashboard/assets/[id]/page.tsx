@@ -77,7 +77,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
       // In a real implementation, this would trigger the application logic.
       console.log("User is authenticated, proceeding with action.");
     } else {
-      router.push(`/#/auth?redirect=${pathname}`);
+      router.push(`/login?redirect=${pathname}`);
     }
   };
 
