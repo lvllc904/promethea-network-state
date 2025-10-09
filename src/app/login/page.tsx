@@ -17,6 +17,7 @@ import { useAuth } from '@/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function LoginPage() {
   const auth = useAuth();
@@ -85,6 +86,20 @@ export default function LoginPage() {
         setIsSigningUp(false);
     });
   };
+
+  if (!auth) {
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-muted/40">
+            <Alert variant="destructive" className="max-w-md">
+                <AlertTitle>Authentication Service Unavailable</AlertTitle>
+                <AlertDescription>
+                    The Firebase authentication service is not connected. Login and Sign-up are currently disabled.
+                </AlertDescription>
+            </Alert>
+        </div>
+    )
+  }
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-muted/40">
