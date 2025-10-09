@@ -10,8 +10,8 @@ export default function WhitepaperPage() {
             Promethea: A White Paper &amp; Roadmap to a Network State and the New World…
           </CardTitle>
             <div className="text-center text-muted-foreground pt-4">
-                <p>Written by; Joshua Wicke</p>
-                <p>In partnership with; Gemini AI</p>
+                <p>Joshua Wicke</p>
+                <p>In partnership with Gemini AI</p>
                 <p>Version: 12.777 (Final Draft)</p>
                 <p>Date: October 8, 2025</p>
                 <p>Status: Live Document</p>
