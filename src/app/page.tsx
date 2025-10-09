@@ -1,9 +1,12 @@
 
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ArrowRight } from 'lucide-react';
+import { AuthStatusIndicator } from '@/components/layout/AuthStatusIndicator';
 
 export default function LandingPage() {
   const heroImage = PlaceHolderImages.find((img) => img.id === 'hero');
@@ -29,7 +32,10 @@ export default function LandingPage() {
           </svg>
           <span className="sr-only">Promethea</span>
         </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
+        <div className="mx-auto">
+          <AuthStatusIndicator />
+        </div>
+        <nav className="ml-auto flex items-center gap-4 sm:gap-6">
           <Link href="/whitepaper" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
             Whitepaper
           </Link>
