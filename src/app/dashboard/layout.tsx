@@ -37,10 +37,10 @@ export default function DashboardLayout({
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
         <MainNav />
         <div className="flex flex-col sm:pl-14">
-            <Header />
-            <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-6 md:gap-8">
+          <Header />
+          <main className="flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-8">
                 {isAuthStatusLoading ? <DashboardSkeleton /> : children}
-            </main>
+          </main>
         </div>
       </div>
     </SidebarProvider>
