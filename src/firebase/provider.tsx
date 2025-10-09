@@ -82,15 +82,15 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       auth,
       async (firebaseUser) => {
         if (firebaseUser) {
-          // Whenever auth state changes, write to localStorage
           if (firebaseUser.isAnonymous) {
+            // For anonymous users, no profile setup is needed. Set status immediately.
             window.localStorage.setItem('authStatus', 'anonymous');
-          } else {
-            window.localStorage.setItem('authStatus', 'authenticated');
+            setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
+            return;
           }
 
+          // For non-anonymous users, proceed with profile check and creation.
           try {
-            // Check if this is a new user by seeing if a citizen profile exists
             const citizenRef = doc(firestore, 'citizens', firebaseUser.uid);
             const citizenSnap = await getDoc(citizenRef);
 
@@ -104,10 +104,14 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
                 personhoodScore: 1,
                 skills: ['Founding Member'],
               };
-              // IMPORTANT: Await profile creation before setting user state
+              // Await profile creation before setting user state AND localStorage.
               await createCitizenProfile(citizenRef, newCitizen);
             }
-            // Set user and set loading to false AFTER all setup is complete
+            
+            // THE FIX: Only set 'authenticated' status AFTER all setup is complete.
+            window.localStorage.setItem('authStatus', 'authenticated');
+
+            // Set user and set loading to false AFTER all setup is complete.
             setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
 
           } catch (e: any) {
@@ -115,7 +119,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
             setUserAuthState({ user: null, isUserLoading: false, userError: e });
           }
         } else {
-          // No user is signed in, so sign them in anonymously
+          // No user is signed in, so sign them in anonymously.
           window.localStorage.setItem('authStatus', 'anonymous');
           // The onAuthStateChanged will fire again once the anonymous user is created.
           signInAnonymously(auth).catch((error) => {
