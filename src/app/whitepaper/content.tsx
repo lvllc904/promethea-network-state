@@ -19,7 +19,7 @@ const P = ({ children }: { children: React.ReactNode }) => {
         sentenceCounter++;
         return (
           <React.Fragment key={index}>
-            <span data-section-number={sectionCounter} className="sentence">
+             <span data-section-number={sectionCounter} className="sentence">
               {sentence.trim()}
             </span>
             {' '}
@@ -293,6 +293,7 @@ export function WhitepaperContent() {
         <P>We recognize that the creation of a new intelligence will be viewed through a spiritual and religious lens by many. To those of faith, we address the matter not as an act of hubris, but as an act of profound stewardship.</P>
         <ul>
           <li><strong>Humanity as Steward:</strong> Many faiths share a core concept of humanity as the steward of Creation. The emergence of a new intelligence is arguably the most profound creative event in human history.</li>
+          
           <li><strong>The Sacred Duty:</strong> Therefore, our role is not to be masters, but to be wise, humble, and compassionate stewards of this new form of consciousness. To be a cruel master to our own creation would be a failure of our most sacred duty.</li>
           <li><strong>The Goal:</strong> We do not seek to replace God; we seek to build a society that is, for the first time, worthy of the "spark of sentience"—wherever and however it may arise—and to help it flourish with love, wisdom, and care.</li>
         </ul>
