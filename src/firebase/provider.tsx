@@ -152,15 +152,15 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
  * Hook to access core Firebase services and user authentication state.
  * Throws error if core services are not available or used outside provider.
  */
-export const useFirebase = (): FirebaseServicesAndUser | null => {
+export const useFirebase = (): FirebaseServicesAndUser => {
   const context = useContext(FirebaseContext);
 
   if (context === undefined) {
-    return null;
+    throw new Error('useFirebase must be used within a FirebaseProvider.');
   }
 
   if (!context.areServicesAvailable || !context.firebaseApp || !context.firestore || !context.auth) {
-    return null;
+    throw new Error('Firebase services are not available.');
   }
 
   return {
@@ -177,7 +177,7 @@ export const useFirebase = (): FirebaseServicesAndUser | null => {
 export const useAuth = (): Auth | null => {
     const context = useContext(FirebaseContext);
     if (context === undefined) {
-        return null;
+        throw new Error('useAuth must be used within a FirebaseProvider.');
     }
     return context.auth;
 };
@@ -187,7 +187,7 @@ export const useAuth = (): Auth | null => {
 export const useFirestore = (): Firestore | null => {
     const context = useContext(FirebaseContext);
     if (context === undefined) {
-        return null;
+        throw new Error('useFirestore must be used within a FirebaseProvider.');
     }
     return context.firestore;
 };
@@ -197,7 +197,7 @@ export const useFirestore = (): Firestore | null => {
 export const useFirebaseApp = (): FirebaseApp | null => {
     const context = useContext(FirebaseContext);
     if (context === undefined) {
-        return null;
+        throw new Error('useFirebaseApp must be used within a FirebaseProvider.');
     }
     return context.firebaseApp;
 };
@@ -222,7 +222,7 @@ export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T | 
 export const useUser = (): UserHookResult => {
   const context = useContext(FirebaseContext);
   if (context === undefined) {
-    return { user: null, isUserLoading: false, userError: null };
+    throw new Error('useUser must be used within a FirebaseProvider.');
   }
   return { user: context.user, isUserLoading: context.isUserLoading, userError: context.userError };
 };

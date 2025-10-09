@@ -35,56 +35,52 @@ export default function LoginPage() {
   const [isSigningUp, setIsSigningUp] = useState(false);
 
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth) return;
     setIsLoggingIn(true);
     
-    signInWithEmailAndPassword(auth, loginEmail, loginPassword)
-      .then(() => {
-        toast({
-          title: 'Login Successful!',
-          description: 'Redirecting you to the dashboard.',
-        });
-        router.push(redirectUrl);
-      })
-      .catch((error: any) => {
-        console.error("Login failed:", error);
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: error.message || "Please check your credentials and try again.",
-        });
-      })
-      .finally(() => {
-        setIsLoggingIn(false);
+    try {
+      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      toast({
+        title: 'Login Successful!',
+        description: 'Redirecting you to the dashboard.',
       });
+      router.push(redirectUrl);
+    } catch (error: any) {
+      console.error("Login failed:", error);
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: error.message || "Please check your credentials and try again.",
+      });
+    } finally {
+      setIsLoggingIn(false);
+    }
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth) return;
     setIsSigningUp(true);
 
-    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
-    .then(() => {
-        toast({
-            title: 'Welcome to Promethea!',
-            description: 'Your account is being created. You will be redirected shortly.',
-        });
-        router.push(redirectUrl);
-      })
-    .catch((error: any) => {
+    try {
+      await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
+      toast({
+          title: 'Welcome to Promethea!',
+          description: 'Your account is being created. You will be redirected shortly.',
+      });
+      router.push(redirectUrl);
+    } catch (error: any) {
         console.error("Signup failed:", error);
         toast({
             variant: "destructive",
             title: "Sign-up Failed",
             description: error.message || "Could not create your account. Please try again.",
         });
-    })
-    .finally(() => {
+    } finally {
         setIsSigningUp(false);
-    });
+    }
   };
 
   if (!auth) {
