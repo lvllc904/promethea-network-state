@@ -1,3 +1,4 @@
+
 'use client';
     
 import {
@@ -11,6 +12,25 @@ import {
 } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import {FirestorePermissionError} from '@/firebase/errors';
+import { Citizen } from '@/lib/types';
+
+/**
+ * Initiates a setDoc operation to create a new citizen profile.
+ * This is a specific implementation for user creation to ensure the correct data shape.
+ * Does NOT await the write operation internally.
+ */
+export function createCitizenProfile(docRef: DocumentReference, data: Citizen) {
+  setDoc(docRef, data).catch(error => {
+    errorEmitter.emit(
+      'permission-error',
+      new FirestorePermissionError({
+        path: docRef.path,
+        operation: 'create',
+        requestResourceData: data,
+      })
+    )
+  })
+}
 
 /**
  * Initiates a setDoc operation for a document reference.
@@ -37,7 +57,7 @@ export function setDocumentNonBlocking(docRef: DocumentReference, data: any, opt
  * Returns the Promise for the new doc ref, but typically not awaited by caller.
  */
 export function addDocumentNonBlocking(colRef: CollectionReference, data: any) {
-  const promise = addDoc(colRef, data)
+  const promise = addDoc(colD, data)
     .catch(error => {
       errorEmitter.emit(
         'permission-error',

@@ -1,6 +1,6 @@
 
 'use client';
-import { useState }from 'react';
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -12,17 +12,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/firebase';
+import { useAuth, useFirestore } from '@/firebase';
 import {
   initiateEmailSignUp,
   initiateEmailSignIn,
 } from '@/firebase/non-blocking-login';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { createCitizenProfile } from '@/firebase/non-blocking-updates';
+import { doc } from 'firebase/firestore';
 
 export default function LoginPage() {
   const auth = useAuth();
+  const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -30,6 +33,7 @@ export default function LoginPage() {
   const [loginPassword, setLoginPassword] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
+  const [isSigningUp, setIsSigningUp] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,18 +42,45 @@ export default function LoginPage() {
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSigningUp(true); // Flag that the next auth change is from a signup
     initiateEmailSignUp(auth, signupEmail, signupPassword);
   };
 
-  onAuthStateChanged(auth, (user) => {
-    if (user && !user.isAnonymous) {
-      toast({
-        title: 'Success!',
-        description: 'You have been logged in.',
-      });
-      router.push('/dashboard');
-    }
-  });
+  useEffect(() => {
+    if (!auth || !firestore) return;
+
+    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
+      if (user && !user.isAnonymous) {
+        // If this auth change was triggered by our signup form
+        if (isSigningUp) {
+          const citizenRef = doc(firestore, 'citizens', user.uid);
+          const newCitizen = {
+            id: user.uid,
+            decentralizedId: `did:prmth:${user.uid}`,
+            reputationScore: 100, // Starting reputation
+            contributionScore: 0,
+            personhoodScore: 1,
+            skills: ['Founding Member'],
+          };
+          createCitizenProfile(citizenRef, newCitizen);
+          setIsSigningUp(false); // Reset the flag
+          toast({
+            title: 'Welcome to Promethea!',
+            description: 'Your Passport has been created.',
+          });
+        } else {
+           toast({
+            title: 'Success!',
+            description: 'You have been logged in.',
+          });
+        }
+        router.push('/dashboard');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth, firestore, router, toast, isSigningUp]);
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-muted/40">

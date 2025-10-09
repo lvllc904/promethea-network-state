@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Card,
@@ -25,57 +26,64 @@ type EnrichedProposal = Proposal & {
 
 export default function GovernancePage() {
   const firestore = useFirestore();
-  const { user } = useUser();
+  const { user, isUserLoading: isAuthLoading } = useUser();
   const [proposals, setProposals] = useState<EnrichedProposal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const proposalsQuery = useMemoFirebase(
-    () => (firestore && user ? collection(firestore, 'proposals') : null),
-    [firestore, user]
+    () => (firestore ? collection(firestore, 'proposals') : null),
+    [firestore]
   );
   const { data: rawProposals, isLoading: proposalsLoading } =
     useCollection<Proposal>(proposalsQuery);
 
   useEffect(() => {
-    if (rawProposals && firestore) {
-      const enrichProposals = async () => {
-        setIsLoading(true);
-        const enriched = await Promise.all(
-          rawProposals.map(async (p) => {
-            const enrichedProposal: EnrichedProposal = { ...p };
-            // Fetch proposer
-            if (p.proposerId) {
-                try {
-                    const proposerSnap = await getDocs(query(collection(firestore, 'citizens'), where('id', '==', p.proposerId)));
-                    if (!proposerSnap.empty) {
-                        enrichedProposal.proposer = { ...proposerSnap.docs[0].data(), id: proposerSnap.docs[0].id } as Citizen;
-                    }
-                } catch (e) {
-                    // This can happen if the proposerId is invalid, or due to permissions
-                    console.error(`Could not fetch proposer for proposal ${p.id}`, e);
-                }
-            }
-
-            // Fetch votes
-            const votesQuery = query(
-              collection(firestore, 'votes'),
-              where('proposalId', '==', p.id)
-            );
-            const votesSnapshot = await getDocs(votesQuery);
-            enrichedProposal.votes = votesSnapshot.docs.map(
-              (d) => ({ ...d.data(), id: d.id } as Vote)
-            );
-            return enrichedProposal;
-          })
-        );
-        setProposals(enriched);
-        setIsLoading(false);
-      };
-      enrichProposals();
-    } else if (!proposalsLoading) {
-        setIsLoading(false);
+    if (proposalsLoading || isAuthLoading) {
+      setIsLoading(true);
+      return;
     }
-  }, [rawProposals, firestore, proposalsLoading]);
+    if (!user || !rawProposals) {
+        setIsLoading(false);
+        return;
+    }
+
+    const enrichProposals = async () => {
+        setIsLoading(true);
+        if (rawProposals && firestore) {
+            const enriched = await Promise.all(
+              rawProposals.map(async (p) => {
+                const enrichedProposal: EnrichedProposal = { ...p };
+                // Fetch proposer
+                if (p.proposerId) {
+                    try {
+                        const proposerSnap = await getDocs(query(collection(firestore, 'citizens'), where('id', '==', p.proposerId)));
+                        if (!proposerSnap.empty) {
+                            enrichedProposal.proposer = { ...proposerSnap.docs[0].data(), id: proposerSnap.docs[0].id } as Citizen;
+                        }
+                    } catch (e) {
+                        console.error(`Could not fetch proposer for proposal ${p.id}`, e);
+                    }
+                }
+    
+                // Fetch votes
+                const votesQuery = query(
+                  collection(firestore, 'votes'),
+                  where('proposalId', '==', p.id)
+                );
+                const votesSnapshot = await getDocs(votesQuery);
+                enrichedProposal.votes = votesSnapshot.docs.map(
+                  (d) => ({ ...d.data(), id: d.id } as Vote)
+                );
+                return enrichedProposal;
+              })
+            );
+            setProposals(enriched);
+        }
+        setIsLoading(false);
+    };
+    enrichProposals();
+    
+  }, [rawProposals, firestore, proposalsLoading, isAuthLoading, user]);
 
 
   const renderProposalCard = (proposal: EnrichedProposal) => {
@@ -209,7 +217,7 @@ export default function GovernancePage() {
           <TabsTrigger value="Draft">Executing</TabsTrigger>
           <TabsTrigger value="Rejected">Failed</TabsTrigger>
         </TabsList>
-        {(proposalsLoading || isLoading) ? renderSkeleton(3) : 
+        {(isLoading) ? renderSkeleton(3) : 
             <>
                 <TabsContent value="Active">
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-4">

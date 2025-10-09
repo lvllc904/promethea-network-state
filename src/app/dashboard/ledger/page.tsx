@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Card,
@@ -22,14 +23,16 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LedgerPage() {
   const firestore = useFirestore();
-  const { user } = useUser();
+  const { user, isUserLoading: isAuthLoading } = useUser();
   
   const tokensQuery = useMemoFirebase(
-    () => (firestore && user ? collection(firestore, 'universal_value_tokens') : null),
-    [firestore, user]
+    () => (firestore ? collection(firestore, 'universal_value_tokens') : null),
+    [firestore]
   );
-  const { data: tokens, isLoading } =
+  const { data: tokens, isLoading: areTokensLoading } =
     useCollection<UniversalValueToken>(tokensQuery);
+    
+  const isLoading = areTokensLoading || isAuthLoading;
 
   const getBadgeVariant = (type: string) => {
     switch (type) {
@@ -90,7 +93,7 @@ export default function LedgerPage() {
                     </TableCell>
                   </TableRow>
                 ))}
-              {tokens?.map((token) => (
+              {!isLoading && user && tokens?.map((token) => (
                 <TableRow key={token.id}>
                   <TableCell className="font-medium">
                     <div className="font-medium">
