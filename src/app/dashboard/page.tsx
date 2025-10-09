@@ -68,15 +68,13 @@ export default function Dashboard() {
     useCollection<RealWorldAsset>(assetsQuery);
     
   const myContributionsQuery = useMemoFirebase(() => 
-    firestore && user ? query(collection(firestore, 'universal_value_tokens'), where('ownerId', '==', user.uid), limit(2)) : null
+    firestore && user ? query(collection(firestore, 'universal_value_tokens'), where('ownerId', '==', user.uid), limit(5)) : null
   , [firestore, user]);
   const { data: myContributions, isLoading: areContributionsLoading } = useCollection<UniversalValueToken>(myContributionsQuery);
 
 
   const totalAUM =
     assets?.reduce((acc, asset) => acc + (asset.tokenIds?.length || 0), 0) || 0;
-
-  const isLoading = isCitizenLoading || areProposalsLoading || areAssetsLoading || areContributionsLoading;
 
   return (
     <div className="flex flex-col gap-8">
@@ -111,7 +109,7 @@ export default function Dashboard() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Network Tokens</CardTitle>
+            <CardTitle className="text-sm font-medium">Network AUM</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -167,14 +165,14 @@ export default function Dashboard() {
                     [...Array(3)].map((_, i) => (
                         <TableRow key={i}>
                             <TableCell><Skeleton className="h-5 w-48 mb-1" /><Skeleton className="h-4 w-32" /></TableCell>
-                            <TableCell className="text-right"><Skeleton className="h-5 w-16" /></TableCell>
+                            <TableCell className="text-right"><Skeleton className="h-5 w-16 ml-auto" /></TableCell>
                         </TableRow>
                     ))
                 ) : (
                     activeProposals?.map((proposal) => (
                   <TableRow key={proposal.id}>
                     <TableCell>
-                      <div className="font-medium">{proposal.title}</div>
+                      <Link href={`/dashboard/governance/${proposal.id}`} className="font-medium hover:underline">{proposal.title}</Link>
                       <div className="text-sm text-muted-foreground">
                         Proposed by Citizen {proposal.proposerId}
                       </div>
@@ -202,7 +200,7 @@ export default function Dashboard() {
                             <Skeleton className="h-5 w-40" />
                             <Skeleton className="h-4 w-48" />
                         </div>
-                        <Skeleton className="h-6 w-20" />
+                        <Skeleton className="h-6 w-20 ml-auto" />
                     </div>
                 ))
             ) : (
@@ -219,7 +217,7 @@ export default function Dashboard() {
                   Asset: {contribution.assetId}
                 </p>
               </div>
-              <div className="ml-auto font-medium text-success">
+              <div className="ml-auto font-medium text-green-600">
                 +{contribution.amount} UVT
               </div>
             </div>

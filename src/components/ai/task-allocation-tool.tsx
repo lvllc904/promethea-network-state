@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import type { AllocateRWATasksInput } from "@/ai/flows/allocate-rwa-tasks";
-
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { collection } from 'firebase/firestore';
+import { Citizen } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, Users, Wand2 } from "lucide-react";
-import { users } from "@/lib/data";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from "next/image";
@@ -21,6 +22,13 @@ export function TaskAllocationTool({ onAllocate }: Props) {
   const [taskDescription, setTaskDescription] = useState("");
   const [suggestedMemberIds, setSuggestedMemberIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const firestore = useFirestore();
+  const citizensQuery = useMemoFirebase(
+    () => (firestore ? collection(firestore, 'citizens') : null),
+    [firestore]
+  );
+  const { data: citizens } = useCollection<Citizen>(citizensQuery);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -36,7 +44,7 @@ export function TaskAllocationTool({ onAllocate }: Props) {
     }
   };
 
-  const suggestedMembers = users.filter(user => suggestedMemberIds.includes(user.id));
+  const suggestedMembers = citizens?.filter(c => suggestedMemberIds.includes(c.id)) || [];
 
   return (
     <Card className="shadow-lg bg-background/50">
@@ -89,17 +97,17 @@ export function TaskAllocationTool({ onAllocate }: Props) {
              ) : (
                 <div className="space-y-4">
                 {suggestedMembers.map(member => {
-                    const memberAvatar = PlaceHolderImages.find(p => p.id === member.avatarUrl);
+                    const memberAvatar = PlaceHolderImages.find(p => p.id === `user${member.id}`);
                     return (
                         <div key={member.id} className="flex items-center justify-between p-2 rounded-md border">
                             <div className="flex items-center gap-3">
                                 <Avatar>
-                                    {memberAvatar && <Image src={memberAvatar.imageUrl} alt={member.name} width={40} height={40} data-ai-hint={memberAvatar.imageHint} />}
-                                    <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                                    {memberAvatar && <Image src={memberAvatar.imageUrl} alt={member.id} width={40} height={40} data-ai-hint={memberAvatar.imageHint} />}
+                                    <AvatarFallback>{member.id.charAt(0)}</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <p className="font-semibold">{member.name}</p>
-                                    <p className="text-sm text-muted-foreground">Rep: {member.reputation}</p>
+                                    <p className="font-semibold">Citizen {member.id}</p>
+                                    <p className="text-sm text-muted-foreground">Rep: {member.reputationScore}</p>
                                 </div>
                             </div>
                             <Button variant="outline" size="sm">Assign</Button>

@@ -16,7 +16,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import { Clock, Check, X, User } from 'lucide-react';
 import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
-import { doc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { Proposal, Vote, Citizen } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEffect, useState } from 'react';
