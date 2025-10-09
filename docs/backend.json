@@ -1,7 +1,6 @@
 {
   "entities": {
     "Citizen": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Citizen",
       "type": "object",
       "description": "Represents a citizen within the Promethea Network State.",
@@ -43,7 +42,6 @@
       ]
     },
     "Proposal": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Proposal",
       "type": "object",
       "description": "Represents a governance proposal within the Promethean DAC.",
@@ -88,7 +86,6 @@
       ]
     },
     "RealWorldAsset": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "RealWorldAsset",
       "type": "object",
       "description": "Represents a Real-World Asset (RWA) within the Promethean Network State.",
@@ -130,7 +127,6 @@
       ]
     },
     "UniversalValueToken": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "UniversalValueToken",
       "type": "object",
       "description": "Represents a Universal Value Token (UVT) within the Promethean Network State.",
@@ -159,13 +155,12 @@
       "required": [
         "id",
         "ownerId",
-        "tokenId",
+        "assetId",
         "tokenType",
         "amount"
       ]
     },
     "Vote": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Vote",
       "type": "object",
       "description": "Represents a vote cast by a citizen on a proposal.",
@@ -200,7 +195,6 @@
       ]
     },
     "Task": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Task",
       "type": "object",
       "description": "Represents a task related to real-world asset management.",
@@ -245,7 +239,6 @@
       ]
     },
     "DACParams": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "DACParams",
       "type": "object",
       "description": "Represents parameters within the Promethean DAC.",
@@ -282,120 +275,47 @@
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "citizens/{citizenId}",
-        "definition": {
-          "entityName": "Citizen",
-          "schema": {
-            "$ref": "#/backend/entities/Citizen"
-          },
-          "description": "Stores citizen data.  Authorization is based on path-based ownership and potentially denormalized role data within the document itself.",
-          "params": [
-            {
-              "name": "citizenId",
-              "description": "The unique identifier for the citizen."
-            }
-          ]
-        }
+    "/citizens/{citizenId}": {
+      "schema": {
+        "$ref": "#/entities/Citizen"
       },
-      {
-        "path": "proposals/{proposalId}",
-        "definition": {
-          "entityName": "Proposal",
-          "schema": {
-            "$ref": "#/backend/entities/Proposal"
-          },
-          "description": "Stores governance proposals. Access control is managed by the proposerId and potentially a membership map for collaborative proposals.",
-          "params": [
-            {
-              "name": "proposalId",
-              "description": "The unique identifier for the proposal."
-            }
-          ]
-        }
+      "description": "Stores citizen data. Authorization is based on path-based ownership and potentially denormalized role data within the document itself."
+    },
+    "/proposals/{proposalId}": {
+      "schema": {
+        "$ref": "#/entities/Proposal"
       },
-      {
-        "path": "real_world_assets/{assetId}",
-        "definition": {
-          "entityName": "RealWorldAsset",
-          "schema": {
-            "$ref": "#/backend/entities/RealWorldAsset"
-          },
-          "description": "Stores real-world asset data. Authorization might involve a membership map indicating authorized users for managing the asset, denormalized for authorization independence.",
-          "params": [
-            {
-              "name": "assetId",
-              "description": "The unique identifier for the real-world asset."
-            }
-          ]
-        }
+      "description": "Stores governance proposals. Access control is managed by the proposerId and potentially a membership map for collaborative proposals."
+    },
+    "/real_world_assets/{assetId}": {
+      "schema": {
+        "$ref": "#/entities/RealWorldAsset"
       },
-      {
-        "path": "universal_value_tokens/{tokenId}",
-        "definition": {
-          "entityName": "UniversalValueToken",
-          "schema": {
-            "$ref": "#/backend/entities/UniversalValueToken"
-          },
-          "description": "Stores universal value tokens. Ownership is determined by the ownerId field, which references a citizen. Includes assetId for linking to RealWorldAsset.",
-          "params": [
-            {
-              "name": "tokenId",
-              "description": "The unique identifier for the universal value token."
-            }
-          ]
-        }
+      "description": "Stores real-world asset data. Authorization might involve a membership map indicating authorized users for managing the asset, denormalized for authorization independence."
+    },
+    "/universal_value_tokens/{tokenId}": {
+      "schema": {
+        "$ref": "#/entities/UniversalValueToken"
       },
-      {
-        "path": "votes/{voteId}",
-        "definition": {
-          "entityName": "Vote",
-          "schema": {
-            "$ref": "#/backend/entities/Vote"
-          },
-          "description": "Stores votes cast by citizens. Access is controlled by the citizenId and proposalId.",
-          "params": [
-            {
-              "name": "voteId",
-              "description": "The unique identifier for the vote."
-            }
-          ]
-        }
+      "description": "Stores universal value tokens. Ownership is determined by the ownerId field, which references a citizen. Includes assetId for linking to RealWorldAsset."
+    },
+    "/votes/{voteId}": {
+      "schema": {
+        "$ref": "#/entities/Vote"
       },
-      {
-        "path": "tasks/{taskId}",
-        "definition": {
-          "entityName": "Task",
-          "schema": {
-            "$ref": "#/backend/entities/Task"
-          },
-          "description": "Stores tasks related to real-world asset management. Authorization is based on the assigneeId and the assetId.",
-          "params": [
-            {
-              "name": "taskId",
-              "description": "The unique identifier for the task."
-            }
-          ]
-        }
+      "description": "Stores votes cast by citizens. Access is controlled by the citizenId and proposalId."
+    },
+    "/tasks/{taskId}": {
+      "schema": {
+        "$ref": "#/entities/Task"
       },
-      {
-        "path": "dac_params/{dacParamsId}",
-        "definition": {
-          "entityName": "DACParams",
-          "schema": {
-            "$ref": "#/backend/entities/DACParams"
-          },
-          "description": "Stores parameters for the DAC, such as governance thresholds or initial reputation values.  Access should be restricted to administrators or potentially the DAC itself via a service account.",
-          "params": [
-            {
-              "name": "dacParamsId",
-              "description": "The unique identifier for the DAC parameter."
-            }
-          ]
-        }
-      }
-    ],
-    "reasoning": "The Firestore structure is designed to support the Promethea Network State's core features, emphasizing authorization independence and secure data access. The primary strategy is authorization independence via denormalization, which eliminates `get()` calls in security rules, enabling atomic operations. Path-based ownership is used where appropriate to simplify rules. Segregation of data with different access requirements ensures clarity of intent and simplifies security rules, avoiding rules that act as filters (QAPs). The membership map pattern is utilized for collaborative data, and dedicated collections manage global roles.\n\nSpecifically, the `citizens/{citizenId}` collection stores citizen data. The `proposals/{proposalId}` collection stores proposals. The `real_world_assets/{assetId}` collection stores real-world assets. The `universal_value_tokens/{tokenId}` collection stores universal value tokens, which are linked to citizens and real-world assets, ensuring proper access control. The `votes/{voteId}` collection stores votes cast by citizens on proposals. The `tasks/{taskId}` collection stores tasks related to real-world asset management.\n\nAuthorization Independence is achieved through denormalization. For example, while a citizen's `decentralizedId` might be used for authentication purposes elsewhere, all relevant authorization data (roles, memberships) is stored directly within the documents in each collection, or can be derived from the path (e.g. ownership of documents within `/users/{userId}`). This eliminates the need for security rules to perform `get()` operations to fetch related data for authorization, supporting atomic operations and simplifying rule debugging.\n\nQAPs are supported by structural segregation. Publicly accessible data (if any) would be stored in separate collections from private data, allowing for secure `list` operations without complex filtering in rules. Private data is typically stored under user-owned paths (`/users/{userId}/private_data`). Collaborative data, such as proposals, can be secured using membership maps or similar mechanisms, denormalized into each document to avoid `get()` calls."
+      "description": "Stores tasks related to real-world asset management. Authorization is based on the assigneeId and the assetId."
+    },
+    "/dac_params/{dacParamsId}": {
+      "schema": {
+        "$ref": "#/entities/DACParams"
+      },
+      "description": "Stores parameters for the DAC, such as governance thresholds or initial reputation values. Access should be restricted to administrators or potentially the DAC itself via a service account."
+    }
   }
 }
