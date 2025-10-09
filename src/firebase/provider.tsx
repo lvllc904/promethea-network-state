@@ -3,9 +3,11 @@
 
 import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import { FirebaseApp } from 'firebase/app';
-import { Firestore } from 'firebase/firestore';
+import { Firestore, doc, getDoc } from 'firebase/firestore';
 import { Auth, User, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
-import { FirebaseErrorListener } from '@/components/FirebaseErrorListener'
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
+import { createCitizenProfile } from '@/firebase/non-blocking-updates';
+
 
 interface FirebaseProviderProps {
   children: ReactNode;
@@ -70,8 +72,8 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
   // Effect to subscribe to Firebase auth state changes
   useEffect(() => {
-    if (!auth) { // If no Auth service instance, cannot determine user state
-      setUserAuthState({ user: null, isUserLoading: false, userError: new Error("Auth service not provided.") });
+    if (!auth || !firestore) { // If no Auth service instance, cannot determine user state
+      setUserAuthState({ user: null, isUserLoading: false, userError: new Error("Auth or Firestore service not provided.") });
       return;
     }
 
@@ -79,8 +81,28 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
     const unsubscribe = onAuthStateChanged(
       auth,
-      (firebaseUser) => { // Auth state determined
+      async (firebaseUser) => { // Auth state determined
         if (firebaseUser) {
+            // Check if this is a new user by seeing if a citizen profile exists
+            const citizenRef = doc(firestore, 'citizens', firebaseUser.uid);
+            const citizenSnap = await getDoc(citizenRef);
+
+            if (!citizenSnap.exists()) {
+                // This is a new user, create their profile
+                const newCitizen = {
+                    id: firebaseUser.uid,
+                    decentralizedId: `did:prmth:${firebaseUser.uid}`,
+                    reputationScore: 100,
+                    contributionScore: 0,
+                    personhoodScore: 1,
+                    skills: ['Founding Member'],
+                };
+                try {
+                    await createCitizenProfile(citizenRef, newCitizen);
+                } catch(e) {
+                    console.error("Failed to create citizen profile", e);
+                }
+            }
             setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
         } else {
             // No user is signed in, so sign them in anonymously
@@ -96,7 +118,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       }
     );
     return () => unsubscribe(); // Cleanup
-  }, [auth]); // Depends on the auth instance
+  }, [auth, firestore]); // Depends on the auth instance
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {

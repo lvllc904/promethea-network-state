@@ -249,7 +249,6 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                       <Button
                         variant="outline"
                         size="sm"
-                        disabled={task.status !== 'Open'}
                         onClick={handleProtectedAction}
                       >
                         Apply
