@@ -168,14 +168,49 @@ const Sidebar = React.forwardRef<
     {
       side = "left",
       variant = "sidebar",
-      collapsible = "offcanvas",
+      collapsible = "icon", // Default to icon collapsible
       className,
       children,
       ...props
     },
     ref
   ) => {
-    const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+    const { isMobile, state, openMobile, setOpenMobile, setOpen } = useSidebar()
+    const [isPinned, setIsPinned] = React.useState(false);
+
+    React.useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'p' && (event.metaKey || event.ctrlKey)) {
+                event.preventDefault();
+                setIsPinned(prev => !prev);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    const handleMouseEnter = () => {
+        if (!isPinned) {
+            setOpen(true);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        if (!isPinned) {
+            setOpen(false);
+        }
+    };
+
+    const handleTogglePin = () => {
+        setIsPinned(prev => !prev);
+        if (!isPinned) { // if it's about to be pinned
+            setOpen(true);
+        }
+    }
+
 
     if (collapsible === "none") {
       return (
@@ -220,6 +255,8 @@ const Sidebar = React.forwardRef<
         data-collapsible={state === "collapsed" ? collapsible : ""}
         data-variant={variant}
         data-side={side}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {/* This is what handles the sidebar gap on desktop */}
         <div
@@ -251,6 +288,9 @@ const Sidebar = React.forwardRef<
             className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
           >
             {children}
+            <Button onClick={handleTogglePin} variant="ghost" size="sm" className="absolute bottom-2 left-2 right-2 text-xs">
+              {isPinned ? 'Unpin (Cmd+P)' : 'Pin (Cmd+P)'}
+            </Button>
           </div>
         </div>
       </div>
