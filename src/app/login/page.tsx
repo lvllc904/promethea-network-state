@@ -8,6 +8,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,6 +19,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'fire
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const auth = useAuth();
@@ -86,12 +88,24 @@ export default function LoginPage() {
   if (!auth) {
     return (
         <div className="flex items-center justify-center min-h-screen bg-muted/40">
-            <Alert variant="destructive" className="max-w-md">
-                <AlertTitle>Authentication Service Unavailable</AlertTitle>
-                <AlertDescription>
-                    The Firebase authentication service is not connected. Login and Sign-up are currently disabled.
-                </AlertDescription>
-            </Alert>
+            <Card className="w-full max-w-md">
+                 <CardHeader>
+                    <CardTitle className="font-headline text-2xl">Auth Unavailable</CardTitle>
+                 </CardHeader>
+                <CardContent>
+                    <Alert variant="destructive" className="max-w-md">
+                        <AlertTitle>Authentication Service Unavailable</AlertTitle>
+                        <AlertDescription>
+                            The Firebase authentication service is not connected. Login and Sign-up are currently disabled.
+                        </AlertDescription>
+                    </Alert>
+                </CardContent>
+                <CardFooter className="justify-center">
+                    <Button variant="link" asChild>
+                        <Link href="/">Return to Promethea</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
         </div>
     )
   }
@@ -141,6 +155,11 @@ export default function LoginPage() {
                 </Button>
               </form>
             </CardContent>
+             <CardFooter className="justify-center">
+                <Button variant="link" asChild>
+                    <Link href="/">Return to Promethea</Link>
+                </Button>
+            </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="signup">
@@ -180,7 +199,12 @@ export default function LoginPage() {
                 </Button>
               </form>
             </CardContent>
-          </Card>
+             <CardFooter className="justify-center">
+                <Button variant="link" asChild>
+                    <Link href="/">Return to Promethea</Link>
+                </Button>
+            </CardFooter>
+          </Card>>
         </TabsContent>
       </Tabs>
     </div>
