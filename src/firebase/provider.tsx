@@ -7,6 +7,7 @@ import { Firestore, doc, getDoc } from 'firebase/firestore';
 import { Auth, User, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 import { createCitizenProfile } from '@/firebase/non-blocking-updates';
+import { Citizen } from '@/lib/types';
 
 
 interface FirebaseProviderProps {
@@ -83,27 +84,32 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       auth,
       async (firebaseUser) => { // Auth state determined
         if (firebaseUser) {
-            // Check if this is a new user by seeing if a citizen profile exists
-            const citizenRef = doc(firestore, 'citizens', firebaseUser.uid);
-            const citizenSnap = await getDoc(citizenRef);
+            try {
+                // Check if this is a new user by seeing if a citizen profile exists
+                const citizenRef = doc(firestore, 'citizens', firebaseUser.uid);
+                const citizenSnap = await getDoc(citizenRef);
 
-            if (!citizenSnap.exists()) {
-                // This is a new user, create their profile
-                const newCitizen = {
-                    id: firebaseUser.uid,
-                    decentralizedId: `did:prmth:${firebaseUser.uid}`,
-                    reputationScore: 100,
-                    contributionScore: 0,
-                    personhoodScore: 1,
-                    skills: ['Founding Member'],
-                };
-                try {
+                if (!citizenSnap.exists()) {
+                    // This is a new user, create their profile
+                    const newCitizen: Citizen = {
+                        id: firebaseUser.uid,
+                        decentralizedId: `did:prmth:${firebaseUser.uid}`,
+                        reputationScore: 100,
+                        contributionScore: 0,
+                        personhoodScore: 1,
+                        skills: ['Founding Member'],
+                    };
+                    // IMPORTANT: Await profile creation before setting user state
                     await createCitizenProfile(citizenRef, newCitizen);
-                } catch(e) {
-                    console.error("Failed to create citizen profile", e);
                 }
+                // Set user and set loading to false AFTER all setup is complete
+                setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
+
+            } catch(e: any) {
+                console.error("Error during user initialization:", e);
+                setUserAuthState({ user: null, isUserLoading: false, userError: e });
             }
-            setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
+
         } else {
             // No user is signed in, so sign them in anonymously
             signInAnonymously(auth).catch((error) => {
