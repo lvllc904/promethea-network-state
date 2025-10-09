@@ -101,7 +101,7 @@ body {
     counter-increment: sentence;
     content: attr(data-section-number) '.' counter(sentence);
     position: absolute;
-    left: -3rem;
+    left: -2.2rem;
     top: -0.25em;
     font-size: 0.3rem;
     vertical-align: super;
