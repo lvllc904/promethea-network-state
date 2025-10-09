@@ -1,3 +1,4 @@
+
 'use client';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -25,9 +26,8 @@ import {
   allocateRWATasks,
   type AllocateRWATasksInput,
 } from '@/ai/flows/allocate-rwa-tasks';
-import { useDoc, useCollection, useMemoFirebase } from '@/firebase';
+import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@/firebase';
 import { doc, collection, query, where } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
 import { RealWorldAsset, Task } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -49,6 +49,7 @@ async function handleAllocate(data: AllocateRWATasksInput) {
 
 export default function AssetDetailPage({ params }: { params: { id: string } }) {
   const firestore = useFirestore();
+  const { user } = useUser();
 
   const assetRef = useMemoFirebase(
     () => (firestore ? doc(firestore, 'real_world_assets', params.id) : null),
@@ -68,6 +69,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
     [firestore, params.id]
   );
   const { data: tasks, isLoading: areTasksLoading } = useCollection<Task>(tasksQuery);
+  const canApply = user && !user.isAnonymous;
 
   if (isAssetLoading) {
     return (
@@ -236,7 +238,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                       <Button
                         variant="outline"
                         size="sm"
-                        disabled={task.status !== 'Open'}
+                        disabled={task.status !== 'Open' || !canApply}
                       >
                         Apply
                       </Button>
@@ -245,6 +247,9 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                 ))}
               </TableBody>
             </Table>
+            {!canApply && (
+                <p className="text-xs text-center text-muted-foreground pt-4">You must have a Promethean Passport to apply for tasks.</p>
+            )}
           </CardContent>
         </Card>
       </div>

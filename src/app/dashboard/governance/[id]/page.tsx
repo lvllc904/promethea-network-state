@@ -1,3 +1,4 @@
+
 'use client';
 import { notFound } from 'next/navigation';
 import {
@@ -15,7 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import { Clock, Check, X, User } from 'lucide-react';
-import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
+import { useDoc, useFirestore, useMemoFirebase, useUser } from '@/firebase';
 import { doc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { Proposal, Vote, Citizen } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -27,6 +28,7 @@ export default function ProposalDetailPage({
   params: { id: string };
 }) {
   const firestore = useFirestore();
+  const { user } = useUser();
   const [votes, setVotes] = useState<Vote[]>([]);
   const [proposer, setProposer] = useState<Citizen | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -75,6 +77,7 @@ export default function ProposalDetailPage({
   const forPercentage = totalVotes > 0 ? (forVotes / totalVotes) * 100 : 0;
 
   const proposerAvatar = proposer ? PlaceHolderImages.find((p) => p.id === `user${proposer.id}`) : null;
+  const canVote = user && !user.isAnonymous;
 
   if (isProposalLoading || isLoading) {
     return (
@@ -202,15 +205,19 @@ export default function ProposalDetailPage({
                 variant="default"
                 size="lg"
                 className="bg-green-600 hover:bg-green-700 h-12"
+                disabled={!canVote}
               >
                 <Check className="mr-2 h-5 w-5" />
                 Vote For
               </Button>
-              <Button variant="destructive" size="lg" className="h-12">
+              <Button variant="destructive" size="lg" className="h-12" disabled={!canVote}>
                 <X className="mr-2 h-5 w-5" />
                 Vote Against
               </Button>
             </div>
+            {!canVote && (
+                 <p className="text-xs text-center text-muted-foreground pt-2">You must have a Promethean Passport to vote.</p>
+            )}
           </CardContent>
         </Card>
 

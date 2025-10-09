@@ -1,3 +1,5 @@
+
+'use client';
 import { EthicalRefinementTool } from "@/components/ai/ethical-refinement-tool";
 import { refineProposal, type RefineProposalInput } from "@/ai/flows/ethical-proposal-refinement";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -5,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useUser } from "@/firebase";
 
 async function handleRefine(data: RefineProposalInput) {
   "use server";
@@ -18,6 +21,9 @@ async function handleRefine(data: RefineProposalInput) {
 }
 
 export default function NewProposalPage() {
+  const { user } = useUser();
+  const canSubmit = user && !user.isAnonymous;
+
   return (
     <div className="grid gap-8 md:grid-cols-2">
       <div className="space-y-8">
@@ -42,7 +48,10 @@ export default function NewProposalPage() {
               <Label htmlFor="description">Full Description</Label>
               <Textarea id="description" placeholder="Provide all the details for your proposal here." className="min-h-[200px]" />
             </div>
-            <Button size="lg">Submit Proposal to DAC</Button>
+            <Button size="lg" disabled={!canSubmit}>Submit Proposal to DAC</Button>
+            {!canSubmit && (
+                <p className="text-xs text-center text-muted-foreground pt-2">You must have a Promethean Passport to submit a proposal.</p>
+            )}
           </CardContent>
         </Card>
       </div>
