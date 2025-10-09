@@ -21,7 +21,6 @@ const P = ({ children }: { children: React.ReactNode }) => {
         sentenceCounter++;
         return (
           <React.Fragment key={index}>
-            {' '}
             <span data-section-number={sectionCounter} className="sentence">
               {sentence.trim()}
             </span>
