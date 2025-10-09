@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "Futuristic city skyline at dusk",
+      "imageUrl": "https://picsum.photos/seed/hero/1920/1080",
+      "imageHint": "futuristic city"
+    },
+    {
+      "id": "user1",
+      "description": "Portrait of a man with glasses",
+      "imageUrl": "https://picsum.photos/seed/user1/200/200",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "user2",
+      "description": "Portrait of a woman smiling",
+      "imageUrl": "https://picsum.photos/seed/user2/200/200",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "user3",
+      "description": "Portrait of a person looking thoughtfully",
+      "imageUrl": "https://picsum.photos/seed/user3/200/200",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "asset1",
+      "description": "Exterior of a modern apartment complex",
+      "imageUrl": "https://picsum.photos/seed/asset1/600/400",
+      "imageHint": "building exterior"
+    },
+    {
+      "id": "asset2",
+      "description": "Vast green farmland under a blue sky",
+      "imageUrl": "https://picsum.photos/seed/asset2/600/400",
+      "imageHint": "farmland landscape"
+    },
+    {
+      "id": "asset3",
+      "description": "Storefront of a small community-owned cafe",
+      "imageUrl": "https://picsum.photos/seed/asset3/600/400",
+      "imageHint": "cafe storefront"
+    },
+    {
+      "id": "asset4",
+      "description": "Rooftop solar panels on a building",
+      "imageUrl": "https://picsum.photos/seed/asset4/600/400",
+      "imageHint": "solar panels"
+    }
+  ]
 }
