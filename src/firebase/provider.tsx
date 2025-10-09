@@ -78,44 +78,43 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       return;
     }
 
-    setUserAuthState({ user: null, isUserLoading: true, userError: null }); // Reset on auth instance change
-
     const unsubscribe = onAuthStateChanged(
       auth,
-      async (firebaseUser) => { // Auth state determined
+      async (firebaseUser) => {
         if (firebaseUser) {
-            try {
-                // Check if this is a new user by seeing if a citizen profile exists
-                const citizenRef = doc(firestore, 'citizens', firebaseUser.uid);
-                const citizenSnap = await getDoc(citizenRef);
+          try {
+            // Check if this is a new user by seeing if a citizen profile exists
+            const citizenRef = doc(firestore, 'citizens', firebaseUser.uid);
+            const citizenSnap = await getDoc(citizenRef);
 
-                if (!citizenSnap.exists()) {
-                    // This is a new user, create their profile
-                    const newCitizen: Citizen = {
-                        id: firebaseUser.uid,
-                        decentralizedId: `did:prmth:${firebaseUser.uid}`,
-                        reputationScore: 100,
-                        contributionScore: 0,
-                        personhoodScore: 1,
-                        skills: ['Founding Member'],
-                    };
-                    // IMPORTANT: Await profile creation before setting user state
-                    await createCitizenProfile(citizenRef, newCitizen);
-                }
-                // Set user and set loading to false AFTER all setup is complete
-                setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
-
-            } catch(e: any) {
-                console.error("Error during user initialization:", e);
-                setUserAuthState({ user: null, isUserLoading: false, userError: e });
+            if (!citizenSnap.exists()) {
+              // This is a new user, create their profile
+              const newCitizen: Citizen = {
+                id: firebaseUser.uid,
+                decentralizedId: `did:prmth:${firebaseUser.uid}`,
+                reputationScore: 100,
+                contributionScore: 0,
+                personhoodScore: 1,
+                skills: ['Founding Member'],
+              };
+              // IMPORTANT: Await profile creation before setting user state
+              await createCitizenProfile(citizenRef, newCitizen);
             }
+            // Set user and set loading to false AFTER all setup is complete
+            setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
 
+          } catch (e: any) {
+            console.error("Error during user initialization:", e);
+            setUserAuthState({ user: null, isUserLoading: false, userError: e });
+          }
         } else {
-            // No user is signed in, so sign them in anonymously
-            signInAnonymously(auth).catch((error) => {
-                console.error("Anonymous sign-in failed:", error);
-                setUserAuthState({ user: null, isUserLoading: false, userError: error });
-            });
+          // No user is signed in, so sign them in anonymously
+          // The onAuthStateChanged will fire again once the anonymous user is created.
+          signInAnonymously(auth).catch((error) => {
+            console.error("Anonymous sign-in failed:", error);
+            // If even anonymous sign-in fails, we stop loading and report the error.
+            setUserAuthState({ user: null, isUserLoading: false, userError: error });
+          });
         }
       },
       (error) => { // Auth listener error
@@ -123,8 +122,9 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
         setUserAuthState({ user: null, isUserLoading: false, userError: error });
       }
     );
+
     return () => unsubscribe(); // Cleanup
-  }, [auth, firestore]); // Depends on the auth instance
+  }, [auth, firestore]);
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {
