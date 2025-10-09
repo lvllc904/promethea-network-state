@@ -34,11 +34,11 @@ export default function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+      <div className="flex min-h-screen w-full bg-muted/40">
         <MainNav />
-        <div className="flex flex-col sm:pl-14">
+        <div className="flex flex-col sm:pl-14 w-full">
           <Header />
-          <main className="flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-8">
+          <main className="flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-8 overflow-y-auto">
                 {isAuthStatusLoading ? <DashboardSkeleton /> : children}
           </main>
         </div>
