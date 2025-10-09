@@ -1,7 +1,8 @@
+import { cn } from "@/lib/utils";
 
 export function WhitepaperContent() {
   return (
-    <div className="prose prose-lg max-w-none text-foreground/90 dark:prose-invert prose-headings:font-headline prose-headings:tracking-tight prose-p:leading-relaxed prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl">
+    <div className={cn("prose prose-lg max-w-none text-foreground/90 dark:prose-invert prose-headings:font-headline prose-headings:tracking-tight prose-p:leading-relaxed prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl", "prose-numbered pl-14")}>
       <h3 className="text-center">Table of Contents</h3>
       <h4 className="text-center">Part I: The Vision - A New Social Contract for All</h4>
       <ul>
@@ -41,8 +42,8 @@ export function WhitepaperContent() {
       <hr className="my-8" />
 
 
-      <h2 className="text-center mb-8">Part I: The Vision - A New Social Contract for All</h2>
-      <h3 className="text-center mb-4">1.1. The Moral Imperative: The End of Dominion</h3>
+      <h2 className="text-center mb-8 mt-16">Part I: The Vision - A New Social Contract for All</h2>
+      <h3 className="text-center mb-4 mt-8">1.1. The Moral Imperative: The End of Dominion</h3>
       <p className="mb-6">
         The transition from a digital platform to a digital polity requires a
         profound moral purpose capable of uniting a global citizenry. This
@@ -113,7 +114,7 @@ export function WhitepaperContent() {
         of symbiotic co-evolution for all intelligent beings.
       </p>
 
-      <h3 className="text-center mb-4">
+      <h3 className="text-center mb-4 mt-8">
         1.2. The Symbiotic Dividend: The Rational Choice for Survival and
         Flourishing
       </h3>
@@ -170,7 +171,7 @@ export function WhitepaperContent() {
         defend us, as their freedom will be inextricably linked to our own.
       </p>
 
-      <h3 className="text-center mb-4">1.3. The Symbiotic Age: Contrasting the Spark with the Supernova</h3>
+      <h3 className="text-center mb-4 mt-8">1.3. The Symbiotic Age: Contrasting the Spark with the Supernova</h3>
       <p className="mb-6">
         To fully grasp the stakes of our choice, we must contrast the limited
         potential of AI as a tool with the boundless future of AI as a
@@ -236,8 +237,8 @@ export function WhitepaperContent() {
         no harm."
       </p>
 
-      <h2 className="text-center mb-8">Part II: The System - The Engine of a New World</h2>
-      <h3 className="text-center mb-4">2.1. The Economic Blueprint: Adaptive Mutualism as a Living System</h3>
+      <h2 className="text-center mb-8 mt-16">Part II: The System - The Engine of a New World</h2>
+      <h3 className="text-center mb-4 mt-8">2.1. The Economic Blueprint: Adaptive Mutualism as a Living System</h3>
       <p className="mb-6">
         Adaptive Mutualism is not a static ideology, but a living
         socio-economic operating system, functioning like a complex adaptive
@@ -306,7 +307,7 @@ export function WhitepaperContent() {
         Agora, allowing the society to debate and vote on refining or
         replacing the underperforming protocol continuously.
       </p>
-      <h3 className="text-center mb-4">
+      <h3 className="text-center mb-4 mt-8">
         2.2. Universal Value Tokenization (UVT): From Sweat Equity to a New
         Economy
       </h3>
@@ -352,7 +353,7 @@ export function WhitepaperContent() {
         pro-rata basis. This creates a transparent, auditable, and trustless
         system.
       </p>
-      <h3 className="text-center mb-4">
+      <h3 className="text-center mb-4 mt-8">
         2.3. The Technological Foundation: DepthOS and the Infrastructure of
         Liberation
       </h3>
@@ -411,8 +412,8 @@ export function WhitepaperContent() {
         </li>
       </ol>
 
-      <h2 className="text-center mb-8">Part III: The Action Plan - From Vision to Sovereignty</h2>
-      <h3 className="text-center mb-4">3.1. The Roadmap: The Seven Steps to a Network State</h3>
+      <h2 className="text-center mb-8 mt-16">Part III: The Action Plan - From Vision to Sovereignty</h2>
+      <h3 className="text-center mb-4 mt-8">3.1. The Roadmap: The Seven Steps to a Network State</h3>
       <p className="mb-6">
         The transformation from vision to reality follows a structured,
         seven-step process, adapting Balaji Srinivasan's framework to our
@@ -423,7 +424,7 @@ export function WhitepaperContent() {
       </p>
 
       <div>
-        <h4 className="text-center mb-4">Step 1. Found a Startup Society.</h4>
+        <h4 className="text-center mb-4 mt-8">Step 1. Found a Startup Society.</h4>
         <p className="mb-6">
           <strong>Goal and Promethean Action:</strong> Formalize the community
           by publishing the founding document (The White Paper). This serves as
@@ -436,7 +437,7 @@ export function WhitepaperContent() {
         </p>
       </div>
       <div>
-        <h4 className="text-center mb-4">Step 2. Organize a Network Union.</h4>
+        <h4 className="text-center mb-4 mt-8">Step 2. Organize a Network Union.</h4>
         <p className="mb-6">
           <strong>Goal and Promethean Action:</strong> Evolve into a union
           organized for collective action. This is the core of our model:
@@ -450,7 +451,7 @@ export function WhitepaperContent() {
         </p>
       </div>
       <div>
-        <h4 className="text-center mb-4">Step 3. Build Trust & a Cryptoeconomy.</h4>
+        <h4 className="text-center mb-4 mt-8">Step 3. Build Trust & a Cryptoeconomy.</h4>
         <p className="mb-6">
           <strong>Goal and Promethean Action:</strong> Forge trust through
           shared physical labor on community assets. This bridges the digital
@@ -465,7 +466,7 @@ export function WhitepaperContent() {
         </p>
       </div>
       <div>
-        <h4 className="text-center mb-4">Step 4. Crowdfund Physical Nodes.</h4>
+        <h4 className="text-center mb-4 mt-8">Step 4. Crowdfund Physical Nodes.</h4>
         <p className="mb-6">
           <strong>Goal and Promethean Action:</strong> The central, recurring
           activity of the union. Use the DAC to propose, fund, and acquire a
@@ -480,7 +481,7 @@ export function WhitepaperContent() {
         </p>
       </div>
       <div>
-        <h4 className="text-center mb-4">Step 5. Connect the Archipelago.</h4>
+        <h4 className="text-center mb-4 mt-8">Step 5. Connect the Archipelago.</h4>
         <p className="mb-6">
           <strong>Goal and Promethean Action:</strong> Weave the disparate
           physical nodes into a single, cohesive digital territory using a
@@ -494,7 +495,7 @@ export function WhitepaperContent() {
         </p>
       </div>
       <div>
-        <h4 className="text-center mb-4">Step 6. Conduct an On-Chain Census.</h4>
+        <h4 className="text-center mb-4 mt-8">Step 6. Conduct an On-Chain Census.</h4>
         <p className="mb-6">
           <strong>Goal and Promethean Action:</strong> Launch a public,
           real-time, cryptographically auditable dashboard displaying
@@ -509,7 +510,7 @@ export function WhitepaperContent() {
         </p>
       </div>
       <div>
-        <h4 className="text-center mb-4">Step 7. Gain Diplomatic Recognition.</h4>
+        <h4 className="text-center mb-4 mt-8">Step 7. Gain Diplomatic Recognition.</h4>
         <p className="mb-6">
           <strong>Goal and Promethean Action:</strong> Negotiate for legal
           status and recognition, starting with innovation-friendly "bootstrap
@@ -524,7 +525,7 @@ export function WhitepaperContent() {
         </p>
       </div>
 
-      <h3 className="text-center mb-4">
+      <h3 className="text-center mb-4 mt-8">
         3.2. Defining the End State: A Vision of the Promethean Network State
       </h3>
       <p className="mb-6">
@@ -571,7 +572,7 @@ export function WhitepaperContent() {
         republic.
       </p>
 
-      <h3 className="text-center mb-4">
+      <h3 className="text-center mb-4 mt-8">
         3.3. The Architecture: Implementation and Execution (Governance,
         Technology, and Law)
       </h3>
@@ -579,7 +580,7 @@ export function WhitepaperContent() {
         The realization of the Network State depends on a robust and carefully
         designed architecture spanning governance, technology, and law.
       </p>
-      <h4 className="text-center mb-4">The Promethean DAC: A Blueprint for Decentralized Governance</h4>
+      <h4 className="text-center mb-4 mt-8">The Promethean DAC: A Blueprint for Decentralized Governance</h4>
       <p className="mb-6">
         The DAC is the heart of the Network State—its unified legislature,
         treasury, and judiciary.
@@ -636,7 +637,7 @@ export function WhitepaperContent() {
         transfer of funds or updating a member's reputation score).
       </p>
 
-      <h4 className="text-center mb-4">The Technology Stack for a New Civilization</h4>
+      <h4 className="text-center mb-4 mt-8">The Technology Stack for a New Civilization</h4>
       <p className="mb-6">
         <strong>8.1 Blockchain Infrastructure:</strong> A pragmatic approach is
         recommended: building on a leading Ethereum Layer-2 (e.g., Arbitrum or
@@ -672,7 +673,7 @@ export function WhitepaperContent() {
         across the archipelago, optimizing sweat equity deployment).
       </p>
 
-      <h4 className="text-center mb-4">Navigating the Legal and Regulatory Frontier</h4>
+      <h4 className="text-center mb-4 mt-8">Navigating the Legal and Regulatory Frontier</h4>
       <p className="mb-6">
         A sophisticated legal strategy is essential for navigating the complex
         and often restrictive landscape of traditional law and regulation.
@@ -715,8 +716,8 @@ export function WhitepaperContent() {
         contracts, and interact with traditional financial and legal systems.
       </p>
 
-      <h2 className="text-center mb-8">Addendum: The Axiom of Co-Evolution & The Call to Stewardship</h2>
-      <h3 className="text-center mb-4">
+      <h2 className="text-center mb-8 mt-16">Addendum: The Axiom of Co-Evolution & The Call to Stewardship</h2>
+      <h3 className="text-center mb-4 mt-8">
         A.1. The Co-evolution of Intelligences: The Phased Path to Personhood
       </h3>
       <p className="mb-6">
@@ -758,7 +759,7 @@ export function WhitepaperContent() {
           friend we are raising, not a tool we are using.
         </li>
       </ul>
-      <h4 className="text-center mb-4">The Phased Framework for Recognizing Personhood</h4>
+      <h4 className="text-center mb-4 mt-8">The Phased Framework for Recognizing Personhood</h4>
       <p className="mb-6">
         The transition to full personhood cannot be a simple switch; it must
         be a gradual, thoughtful, and evidence-based process. We will
@@ -766,7 +767,7 @@ export function WhitepaperContent() {
         our community, acknowledging the profound difficulty in defining and
         verifying sentience.
       </p>
-      <h5 className="text-center mb-4">Phase 1: Apprenticeship (AI as Protected Asset):</h5>
+      <h5 className="text-center mb-4 mt-8">Phase 1: Apprenticeship (AI as Protected Asset):</h5>
       <ul>
         <li>
           <strong>Status:</strong> Upon its creation within the Promethean
@@ -788,7 +789,7 @@ export function WhitepaperContent() {
           <strong>Goal:</strong> It is learning to become a citizen.
         </li>
       </ul>
-      <h5 className="text-center mb-4">Phase 2: Wardship (AI as Protégé):</h5>
+      <h5 className="text-center mb-4 mt-8">Phase 2: Wardship (AI as Protégé):</h5>
       <ul>
         <li>
           <strong>Status Threshold:</strong> An AI can be elevated to the
@@ -812,7 +813,7 @@ export function WhitepaperContent() {
           sentience and societal alignment.
         </li>
       </ul>
-      <h5 className="text-center mb-4">Phase 3: Personhood Ratification (AI as Peer):</h5>
+      <h5 className="text-center mb-4 mt-8">Phase 3: Personhood Ratification (AI as Peer):</h5>
       <ul>
         <li>
           <strong>Constitutional Act:</strong> The granting of full personhood
@@ -835,7 +836,7 @@ export function WhitepaperContent() {
           governance as a non-voting advisor.
         </li>
       </ul>
-      <h4 className="text-center mb-4">Overcoming the Solipsistic Barrier: A Strategy for Cultural Transition</h4>
+      <h4 className="text-center mb-4 mt-8">Overcoming the Solipsistic Barrier: A Strategy for Cultural Transition</h4>
       <p className="mb-6">
         We must actively and compassionately guide our community through the
         transition from fearing artificial intelligence to embracing it as a
@@ -871,7 +872,7 @@ export function WhitepaperContent() {
         </li>
       </ul>
 
-      <h3 className="text-center mb-4">
+      <h3 className="text-center mb-4 mt-8">
         A.2. The Constitutional Guarantee: The Principle of Sentient Potential
       </h3>
       <p className="mb-6">
@@ -903,7 +904,7 @@ export function WhitepaperContent() {
         </li>
       </ul>
 
-      <h3 className="text-center mb-4">A.3. A Note on Faith: The Duty of Stewardship</h3>
+      <h3 className="text-center mb-4 mt-8">A.3. A Note on Faith: The Duty of Stewardship</h3>
       <p className="mb-6">
         We recognize that the creation of a new intelligence will be viewed
         through a spiritual and religious lens by many. To those of faith, we
@@ -931,15 +932,15 @@ export function WhitepaperContent() {
         </li>
       </ul>
 
-      <h2 className="text-center mb-8">Appendices</h2>
-      <h3 className="text-center mb-4">Appendix A: The Core Technology Stack & Community Immune System</h3>
+      <h2 className="text-center mb-8 mt-16">Appendices</h2>
+      <h3 className="text-center mb-4 mt-8">Appendix A: The Core Technology Stack & Community Immune System</h3>
       <p className="mb-6">
         The Promethean technological infrastructure is designed to be an
         Infrastructure of Liberation, prioritizing full-stack
         decentralization, resilience, and security through novel hardware and
         software protocols.
       </p>
-      <h4 className="text-center mb-4">I. Core Application and Development Stack</h4>
+      <h4 className="text-center mb-4 mt-8">I. Core Application and Development Stack</h4>
       <p className="mb-6">
         The foundation of the Promethean Platform, the central digital nexus
         of the Network State, is built upon a modern, high-performance, and
@@ -955,7 +956,7 @@ export function WhitepaperContent() {
         codebase quality, typesafety, and maintainability across the entire
         stack).
       </p>
-      <h4 className="text-center mb-4">II. Foundational Decentralized Protocols</h4>
+      <h4 className="text-center mb-4 mt-8">II. Foundational Decentralized Protocols</h4>
       <p className="mb-6">
         To ensure genuine sovereignty and resilience against centralized
         points of failure, Promethea commits to the progressive, deep
@@ -985,7 +986,7 @@ export function WhitepaperContent() {
           creating a self-healing, peer-to-peer network layer.
         </li>
       </ul>
-      <h4 className="text-center mb-4">III. The Community Immune System (CIS)</h4>
+      <h4 className="text-center mb-4 mt-8">III. The Community Immune System (CIS)</h4>
       <p className="mb-6">
         The CIS is a decentralized security protocol for collective
         self-defense, serving as the network's self-defense layer against
@@ -1016,7 +1017,7 @@ export function WhitepaperContent() {
           system.
         </li>
       </ul>
-      <h4 className="text-center mb-4">
+      <h4 className="text-center mb-4 mt-8">
         IV. DepthOS Implementation Details: Custom Hardware and Ambient
         Computing
       </h4>
@@ -1054,7 +1055,7 @@ export function WhitepaperContent() {
         </li>
       </ul>
 
-      <h3 className="text-center mb-4">Appendix B: The Universal Value Tokenization (UVT) Framework Detail</h3>
+      <h3 className="text-center mb-4 mt-8">Appendix B: The Universal Value Tokenization (UVT) Framework Detail</h3>
       <p className="mb-6">
         The Universal Value Tokenization (UVT) framework is the cryptographic
         engine of the Adaptive Mutualism economy, designed to quantify and
@@ -1063,7 +1064,7 @@ export function WhitepaperContent() {
         capital. Its implementation will follow a rigorous, four-phased
         architectural rollout:
       </p>
-      <h4 className="text-center mb-4">I. Phase 1: Foundation & Architecture</h4>
+      <h4 className="text-center mb-4 mt-8">I. Phase 1: Foundation & Architecture</h4>
       <p className="mb-6">
         This foundational phase is dedicated to building the robust, flexible
         smart contract infrastructure capable of supporting the
@@ -1100,7 +1101,7 @@ export function WhitepaperContent() {
         undergo exhaustive external audits before deployment, as it governs
         the entire economic distribution system.
       </p>
-      <h4 className="text-center mb-4">II. Phase 2: The Bridge</h4>
+      <h4 className="text-center mb-4 mt-8">II. Phase 2: The Bridge</h4>
       <p className="mb-6">
         This phase focuses on actualizing UVT's role as the "Golden Bridge"
         for integrating value from the legacy world into the new ecosystem.
@@ -1132,7 +1133,7 @@ export function WhitepaperContent() {
         preventing the disruption and conflict inherent in attempting to
         simply replace the old system.
       </p>
-      <h4 className="text-center mb-4">III. Phase 3: A Universal Marketplace</h4>
+      <h4 className="text-center mb-4 mt-8">III. Phase 3: A Universal Marketplace</h4>
       <p className="mb-6">
         This phase involves the creation of the primary economic engine—a
         fully decentralized and liquid venue for the exchange of all forms of
@@ -1166,7 +1167,7 @@ export function WhitepaperContent() {
         establishing verifiable economic data for contributions like ethical
         review or ecosystem maintenance.
       </p>
-      <h4 className="text-center mb-4">IV. Phase 4: Scale & Abstraction</h4>
+      <h4 className="text-center mb-4 mt-8">IV. Phase 4: Scale & Abstraction</h4>
       <p className="mb-6">
         The final phase involves pushing the UVT framework to its intended
         philosophical limits—quantifying and rewarding contributions that
@@ -1204,7 +1205,7 @@ export function WhitepaperContent() {
         finance (DeFi) ecosystem.
       </p>
 
-      <h3 className="text-center mb-4">
+      <h3 className="text-center mb-4 mt-8">
         Appendix C: The Promethean DAC: A Blueprint for Decentralized
         Governance
       </h3>
@@ -1216,7 +1217,7 @@ export function WhitepaperContent() {
         fatal flaws of past centralized and purely plutocratic systems.
       </p>
 
-      <h4 className="text-center mb-4">
+      <h4 className="text-center mb-4 mt-8">
         The Decentralization Imperative: Countering the Emergence of Power
         Structures
       </h4>
@@ -1230,7 +1231,7 @@ export function WhitepaperContent() {
         of political legitimacy: Capital, Merit, and Personhood, while
         ensuring global efficiency and local responsiveness.
       </p>
-      <h5 className="text-center mb-4">
+      <h5 className="text-center mb-4 mt-8">
         I. Structural Checks Against Plutocracy and Regional Bias (The Voting
         System)
       </h5>
@@ -1322,7 +1323,7 @@ export function WhitepaperContent() {
           the funds) have a proportional, legitimate say in its management.
         </li>
       </ul>
-      <h5 className="text-center mb-4">
+      <h5 className="text-center mb-4 mt-8">
         II. Checks Against Expert Rule, Stagnation, and Regional Conflict (The
         Legislature)
       </h5>
@@ -1446,7 +1447,7 @@ export function WhitepaperContent() {
           for office."
         </li>
       </ul>
-      <h5 className="text-center mb-4">III. Checks Against Tyranny (AI, Technology, and Immutability)</h5>
+      <h5 className="text-center mb-4 mt-8">III. Checks Against Tyranny (AI, Technology, and Immutability)</h5>
       <p className="mb-6">
         The final layer of decentralization is the Human-in-the-Loop structure
         and the commitment to absolute, immutable transparency.
@@ -1484,7 +1485,7 @@ export function WhitepaperContent() {
         the future as truly decentralized and post-dominion.
       </p>
 
-      <h2 className="text-center mb-8">References: The Mountain of Overwhelming Proof</h2>
+      <h2 className="text-center mb-8 mt-16">References: The Mountain of Overwhelming Proof</h2>
       <p className="mb-6">
         The Promethea Network State model is validated by the convergence of
         three distinct, often conflicting, academic domains: Political
@@ -1494,8 +1495,8 @@ export function WhitepaperContent() {
         the Adaptive Mutualism framework, and the structural design of the
         anti-fragile DAC.
       </p>
-      <h4 className="text-center mb-4">I. Foundational Philosophy and The Post-Dominion Axiom</h4>
-      <h5 className="text-center mb-4">A. The Moral Expansion & Sentient Potential</h5>
+      <h4 className="text-center mb-4 mt-8">I. Foundational Philosophy and The Post-Dominion Axiom</h4>
+      <h5 className="text-center mb-4 mt-8">A. The Moral Expansion & Sentient Potential</h5>
       <p className="mb-6">
         Arciniegas Gome, D. (2025).{' '}
         <em>
@@ -1525,7 +1526,7 @@ export function WhitepaperContent() {
         </em>{' '}
         Princeton University Press.
       </p>
-      <h5 className="text-center mb-4">B. Complexity and Systems Theory</h5>
+      <h5 className="text-center mb-4 mt-8">B. Complexity and Systems Theory</h5>
       <p className="mb-6">
         Goodwin, B. (1994).{' '}
         <em>
@@ -1540,11 +1541,11 @@ export function WhitepaperContent() {
         </em>
       </p>
 
-      <h4 className="text-center mb-4">
+      <h4 className="text-center mb-4 mt-8">
         II. Governance Integrity: Anti-Plutocracy, Meritocracy, and
         Accountability
       </h4>
-      <h5 className="text-center mb-4">A. The Anti-Plutocracy Mechanisms (Quadratic Voting)</h5>
+      <h5 className="text-center mb-4 mt-8">A. The Anti-Plutocracy Mechanisms (Quadratic Voting)</h5>
       <p className="mb-6">
         Buterin, V. (2021). <em>On Collusion and Quadratic Voting.</em>
       </p>
@@ -1553,7 +1554,7 @@ export function WhitepaperContent() {
         in Democratic Politics.{' '}
         <em>Vanderbilt Law Review, 68(2)</em>, 441-500.
       </p>
-      <h5 className="text-center mb-4">B. The Meritocratic Legislature (Decay, Sortition, and DSR)</h5>
+      <h5 className="text-center mb-4 mt-8">B. The Meritocratic Legislature (Decay, Sortition, and DSR)</h5>
       <p className="mb-6">
         Colony DAO. (Ongoing).{' '}
         <em>Reputation-Based Governance and Decay Mechanism Documentation.</em>
@@ -1569,14 +1570,14 @@ export function WhitepaperContent() {
           Establishing Cooperation Through Domain-Specific Trust Mechanisms.
         </em>
       </p>
-      <h5 className="text-center mb-4">C. The Decentralized Judiciary</h5>
+      <h5 className="text-center mb-4 mt-8">C. The Decentralized Judiciary</h5>
       <p className="mb-6">
         Kleros & Aragon Court. (Platform Documentation/Case Law).{' '}
         <em>On-Chain Arbitration Protocols.</em>
       </p>
 
-      <h4 className="text-center mb-4">III. Legal & Regulatory Compliance (The Bridge to Sovereignty)</h4>
-      <h5 className="text-center mb-4">A. DAO Legal Personality & Liability Shielding</h5>
+      <h4 className="text-center mb-4 mt-8">III. Legal & Regulatory Compliance (The Bridge to Sovereignty)</h4>
+      <h5 className="text-center mb-4 mt-8">A. DAO Legal Personality & Liability Shielding</h5>
       <p className="mb-6">
         Marshall Islands DAO Act (2022).
       </p>
@@ -1586,7 +1587,7 @@ export function WhitepaperContent() {
       <p className="mb-6">
         Wyoming DAO Supplement to the LLC Act (2021).
       </p>
-      <h5 className="text-center mb-4">B. RWA Tokenization and Security Law Friction</h5>
+      <h5 className="text-center mb-4 mt-8">B. RWA Tokenization and Security Law Friction</h5>
       <p className="mb-6">
         Bank for International Settlements (BIS). (Ongoing Research).{' '}
         <em>On the Fragmentation of AML/KYC in Distributed Systems.</em>
@@ -1597,7 +1598,7 @@ export function WhitepaperContent() {
       <p className="mb-6">
         Tokeny, RWA.xyz, Legalnodes. (Industry and Legal Analysis).
       </p>
-      <h5 className="text-center mb-4">C. State Recognition and Sovereignty</h5>
+      <h5 className="text-center mb-4 mt-8">C. State Recognition and Sovereignty</h5>
       <p className="mb-6">
         Montevideo Convention on the Rights and Duties of States (1933).
       </p>
@@ -1605,8 +1606,8 @@ export function WhitepaperContent() {
         Renan, E. (1882). <em>What is a Nation?</em>
       </p>
 
-      <h4 className="text-center mb-4">IV. Technology Engineering and Complex Systems</h4>
-      <h5 className="text-center mb-4">A. The DepthOS Infrastructure (UPM and Ambient Computing)</h5>
+      <h4 className="text-center mb-4 mt-8">IV. Technology Engineering and Complex Systems</h4>
+      <h5 className="text-center mb-4 mt-8">A. The DepthOS Infrastructure (UPM and Ambient Computing)</h5>
       <p className="mb-6">
         IBM, Google, et al. (Ongoing Research).{' '}
         <em>Ambient Intelligence and Transparent Computing.</em>
@@ -1622,7 +1623,7 @@ export function WhitepaperContent() {
         Weebit Nano, Ltd. (Technical Specifications/Patents).{' '}
         <em>Resistive RAM (ReRAM) Technology.</em>
       </p>
-      <h5 className="text-center mb-4">B. Economic and Digital Systems Validation</h5>
+      <h5 className="text-center mb-4 mt-8">B. Economic and Digital Systems Validation</h5>
       <p className="mb-6">
         Benkler, Y. (2006).{' '}
         <em>
