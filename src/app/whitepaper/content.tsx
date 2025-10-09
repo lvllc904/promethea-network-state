@@ -11,7 +11,10 @@ const P = ({ children }: { children: React.ReactNode }) => {
   if (typeof children !== 'string') {
     return <p>{children}</p>;
   }
-  const sentences = children.match(/[^.!?]+[.!?]+/g) || [children];
+  // This regex splits by sentence-ending punctuation but keeps the delimiters.
+  // It handles cases where paragraphs don't end with punctuation.
+  const sentences = children.split(/(?<=[.!?])\s*/).filter(s => s.trim().length > 0);
+  
   return (
     <p>
       {sentences.map((sentence, index) => {
