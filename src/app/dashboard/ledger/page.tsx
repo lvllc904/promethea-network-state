@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useCollection, useFirestore, useMemoFirebase, useUser } from '@/firebase';
-import { collection } from 'firebase/firestore';
+import { collection, query, where } from 'firebase/firestore';
 import { UniversalValueToken } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -26,8 +26,8 @@ export default function LedgerPage() {
   const { user, isUserLoading: isAuthLoading } = useUser();
   
   const tokensQuery = useMemoFirebase(
-    () => (firestore ? collection(firestore, 'universal_value_tokens') : null),
-    [firestore]
+    () => (firestore && user ? query(collection(firestore, 'universal_value_tokens'), where('ownerId', '==', user.uid)) : null),
+    [firestore, user]
   );
   const { data: tokens, isLoading: areTokensLoading } =
     useCollection<UniversalValueToken>(tokensQuery);
@@ -50,18 +50,16 @@ export default function LedgerPage() {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h1 className="text-3xl font-headline font-bold">UVT Ledger</h1>
+        <h1 className="text-3xl font-headline font-bold">My Transactions</h1>
         <p className="text-muted-foreground">
-          A rich, multi-dimensional, and immutable record of how value is
-          created and exchanged.
+          A record of your value creation and exchange events on the UVT Ledger.
         </p>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>All Transactions</CardTitle>
+          <CardTitle>My Recent Contributions</CardTitle>
           <CardDescription>
-            All value creation and exchange events are recorded transparently
-            on-chain.
+            Your recent activity is recorded transparently on-chain.
           </CardDescription>
         </CardHeader>
         <CardContent>
