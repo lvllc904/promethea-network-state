@@ -82,6 +82,13 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       auth,
       async (firebaseUser) => {
         if (firebaseUser) {
+          // Whenever auth state changes, write to localStorage
+          if (firebaseUser.isAnonymous) {
+            window.localStorage.setItem('authStatus', 'anonymous');
+          } else {
+            window.localStorage.setItem('authStatus', 'authenticated');
+          }
+
           try {
             // Check if this is a new user by seeing if a citizen profile exists
             const citizenRef = doc(firestore, 'citizens', firebaseUser.uid);
@@ -109,9 +116,11 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
           }
         } else {
           // No user is signed in, so sign them in anonymously
+          window.localStorage.setItem('authStatus', 'anonymous');
           // The onAuthStateChanged will fire again once the anonymous user is created.
           signInAnonymously(auth).catch((error) => {
             console.error("Anonymous sign-in failed:", error);
+             window.localStorage.removeItem('authStatus');
             // If even anonymous sign-in fails, we stop loading and report the error.
             setUserAuthState({ user: null, isUserLoading: false, userError: error });
           });
@@ -119,6 +128,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       },
       (error) => { // Auth listener error
         console.error("FirebaseProvider: onAuthStateChanged error:", error);
+        window.localStorage.removeItem('authStatus');
         setUserAuthState({ user: null, isUserLoading: false, userError: error });
       }
     );
