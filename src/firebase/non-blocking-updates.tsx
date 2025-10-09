@@ -17,10 +17,14 @@ import { Citizen } from '@/lib/types';
 /**
  * Initiates a setDoc operation to create a new citizen profile.
  * This is a specific implementation for user creation to ensure the correct data shape.
- * Does NOT await the write operation internally.
+ * This function IS blocking and should be awaited.
  */
-export function createCitizenProfile(docRef: DocumentReference, data: Citizen) {
-  setDoc(docRef, data).catch(error => {
+export async function createCitizenProfile(docRef: DocumentReference, data: Citizen) {
+  try {
+    // The `await` keyword ensures we wait for the operation to complete or fail.
+    await setDoc(docRef, data);
+  } catch (error) {
+    // If it fails, we construct and emit a detailed error.
     errorEmitter.emit(
       'permission-error',
       new FirestorePermissionError({
@@ -28,9 +32,12 @@ export function createCitizenProfile(docRef: DocumentReference, data: Citizen) {
         operation: 'create',
         requestResourceData: data,
       })
-    )
-  })
+    );
+    // Re-throw the error so the calling function knows the operation failed.
+    throw error;
+  }
 }
+
 
 /**
  * Initiates a setDoc operation for a document reference.
@@ -107,3 +114,5 @@ export function deleteDocumentNonBlocking(docRef: DocumentReference) {
       )
     });
 }
+
+    

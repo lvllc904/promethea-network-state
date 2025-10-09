@@ -1,7 +1,7 @@
 
 'use client';
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -14,15 +14,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth, useFirestore } from '@/firebase';
-import {
-  initiateEmailSignUp,
-  initiateEmailSignIn,
-} from '@/firebase/non-blocking-login';
-import { useRouter } from 'next/navigation';
+import { useAuth, useFirestore, createCitizenProfile } from '@/firebase';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { createCitizenProfile } from '@/firebase/non-blocking-updates';
 import { doc } from 'firebase/firestore';
 import { Progress } from '@/components/ui/progress';
 import { ArrowLeft, ArrowRight, KeyRound, ShieldCheck, UserCheck, Wallet, Loader2 } from 'lucide-react';
@@ -45,60 +39,91 @@ export default function LoginPage() {
   const [signupStep, setSignupStep] = useState(1);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [isSignupComplete, setIsSignupComplete] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
 
   const progress = (signupStep / TOTAL_SIGNUP_STEPS) * 100;
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth) return;
-    initiateEmailSignIn(auth, loginEmail, loginPassword);
+    setIsLoggingIn(true);
+    try {
+      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      toast({
+        title: 'Login Successful!',
+        description: 'Welcome back.',
+      });
+      router.push(redirectUrl);
+    } catch (error: any) {
+      console.error("Login failed:", error);
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: error.message || "Please check your credentials and try again.",
+      });
+    } finally {
+      setIsLoggingIn(false);
+    }
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth || !firestore) return;
     setIsSigningUp(true);
-    initiateEmailSignUp(auth, signupEmail, signupPassword);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
+      const user = userCredential.user;
+
+      if (user) {
+        const citizenRef = doc(firestore, 'citizens', user.uid);
+        const newCitizen = {
+            id: user.uid,
+            decentralizedId: `did:prmth:${user.uid}`,
+            reputationScore: 100,
+            contributionScore: 0,
+            personhoodScore: 1,
+            skills: ['Founding Member'],
+        };
+        // Await the creation of the citizen profile
+        await createCitizenProfile(citizenRef, newCitizen);
+        
+        toast({
+            title: 'Welcome to Promethea!',
+            description: 'Your Passport has been created. You can now access all features.',
+        });
+        setIsSignupComplete(true);
+      }
+    } catch(error: any) {
+        console.error("Signup failed:", error);
+        toast({
+            variant: "destructive",
+            title: "Sign-up Failed",
+            description: error.message || "Could not create your account. Please try again.",
+        });
+    } finally {
+        setIsSigningUp(false);
+    }
   };
+
 
   const handleNextStep = () => setSignupStep(prev => Math.min(prev + 1, TOTAL_SIGNUP_STEPS));
   const handlePrevStep = () => setSignupStep(prev => Math.max(prev - 1, 1));
-
-  useEffect(() => {
-    if (!auth || !firestore) return;
-
-    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
-        if (user && !user.isAnonymous) {
-            if (isSigningUp) {
-                const citizenRef = doc(firestore, 'citizens', user.uid);
-                const newCitizen = {
-                    id: user.uid,
-                    decentralizedId: `did:prmth:${user.uid}`,
-                    reputationScore: 100,
-                    contributionScore: 0,
-                    personhoodScore: 1,
-                    skills: ['Founding Member'],
-                };
-                createCitizenProfile(citizenRef, newCitizen);
-                
-                toast({
-                    title: 'Welcome to Promethea!',
-                    description: 'Your Passport has been created. You can now access all features.',
-                });
-                setIsSignupComplete(true);
-            } else {
-                 toast({
-                    title: 'Login Successful!',
-                    description: 'Welcome back.',
-                  });
-                  router.push(redirectUrl);
+  
+    // This effect handles redirection for users who land on the login page
+    // but are already authenticated.
+    useEffect(() => {
+        if (!auth) return;
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user && !user.isAnonymous) {
+                // If user is logged in and somehow lands here, redirect them.
+                // This avoids showing the login page to an auth'd user.
+                router.push(redirectUrl);
             }
-            setIsSigningUp(false);
-        }
-    });
-
-    return () => unsubscribe();
-  }, [auth, firestore, router, toast, isSigningUp, redirectUrl]);
+        });
+        return () => unsubscribe();
+    }, [auth, router, redirectUrl]);
 
 
   const renderSignupStep = () => {
@@ -112,7 +137,7 @@ export default function LoginPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Passport Created!</h3>
                 <p className="text-muted-foreground mb-4">You are now a citizen of Promethea. Welcome to the network state.</p>
-                <Button onClick={() => router.push(redirectUrl)}>Continue</Button>
+                <Button onClick={() => router.push(redirectUrl)}>Continue to Dashboard</Button>
             </CardContent>
         );
     }
@@ -127,7 +152,7 @@ export default function LoginPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Creating Your Passport...</h3>
                 <p className="text-muted-foreground">Please wait while we establish your self-sovereign identity on the network.</p>
-                <Progress value={isSignupComplete ? 100 : 50} className="mt-4" />
+                <Progress value={50} className="mt-4" />
             </CardContent>
         );
     }
@@ -224,7 +249,8 @@ export default function LoginPage() {
                     <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
             ) : (
-                <Button onClick={handleSignup} type="submit">
+                <Button onClick={handleSignup} type="submit" disabled={isSigningUp}>
+                    {isSigningUp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                     Create Passport
                 </Button>
             )}
@@ -270,7 +296,8 @@ export default function LoginPage() {
                     onChange={(e) => setLoginPassword(e.target.value)}
                   />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                  {isLoggingIn ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                   Login
                 </Button>
               </form>
@@ -284,7 +311,7 @@ export default function LoginPage() {
               <CardDescription>
                 Join the Promethea Network State by creating your Self-Sovereign Identity.
               </CardDescription>
-              <Progress value={progress} className="mt-2" />
+              <Progress value={isSignupComplete ? 100 : progress} className="mt-2" />
             </CardHeader>
             
             {renderSignupStep()}
@@ -296,3 +323,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
