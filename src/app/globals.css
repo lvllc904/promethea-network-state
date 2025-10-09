@@ -86,17 +86,21 @@ body {
     @apply bg-background text-foreground;
   }
   .prose-numbered {
+    counter-reset: section;
+  }
+  .prose-numbered .prose-section {
+    counter-increment: section;
     counter-reset: paragraph;
   }
-  .prose-numbered p {
+  .prose-numbered .prose-section p {
     text-indent: 2em;
     position: relative;
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
-  .prose-numbered p::before {
+  .prose-numbered .prose-section p::before {
     counter-increment: paragraph;
-    content: counter(paragraph);
+    content: counter(section) ':' counter(paragraph);
     position: absolute;
     left: -3.5rem;
     top: 0;
