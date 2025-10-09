@@ -40,7 +40,7 @@ export default function LandingPage() {
             Assets
           </Link>
            <Button asChild variant="outline" size="sm">
-              <Link href="/login">Login / Sign Up</Link>
+              <Link href="/#/auth">Login / Sign Up</Link>
             </Button>
         </nav>
       </header>

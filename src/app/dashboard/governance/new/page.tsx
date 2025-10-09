@@ -30,7 +30,7 @@ export default function NewProposalPage() {
       // In a real implementation, this would submit the form data
       console.log("User is authenticated, proceeding with action.");
     } else {
-      router.push('/login');
+      router.push('/#/auth');
     }
   };
 

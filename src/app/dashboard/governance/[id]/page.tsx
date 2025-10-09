@@ -83,7 +83,7 @@ export default function ProposalDetailPage({
       // In a real implementation, this would trigger the voting logic.
       console.log("User is authenticated, proceeding with action.");
     } else {
-      router.push(`/login?redirect=${pathname}`);
+      router.push(`/#/auth?redirect=${pathname}`);
     }
   };
 
