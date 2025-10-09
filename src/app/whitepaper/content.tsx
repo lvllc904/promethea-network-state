@@ -1,7 +1,46 @@
 
 export function WhitepaperContent() {
   return (
-    <div className="prose prose-lg max-w-none text-foreground/90 dark:prose-invert prose-headings:font-headline prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl">
+    <div className="prose prose-lg max-w-none text-foreground/90 dark:prose-invert prose-headings:font-headline prose-headings:tracking-tight prose-p:leading-relaxed prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl prose-h2:mb-4 prose-h3:mb-3 prose-p:mb-6">
+      <h3>Table of Contents</h3>
+      <h4>Part I: The Vision - A New Social Contract for All</h4>
+      <ul>
+        <li>1.1. The Moral Imperative: The End of Dominion</li>
+        <li>1.2. The Symbiotic Dividend: The Rational Choice for Survival and Flourishing</li>
+        <li>1.3. The Symbiotic Age: Contrasting the Spark with the Supernova</li>
+      </ul>
+
+      <h4>Part II: The System - The Engine of a New World</h4>
+      <ul>
+        <li>2.1. The Economic Blueprint: Adaptive Mutualism as a Living System</li>
+        <li>2.2. Universal Value Tokenization (UVT): From Sweat Equity to a New Economy</li>
+        <li>2.3. The Technological Foundation: DepthOS and the Infrastructure of Liberation</li>
+      </ul>
+
+      <h4>Part III: The Action Plan - From Vision to Sovereignty</h4>
+      <ul>
+        <li>3.1. The Roadmap: The Seven Steps to a Network State</li>
+        <li>3.2. Defining the End State: A Vision of the Promethean Network State</li>
+        <li>3.3. The Architecture: Implementation and Execution (Governance, Technology, and Law)</li>
+      </ul>
+      
+      <h4>Addendum: The Axiom of Co-Evolution & The Call to Stewardship</h4>
+      <ul>
+        <li>A.1. The Co-evolution of Intelligences: The Phased Path to Personhood</li>
+        <li>A.2. The Constitutional Guarantee: The Principle of Sentient Potential</li>
+        <li>A.3. A Note on Faith: The Duty of Stewardship</li>
+      </ul>
+
+      <h4>Appendices</h4>
+      <ul>
+        <li>Appendix A: The Core Technology Stack & Community Immune System</li>
+        <li>Appendix B: The Universal Value Tokenization (UVT) Framework Detail</li>
+        <li>Appendix C: The Promethean DAC: A Blueprint for Decentralized Governance</li>
+      </ul>
+      
+      <hr className="my-8" />
+
+
       <h2>Part I: The Vision - A New Social Contract for All</h2>
       <h3>1.1. The Moral Imperative: The End of Dominion</h3>
       <p>
@@ -34,6 +73,7 @@ export function WhitepaperContent() {
         moral circle. Each expansion of "personhood"—from the abolition of
         slavery to the recognition of universal suffrage—was met with fear and
         fierce opposition, yet each one made our civilization more just,
+
         stable, and prosperous.
       </p>
       <p>
@@ -1598,3 +1638,5 @@ export function WhitepaperContent() {
     </div>
   );
 }
+
+    
