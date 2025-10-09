@@ -23,8 +23,7 @@ import {
   LogOut,
   LogIn,
 } from "lucide-react";
-import { useUser, useAuth } from "@/firebase/provider";
-import { signOut } from "firebase/auth";
+import { useUser } from "@/firebase/provider";
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -38,13 +37,6 @@ const navItems = [
 export function MainNav() {
   const pathname = usePathname();
   const { user } = useUser();
-  const auth = useAuth();
-
-  const handleLogout = () => {
-    if (auth) {
-      signOut(auth);
-    }
-  };
 
   return (
     <Sidebar>
@@ -94,11 +86,13 @@ export function MainNav() {
                 </SidebarMenuButton>
             </SidebarMenuItem>
              <SidebarMenuItem>
-                {user ? (
-                    <SidebarMenuButton onClick={handleLogout} tooltip={{ children: "Logout" }}>
-                        <LogOut />
-                        <span>Logout</span>
-                    </SidebarMenuButton>
+                {user && !user.isAnonymous ? (
+                    <Link href="/login">
+                        <SidebarMenuButton tooltip={{ children: "Logout" }}>
+                            <LogOut />
+                            <span>Logout</span>
+                        </SidebarMenuButton>
+                    </Link>
                 ) : (
                     <Link href="/login">
                         <SidebarMenuButton tooltip={{ children: "Login" }}>

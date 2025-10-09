@@ -16,9 +16,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from 'next/image';
-import { useUser, useAuth } from "@/firebase/provider";
+import { useUser } from "@/firebase/provider";
 import { Skeleton } from "../ui/skeleton";
-import { signOut } from "firebase/auth";
 
 function getPageTitle(pathname: string): string {
   const segments = pathname.split('/').filter(Boolean);
@@ -34,16 +33,9 @@ export function Header() {
   const pathname = usePathname();
   const title = getPageTitle(pathname);
   const { user, isUserLoading } = useUser();
-  const auth = useAuth();
 
   const userAvatar = user ? PlaceHolderImages.find(p => p.id === `user${user.uid}`) : null;
 
-  const handleLogout = () => {
-    if (auth) {
-      signOut(auth);
-    }
-  };
-  
   if (isUserLoading) {
     return (
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -77,7 +69,7 @@ export function Header() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => window.location.href = '/login'}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
        ) : (

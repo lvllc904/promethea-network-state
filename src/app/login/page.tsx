@@ -14,16 +14,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { useAuth, useUser } from '@/firebase';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, LogOut } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 function LoginPageContent() {
   const auth = useAuth();
+  const { user, isUserLoading } = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirect') || '/dashboard';
@@ -36,6 +37,7 @@ function LoginPageContent() {
   
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -85,7 +87,67 @@ function LoginPageContent() {
         setIsSigningUp(false);
     }
   };
+  
+  const handleLogout = async () => {
+    if (!auth) return;
+    setIsLoggingOut(true);
+    try {
+      await signOut(auth);
+      // The onAuthStateChanged listener in FirebaseProvider will handle the user state change.
+      toast({
+        title: 'Logged Out',
+        description: 'You have been successfully logged out.',
+      });
+      // We don't need to force a redirect. The app state will change naturally.
+    } catch (error: any) {
+      console.error("Logout failed:", error);
+      toast({
+        variant: "destructive",
+        title: "Logout Failed",
+        description: error.message || "Could not log you out. Please try again.",
+      });
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+  
+  if (isUserLoading) {
+      return (
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      );
+  }
 
+  // If user is authenticated (not anonymous), show the logout page.
+  if (user && !user.isAnonymous) {
+      return (
+         <div className="flex items-center justify-center min-h-screen bg-muted/40">
+            <Card className="w-full max-w-md">
+                 <CardHeader>
+                    <CardTitle className="font-headline text-2xl">Logout</CardTitle>
+                    <CardDescription>
+                        You are currently logged in as {user.email}.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <p>Click the button below to securely log out of your account.</p>
+                     <Button onClick={handleLogout} disabled={isLoggingOut} className="w-full" variant="destructive">
+                        {isLoggingOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogOut className="mr-2 h-4 w-4" />}
+                        Logout
+                    </Button>
+                </CardContent>
+                 <CardFooter className="justify-center">
+                    <Button variant="link" asChild>
+                        <Link href="/dashboard">Return to Dashboard</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
+        </div>
+      )
+  }
+
+  // Otherwise, show the Login/Sign Up forms.
   return (
     <div className="flex items-center justify-center min-h-screen bg-muted/40">
       <Tabs defaultValue="login" className="w-full max-w-md">
@@ -212,4 +274,3 @@ export default function LoginPage() {
     </FirebaseClientProvider>
   );
 }
-
