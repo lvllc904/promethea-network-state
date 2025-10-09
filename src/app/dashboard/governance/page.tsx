@@ -42,43 +42,47 @@ export default function GovernancePage() {
       setIsLoading(true);
       return;
     }
-    if (!user || !rawProposals) {
+    // Guard against running when user or data is not yet available.
+    if (!user || !rawProposals || !firestore) {
         setIsLoading(false);
+        // If there are no raw proposals, ensure the proposals list is empty.
+        if (!rawProposals) {
+            setProposals([]);
+        }
         return;
     }
 
     const enrichProposals = async () => {
         setIsLoading(true);
-        if (rawProposals && firestore) {
-            const enriched = await Promise.all(
-              rawProposals.map(async (p) => {
-                const enrichedProposal: EnrichedProposal = { ...p };
-                // Fetch proposer
-                if (p.proposerId) {
-                    try {
-                        const proposerSnap = await getDocs(query(collection(firestore, 'citizens'), where('id', '==', p.proposerId)));
-                        if (!proposerSnap.empty) {
-                            enrichedProposal.proposer = { ...proposerSnap.docs[0].data(), id: proposerSnap.docs[0].id } as Citizen;
-                        }
-                    } catch (e) {
-                        console.error(`Could not fetch proposer for proposal ${p.id}`, e);
+        const enriched = await Promise.all(
+          rawProposals.map(async (p) => {
+            const enrichedProposal: EnrichedProposal = { ...p };
+            // Fetch proposer
+            if (p.proposerId) {
+                try {
+                    const proposerRef = doc(firestore, 'citizens', p.proposerId);
+                    const proposerSnap = await getDoc(proposerRef);
+                    if (proposerSnap.exists()) {
+                        enrichedProposal.proposer = { ...proposerSnap.data(), id: proposerSnap.id } as Citizen;
                     }
+                } catch (e) {
+                    console.error(`Could not fetch proposer for proposal ${p.id}`, e);
                 }
-    
-                // Fetch votes
-                const votesQuery = query(
-                  collection(firestore, 'votes'),
-                  where('proposalId', '==', p.id)
-                );
-                const votesSnapshot = await getDocs(votesQuery);
-                enrichedProposal.votes = votesSnapshot.docs.map(
-                  (d) => ({ ...d.data(), id: d.id } as Vote)
-                );
-                return enrichedProposal;
-              })
+            }
+
+            // Fetch votes
+            const votesQuery = query(
+              collection(firestore, 'votes'),
+              where('proposalId', '==', p.id)
             );
-            setProposals(enriched);
-        }
+            const votesSnapshot = await getDocs(votesQuery);
+            enrichedProposal.votes = votesSnapshot.docs.map(
+              (d) => ({ ...d.data(), id: d.id } as Vote)
+            );
+            return enrichedProposal;
+          })
+        );
+        setProposals(enriched);
         setIsLoading(false);
     };
     enrichProposals();

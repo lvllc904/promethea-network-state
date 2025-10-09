@@ -33,7 +33,7 @@ export default function ProposalDetailPage({
   const pathname = usePathname();
   const [votes, setVotes] = useState<Vote[]>([]);
   const [proposer, setProposer] = useState<Citizen | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isSecondaryLoading, setIsSecondaryLoading] = useState(true);
 
   const proposalRef = useMemoFirebase(
     () => (firestore ? doc(firestore, 'proposals', params.id) : null),
@@ -42,35 +42,40 @@ export default function ProposalDetailPage({
   const { data: proposal, isLoading: isProposalLoading } = useDoc<Proposal>(proposalRef);
 
   useEffect(() => {
-    if (proposal && firestore) {
-      const fetchVotesAndProposer = async () => {
-        setIsLoading(true);
-        // Fetch votes
-        const votesQuery = query(
-          collection(firestore, 'votes'),
-          where('proposalId', '==', proposal.id)
-        );
-        const votesSnapshot = await getDocs(votesQuery);
-        const votesData = votesSnapshot.docs.map(
-          (d) => ({ ...d.data(), id: d.id } as Vote)
-        );
-        setVotes(votesData);
-
-        // Fetch proposer
-        if (proposal.proposerId) {
-            const proposerRef = doc(firestore, 'citizens', proposal.proposerId);
-            const proposerSnap = await getDoc(proposerRef);
-            if (proposerSnap.exists()) {
-                setProposer({ ...proposerSnap.data(), id: proposerSnap.id } as Citizen);
-            }
-        }
-        setIsLoading(false);
-      };
-
-      fetchVotesAndProposer();
-    } else if (!isProposalLoading) {
-        setIsLoading(false);
+    // Guard: Wait for the main proposal data and firestore to be available.
+    if (!proposal || !firestore) {
+      if (!isProposalLoading) {
+        setIsSecondaryLoading(false);
+      }
+      return;
     }
+
+    const fetchVotesAndProposer = async () => {
+      setIsSecondaryLoading(true);
+      // Fetch votes
+      const votesQuery = query(
+        collection(firestore, 'votes'),
+        where('proposalId', '==', proposal.id)
+      );
+      const votesSnapshot = await getDocs(votesQuery);
+      const votesData = votesSnapshot.docs.map(
+        (d) => ({ ...d.data(), id: d.id } as Vote)
+      );
+      setVotes(votesData);
+
+      // Fetch proposer
+      if (proposal.proposerId) {
+          const proposerRef = doc(firestore, 'citizens', proposal.proposerId);
+          const proposerSnap = await getDoc(proposerRef);
+          if (proposerSnap.exists()) {
+              setProposer({ ...proposerSnap.data(), id: proposerSnap.id } as Citizen);
+          }
+      }
+      setIsSecondaryLoading(false);
+    };
+
+    fetchVotesAndProposer();
+
   }, [proposal, firestore, isProposalLoading]);
   
   const handleProtectedAction = () => {
@@ -89,7 +94,7 @@ export default function ProposalDetailPage({
 
   const proposerAvatar = proposer ? PlaceHolderImages.find((p) => p.id === `user${proposer.id}`) : null;
 
-  if (isProposalLoading || isLoading) {
+  if (isProposalLoading || isSecondaryLoading) {
     return (
         <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-2">
