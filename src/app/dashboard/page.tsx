@@ -48,27 +48,27 @@ export default function Dashboard() {
 
   const activeProposalsQuery = useMemoFirebase(
     () =>
-      firestore && user
+      firestore
         ? query(
             collection(firestore, 'proposals'),
             where('status', '==', 'Active'),
             limit(3)
           )
         : null,
-    [firestore, user]
+    [firestore]
   );
   const { data: activeProposals, isLoading: areProposalsLoading } =
     useCollection<Proposal>(activeProposalsQuery);
 
   const assetsQuery = useMemoFirebase(
-    () => (firestore && user ? collection(firestore, 'real_world_assets') : null),
-    [firestore, user]
+    () => (firestore ? collection(firestore, 'real_world_assets') : null),
+    [firestore]
   );
   const { data: assets, isLoading: areAssetsLoading } =
     useCollection<RealWorldAsset>(assetsQuery);
     
   const myContributionsQuery = useMemoFirebase(() => 
-    firestore && user ? query(collection(firestore, 'universal_value_tokens'), where('ownerId', '==', user.uid), limit(5)) : null
+    (firestore && user) ? query(collection(firestore, 'universal_value_tokens'), where('ownerId', '==', user.uid), limit(5)) : null
   , [firestore, user]);
   const { data: myContributions, isLoading: areContributionsLoading } = useCollection<UniversalValueToken>(myContributionsQuery);
 
