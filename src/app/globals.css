@@ -103,7 +103,7 @@ body {
     position: absolute;
     left: -3rem;
     top: -0.25em;
-    font-size: 0.65rem;
+    font-size: 0.3rem;
     vertical-align: super;
     color: hsl(var(--accent));
     opacity: 1;
