@@ -18,6 +18,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from 'next/image';
 import { Skeleton } from "../ui/skeleton";
 import { useAuthStatus } from "@/hooks/use-auth-status";
+import { AuthStatusIndicator } from "./AuthStatusIndicator";
 
 function getPageTitle(pathname: string): string {
   const segments = pathname.split('/').filter(Boolean);
@@ -34,9 +35,6 @@ export function Header() {
   const title = getPageTitle(pathname);
   const { isAuthenticated, isAuthStatusLoading } = useAuthStatus();
 
-  // In this decoupled system, we don't have direct access to user details here.
-  // We'll show a generic authenticated state. A real implementation might
-  // fetch user details via a separate API call if needed.
   const userEmail = "citizen@promethea.network"; 
   const userAvatar = PlaceHolderImages.find(p => p.id === `user1`);
 
@@ -57,6 +55,11 @@ export function Header() {
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <SidebarTrigger className="md:hidden" />
       <h1 className="text-2xl font-headline font-semibold">{title}</h1>
+      
+      <div className="mx-auto">
+        <AuthStatusIndicator />
+      </div>
+
       <div className="ml-auto flex items-center gap-4">
        {isAuthenticated ? (
           <DropdownMenu>
