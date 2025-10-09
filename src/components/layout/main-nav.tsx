@@ -20,10 +20,7 @@ import {
   Shield,
   BookOpen,
   Settings,
-  LogOut,
-  LogIn,
 } from "lucide-react";
-import { useUser } from "@/firebase/provider";
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -36,7 +33,6 @@ const navItems = [
 
 export function MainNav() {
   const pathname = usePathname();
-  const { user } = useUser();
 
   return (
     <Sidebar>
@@ -84,23 +80,6 @@ export function MainNav() {
                     <Settings />
                     <span>Settings</span>
                 </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-                {user && !user.isAnonymous ? (
-                    <Link href="/login">
-                        <SidebarMenuButton tooltip={{ children: "Logout" }}>
-                            <LogOut />
-                            <span>Logout</span>
-                        </SidebarMenuButton>
-                    </Link>
-                ) : (
-                    <Link href="/login">
-                        <SidebarMenuButton tooltip={{ children: "Login" }}>
-                            <LogIn />
-                            <span>Login</span>
-                        </SidebarMenuButton>
-                    </Link>
-                )}
             </SidebarMenuItem>
          </SidebarMenu>
       </SidebarFooter>
