@@ -1,0 +1,401 @@
+{
+  "entities": {
+    "Citizen": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Citizen",
+      "type": "object",
+      "description": "Represents a citizen within the Promethea Network State.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Citizen entity."
+        },
+        "decentralizedId": {
+          "type": "string",
+          "description": "The citizen's Decentralized Identifier (DID) - their Promethean Passport."
+        },
+        "reputationScore": {
+          "type": "number",
+          "description": "A non-transferable score representing the citizen's proven history of positive contributions."
+        },
+        "contributionScore": {
+          "type": "number",
+          "description": "A score representing the citizen's overall contributions to the network (sweat equity + capital invested)."
+        },
+        "personhoodScore": {
+          "type": "number",
+          "description": "A score calculated using Quadratic Voting principles to prevent domination by large token-holders."
+        },
+        "skills": {
+          "type": "array",
+          "description": "An array of verifiable skills possessed by the citizen (Verifiable Credentials).",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "decentralizedId",
+        "reputationScore",
+        "contributionScore",
+        "personhoodScore"
+      ]
+    },
+    "Proposal": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Proposal",
+      "type": "object",
+      "description": "Represents a governance proposal within the Promethean DAC.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Proposal entity."
+        },
+        "proposerId": {
+          "type": "string",
+          "description": "Reference to Citizen who proposed the proposal. (Relationship: Citizen 1:N Proposal)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the proposal."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the proposal."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the proposal (e.g., 'Draft', 'Active', 'Passed', 'Rejected')."
+        },
+        "votingStartTime": {
+          "type": "string",
+          "description": "The date and time when voting on the proposal starts.",
+          "format": "date-time"
+        },
+        "votingEndTime": {
+          "type": "string",
+          "description": "The date and time when voting on the proposal ends.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "proposerId",
+        "title",
+        "description",
+        "status"
+      ]
+    },
+    "RealWorldAsset": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "RealWorldAsset",
+      "type": "object",
+      "description": "Represents a Real-World Asset (RWA) within the Promethean Network State.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the RealWorldAsset entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the real-world asset (e.g., 'Apartment Complex A', 'Farmland B')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the real-world asset."
+        },
+        "location": {
+          "type": "string",
+          "description": "The geographical location of the real-world asset."
+        },
+        "assetType": {
+          "type": "string",
+          "description": "The type of asset (e.g., 'Real Estate', 'Agriculture', 'Small Business')."
+        },
+        "tokenIds": {
+          "type": "array",
+          "description": "References to UVT tokens representing fractional ownership of the asset. (Relationship: RealWorldAsset 1:N UniversalValueToken)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "location",
+        "assetType"
+      ]
+    },
+    "UniversalValueToken": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UniversalValueToken",
+      "type": "object",
+      "description": "Represents a Universal Value Token (UVT) within the Promethean Network State.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UniversalValueToken entity."
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Reference to Citizen who owns the token. (Relationship: Citizen 1:N UniversalValueToken)"
+        },
+        "assetId": {
+          "type": "string",
+          "description": "Reference to RealWorldAsset the token represents fractional ownership of. (Relationship: RealWorldAsset 1:N UniversalValueToken)"
+        },
+        "tokenType": {
+          "type": "string",
+          "description": "The type of token (e.g., 'Labor', 'Capital', 'Reputation')."
+        },
+        "amount": {
+          "type": "number",
+          "description": "The amount of the token held."
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "tokenId",
+        "tokenType",
+        "amount"
+      ]
+    },
+    "Vote": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Vote",
+      "type": "object",
+      "description": "Represents a vote cast by a citizen on a proposal.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Vote entity."
+        },
+        "citizenId": {
+          "type": "string",
+          "description": "Reference to Citizen who cast the vote. (Relationship: Citizen 1:N Vote)"
+        },
+        "proposalId": {
+          "type": "string",
+          "description": "Reference to Proposal being voted on. (Relationship: Proposal 1:N Vote)"
+        },
+        "votePower": {
+          "type": "number",
+          "description": "The voting power used by the citizen in this vote."
+        },
+        "support": {
+          "type": "boolean",
+          "description": "Indicates whether the citizen supported the proposal (true) or opposed it (false)."
+        }
+      },
+      "required": [
+        "id",
+        "citizenId",
+        "proposalId",
+        "votePower",
+        "support"
+      ]
+    },
+    "Task": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Task",
+      "type": "object",
+      "description": "Represents a task related to real-world asset management.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Task entity."
+        },
+        "assetId": {
+          "type": "string",
+          "description": "Reference to RealWorldAsset the task is associated with. (Relationship: RealWorldAsset 1:N Task)"
+        },
+        "assigneeId": {
+          "type": "string",
+          "description": "Reference to Citizen assigned to the task. (Relationship: Citizen 1:N Task)"
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the task."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the task (e.g., 'Open', 'In Progress', 'Completed')."
+        },
+        "priority": {
+          "type": "string",
+          "description": "The priority of the task (e.g., 'High', 'Medium', 'Low')."
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "The due date for the task.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "assetId",
+        "description",
+        "status",
+        "priority",
+        "dueDate"
+      ]
+    },
+    "DACParams": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DACParams",
+      "type": "object",
+      "description": "Represents parameters within the Promethean DAC.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the DACParam entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the parameter (e.g., initialReputation, governanceThreshold)."
+        },
+        "value": {
+          "type": "string",
+          "description": "Value of the parameter (can be string, number, boolean, etc.)."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the parameter."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "value",
+        "description"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "citizens/{citizenId}",
+        "definition": {
+          "entityName": "Citizen",
+          "schema": {
+            "$ref": "#/backend/entities/Citizen"
+          },
+          "description": "Stores citizen data.  Authorization is based on path-based ownership and potentially denormalized role data within the document itself.",
+          "params": [
+            {
+              "name": "citizenId",
+              "description": "The unique identifier for the citizen."
+            }
+          ]
+        }
+      },
+      {
+        "path": "proposals/{proposalId}",
+        "definition": {
+          "entityName": "Proposal",
+          "schema": {
+            "$ref": "#/backend/entities/Proposal"
+          },
+          "description": "Stores governance proposals. Access control is managed by the proposerId and potentially a membership map for collaborative proposals.",
+          "params": [
+            {
+              "name": "proposalId",
+              "description": "The unique identifier for the proposal."
+            }
+          ]
+        }
+      },
+      {
+        "path": "real_world_assets/{assetId}",
+        "definition": {
+          "entityName": "RealWorldAsset",
+          "schema": {
+            "$ref": "#/backend/entities/RealWorldAsset"
+          },
+          "description": "Stores real-world asset data. Authorization might involve a membership map indicating authorized users for managing the asset, denormalized for authorization independence.",
+          "params": [
+            {
+              "name": "assetId",
+              "description": "The unique identifier for the real-world asset."
+            }
+          ]
+        }
+      },
+      {
+        "path": "universal_value_tokens/{tokenId}",
+        "definition": {
+          "entityName": "UniversalValueToken",
+          "schema": {
+            "$ref": "#/backend/entities/UniversalValueToken"
+          },
+          "description": "Stores universal value tokens. Ownership is determined by the ownerId field, which references a citizen. Includes assetId for linking to RealWorldAsset.",
+          "params": [
+            {
+              "name": "tokenId",
+              "description": "The unique identifier for the universal value token."
+            }
+          ]
+        }
+      },
+      {
+        "path": "votes/{voteId}",
+        "definition": {
+          "entityName": "Vote",
+          "schema": {
+            "$ref": "#/backend/entities/Vote"
+          },
+          "description": "Stores votes cast by citizens. Access is controlled by the citizenId and proposalId.",
+          "params": [
+            {
+              "name": "voteId",
+              "description": "The unique identifier for the vote."
+            }
+          ]
+        }
+      },
+      {
+        "path": "tasks/{taskId}",
+        "definition": {
+          "entityName": "Task",
+          "schema": {
+            "$ref": "#/backend/entities/Task"
+          },
+          "description": "Stores tasks related to real-world asset management. Authorization is based on the assigneeId and the assetId.",
+          "params": [
+            {
+              "name": "taskId",
+              "description": "The unique identifier for the task."
+            }
+          ]
+        }
+      },
+      {
+        "path": "dac_params/{dacParamsId}",
+        "definition": {
+          "entityName": "DACParams",
+          "schema": {
+            "$ref": "#/backend/entities/DACParams"
+          },
+          "description": "Stores parameters for the DAC, such as governance thresholds or initial reputation values.  Access should be restricted to administrators or potentially the DAC itself via a service account.",
+          "params": [
+            {
+              "name": "dacParamsId",
+              "description": "The unique identifier for the DAC parameter."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to support the Promethea Network State's core features, emphasizing authorization independence and secure data access. The primary strategy is authorization independence via denormalization, which eliminates `get()` calls in security rules, enabling atomic operations. Path-based ownership is used where appropriate to simplify rules. Segregation of data with different access requirements ensures clarity of intent and simplifies security rules, avoiding rules that act as filters (QAPs). The membership map pattern is utilized for collaborative data, and dedicated collections manage global roles.\n\nSpecifically, the `citizens/{citizenId}` collection stores citizen data. The `proposals/{proposalId}` collection stores proposals. The `real_world_assets/{assetId}` collection stores real-world assets. The `universal_value_tokens/{tokenId}` collection stores universal value tokens, which are linked to citizens and real-world assets, ensuring proper access control. The `votes/{voteId}` collection stores votes cast by citizens on proposals. The `tasks/{taskId}` collection stores tasks related to real-world asset management.\n\nAuthorization Independence is achieved through denormalization. For example, while a citizen's `decentralizedId` might be used for authentication purposes elsewhere, all relevant authorization data (roles, memberships) is stored directly within the documents in each collection, or can be derived from the path (e.g. ownership of documents within `/users/{userId}`). This eliminates the need for security rules to perform `get()` operations to fetch related data for authorization, supporting atomic operations and simplifying rule debugging.\n\nQAPs are supported by structural segregation. Publicly accessible data (if any) would be stored in separate collections from private data, allowing for secure `list` operations without complex filtering in rules. Private data is typically stored under user-owned paths (`/users/{userId}/private_data`). Collaborative data, such as proposals, can be secured using membership maps or similar mechanisms, denormalized into each document to avoid `get()` calls."
+  }
+}
