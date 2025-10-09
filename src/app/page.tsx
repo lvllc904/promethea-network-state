@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -38,6 +39,9 @@ export default function LandingPage() {
           <Link href="/dashboard/assets" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
             Assets
           </Link>
+           <Button asChild variant="outline" size="sm">
+              <Link href="/login">Login / Sign Up</Link>
+            </Button>
         </nav>
       </header>
       <main className="flex-1">

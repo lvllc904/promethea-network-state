@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -11,7 +12,6 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard,
   Wallet,
@@ -21,7 +21,10 @@ import {
   BookOpen,
   Settings,
   LogOut,
+  LogIn,
 } from "lucide-react";
+import { useUser, useAuth } from "@/firebase/provider";
+import { signOut } from "firebase/auth";
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -34,6 +37,14 @@ const navItems = [
 
 export function MainNav() {
   const pathname = usePathname();
+  const { user } = useUser();
+  const auth = useAuth();
+
+  const handleLogout = () => {
+    if (auth) {
+      signOut(auth);
+    }
+  };
 
   return (
     <Sidebar>
@@ -63,7 +74,7 @@ export function MainNav() {
             <SidebarMenuItem key={item.href}>
               <Link href={item.href}>
                 <SidebarMenuButton
-                  isActive={pathname === item.href}
+                  isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}
                   tooltip={{ children: item.label }}
                 >
                   <item.icon />
@@ -83,10 +94,19 @@ export function MainNav() {
                 </SidebarMenuButton>
             </SidebarMenuItem>
              <SidebarMenuItem>
-                <SidebarMenuButton tooltip={{ children: "Logout" }}>
-                    <LogOut />
-                    <span>Logout</span>
-                </SidebarMenuButton>
+                {user ? (
+                    <SidebarMenuButton onClick={handleLogout} tooltip={{ children: "Logout" }}>
+                        <LogOut />
+                        <span>Logout</span>
+                    </SidebarMenuButton>
+                ) : (
+                    <Link href="/login">
+                        <SidebarMenuButton tooltip={{ children: "Login" }}>
+                            <LogIn />
+                            <span>Login</span>
+                        </SidebarMenuButton>
+                    </Link>
+                )}
             </SidebarMenuItem>
          </SidebarMenu>
       </SidebarFooter>
