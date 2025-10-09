@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { cn } from '@/lib/utils';
-import { FirebaseClientProvider } from '@/firebase';
+// FirebaseClientProvider is removed to disconnect the auth service.
 
 export const metadata: Metadata = {
   title: 'Promethea Network State',
@@ -25,9 +25,8 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased', 'min-h-screen bg-background font-sans')}>
-        <FirebaseClientProvider>
-          {children}
-        </FirebaseClientProvider>
+        {/* The FirebaseClientProvider is intentionally removed to keep the systems separate. */}
+        {children}
         <Toaster />
       </body>
     </html>

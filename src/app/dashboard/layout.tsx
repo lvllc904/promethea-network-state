@@ -40,7 +40,8 @@ export default function DashboardLayout({
             <SidebarInset>
                 <Header />
                 <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-                    {isUserLoading ? <DashboardSkeleton /> : children}
+                    {/* With auth disconnected, we never show the skeleton */}
+                    {children}
                 </main>
             </SidebarInset>
         </div>
