@@ -1,6 +1,6 @@
 
 'use client';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import {
@@ -50,6 +50,7 @@ async function handleAllocate(data: AllocateRWATasksInput) {
 export default function AssetDetailPage({ params }: { params: { id: string } }) {
   const firestore = useFirestore();
   const { user } = useUser();
+  const router = useRouter();
 
   const assetRef = useMemoFirebase(
     () => (firestore ? doc(firestore, 'real_world_assets', params.id) : null),
@@ -69,7 +70,16 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
     [firestore, params.id]
   );
   const { data: tasks, isLoading: areTasksLoading } = useCollection<Task>(tasksQuery);
-  const canApply = user && !user.isAnonymous;
+  
+  const handleProtectedAction = () => {
+    if (user && !user.isAnonymous) {
+      // In a real implementation, this would trigger the application logic.
+      console.log("User is authenticated, proceeding with action.");
+    } else {
+      router.push('/login');
+    }
+  };
+
 
   if (isAssetLoading) {
     return (
@@ -238,7 +248,8 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                       <Button
                         variant="outline"
                         size="sm"
-                        disabled={task.status !== 'Open' || !canApply}
+                        disabled={task.status !== 'Open'}
+                        onClick={handleProtectedAction}
                       >
                         Apply
                       </Button>
@@ -247,8 +258,8 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                 ))}
               </TableBody>
             </Table>
-            {!canApply && (
-                <p className="text-xs text-center text-muted-foreground pt-4">You must have a Promethean Passport to apply for tasks.</p>
+            {user?.isAnonymous && (
+                <p className="text-xs text-center text-muted-foreground pt-4">Create a Promethean Passport to apply for tasks.</p>
             )}
           </CardContent>
         </Card>

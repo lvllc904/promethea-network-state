@@ -1,6 +1,6 @@
 
 'use client';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import {
   Card,
   CardHeader,
@@ -29,6 +29,7 @@ export default function ProposalDetailPage({
 }) {
   const firestore = useFirestore();
   const { user } = useUser();
+  const router = useRouter();
   const [votes, setVotes] = useState<Vote[]>([]);
   const [proposer, setProposer] = useState<Citizen | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -70,6 +71,15 @@ export default function ProposalDetailPage({
         setIsLoading(false);
     }
   }, [proposal, firestore, isProposalLoading]);
+  
+  const handleProtectedAction = () => {
+    if (user && !user.isAnonymous) {
+      // In a real implementation, this would trigger the voting logic.
+      console.log("User is authenticated, proceeding with action.");
+    } else {
+      router.push('/login');
+    }
+  };
 
   const totalVotes = votes.length;
   const forVotes = votes.filter(v => v.support).length;
@@ -77,7 +87,6 @@ export default function ProposalDetailPage({
   const forPercentage = totalVotes > 0 ? (forVotes / totalVotes) * 100 : 0;
 
   const proposerAvatar = proposer ? PlaceHolderImages.find((p) => p.id === `user${proposer.id}`) : null;
-  const canVote = user && !user.isAnonymous;
 
   if (isProposalLoading || isLoading) {
     return (
@@ -205,18 +214,18 @@ export default function ProposalDetailPage({
                 variant="default"
                 size="lg"
                 className="bg-green-600 hover:bg-green-700 h-12"
-                disabled={!canVote}
+                onClick={handleProtectedAction}
               >
                 <Check className="mr-2 h-5 w-5" />
                 Vote For
               </Button>
-              <Button variant="destructive" size="lg" className="h-12" disabled={!canVote}>
+              <Button variant="destructive" size="lg" className="h-12" onClick={handleProtectedAction}>
                 <X className="mr-2 h-5 w-5" />
                 Vote Against
               </Button>
             </div>
-            {!canVote && (
-                 <p className="text-xs text-center text-muted-foreground pt-2">You must have a Promethean Passport to vote.</p>
+            {user?.isAnonymous && (
+                 <p className="text-xs text-center text-muted-foreground pt-2">Create a Promethean Passport to vote.</p>
             )}
           </CardContent>
         </Card>

@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useUser } from "@/firebase";
+import { useRouter } from "next/navigation";
 
 async function handleRefine(data: RefineProposalInput) {
   "use server";
@@ -20,6 +22,17 @@ async function handleRefine(data: RefineProposalInput) {
 }
 
 export default function NewProposalPage() {
+  const { user } = useUser();
+  const router = useRouter();
+  
+  const handleProtectedAction = () => {
+    if (user && !user.isAnonymous) {
+      // In a real implementation, this would submit the form data
+      console.log("User is authenticated, proceeding with action.");
+    } else {
+      router.push('/login');
+    }
+  };
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
@@ -45,7 +58,7 @@ export default function NewProposalPage() {
               <Label htmlFor="description">Full Description</Label>
               <Textarea id="description" placeholder="Provide all the details for your proposal here." className="min-h-[200px]" />
             </div>
-            <Button size="lg">Submit Proposal to DAC</Button>
+            <Button size="lg" onClick={handleProtectedAction}>Submit Proposal to DAC</Button>
           </CardContent>
         </Card>
       </div>
