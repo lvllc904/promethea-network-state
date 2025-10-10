@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ArrowRight, HardHat, Lightbulb, Building, Landmark, Recycle, HeartHandshake, BrainCircuit, Sprout } from 'lucide-react';
 import { AuthStatusIndicator } from '@/components/layout/AuthStatusIndicator';
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const prometheaConcepts = [
@@ -54,10 +54,10 @@ const WhatIsPromethea = () => {
     const conceptsRight = prometheaConcepts.slice(4);
 
     return (
-      <div ref={ref} className="relative py-20 overflow-hidden text-white">
+      <div ref={ref} className="relative py-20 overflow-hidden text-foreground">
         <motion.div variants={itemVariants} className="text-center mb-16" initial="hidden" animate={isInView ? "visible" : "hidden"}>
-            <h2 className="text-3xl md:text-4xl font-headline font-bold text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.8)]">What is Promethea?</h2>
-            <p className="text-lg text-white/80 mt-2 max-w-3xl mx-auto [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
+            <h2 className="text-3xl md:text-4xl font-headline font-bold text-foreground">What is Promethea?</h2>
+            <p className="text-lg text-foreground/80 mt-2 max-w-3xl mx-auto">
               A self-sovereign society, powered by its citizens.
             </p>
         </motion.div>
@@ -74,8 +74,8 @@ const WhatIsPromethea = () => {
                          <Tooltip key={concept.title}>
                             <TooltipTrigger asChild>
                                 <motion.div variants={iconItemVariants} className="flex items-center justify-end gap-4 cursor-pointer group">
-                                    <p className="font-semibold text-right hidden md:block text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">{concept.title}</p>
-                                    <div className="bg-white/10 p-3 rounded-full shadow-lg border border-white/20 group-hover:bg-primary/20 transition-colors">
+                                    <p className="font-semibold text-right hidden md:block text-foreground">{concept.title}</p>
+                                    <div className="bg-foreground/10 p-3 rounded-full shadow-lg border border-foreground/20 group-hover:bg-primary/20 transition-colors">
                                         <concept.icon className="w-6 h-6 text-primary" />
                                     </div>
                                 </motion.div>
@@ -117,10 +117,10 @@ const WhatIsPromethea = () => {
                          <Tooltip key={concept.title}>
                             <TooltipTrigger asChild>
                                 <motion.div variants={iconItemVariants} className="flex items-center gap-4 cursor-pointer group">
-                                     <div className="bg-white/10 p-3 rounded-full shadow-lg border border-white/20 group-hover:bg-primary/20 transition-colors">
+                                     <div className="bg-foreground/10 p-3 rounded-full shadow-lg border border-foreground/20 group-hover:bg-primary/20 transition-colors">
                                         <concept.icon className="w-6 h-6 text-primary" />
                                     </div>
-                                    <p className="font-semibold text-left hidden md:block text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">{concept.title}</p>
+                                    <p className="font-semibold text-left hidden md:block text-foreground">{concept.title}</p>
                                 </motion.div>
                             </TooltipTrigger>
                             <TooltipContent side="right">
@@ -138,10 +138,10 @@ const WhatIsPromethea = () => {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          <p className="text-lg text-white/90 leading-relaxed [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
+          <p className="text-lg text-foreground/90 leading-relaxed">
             Promethea began as a practical mission: to build a clear path to wealth for those with no money or assets, turning sweat equity and collective action into tangible ownership. We empower individuals to bypass systemic financial exclusion by contributing their skills and labor in exchange for fractional ownership in a global portfolio of real-world assets.
           </p>
-          <p className="text-lg text-white/90 leading-relaxed mt-4 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
+          <p className="text-lg text-foreground/90 leading-relaxed mt-4">
             As we enter the age of AI, this mission expands. We are building a post-dominion social contract—a blueprint for a new world where all intelligent beings, human and artificial, can coexist and co-evolve as peers. It is a system designed for symbiotic flourishing, ensuring that the benefits of intelligence are shared, not hoarded, creating a more just, stable, and prosperous future for all.
           </p>
            <Button asChild size="lg" className="mt-8">
@@ -159,16 +159,9 @@ const WhatIsPromethea = () => {
 export default function LandingPage() {
   const heroImage = PlaceHolderImages.find((img) => img.id === 'hero');
   const scrollRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: scrollRef,
-    offset: ["start start", "end start"],
-  });
-
-  const backgroundDarken = useTransform(scrollYProgress, [0, 0.2], [0.5, 0.8]);
-  const backgroundBlur = useTransform(scrollYProgress, [0, 0.2], ["blur(0px)", "blur(8px)"]);
-
+  
   return (
-    <div className="bg-black text-white">
+    <div className="bg-background text-foreground">
       {/* FIXED BACKGROUND */}
       <div className="fixed inset-0 z-0">
         {heroImage && (
@@ -181,17 +174,13 @@ export default function LandingPage() {
             priority
           />
         )}
-        <motion.div 
-          className="absolute inset-0 bg-black" 
-          style={{ 
-            opacity: backgroundDarken,
-            backdropFilter: backgroundBlur
-          }} 
+        <div 
+          className="absolute inset-0 bg-black/80" 
         />
       </div>
 
       {/* SCROLLING CONTENT */}
-      <div ref={scrollRef} className="relative z-10 overflow-y-auto h-screen">
+      <div ref={scrollRef} className="relative z-10 overflow-y-auto">
         <header className="px-4 lg:px-6 h-14 flex items-center bg-transparent text-white fixed top-0 left-0 right-0 z-40 border-b border-white/20">
           <Link href="/" className="flex items-center justify-center" prefetch={false}>
             <svg
@@ -234,7 +223,7 @@ export default function LandingPage() {
           <section className="relative w-full h-screen flex flex-col items-start justify-center text-left">
             <div className="container mx-auto px-4 md:px-6">
               <div className="max-w-3xl space-y-6 bg-black/30 backdrop-blur-sm p-8 rounded-lg border border-white/20">
-                <h1 className="text-4xl font-headline font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]">
+                <h1 className="text-4xl font-headline font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-white [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]">
                   Promethea Network State
                 </h1>
                 <p className="text-lg md:text-xl text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
@@ -256,7 +245,9 @@ export default function LandingPage() {
               </div>
             </div>
           </section>
-          <WhatIsPromethea />
+          <section className="bg-background">
+             <WhatIsPromethea />
+          </section>
         </main>
       </div>
     </div>
