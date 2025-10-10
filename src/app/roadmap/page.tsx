@@ -202,8 +202,8 @@ const WhatIsPromethea = () => {
             <TooltipProvider>
                 {prometheaConcepts.map((concept, index) => {
                     const angleRad = (concept.angle - 90) * (Math.PI / 180); // adjust for correct positioning
-                    const radius = 200; // md screen radius
-                    const smallRadius = 150; // mobile screen radius
+                    const radius = 220; // md screen radius
+                    const smallRadius = 170; // mobile screen radius
                     const x = `calc(50% + ${radius * Math.cos(angleRad)}px)`;
                     const y = `calc(50% + ${radius * Math.sin(angleRad)}px)`;
                     const smallX = `calc(50% + ${smallRadius * Math.cos(angleRad)}px)`;
