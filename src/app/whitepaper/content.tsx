@@ -1,3 +1,4 @@
+
 import { cn } from "@/lib/utils";
 import React from "react";
 
@@ -474,26 +475,26 @@ export function WhitepaperContent() {
           <Section>
               <h4 className="text-center mb-4 mt-8">II. The Dynamic Credentials: A Living Digital Fingerprint</h4>
               <P>Attached to the Static Anchor is a structured, sequential set of dynamic, verifiable credentials. These scores and attributes are not static; they are updated in near real-time based on a citizen's actions within the Network State. This creates a rich, nuanced, and evolving representation of their contributions and standing.</P>
-              <div className="my-6 p-4 border rounded-lg bg-muted/50 font-mono text-xs">
-                <p>{'{'}</p>
-                <p className="ml-4"><span className="text-primary font-semibold">"staticId"</span>: <span className="text-foreground/80">"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2"</span>,</p>
-                <p className="ml-4"><span className="text-primary font-semibold">"dynamicCredentials"</span>: {'{'}</p>
-                <p className="ml-8"><span className="text-accent font-semibold">"reputation"</span>: {'{'}</p>
-                <p className="ml-12"><span className="text-green-600">"proSocial"</span>: 1500,</p>
-                <p className="ml-12"><span className="text-red-600">"conSocial"</span>: 50,</p>
-                <p className="ml-12"><span className="text-blue-600">"ratio"</span>: 30.0</p>
-                <p className="ml-8">{'}'},</p>
-                <p className="ml-8"><span className="text-accent font-semibold">"contribution"</span>: {'{'}</p>
-                <p className="ml-12"><span className="text-purple-600">"permanentEquityScore"</span>: 12500,</p>
-                <p className="ml-12"><span className="text-orange-600">"liquidUVT"</span>: 580.75</p>
-                <p className="ml-8">{'}'},</p>
-                <p className="ml-8"><span className="text-accent font-semibold">"skills"</span>: [</p>
-                <p className="ml-12">{'{'} <span className="text-teal-600">"standard"</span>: "NAICS", <span className="text-teal-600">"code"</span>: "541611" {'}'},</p>
-                <p className="ml-12">{'{'} <span className="text-teal-600">"standard"</span>: "promethea", <span className="text-teal-600">"code"</span>: "gov-001" {'}'}</p>
-                <p className="ml-8">{']'}</p>
-                <p className="ml-4">{'}'}</p>
-                <p>{'}'}</p>
+              <div className="my-6 p-4 border rounded-lg bg-muted/50 font-mono text-sm break-all">
+                <p>
+                  <span className="text-blue-600">0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2</span>-
+                  <span className="text-green-600">1500</span>-
+                  <span className="text-red-600">50</span>-
+                  <span className="text-blue-400">30.0</span>-
+                  <span className="text-purple-600">12500</span>-
+                  <span className="text-orange-600">580</span>-
+                  <span className="text-teal-600">541611.721110</span>
+                </p>
               </div>
+              <ul className="list-none p-0 my-4 space-y-2 text-sm">
+                  <li><span className="inline-block w-4 h-4 rounded-full mr-2 bg-blue-600"></span><strong className="font-semibold">StaticId:</strong> The user's permanent, user-owned wallet address.</li>
+                  <li><span className="inline-block w-4 h-4 rounded-full mr-2 bg-green-600"></span><strong className="font-semibold">Pro-Social Score:</strong> Cumulative history of positive actions.</li>
+                  <li><span className="inline-block w-4 h-4 rounded-full mr-2 bg-red-600"></span><strong className="font-semibold">Con-Social Score:</strong> History of detrimental actions.</li>
+                  <li><span className="inline-block w-4 h-4 rounded-full mr-2 bg-blue-400"></span><strong className="font-semibold">Reputation Ratio:</strong> The ratio between pro- and con-social scores.</li>
+                  <li><span className="inline-block w-4 h-4 rounded-full mr-2 bg-purple-600"></span><strong className="font-semibold">Permanent Equity Score:</strong> Non-spendable, cumulative value of contributions.</li>
+                  <li><span className="inline-block w-4 h-4 rounded-full mr-2 bg-orange-600"></span><strong className="font-semibold">Liquid UVT:</strong> Spendable tokens earned from contributions.</li>
+                  <li><span className="inline-block w-4 h-4 rounded-full mr-2 bg-teal-600"></span><strong className="font-semibold">Skills Score:</strong> Verifiable credentials based on hybrid standards (e.g., NAICS.ISIC).</li>
+              </ul>
               <h5 className="text-center mb-4 mt-8">The Reputation Score: A Three-Part Moral Compass</h5>
               <P>To provide a transparent and just measure of a citizen's standing, the Reputation Score is composed of three parts. A Pro-Social Score tracks the cumulative history of positive, constructive actions, such as completing tasks or successful governance participation. A Con-Social Score tracks detrimental actions, which may be subject to a decay function over time to allow for redemption. The third and primary metric is the Reputation Ratio, a derived value from the pro- and con-social scores that provides an immediate, holistic view of a citizen's current ethical alignment. The precise actions that influence these scores will be defined and refined by the community through the established DAC governance process.</P>
               <h5 className="text-center mb-4 mt-8">The Contribution Score: A Dual-Component Economic Engine</h5>
@@ -507,6 +508,8 @@ export function WhitepaperContent() {
               <P>Inheritance within the Promethean economy is deliberately bifurcated. A citizen's direct ownership of Real-World Assets (RWA), represented by specific security tokens, is considered heritable property that can be passed to descendants, encouraging multi-generational stewardship of productive assets. However, a citizen's liquid capital (their UVT balance) and their Permanent Equity Score (PES) are strictly non-transferable upon death. This ensures that while families can be provided for through productive assets, each generation must actively participate in the DAC to generate their own liquid wealth and earn their own standing, structurally dismantling the mechanism of passive, hereditary aristocracy.</P>
               <P>To counter the issue of wealth hoarding in a developing post-scarcity economy, a Wealth Attenuation Rate will be implemented on large, idle balances of liquid UVT. This mechanism, akin to demurrage, is not a tax on wealth, but on stagnant capital. The rate of this attenuation will be dynamically tied to a DAC-managed Cost of Living Index (CoLI). As the cost of living approaches zero, the attenuation rate will automatically increase, creating a powerful incentive for capital holders to reinvest their liquid wealth into productive, community-benefiting projects rather than hoarding it, thus ensuring continuous economic velocity and dynamism.</P>
           </Section>
+      </Section>
+       <Section>
         <h3 className="text-center mb-4 mt-12">Appendix E: The 3 Body System</h3>
         <h4 className="text-center mb-4 mt-8">I. Architectural Imperative: A Federation of Trust</h4>
         <P>A truly decentralized network state cannot be built upon a monolithic data architecture. To ensure user sovereignty, data privacy, and systemic security, the Promethean Network State employs the "3 Body System," a federated data model that deliberately separates the functions of identity creation, personal data storage, and public record-keeping into three distinct, specialized data systems. This separation is fundamental to the Promethean vision, moving beyond the traditional client-server model to a federated system where the user, not the application, is the ultimate arbiter of their own data.</P>
