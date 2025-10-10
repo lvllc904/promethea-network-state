@@ -64,11 +64,11 @@ export default function LandingPage() {
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
           <div className="relative container mx-auto px-4 md:px-6 h-full flex flex-col items-start justify-center text-left text-white">
-            <div className="max-w-3xl space-y-6">
-              <h1 className="text-4xl font-headline font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            <div className="max-w-3xl space-y-6 bg-black/30 backdrop-blur-sm p-8 rounded-lg">
+              <h1 className="text-4xl font-headline font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]">
                 Promethea Network State
               </h1>
-              <p className="text-lg md:text-xl text-primary-foreground/80">
+              <p className="text-lg md:text-xl text-white/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">
                 A comprehensive blueprint for a post-dominion social contract. A system designed to peacefully and
                 prosperously navigate the final expansion of the moral circle, ensuring a future of symbiotic
                 co-evolution for all intelligent beings.
