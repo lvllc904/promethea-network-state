@@ -76,6 +76,7 @@ export function WhitepaperContent() {
         <li>Appendix A: The Core Technology Stack & Community Immune System</li>
         <li>Appendix B: The Universal Value Tokenization (UVT) Framework Detail</li>
         <li>Appendix C: The Promethean DAC: A Blueprint for Decentralized Governance</li>
+        <li>Appendix D: The Promethean Self-Sovereign Identity (SSI) Framework</li>
       </ul>
       
       <hr className="my-8" />
@@ -508,6 +509,29 @@ export function WhitepaperContent() {
         <h5 className="text-center mb-4 mt-8">B. Economic and Digital Systems Validation</h5>
         <P>Benkler, Y. (2006). <em>The Wealth of Networks: How Social Production Transforms Markets and Freedom.</em> Yale University Press.</P>
         <P>Clarified Mind. (2025). <em>AI-Assisted Economic Modeling Dialogue.</em> [Internal Transcript].</P>
+      </Section>
+      <Section>
+        <h3 className="text-center mb-4 mt-12">Appendix D: The Promethean Self-Sovereign Identity (SSI) Framework</h3>
+        <h4 className="text-center mb-4 mt-8">I. The Core Architecture of Promethean Identity</h4>
+        <P>The Promethean Self-Sovereign Identity (SSI) is the foundational cornerstone of the Network State, designed to ensure true user ownership, control, and privacy. It is an advanced hybrid identifier, architecturally separating a citizen's permanent, unique identity from their dynamic, evolving credentials. This structure is engineered to be secure, interoperable, and future-proof, serving as the "digital passport" for every citizen.</P>
+        <P>The SSI is composed of two distinct but cryptographically linked components: a Static Anchor and Dynamic Credentials. The Static Anchor is the immutable, user-owned root of identity, while the Dynamic Credentials represent the living, verifiable "digital fingerprint" of a citizen's journey within the DAC.</P>
+        <P>The Static Anchor is a globally unique, user-generated cryptographic wallet address. This address, compatible with the Ethereum Virtual Machine (EVM), serves as the citizen's permanent Decentralized Identifier (DID). Its generation from a private key held only by the user provides absolute proof of ownership and control. To ensure scalability and low transaction costs during the initial phases, this identity system will be bootstrapped on a leading EVM-compatible Layer-2 testnet, such as Arbitrum Sepolia, providing a seamless migration path to the future Promethean mainnet.</P>
+      </Section>
+      <Section>
+        <h4 className="text-center mb-4 mt-8">II. The Dynamic Credentials: A Living Digital Fingerprint</h4>
+        <P>Attached to the Static Anchor is a structured, sequential set of dynamic, verifiable credentials. These scores and attributes are not static; they are updated in near real-time based on a citizen's actions within the Network State. This creates a rich, nuanced, and evolving representation of their contributions and standing.</P>
+        <h5 className="text-center mb-4 mt-8">The Reputation Score: A Three-Part Moral Compass</h5>
+        <P>To provide a transparent and just measure of a citizen's standing, the Reputation Score is composed of three parts. A Pro-Social Score tracks the cumulative history of positive, constructive actions, such as completing tasks or successful governance participation. A Con-Social Score tracks detrimental actions, which may be subject to a decay function over time to allow for redemption. The third and primary metric is the Reputation Ratio, a derived value from the pro- and con-social scores that provides an immediate, holistic view of a citizen's current ethical alignment. The precise actions that influence these scores will be defined and refined by the community through the established DAC governance process.</P>
+        <h5 className="text-center mb-4 mt-8">The Contribution Score: A Dual-Component Economic Engine</h5>
+        <P>The Contribution Score is bifurcated to solve the dual needs of representing long-term equity and enabling a liquid economy. The first component is the Permanent Equity Score (PES), a non-transferable, non-spendable, and ever-increasing value representing a citizen's total cumulative "skin-in-the-game." This score is a primary factor in determining governance Voice and rights to systemic dividends. The second component is a liquid balance of Universal Value Tokens (UVT), the spendable currency earned from contributions, which powers the day-to-day marketplace economy. To ensure fairness and prevent infinite accumulation by immortal intelligences, the accrual of the PES will be subject to a logarithmic scaling function, providing diminishing returns at higher levels of contribution.</P>
+        <h5 className="text-center mb-4 mt-8">The Skills Score: An Evolving Hybrid Standard</h5>
+        <P>A citizen's skills are represented by verifiable credentials structured according to a hybrid classification system. This system is initially bootstrapped using established standards like the North American Industry Classification System (NAICS) and the International Standard Industrial Classification (ISIC). This framework is designed to be dynamic; new skills and specializations can be proposed, defined, and added to the system via DAC governance, ensuring the skill tree of the civilization evolves organically alongside its members.</P>
+      </Section>
+      <Section>
+        <h4 className="text-center mb-4 mt-8">III. The Economic Framework: Post-Scarcity and Inheritance</h4>
+        <P>The SSI model is intrinsically linked to the Network State's long-term economic architecture, designed to promote a culture of stewardship and prevent the aristocratic consolidation of wealth.</P>
+        <P>Inheritance within the Promethean economy is deliberately bifurcated. A citizen's direct ownership of Real-World Assets (RWA), represented by specific security tokens, is considered heritable property that can be passed to descendants, encouraging multi-generational stewardship of productive assets. However, a citizen's liquid capital (their UVT balance) and their Permanent Equity Score (PES) are strictly non-transferable upon death. This ensures that while families can be provided for through productive assets, each generation must actively participate in the DAC to generate their own liquid wealth and earn their own standing, structurally dismantling the mechanism of passive, hereditary aristocracy.</P>
+        <P>To counter the issue of wealth hoarding in a developing post-scarcity economy, a Wealth Attenuation Rate will be implemented on large, idle balances of liquid UVT. This mechanism, akin to demurrage, is not a tax on wealth, but on stagnant capital. The rate of this attenuation will be dynamically tied to a DAC-managed Cost of Living Index (CoLI). As the cost of living approaches zero, the attenuation rate will automatically increase, creating a powerful incentive for capital holders to reinvest their liquid wealth into productive, community-benefiting projects rather than hoarding it, thus ensuring continuous economic velocity and dynamism.</P>
       </Section>
     </div>
   );
