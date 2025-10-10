@@ -47,6 +47,12 @@
       "description": "Rooftop solar panels on a building",
       "imageUrl": "https://picsum.photos/seed/asset4/600/400",
       "imageHint": "solar panels"
+    },
+    {
+      "id": "roadmap-visual",
+      "description": "Stylized rocket ship with icons representing society, technology, and nature",
+      "imageUrl": "https://picsum.photos/seed/roadmap/400/400",
+      "imageHint": "rocket ship illustration"
     }
   ]
 }

@@ -54,6 +54,9 @@ import {
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+
 
 // --- Data ---
 const aumData = [
@@ -89,6 +92,18 @@ const sevenSteps = [
     { icon: Megaphone, step: 6, title: 'Conduct On-Chain Census', kpi: 'Census data integrated with third-party aggregators for public verification.', status: 'Not Started' },
     { icon: Globe, step: 7, title: 'Gain Diplomatic Recognition', kpi: 'The DAC is legally recognized as a governing entity for a physical territory.', status: 'Not Started' },
 ];
+
+const prometheaConcepts = [
+    { icon: HardHat, title: "Sweat Equity", description: "Your labor and skills are converted into tangible ownership.", angle: 0 },
+    { icon: Lightbulb, title: "Intellectual Capital", description: "Your ideas and knowledge are valuable assets.", angle: 45 },
+    { icon: Building, title: "Real-World Assets", description: "The foundation of our economy, from real estate to businesses.", angle: 90 },
+    { icon: Landmark, title: "Governance", description: "A decentralized community where every voice matters.", angle: 135 },
+    { icon: Recycle, title: "UVT Economy", description: "A circular economy powered by Universal Value Tokens.", angle: 180 },
+    { icon: HeartHandshake, title: "Community", description: "A global network of aligned individuals building a new world.", angle: 225 },
+    { icon: BrainCircuit, title: "Technology", description: "Advanced, ethical AI and decentralized systems for liberation.", angle: 270 },
+    { icon: Sprout, title: "Growth", description: "Expanding our sovereign archipelago of assets and citizens.", angle: 315 },
+]
+
 
 // --- Animation Variants ---
 const containerVariants = {
@@ -139,20 +154,16 @@ const SectionHeader = ({ title, subtitle }: { title: string; subtitle: string })
 const WhatIsPromethea = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, amount: 0.5 });
-  
-    const layerVariants = {
-      hidden: { opacity: 0, y: 30 },
-      visible: (i:number) => ({
-        opacity: 1,
-        y: 0,
-        transition: { delay: i * 0.3, duration: 0.6 }
-      })
-    };
+    const visualImage = PlaceHolderImages.find(p => p.id === 'roadmap-visual');
   
     const iconVariants = {
         hidden: { scale: 0, opacity: 0 },
-        visible: { scale: 1, opacity: 1, transition: { type: 'spring', stiffness: 260, damping: 20, delay: 0.2 } }
-    }
+        visible: (i:number) => ({
+             scale: 1,
+             opacity: 1,
+             transition: { delay: 0.5 + i * 0.1, type: 'spring', stiffness: 200, damping: 20 } 
+        }),
+    };
   
     return (
       <div ref={ref} className="relative py-20 overflow-hidden">
@@ -170,73 +181,70 @@ const WhatIsPromethea = () => {
             </p>
         </motion.div>
 
-        <div className="relative max-w-4xl mx-auto flex flex-col items-center gap-2">
-          {/* Layer 3: Society */}
-          <motion.div
-            custom={2} initial="hidden" animate={isInView ? "visible" : "hidden"} variants={layerVariants}
-            className="flex justify-center gap-8 z-10"
-          >
-            <motion.div variants={iconVariants} className="flex flex-col items-center gap-2 text-center w-24">
-              <div className="bg-primary/10 text-primary p-3 rounded-full"><BrainCircuit className="w-8 h-8" /></div>
-              <h4 className="font-semibold text-sm">Technology</h4>
-            </motion.div>
-            <motion.div variants={iconVariants} className="flex flex-col items-center gap-2 text-center w-24">
-              <div className="bg-primary/10 text-primary p-3 rounded-full"><HeartHandshake className="w-8 h-8" /></div>
-              <h4 className="font-semibold text-sm">Community</h4>
-            </motion.div>
-            <motion.div variants={iconVariants} className="flex flex-col items-center gap-2 text-center w-24">
-              <div className="bg-primary/10 text-primary p-3 rounded-full"><Sprout className="w-8 h-8" /></div>
-              <h4 className="font-semibold text-sm">Growth</h4>
-            </motion.div>
-          </motion.div>
-  
-          {/* Connecting Lines */}
-          <motion.svg className="w-full h-8" initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 1, duration: 0.5 }}>
-            <path d="M 20% 0 V 100%" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="2 2" />
-            <path d="M 50% 0 V 100%" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="2 2" />
-            <path d="M 80% 0 V 100%" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="2 2" />
-          </motion.svg>
-  
-          {/* Layer 2: The Engine */}
-          <motion.div
-            custom={1} initial="hidden" animate={isInView ? "visible" : "hidden"} variants={layerVariants}
-            className="w-[500px] max-w-full bg-card p-4 rounded-xl border shadow-md flex justify-around"
-          >
-            <div className="flex flex-col items-center gap-1 text-center">
-              <Building className="w-6 h-6 text-muted-foreground" />
-              <h4 className="font-semibold">Real-World Assets</h4>
-            </div>
-            <div className="flex flex-col items-center gap-1 text-center">
-              <Landmark className="w-6 h-6 text-muted-foreground" />
-              <h4 className="font-semibold">Governance</h4>
-            </div>
-            <div className="flex flex-col items-center gap-1 text-center">
-              <Recycle className="w-6 h-6 text-muted-foreground" />
-              <h4 className="font-semibold">UVT Economy</h4>
-            </div>
-          </motion.div>
-  
-          {/* Connecting Lines */}
-          <motion.svg className="w-full h-8" initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.7, duration: 0.5 }}>
-            <path d="M 50% 0 V 100%" stroke="hsl(var(--border))" strokeWidth="2" />
-          </motion.svg>
-  
-          {/* Layer 1: Foundation */}
-          <motion.div
-            custom={0} initial="hidden" animate={isInView ? "visible" : "hidden"} variants={layerVariants}
-            className="flex gap-12"
-          >
-            <div className="flex flex-col items-center gap-2">
-              <HardHat className="w-7 h-7 text-accent" />
-              <h4 className="font-semibold">Sweat Equity</h4>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <Lightbulb className="w-7 h-7 text-accent" />
-              <h4 className="font-semibold">Intellectual Capital</h4>
-            </div>
-          </motion.div>
-  
-        </div>
+        <motion.div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px] mx-auto">
+            {visualImage && 
+                <motion.div
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={isInView ? { scale: 1, opacity: 1 } : {}}
+                    transition={{ duration: 0.8, ease: "backOut" }}
+                >
+                    <Image 
+                        src={visualImage.imageUrl} 
+                        alt={visualImage.description} 
+                        width={400} 
+                        height={400}
+                        className="rounded-full shadow-2xl object-cover"
+                        data-ai-hint={visualImage.imageHint}
+                    />
+                </motion.div>
+            }
+
+            <TooltipProvider>
+                {prometheaConcepts.map((concept, index) => {
+                    const angleRad = (concept.angle - 90) * (Math.PI / 180); // adjust for correct positioning
+                    const radius = 200; // md screen radius
+                    const smallRadius = 150; // mobile screen radius
+                    const x = `calc(50% + ${radius * Math.cos(angleRad)}px)`;
+                    const y = `calc(50% + ${radius * Math.sin(angleRad)}px)`;
+                    const smallX = `calc(50% + ${smallRadius * Math.cos(angleRad)}px)`;
+                    const smallY = `calc(50% + ${smallRadius * Math.sin(angleRad)}px)`;
+
+                    return (
+                        <Tooltip key={concept.title}>
+                            <TooltipTrigger asChild>
+                                <motion.div
+                                    custom={index}
+                                    initial="hidden"
+                                    animate={isInView ? "visible" : "hidden"}
+                                    variants={iconVariants}
+                                    className="absolute -translate-x-1/2 -translate-y-1/2 bg-card p-3 rounded-full shadow-lg border cursor-pointer hover:scale-110 transition-transform"
+                                    style={{
+                                        top: smallY,
+                                        left: smallX,
+                                    }}
+                                    // Use responsive styles for larger screens
+                                    // This is a bit of a hack since we can't use tailwind variants in `style`
+                                    // In a real scenario, you might use different components or CSS media queries
+                                    onLoad={(e) => {
+                                        if (window.innerWidth >= 768) {
+                                            (e.target as HTMLElement).style.top = y;
+                                            (e.target as HTMLElement).style.left = x;
+                                        }
+                                    }}
+                                >
+                                    <concept.icon className="w-6 h-6 text-primary" />
+                                </motion.div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p className="font-bold">{concept.title}</p>
+                                <p>{concept.description}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    );
+                })}
+            </TooltipProvider>
+
+        </motion.div>
       </div>
     );
   };
@@ -428,3 +436,5 @@ export default function RoadmapPage() {
     </div>
   );
 }
+
+    
