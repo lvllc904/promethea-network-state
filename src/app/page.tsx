@@ -160,7 +160,7 @@ export default function LandingPage() {
   const heroImage = PlaceHolderImages.find((img) => img.id === 'hero');
 
   return (
-    <div className="flex flex-col min-h-screen bg-black">
+    <div className="bg-black text-white">
       {heroImage && (
         <Image
           src={heroImage.imageUrl}
@@ -173,7 +173,7 @@ export default function LandingPage() {
       )}
       <div className="fixed inset-0 bg-black/50 z-0" />
 
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10">
         <header className="px-4 lg:px-6 h-14 flex items-center bg-transparent text-white backdrop-blur-sm fixed top-0 left-0 right-0 z-40 border-b border-white/20">
           <Link href="/" className="flex items-center justify-center" prefetch={false}>
             <svg
@@ -212,8 +212,8 @@ export default function LandingPage() {
           </nav>
         </header>
 
-        <main className="flex-1">
-          <section className="relative w-full h-screen flex flex-col items-start justify-center text-left text-white">
+        <main>
+          <section className="relative w-full h-screen flex flex-col items-start justify-center text-left">
             <div className="container mx-auto px-4 md:px-6">
               <div className="max-w-3xl space-y-6 bg-black/60 backdrop-blur-md p-8 rounded-lg border border-white/20">
                 <h1 className="text-4xl font-headline font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]">
