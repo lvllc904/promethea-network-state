@@ -4,44 +4,32 @@ This document outlines the phased technical roadmap for building the Promethea a
 
 ---
 
-### Phase 1: Foundational MVP & Core UI (Current Phase)
+### Phase 1: Foundational MVP & Decentralized Identity (Current Phase)
 
-**Objective:** Solidify the core application, connect all UI components to a live Firebase backend, and ensure a stable, performant user experience. This phase focuses on building a fully functional centralized application.
+**Objective:** Architect and implement the foundational "3 Body System" for decentralized identity. Decouple the core UI from a centralized user profile model and connect it to a client-side, self-sovereign identity (SSI) structure, verified by a public ledger of actions.
 
-**Key Technologies:** Next.js, Firebase (Auth, Firestore), ShadCN UI, Tailwind CSS
+**Key Technologies:** Next.js, Firebase (as a Ledger of Record), ShadCN UI, Tailwind CSS
 
 **Steps:**
-1.  **Firebase Backend Integration:**
-    - [x] Connect all pages (Dashboard, Governance, Assets, Ledger, Passport) to live Firestore collections.
-    - [ ] Implement user-specific data queries for "My Reputation," "My Contribution," and "My Recent Contributions."
-    - [ ] Finalize the data models in `backend.json` to match the UI perfectly.
-    - [ ] Ensure all read/write operations use the provided Firebase hooks (`useDoc`, `useCollection`).
+1.  **Architect the 3 Body System:**
+    - [x] **Identity Genesis Database:** Define the role of the authenticator application for one-time identity creation.
+    - [x] **Sovereign Data Store (DepthOS):** Define the principle of local-first user data, where the citizen's device holds their private keys and the canonical copy of their dynamic credentials.
+    - [x] **Ledger of Record (Firebase):** Redefine Firestore's role to be an immutable ledger of actions and a security checkpoint for the "last verified state" of a citizen's scores, preventing tampering.
 
-2.  **Authentication & User Passport:**
-    - [ ] Implement a full authentication flow (Sign Up, Login, Logout) using Firebase Auth.
-    - [ ] Connect the Passport page to the logged-in user's data in the `citizens` collection.
-    - [ ] Implement a "Create Passport" flow for new users to initialize their citizen profile in Firestore.
+2.  **Implement the Self-Sovereign Identity (SSI) Model:**
+    - [x] Define the structure of the SSI token, including the static DID anchor and the dynamic credentials (Reputation, Contribution, and Skills scores) as outlined in Appendix D.
+    - [ ] **Decouple UI from Firestore Profiles:** Refactor pages like the Passport and Dashboard to read user data from a local-first provider (`useLocalCitizen` hook) instead of directly from a Firestore document.
+    - [ ] **Implement the "Trustless Handshake":** Develop the logic where actions initiated from the client-side are signed, sent to the Ledger of Record for verification against the last known state, and then recorded, with the new state being attested back to the client.
 
-3.  **Governance Module:**
-    - [ ] Implement the "Create New Proposal" functionality, writing new proposals to the `proposals` collection.
-    - [ ] Implement the "Vote" functionality on the proposal detail page, writing votes to the `votes` collection.
-    - [ ] Ensure vote counts and proposal statuses update in real-time.
-
-4.  **RWA & Task Management:**
-    - [ ] Implement the "Apply" for task functionality on the asset detail page.
-    - [ ] Develop an admin view or mechanism to update task statuses (e.g., 'In Progress', 'Completed').
-    - [ ] Award UVT (create `universal_value_tokens` documents) upon task completion.
-
-5.  **Code Cleanup & Refinement:**
-    - [ ] Remove all placeholder/mock data from components.
-    - [ ] Refactor any large components for better readability and performance.
-    - [ ] Add comprehensive error handling for all data-fetching and mutation operations.
+3.  **Connect Core Governance and Asset Modules:**
+    - [ ] Ensure the Governance module (creating/voting on proposals) and Asset module (applying for tasks) correctly use the new SSI model for actions. All on-chain actions will be linked to a citizen's DID, not a user profile document.
+    - [ ] Ensure all read/write operations use the appropriate hooks, now re-purposed to interact with the Ledger of Record for public data and actions.
 
 ---
 
 ### Phase 2: AI Integration & Smart Tooling
 
-**Objective:** Integrate the Genkit AI flows into the application to provide intelligent, assistive features for governance, security, and task management.
+**Objective:** Integrate the Genkit AI flows into the application to provide intelligent, assistive features for governance, security, and task management, leveraging the decentralized identity system.
 
 **Key Technologies:** Genkit, Google AI (Gemini)
 
@@ -54,20 +42,20 @@ This document outlines the phased technical roadmap for building the Promethea a
 2.  **AI Labor Allocation:**
     - [x] UI for the Task Allocation Tool is complete.
     - [x] Genkit flow `allocateRWATasks` is defined.
-    - [ ] Enhance the `allocateRWATasks` flow to query the live `citizens` collection in Firestore (via a tool) to analyze skills and reputation for better suggestions.
-    - [ ] Implement the "Assign" functionality to update the `assigneeId` on a task document in Firestore.
+    - [ ] Enhance the `allocateRWATasks` flow to query the Ledger of Record for citizen DIDs and their associated, publicly verifiable skills (Verifiable Credentials) to make better suggestions.
+    - [ ] Implement the "Assign" functionality to update a task on the Ledger of Record with the assignee's DID.
 
 3.  **Community Immune System:**
     - [x] UI for the Threat Detector is complete.
     - [x] Genkit flow `detectNetworkThreats` is defined.
-    - [ ] Enhance the `initiateCommunityVote` tool to create a new, high-priority proposal in the `proposals` collection in Firestore.
-    - [ ] Create a live dashboard or real-time alert system (using Firestore listeners) that feeds data into the tool for continuous monitoring.
+    - [ ] Enhance the `initiateCommunityVote` tool to create a new, high-priority proposal on the Ledger of Record.
+    - [ ] Create a live dashboard or real-time alert system that feeds data into the tool for continuous monitoring of the action ledger.
 
 ---
 
 ### Phase 3: Decentralization & Smart Contracts
 
-**Objective:** Transition core logic from the centralized Firebase backend to decentralized technologies, including smart contracts for governance and tokenization, and decentralized storage for data.
+**Objective:** Transition core logic from the centralized Ledger of Record to fully decentralized technologies, including smart contracts for governance and tokenization, and decentralized storage for data.
 
 **Key Technologies:** Ethereum (Layer-2, e.g., Arbitrum/Optimism), Solidity, IPFS, Ethers.js
 
@@ -79,12 +67,11 @@ This document outlines the phased technical roadmap for building the Promethea a
     - [ ] **RWA Tokenization:** Develop contracts for fractional ownership of Real-World Assets.
 
 2.  **Web3 Integration (Frontend):**
-    - [ ] Integrate a wallet connection library (e.g., RainbowKit, Wagmi) to manage user wallets.
-    - [ ] Replace Firebase Auth with wallet-based authentication (Sign-In with Ethereum).
-    - [ ] Refactor UI components to interact with the new smart contracts instead of Firestore for core operations (voting, creating proposals, viewing token balances).
+    - [ ] Replace the Phase 1 "Authenticator App" concept with true wallet-based authentication (Sign-In with Ethereum). DepthOS will become the primary wallet.
+    - [ ] Refactor UI components to interact with the new smart contracts instead of the Firebase Ledger for core operations (voting, creating proposals, viewing token balances).
 
 3.  **Decentralized Storage (IPFS):**
-    - [ ] Migrate proposal descriptions, RWA documentation, and other large metadata from Firestore to IPFS.
+    - [ ] Migrate proposal descriptions, RWA documentation, and other large metadata from the Firebase Ledger to IPFS.
     - [ ] Store only the IPFS content hash (CID) in the smart contracts or remaining Firestore documents.
     - [ ] Set up a pinning service (e.g., Pinata) to ensure data availability.
 
