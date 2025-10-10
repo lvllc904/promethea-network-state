@@ -17,7 +17,14 @@ import {
   BrainCircuit,
   ShieldCheck,
   Milestone,
-  ArrowRight
+  ArrowRight,
+  HardHat,
+  Lightbulb,
+  Building,
+  Coins,
+  Recycle,
+  Sprout,
+  HeartHandshake
 } from 'lucide-react';
 import React, { useRef } from 'react';
 import {
@@ -102,7 +109,7 @@ const lineVariants = {
 }
 
 // --- Components ---
-const AnimatedSection = ({ children }: { children: React.ReactNode }) => {
+const AnimatedSection = ({ children, className }: { children: React.ReactNode, className?: string }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
@@ -112,7 +119,7 @@ const AnimatedSection = ({ children }: { children: React.ReactNode }) => {
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
       variants={containerVariants}
-      className="py-12 md:py-20"
+      className={cn("py-12 md:py-20", className)}
     >
       {children}
     </motion.section>
@@ -128,18 +135,136 @@ const SectionHeader = ({ title, subtitle }: { title: string; subtitle: string })
   </motion.div>
 );
 
+const WhatIsPromethea = () => {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, amount: 0.5 });
+  
+    const layerVariants = {
+      hidden: { opacity: 0, y: 30 },
+      visible: (i:number) => ({
+        opacity: 1,
+        y: 0,
+        transition: { delay: i * 0.3, duration: 0.6 }
+      })
+    };
+  
+    const iconVariants = {
+        hidden: { scale: 0, opacity: 0 },
+        visible: { scale: 1, opacity: 1, transition: { type: 'spring', stiffness: 260, damping: 20, delay: 0.2 } }
+    }
+  
+    return (
+      <div ref={ref} className="relative py-20 overflow-hidden">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="absolute inset-0 bg-grid-slate-100/50 [mask-image:linear-gradient(to_bottom,white_10%,transparent_70%)] dark:bg-grid-slate-700/50"
+        />
+
+        <motion.div variants={itemVariants} className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-headline font-bold">What is Promethea?</h2>
+            <p className="text-lg text-muted-foreground mt-2 max-w-3xl mx-auto">
+              A visual story of a self-sovereign society, powered by its citizens.
+            </p>
+        </motion.div>
+
+        <div className="relative max-w-4xl mx-auto flex flex-col items-center gap-2">
+          {/* Layer 3: Society */}
+          <motion.div
+            custom={2} initial="hidden" animate={isInView ? "visible" : "hidden"} variants={layerVariants}
+            className="flex justify-center gap-8 z-10"
+          >
+            <motion.div variants={iconVariants} className="flex flex-col items-center gap-2 text-center w-24">
+              <div className="bg-primary/10 text-primary p-3 rounded-full"><BrainCircuit className="w-8 h-8" /></div>
+              <h4 className="font-semibold text-sm">Technology</h4>
+            </motion.div>
+            <motion.div variants={iconVariants} className="flex flex-col items-center gap-2 text-center w-24">
+              <div className="bg-primary/10 text-primary p-3 rounded-full"><HeartHandshake className="w-8 h-8" /></div>
+              <h4 className="font-semibold text-sm">Community</h4>
+            </motion.div>
+            <motion.div variants={iconVariants} className="flex flex-col items-center gap-2 text-center w-24">
+              <div className="bg-primary/10 text-primary p-3 rounded-full"><Sprout className="w-8 h-8" /></div>
+              <h4 className="font-semibold text-sm">Growth</h4>
+            </motion.div>
+          </motion.div>
+  
+          {/* Connecting Lines */}
+          <motion.svg className="w-full h-8" initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 1, duration: 0.5 }}>
+            <path d="M 20% 0 V 100%" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="2 2" />
+            <path d="M 50% 0 V 100%" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="2 2" />
+            <path d="M 80% 0 V 100%" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="2 2" />
+          </motion.svg>
+  
+          {/* Layer 2: The Engine */}
+          <motion.div
+            custom={1} initial="hidden" animate={isInView ? "visible" : "hidden"} variants={layerVariants}
+            className="w-[500px] max-w-full bg-card p-4 rounded-xl border shadow-md flex justify-around"
+          >
+            <div className="flex flex-col items-center gap-1 text-center">
+              <Building className="w-6 h-6 text-muted-foreground" />
+              <h4 className="font-semibold">Real-World Assets</h4>
+            </div>
+            <div className="flex flex-col items-center gap-1 text-center">
+              <Landmark className="w-6 h-6 text-muted-foreground" />
+              <h4 className="font-semibold">Governance</h4>
+            </div>
+            <div className="flex flex-col items-center gap-1 text-center">
+              <Recycle className="w-6 h-6 text-muted-foreground" />
+              <h4 className="font-semibold">UVT Economy</h4>
+            </div>
+          </motion.div>
+  
+          {/* Connecting Lines */}
+          <motion.svg className="w-full h-8" initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.7, duration: 0.5 }}>
+            <path d="M 50% 0 V 100%" stroke="hsl(var(--border))" strokeWidth="2" />
+          </motion.svg>
+  
+          {/* Layer 1: Foundation */}
+          <motion.div
+            custom={0} initial="hidden" animate={isInView ? "visible" : "hidden"} variants={layerVariants}
+            className="flex gap-12"
+          >
+            <div className="flex flex-col items-center gap-2">
+              <HardHat className="w-7 h-7 text-accent" />
+              <h4 className="font-semibold">Sweat Equity</h4>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <Lightbulb className="w-7 h-7 text-accent" />
+              <h4 className="font-semibold">Intellectual Capital</h4>
+            </div>
+          </motion.div>
+  
+        </div>
+      </div>
+    );
+  };
+  
+
 // --- Page ---
 export default function RoadmapPage() {
   return (
     <div className="container mx-auto px-4 md:px-6">
       <header className="py-12 text-center">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-extrabold tracking-tight">
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-4xl md:text-5xl lg:text-6xl font-headline font-extrabold tracking-tight"
+        >
           The Road to a Network State
-        </h1>
-        <p className="mt-4 text-xl text-muted-foreground max-w-4xl mx-auto">
+        </motion.h1>
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-4 text-xl text-muted-foreground max-w-4xl mx-auto"
+        >
           An interactive journey through the phases of building Promethea, from a decentralized identity system to a globally recognized sovereign entity.
-        </p>
+        </motion.p>
       </header>
+
+      <WhatIsPromethea />
 
       {/* Phase 1 */}
       <AnimatedSection>
@@ -148,9 +273,9 @@ export default function RoadmapPage() {
           subtitle="Architecting the core '3 Body System' for self-sovereign identity, decoupling the UI from centralized profiles and connecting it to a local-first data model."
         />
         <div className="grid md:grid-cols-3 gap-8 items-start relative">
-           <motion.svg className="absolute hidden md:block top-1/2 left-0 w-full h-px" variants={lineVariants}>
-             <line x1="16.66%" y1="0" x2="50%" y2="0" stroke="hsl(var(--border))" strokeWidth="2" strokeDasharray="4 4" />
-             <line x1="50%" y1="0" x2="83.33%" y2="0" stroke="hsl(var(--border))" strokeWidth="2" strokeDasharray="4 4" />
+           <motion.svg className="absolute hidden md:block top-1/2 left-0 w-full h-px" >
+             <motion.line x1="16.66%" y1="0" x2="50%" y2="0" stroke="hsl(var(--border))" strokeWidth="2" strokeDasharray="4 4" variants={lineVariants} />
+             <motion.line x1="50%" y1="0" x2="83.33%" y2="0" stroke="hsl(var(--border))" strokeWidth="2" strokeDasharray="4 4" variants={lineVariants} />
            </motion.svg>
           {threeBodySystem.map((body, index) => (
             <motion.div key={index} variants={itemVariants} className="relative z-10">
