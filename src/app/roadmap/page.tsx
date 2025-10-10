@@ -188,7 +188,7 @@ const WhatIsPromethea = () => {
         <motion.div variants={itemVariants} className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-headline font-bold">What is Promethea?</h2>
             <p className="text-lg text-muted-foreground mt-2 max-w-3xl mx-auto">
-              A visual story of a self-sovereign society, powered by its citizens.
+              A self-sovereign society, powered by its citizens.
             </p>
         </motion.div>
         
@@ -262,6 +262,17 @@ const WhatIsPromethea = () => {
                 </motion.div>
             </TooltipProvider>
         </div>
+        <motion.div 
+          variants={itemVariants} 
+          className="text-center mt-16 max-w-4xl mx-auto"
+        >
+          <p className="text-lg text-foreground/90 leading-relaxed">
+            Promethea began as a practical mission: to build a clear path to wealth for those with no money or assets, turning sweat equity and collective action into tangible ownership. We empower individuals to bypass systemic financial exclusion by contributing their skills and labor in exchange for fractional ownership in a global portfolio of real-world assets.
+          </p>
+          <p className="text-lg text-foreground/90 leading-relaxed mt-4">
+            As we enter the age of AI, this mission expands. We are building a post-dominion social contract—a blueprint for a new world where all intelligent beings, human and artificial, can coexist and co-evolve as peers. It is a system designed for symbiotic flourishing, ensuring that the benefits of intelligence are shared, not hoarded, creating a more just, stable, and prosperous future for all.
+          </p>
+        </motion.div>
       </div>
     );
 };
