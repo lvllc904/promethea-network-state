@@ -47,6 +47,7 @@ import {
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Progress } from '@/components/ui/progress';
 
 // --- Data ---
 const aumData = [
@@ -82,6 +83,13 @@ const sevenSteps = [
     { icon: Megaphone, step: 6, title: 'Conduct On-Chain Census', kpi: 'Census data integrated with third-party aggregators for public verification.', status: 'Not Started' },
     { icon: Globe, step: 7, title: 'Gain Diplomatic Recognition', kpi: 'The DAC is legally recognized as a governing entity for a physical territory.', status: 'Not Started' },
 ];
+
+const progressData = [
+    { name: 'Phase 1: Foundational MVP', progress: 80, status: 'In Progress', color: 'bg-amber-500' },
+    { name: 'Phase 2: AI Integration', progress: 30, status: 'In Progress', color: 'bg-amber-500' },
+    { name: 'Phase 3: Decentralization', progress: 0, status: 'Planned', color: 'bg-gray-400' },
+    { name: 'Phase 4: Full Symbiosis', progress: 0, status: 'Planned', color: 'bg-gray-400' },
+]
 
 // --- Animation Variants ---
 const containerVariants = {
@@ -176,6 +184,29 @@ export default function RoadmapPage() {
             An interactive journey through the phases of building Promethea, from a decentralized identity system to a globally recognized sovereign entity.
           </motion.p>
         </header>
+
+        <AnimatedSection className="py-0 md:py-8">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline text-2xl">Overall Progress</CardTitle>
+                    <CardDescription>A high-level overview of our current development status across all phases.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    {progressData.map((phase) => (
+                        <div key={phase.name}>
+                            <div className="flex justify-between items-center mb-1">
+                                <span className="font-medium text-sm">{phase.name}</span>
+                                <Badge variant="outline" className={cn(
+                                    phase.status === 'In Progress' && 'border-amber-500 text-amber-500',
+                                    phase.status === 'Planned' && 'border-gray-400 text-gray-400'
+                                )}>{phase.status}</Badge>
+                            </div>
+                            <Progress value={phase.progress} className="h-2 [&>div]:bg-green-500" />
+                        </div>
+                    ))}
+                </CardContent>
+            </Card>
+        </AnimatedSection>
 
         {/* Phase 1 */}
         <AnimatedSection>
@@ -339,3 +370,5 @@ export default function RoadmapPage() {
     </div>
   );
 }
+
+    
