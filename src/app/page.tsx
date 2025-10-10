@@ -54,10 +54,10 @@ const WhatIsPromethea = () => {
     const conceptsRight = prometheaConcepts.slice(4);
 
     return (
-      <div ref={ref} className="relative py-20 overflow-hidden bg-black/70 backdrop-blur-sm text-white">
+      <div ref={ref} className="relative py-20 overflow-hidden text-white">
         <motion.div variants={itemVariants} className="text-center mb-16" initial="hidden" animate={isInView ? "visible" : "hidden"}>
-            <h2 className="text-3xl md:text-4xl font-headline font-bold text-white">What is Promethea?</h2>
-            <p className="text-lg text-white/80 mt-2 max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-headline font-bold text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.8)]">What is Promethea?</h2>
+            <p className="text-lg text-white/80 mt-2 max-w-3xl mx-auto [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
               A self-sovereign society, powered by its citizens.
             </p>
         </motion.div>
@@ -74,7 +74,7 @@ const WhatIsPromethea = () => {
                          <Tooltip key={concept.title}>
                             <TooltipTrigger asChild>
                                 <motion.div variants={iconItemVariants} className="flex items-center justify-end gap-4 cursor-pointer group">
-                                    <p className="font-semibold text-right hidden md:block text-white">{concept.title}</p>
+                                    <p className="font-semibold text-right hidden md:block text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">{concept.title}</p>
                                     <div className="bg-white/10 p-3 rounded-full shadow-lg border border-white/20 group-hover:bg-primary/20 transition-colors">
                                         <concept.icon className="w-6 h-6 text-primary" />
                                     </div>
@@ -120,7 +120,7 @@ const WhatIsPromethea = () => {
                                      <div className="bg-white/10 p-3 rounded-full shadow-lg border border-white/20 group-hover:bg-primary/20 transition-colors">
                                         <concept.icon className="w-6 h-6 text-primary" />
                                     </div>
-                                    <p className="font-semibold text-left hidden md:block text-white">{concept.title}</p>
+                                    <p className="font-semibold text-left hidden md:block text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">{concept.title}</p>
                                 </motion.div>
                             </TooltipTrigger>
                             <TooltipContent side="right">
@@ -138,10 +138,10 @@ const WhatIsPromethea = () => {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          <p className="text-lg text-white/90 leading-relaxed">
+          <p className="text-lg text-white/90 leading-relaxed [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
             Promethea began as a practical mission: to build a clear path to wealth for those with no money or assets, turning sweat equity and collective action into tangible ownership. We empower individuals to bypass systemic financial exclusion by contributing their skills and labor in exchange for fractional ownership in a global portfolio of real-world assets.
           </p>
-          <p className="text-lg text-white/90 leading-relaxed mt-4">
+          <p className="text-lg text-white/90 leading-relaxed mt-4 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
             As we enter the age of AI, this mission expands. We are building a post-dominion social contract—a blueprint for a new world where all intelligent beings, human and artificial, can coexist and co-evolve as peers. It is a system designed for symbiotic flourishing, ensuring that the benefits of intelligence are shared, not hoarded, creating a more just, stable, and prosperous future for all.
           </p>
            <Button asChild size="lg" className="mt-8">
@@ -161,18 +161,22 @@ export default function LandingPage() {
 
   return (
     <div className="bg-black text-white">
-      {heroImage && (
-        <Image
-          src={heroImage.imageUrl}
-          alt={heroImage.description}
-          fill
-          className="object-cover fixed inset-0 z-0"
-          data-ai-hint={heroImage.imageHint}
-          priority
-        />
-      )}
-      <div className="fixed inset-0 bg-black/50 z-0" />
+      {/* FIXED BACKGROUND */}
+      <div className="fixed inset-0 z-0">
+        {heroImage && (
+          <Image
+            src={heroImage.imageUrl}
+            alt={heroImage.description}
+            fill
+            className="object-cover"
+            data-ai-hint={heroImage.imageHint}
+            priority
+          />
+        )}
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
 
+      {/* SCROLLING CONTENT */}
       <div className="relative z-10">
         <header className="px-4 lg:px-6 h-14 flex items-center bg-transparent text-white backdrop-blur-sm fixed top-0 left-0 right-0 z-40 border-b border-white/20">
           <Link href="/" className="flex items-center justify-center" prefetch={false}>
