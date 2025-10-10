@@ -20,6 +20,7 @@ import {
   Shield,
   BookOpen,
   Settings,
+  GitMerge,
 } from "lucide-react";
 
 const navItems = [
@@ -29,6 +30,7 @@ const navItems = [
   { href: "/dashboard/assets", icon: FileText, label: "RWA Management" },
   { href: "/dashboard/ledger", icon: BookOpen, label: "UVT Ledger" },
   { href: "/dashboard/security", icon: Shield, label: "Immune System" },
+  { href: "/roadmap", icon: GitMerge, label: "Roadmap" },
 ];
 
 export function MainNav() {
