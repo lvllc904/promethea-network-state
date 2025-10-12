@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Card,
@@ -21,6 +21,14 @@ import { Loader2, LogOut } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
+
+function LoginPageSuspenseFallback() {
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+    )
+}
 
 function LoginPageContent() {
   const auth = useAuth();
@@ -270,7 +278,9 @@ function LoginPageContent() {
 export default function LoginPage() {
   return (
     <FirebaseClientProvider>
-      <LoginPageContent />
+      <Suspense fallback={<LoginPageSuspenseFallback />}>
+        <LoginPageContent />
+      </Suspense>
     </FirebaseClientProvider>
   );
 }
