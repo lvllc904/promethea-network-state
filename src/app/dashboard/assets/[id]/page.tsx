@@ -22,30 +22,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DollarSign, MapPin, Wrench } from 'lucide-react';
 import { TaskAllocationTool } from '@/components/ai/task-allocation-tool';
-import {
-  allocateRWATasks,
-  type AllocateRWATasksInput,
-} from '@/ai/flows/allocate-rwa-tasks';
 import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@/firebase';
 import { doc, collection, query, where } from 'firebase/firestore';
 import { RealWorldAsset, Task } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
-
-async function handleAllocate(data: AllocateRWATasksInput) {
-  'use server';
-  try {
-    if (data.taskDescription.toLowerCase().includes('electrician')) {
-      return { suggestedMembers: ['user3'] };
-    }
-    if (data.taskDescription.toLowerCase().includes('manage')) {
-      return { suggestedMembers: ['user2'] };
-    }
-    return await allocateRWATasks(data);
-  } catch (error) {
-    console.error(error);
-    return { suggestedMembers: [] };
-  }
-}
+import { handleAllocate } from './actions';
 
 export default function AssetDetailPage({ params }: { params: { id: string } }) {
   const firestore = useFirestore();

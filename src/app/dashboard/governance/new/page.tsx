@@ -1,7 +1,6 @@
 
 'use client';
 import { EthicalRefinementTool } from "@/components/ai/ethical-refinement-tool";
-import { refineProposal, type RefineProposalInput } from "@/ai/flows/ethical-proposal-refinement";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,17 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
-
-async function handleRefine(data: RefineProposalInput) {
-  "use server";
-  try {
-    const result = await refineProposal(data);
-    return result;
-  } catch (error) {
-    console.error(error);
-    return { refinedProposal: "Error: Could not refine proposal." };
-  }
-}
+import { handleRefine } from "./actions";
 
 export default function NewProposalPage() {
   const { user } = useUser();
