@@ -158,7 +158,6 @@ const WhatIsPromethea = () => {
 
 export default function LandingPage() {
   const heroImage = PlaceHolderImages.find((img) => img.id === 'hero');
-  const scrollRef = useRef(null);
   
   return (
     <div className="bg-background text-foreground">
@@ -180,7 +179,7 @@ export default function LandingPage() {
       </div>
 
       {/* SCROLLING CONTENT */}
-      <div ref={scrollRef} className="relative z-10 overflow-y-auto">
+      <div className="relative z-10">
         <header className="px-4 lg:px-6 h-14 flex items-center bg-transparent text-white fixed top-0 left-0 right-0 z-40 border-b border-white/20">
           <Link href="/" className="flex items-center justify-center" prefetch={false}>
             <svg
