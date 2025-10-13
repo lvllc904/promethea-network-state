@@ -70,11 +70,15 @@ function LoginPageContent() {
         const keystoreJson = await keystoreFile.text();
         const wallet = await ethers.Wallet.fromEncryptedJson(keystoreJson, loginPassword);
 
-        // We need an email to sign in. In a full DID system, we'd use the wallet to sign
-        // a message, but for now we link it back to an email. We'll extract it from the keystore name.
-        const emailFromName = `${wallet.address}@promethea.network`;
-        
-        await signInWithEmailAndPassword(auth, emailFromName, loginPassword);
+        // Extract the email from the keystore filename.
+        // Format: promethea-keystore--[email]--[address].json
+        const parts = keystoreFile.name.split('--');
+        if (parts.length < 3 || !parts[1]) {
+            throw new Error("Invalid keystore filename format. Cannot extract email.");
+        }
+        const emailFromFilename = parts[1];
+
+        await signInWithEmailAndPassword(auth, emailFromFilename, loginPassword);
 
         toast({
             title: 'Login Successful!',
@@ -82,10 +86,14 @@ function LoginPageContent() {
         });
         router.push(redirectUrl);
 
-    } catch (error: any)      if (error.message?.includes('incorrect password')) {
+    } catch (error: any) {
+      let description = "An unexpected error occurred during login. Please check the console for details.";
+      if (error.message?.includes('incorrect password')) {
         description = "Incorrect password for the provided keystore file. Please try again.";
       } else if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
         description = "No Promethean Passport is associated with this keystore. Please mint a new passport.";
+      } else if (error.message?.includes("Invalid keystore filename format")) {
+        description = "The keystore file has an invalid name. It may be corrupted or not a valid Promethean passport file.";
       }
       toast({
         variant: "destructive",
@@ -117,7 +125,7 @@ function LoginPageContent() {
         const a = document.createElement('a');
         a.href = url;
         // The filename now includes the email for recovery during login
-        a.download = `UTC--${new Date().toISOString().replace(/:/g, '-')}--${generatedWallet.address}.json`;
+        a.download = `promethea-keystore--${signupEmail}--${generatedWallet.address}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -149,7 +157,8 @@ function LoginPageContent() {
       // Use the user's actual email for auth, and the keystore password.
       await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
       
-      const redirectWithDid = `${redirectUrl}?did=${generatedWallet.address}`;
+      // Pass the DID to the dashboard so it can be used in profile creation
+      const redirectWithDid = `/dashboard?did=${generatedWallet.address}`;
 
       toast({
           title: 'Welcome to Promethea!',
@@ -411,5 +420,3 @@ export default function LoginPage() {
   );
 }
 
-
-    
