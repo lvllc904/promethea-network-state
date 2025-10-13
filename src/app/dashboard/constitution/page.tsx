@@ -10,17 +10,14 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
+import { WhitepaperContent } from '@/app/whitepaper/content';
 
 
-const ConstitutionRenderer = ({ content }: { content: string }) => (
+const ConstitutionRenderer = ({ content }: { content: React.ReactNode }) => (
     <div className={cn("prose prose-lg max-w-none text-foreground/90 dark:prose-invert prose-headings:font-headline prose-headings:tracking-tight prose-p:leading-relaxed prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl", "prose-numbered pl-14")}>
-        {/* In a real scenario, we would use a Markdown renderer here. For now, we'll just display the text. */}
-        <p>This page displays the live, canonical version of the Promethean Constitution, fetched directly from Firestore. The content below represents the initial version derived from the whitepaper.</p>
+        <p>This page displays the live, canonical version of the Promethean Constitution. The content below represents the initial version derived from the whitepaper, ready for debate and amendment.</p>
         <hr/>
-        {/* A proper markdown renderer would be used here. For simplicity, we are splitting by newlines */}
-        {content.split('\n').map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-        ))}
+        {content}
     </div>
 );
 
@@ -66,13 +63,22 @@ export default function ConstitutionPage() {
     <div>
         <div className="mb-4">
             <h1 className="text-3xl font-headline font-bold">The Promethean Constitution</h1>
-            {constitution && (
+            {constitution ? (
                 <p className="text-muted-foreground">Version {constitution.version} - Last Amended: {new Date(constitution.lastAmended).toLocaleDateString()}</p>
+            ) : (
+                <p className="text-muted-foreground">Version 1.0.0 - Awaiting Ratification</p>
             )}
         </div>
         <Card>
             <CardContent className="pt-6">
-                {!constitution ? (
+                {/* 
+                  Once the constitution is seeded in Firestore, the `constitution.content` will be used.
+                  For now, we display the content directly from the component to visualize it.
+                */}
+                <ConstitutionRenderer content={<WhitepaperContent />} />
+
+                {/* This alert can be re-enabled later if we need to show a message about seeding */}
+                {/*!constitution && (
                     <Alert>
                       <Info className="h-4 w-4" />
                       <AlertTitle>Constitution Not Yet Ratified</AlertTitle>
@@ -81,10 +87,7 @@ export default function ConstitutionPage() {
                         This is the next step in our roadmap.
                       </AlertDescription>
                     </Alert>
-                ) : (
-                    // This will eventually render markdown from constitution.content
-                    <ConstitutionRenderer content={constitution.content} />
-                )}
+                )*/}
             </CardContent>
         </Card>
     </div>
