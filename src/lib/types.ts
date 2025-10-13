@@ -5,6 +5,10 @@ export interface Citizen {
     contributionScore: number;
     personhoodScore: number;
     skills?: string[];
+    proofOfUniqueness: {
+        issuer: string;
+        issuanceDate: string;
+    };
 }
 
 export interface Proposal {

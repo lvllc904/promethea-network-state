@@ -96,22 +96,25 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
             if (!citizenSnap.exists()) {
               // This is a new user, create their profile
+              const params = new URLSearchParams(window.location.search);
+              const did = params.get('did');
+
               const newCitizen: Citizen = {
                 id: firebaseUser.uid,
-                decentralizedId: `did:prmth:${firebaseUser.uid}`,
+                decentralizedId: did ? `did:prmth:${did}` : `did:prmth:${firebaseUser.uid}`,
                 reputationScore: 100,
                 contributionScore: 0,
                 personhoodScore: 1,
                 skills: ['Founding Member'],
+                proofOfUniqueness: {
+                  issuer: "Promethea Identity Oracle",
+                  issuanceDate: new Date().toISOString(),
+                }
               };
-              // Await profile creation before setting user state AND localStorage.
               await createCitizenProfile(citizenRef, newCitizen);
             }
             
-            // THE FIX: Only set 'authenticated' status AFTER all setup is complete.
             window.localStorage.setItem('authStatus', 'authenticated');
-
-            // Set user and set loading to false AFTER all setup is complete.
             setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
 
           } catch (e: any) {
@@ -121,11 +124,9 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
         } else {
           // No user is signed in, so sign them in anonymously.
           window.localStorage.setItem('authStatus', 'anonymous');
-          // The onAuthStateChanged will fire again once the anonymous user is created.
           signInAnonymously(auth).catch((error) => {
             console.error("Anonymous sign-in failed:", error);
              window.localStorage.removeItem('authStatus');
-            // If even anonymous sign-in fails, we stop loading and report the error.
             setUserAuthState({ user: null, isUserLoading: false, userError: error });
           });
         }
