@@ -15,8 +15,6 @@ import { WhitepaperContent } from '@/app/whitepaper/content';
 
 const ConstitutionRenderer = ({ content }: { content: React.ReactNode }) => (
     <div className={cn("prose prose-lg max-w-none text-foreground/90 dark:prose-invert prose-headings:font-headline prose-headings:tracking-tight prose-p:leading-relaxed prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl", "prose-numbered pl-14")}>
-        <p>This page displays the live, canonical version of the Promethean Constitution. The content below represents the initial version derived from the whitepaper, ready for debate and amendment.</p>
-        <hr/>
         {content}
     </div>
 );

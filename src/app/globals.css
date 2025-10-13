@@ -86,26 +86,32 @@ body {
     @apply bg-background text-foreground;
   }
   .prose-numbered {
+    counter-reset: article;
+  }
+  .prose-numbered .prose-article {
+    counter-increment: article;
     counter-reset: section;
   }
   .prose-numbered .prose-section {
+    counter-increment: section;
     counter-reset: sentence;
   }
   .prose-numbered .prose-section p {
     text-indent: 2em;
   }
-  .prose-numbered .prose-section .sentence {
+  .prose-numbered .sentence {
     position: relative;
+    display: inline-block; /* Or block, depending on desired wrapping */
   }
-  .prose-numbered .prose-section .sentence::before {
+  .prose-numbered .sentence::before {
     counter-increment: sentence;
-    content: attr(data-section-number) '.' counter(sentence);
+    content: counter(article) "." counter(section) "." counter(sentence);
     position: absolute;
-    left: -2.2rem;
-    top: -0.25em;
-    font-size: 0.3rem;
+    left: -3rem; /* Adjust as needed */
+    top: -0.25rem; /* Adjust as needed */
+    font-size: 0.6rem;
     vertical-align: super;
-    color: hsl(var(--destructive));
-    opacity: 1;
+    color: hsl(var(--muted-foreground));
+    opacity: 0.7;
   }
 }
