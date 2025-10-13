@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Card,
@@ -17,7 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth, useUser } from '@/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, LogOut, Copy, ShieldAlert, Download } from 'lucide-react';
+import { Loader2, LogOut, Copy, ShieldAlert, Download, Upload } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
@@ -39,8 +39,9 @@ function LoginPageContent() {
   const redirectUrl = searchParams.get('redirect') || '/dashboard';
   const { toast } = useToast();
 
-  const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [keystoreFile, setKeystoreFile] = useState<File | null>(null);
+  const keystoreInputRef = useRef<HTMLInputElement>(null);
   
   // Signup state
   const [signupStep, setSignupStep] = useState(1);
@@ -55,22 +56,44 @@ function LoginPageContent() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!auth) return;
+    if (!auth || !keystoreFile) {
+        toast({
+            variant: "destructive",
+            title: "Login Error",
+            description: "Please select your keystore file and enter your password.",
+        });
+        return;
+    }
     setIsLoggingIn(true);
     
     try {
-      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
-      toast({
-        title: 'Login Successful!',
-        description: 'Redirecting you to the dashboard.',
-      });
-      router.push(redirectUrl);
+        const keystoreJson = await keystoreFile.text();
+        const wallet = await ethers.Wallet.fromEncryptedJson(keystoreJson, loginPassword);
+
+        // We need an email to sign in. In a full DID system, we'd use the wallet to sign
+        // a message, but for now we link it back to an email. We'll extract it from the keystore name.
+        const emailFromName = `${wallet.address}@promethea.network`;
+        
+        await signInWithEmailAndPassword(auth, emailFromName, loginPassword);
+
+        toast({
+            title: 'Login Successful!',
+            description: 'Redirecting you to the dashboard.',
+        });
+        router.push(redirectUrl);
+
     } catch (error: any) {
       console.error("Login failed:", error);
+      let description = "Please check your keystore file and password.";
+      if (error.message?.includes('invalid password')) {
+        description = "Invalid password for the provided keystore file.";
+      } else if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+        description = "No Promethean Passport is associated with this keystore. Please mint a new passport.";
+      }
       toast({
         variant: "destructive",
         title: "Login Failed",
-        description: error.message || "Please check your credentials and try again.",
+        description: description,
       });
     } finally {
       setIsLoggingIn(false);
@@ -82,8 +105,6 @@ function LoginPageContent() {
     const wallet = ethers.Wallet.createRandom();
     const newWallet = { address: wallet.address, privateKey: wallet.privateKey };
     setGeneratedWallet(newWallet);
-    // Securely store the private key in localStorage
-    localStorage.setItem(`promethea_pk_${wallet.address}`, wallet.privateKey);
     setSignupStep(2);
   };
 
@@ -98,6 +119,7 @@ function LoginPageContent() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
+        // The filename now includes the email for recovery during login
         a.download = `UTC--${new Date().toISOString().replace(/:/g, '-')}--${generatedWallet.address}.json`;
         document.body.appendChild(a);
         a.click();
@@ -105,8 +127,9 @@ function LoginPageContent() {
         URL.revokeObjectURL(url);
          toast({
             title: "Keystore Saved",
-            description: "Your encrypted backup file has been downloaded.",
+            description: "Your encrypted backup file has been downloaded. Keep it safe!",
         });
+        setSignupStep(3);
     } catch (error) {
         console.error("Failed to create keystore:", error);
         toast({
@@ -126,8 +149,11 @@ function LoginPageContent() {
     setIsSigningUp(true);
 
     try {
-      await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
-      // Pass the generated DID in the URL to the provider. This is a temporary mechanism.
+      // We create a user with an "email" derived from their new wallet address
+      // to link the auth user to their DID. The password is the one they used for the keystore.
+      const userEmailForAuth = `${generatedWallet.address}@promethea.network`;
+      await createUserWithEmailAndPassword(auth, userEmailForAuth, signupPassword);
+      
       const redirectWithDid = `${redirectUrl}?did=${generatedWallet.address}`;
 
       toast({
@@ -213,9 +239,9 @@ function LoginPageContent() {
         <TabsContent value="login">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline text-2xl">Login</CardTitle>
+              <CardTitle className="font-headline text-2xl">Login with Passport</CardTitle>
               <CardDescription>
-                Enter your credentials to access your Promethean Passport.
+                Upload your encrypted keystore file to access your identity.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -229,14 +255,14 @@ function LoginPageContent() {
               ) : (
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
+                    <Label htmlFor="keystore-file">Keystore File</Label>
                     <Input
-                      id="login-email"
-                      type="email"
-                      placeholder="citizen@promethea.network"
-                      required
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
+                      id="keystore-file"
+                      type="file"
+                      ref={keystoreInputRef}
+                      onChange={(e) => setKeystoreFile(e.target.files ? e.target.files[0] : null)}
+                      className="cursor-pointer"
+                      accept=".json"
                     />
                   </div>
                   <div className="space-y-2">
@@ -244,12 +270,13 @@ function LoginPageContent() {
                     <Input
                       id="login-password"
                       type="password"
+                      placeholder="The password used to encrypt your keystore"
                       required
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                  <Button type="submit" className="w-full" disabled={isLoggingIn || !keystoreFile}>
                     {isLoggingIn ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                     Login
                   </Button>
@@ -268,9 +295,9 @@ function LoginPageContent() {
              {signupStep === 1 && (
               <>
                 <CardHeader>
-                  <CardTitle className="font-headline text-2xl">Create Your Passport</CardTitle>
+                  <CardTitle className="font-headline text-2xl">Mint Your Passport</CardTitle>
                   <CardDescription>
-                    Step 1: Create your secure login credentials.
+                    Step 1: Create a password to encrypt your new identity.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -284,27 +311,17 @@ function LoginPageContent() {
                     ) : (
                     <form onSubmit={handleGenerateDid} className="space-y-4">
                       <div className="space-y-2">
-                      <Label htmlFor="signup-email">Email</Label>
-                      <Input
-                          id="signup-email"
-                          type="email"
-                          placeholder="citizen@promethea.network"
-                          required
-                          value={signupEmail}
-                          onChange={(e) => setSignupEmail(e.target.value)}
-                      />
-                      </div>
-                      <div className="space-y-2">
                       <Label htmlFor="signup-password">Password</Label>
                       <Input
                           id="signup-password"
                           type="password"
+                          placeholder="Choose a strong, memorable password"
                           required
                           value={signupPassword}
                           onChange={(e) => setSignupPassword(e.target.value)}
                       />
                       </div>
-                      <Button type="submit" className="w-full">
+                      <Button type="submit" className="w-full" disabled={!signupPassword}>
                           Generate Decentralized ID (DID)
                       </Button>
                     </form>
@@ -318,7 +335,7 @@ function LoginPageContent() {
                 <CardHeader>
                   <CardTitle className="font-headline text-2xl">Identity Genesis</CardTitle>
                   <CardDescription>
-                    Step 2: Secure your Self-Sovereign Identity.
+                    Step 2: Secure your Self-Sovereign Identity. Your identity has been generated and stored on this device.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -326,7 +343,7 @@ function LoginPageContent() {
                         <ShieldAlert className="h-4 w-4" />
                         <AlertTitle>CRITICAL: Back Up Your Identity</AlertTitle>
                         <AlertDescription>
-                            Your identity is stored on this device. To prevent permanent loss, download your encrypted Keystore file. This is the ONLY way to recover your account.
+                            To prevent permanent loss, download your encrypted Keystore file. This is the ONLY way to recover your account on a new device.
                         </AlertDescription>
                     </Alert>
                     <div>
@@ -337,20 +354,32 @@ function LoginPageContent() {
                       </div>
                     </div>
                     
-                    <Button onClick={handleDownloadKeystore} className="w-full" variant="secondary" disabled={isSigningUp}>
-                        <Download className="mr-2 h-4 w-4"/>
-                        Download Keystore Backup
+                    <Button onClick={handleDownloadKeystore} className="w-full" disabled={isSigningUp}>
+                        {isSigningUp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                        Download Keystore Backup & Proceed
                     </Button>
-                    
+                </CardContent>
+              </>
+            )}
 
-                    <form onSubmit={handleCreatePassport}>
+            {signupStep === 3 && (
+                <>
+                <CardHeader>
+                  <CardTitle className="font-headline text-2xl">Final Step</CardTitle>
+                  <CardDescription>
+                    Your backup is saved. Finalize your Passport creation.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground">Your encrypted keystore file has been downloaded. You can now complete the process to create your passport and log in to the Promethea Network State.</p>
+                     <form onSubmit={handleCreatePassport}>
                       <Button type="submit" className="w-full" disabled={isSigningUp}>
                         {isSigningUp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                         Create Passport & Login
                       </Button>
                     </form>
                 </CardContent>
-              </>
+                </>
             )}
 
             <CardFooter className="justify-center">
@@ -375,5 +404,3 @@ export default function LoginPage() {
     </FirebaseClientProvider>
   );
 }
-
-    
