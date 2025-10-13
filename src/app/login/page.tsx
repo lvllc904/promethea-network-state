@@ -94,7 +94,7 @@ function LoginPageContent() {
       console.error(error);
       let description = "An unexpected error occurred during login. Please check the console for details.";
       // Check for ethers.js specific incorrect password error
-      if (error.code === 'INVALID_ARGUMENT' && error.message?.includes('invalid password')) {
+      if (error.code === 'INVALID_ARGUMENT' && (error.message?.includes('invalid password') || error.message?.includes('incorrect password'))) {
         description = "Incorrect password for the provided keystore file. Please try again.";
       } else if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
         description = "No Promethean Passport is associated with this email or password. Please mint a new passport or check your credentials.";
