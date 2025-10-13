@@ -82,10 +82,7 @@ function LoginPageContent() {
         });
         router.push(redirectUrl);
 
-    } catch (error: any) {
-      console.error("Login failed:", error);
-      let description = "Please check your keystore file and password.";
-      if (error.message?.includes('incorrect password')) {
+    } catch (error: any)      if (error.message?.includes('incorrect password')) {
         description = "Incorrect password for the provided keystore file. Please try again.";
       } else if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
         description = "No Promethean Passport is associated with this keystore. Please mint a new passport.";
@@ -149,10 +146,8 @@ function LoginPageContent() {
     setIsSigningUp(true);
 
     try {
-      // We create a user with an "email" derived from their new wallet address
-      // to link the auth user to their DID. The password is the one they used for the keystore.
-      const userEmailForAuth = `${generatedWallet.address}@promethea.network`;
-      await createUserWithEmailAndPassword(auth, userEmailForAuth, signupPassword);
+      // Use the user's actual email for auth, and the keystore password.
+      await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
       
       const redirectWithDid = `${redirectUrl}?did=${generatedWallet.address}`;
 
@@ -297,7 +292,7 @@ function LoginPageContent() {
                 <CardHeader>
                   <CardTitle className="font-headline text-2xl">Mint Your Passport</CardTitle>
                   <CardDescription>
-                    Step 1: Create a password to encrypt your new identity.
+                    Step 1: Create your secure account and identity.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -310,6 +305,17 @@ function LoginPageContent() {
                       </Alert>
                     ) : (
                     <form onSubmit={handleGenerateDid} className="space-y-4">
+                       <div className="space-y-2">
+                        <Label htmlFor="signup-email">Email</Label>
+                        <Input
+                            id="signup-email"
+                            type="email"
+                            placeholder="your@email.com"
+                            required
+                            value={signupEmail}
+                            onChange={(e) => setSignupEmail(e.target.value)}
+                        />
+                      </div>
                       <div className="space-y-2">
                       <Label htmlFor="signup-password">Password</Label>
                       <Input
@@ -321,7 +327,7 @@ function LoginPageContent() {
                           onChange={(e) => setSignupPassword(e.target.value)}
                       />
                       </div>
-                      <Button type="submit" className="w-full" disabled={!signupPassword}>
+                      <Button type="submit" className="w-full" disabled={!signupPassword || !signupEmail}>
                           Generate Decentralized ID (DID)
                       </Button>
                     </form>
@@ -404,5 +410,6 @@ export default function LoginPage() {
     </FirebaseClientProvider>
   );
 }
+
 
     
