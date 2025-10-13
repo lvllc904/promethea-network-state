@@ -1,12 +1,61 @@
+
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { WhitepaperContent } from './content';
 import { Button } from '@/components/ui/button';
 
+const TableOfContents = () => (
+    <nav className="text-sm">
+        <h3 className="font-headline font-bold mb-4">Table of Contents</h3>
+        <ul className="space-y-2">
+            <li><a href="#part-1-heading" className="font-semibold hover:underline">Part I: The Vision</a>
+                <ul className="pl-4 mt-1 space-y-1 text-muted-foreground">
+                    <li><a href="#section-1-1" className="hover:underline">1.1. The Moral Imperative</a></li>
+                    <li><a href="#section-1-2" className="hover:underline">1.2. The Symbiotic Dividend</a></li>
+                    <li><a href="#section-1-3" className="hover:underline">1.3. The Symbiotic Age</a></li>
+                </ul>
+            </li>
+            <li><a href="#part-2-heading" className="font-semibold hover:underline">Part II: The System</a>
+                 <ul className="pl-4 mt-1 space-y-1 text-muted-foreground">
+                    <li><a href="#section-2-1" className="hover:underline">2.1. The Economic Blueprint</a></li>
+                    <li><a href="#section-2-2" className="hover:underline">2.2. Universal Value Tokenization</a></li>
+                    <li><a href="#section-2-3" className="hover:underline">2.3. The Technological Foundation</a></li>
+                </ul>
+            </li>
+            <li><a href="#part-3-heading" className="font-semibold hover:underline">Part III: The Action Plan</a>
+                 <ul className="pl-4 mt-1 space-y-1 text-muted-foreground">
+                    <li><a href="#section-3-1" className="hover:underline">3.1. The Roadmap</a></li>
+                    <li><a href="#section-3-2" className="hover:underline">3.2. Defining the End State</a></li>
+                    <li><a href="#section-3-3" className="hover:underline">3.3. The Architecture</a></li>
+                </ul>
+            </li>
+            <li><a href="#addendum-heading" className="font-semibold hover:underline">Addendum</a>
+                 <ul className="pl-4 mt-1 space-y-1 text-muted-foreground">
+                    <li><a href="#section-a-1" className="hover:underline">A.1. Co-evolution of Intelligences</a></li>
+                    <li><a href="#section-a-2" className="hover:underline">A.2. The Constitutional Guarantee</a></li>
+                    <li><a href="#section-a-3" className="hover:underline">A.3. A Note on Faith</a></li>
+                </ul>
+            </li>
+             <li><a href="#appendices-heading" className="font-semibold hover:underline">Appendices</a>
+                 <ul className="pl-4 mt-1 space-y-1 text-muted-foreground">
+                    <li><a href="#appendix-a" className="hover:underline">A. Core Technology Stack</a></li>
+                    <li><a href="#appendix-b" className="hover:underline">B. UVT Framework</a></li>
+                    <li><a href="#appendix-c" className="hover:underline">C. The Promethean DAC</a></li>
+                    <li><a href="#appendix-d" className="hover:underline">D. SSI Framework</a></li>
+                    <li><a href="#appendix-e" className="hover:underline">E. The 3 Body System</a></li>
+                    <li><a href="#addendum-appendices" className="hover:underline">Addendum to Appendices</a></li>
+                </ul>
+            </li>
+             <li><a href="#references" className="font-semibold hover:underline">References</a></li>
+        </ul>
+    </nav>
+);
+
+
 export default function WhitepaperPage() {
   return (
-    <div className="container mx-auto py-12 px-4 md:px-6">
-      <header className="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between bg-background/80 px-4 backdrop-blur-sm lg:px-6">
+    <div className="container mx-auto px-4 md:px-6">
+       <header className="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between bg-background/80 px-4 backdrop-blur-sm lg:px-6 border-b">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -29,24 +78,35 @@ export default function WhitepaperPage() {
           <Link href="/dashboard">Return to Dashboard</Link>
         </Button>
       </header>
-      <Card className="mx-auto max-w-4xl mt-14">
-        <CardHeader>
-          <CardTitle className="text-center font-headline text-4xl">
-            Promethea: A White Paper &amp; Roadmap to a Network State and the New
-            World…
-          </CardTitle>
-          <div className="pt-4 text-center text-muted-foreground">
-            <p>Joshua Wicke</p>
-            <p>In partnership with Gemini AI</p>
-            <p>Version: 12.777 (Final Draft)</p>
-            <p>Date: October 8, 2025</p>
-            <p>Status: Live Document</p>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <WhitepaperContent />
-        </CardContent>
-      </Card>
+
+      <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 mt-14 py-12">
+        <aside className="w-full lg:w-64 xl:w-72 lg:sticky lg:top-28 lg:self-start">
+            <div className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
+                <TableOfContents />
+            </div>
+        </aside>
+
+        <main className="flex-1 min-w-0">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center font-headline text-4xl">
+                Promethea: A White Paper &amp; Roadmap to a Network State and the New
+                World…
+              </CardTitle>
+              <div className="pt-4 text-center text-muted-foreground">
+                <p>Joshua Wicke</p>
+                <p>In partnership with Gemini AI</p>
+                <p>Version: 12.777 (Final Draft)</p>
+                <p>Date: October 8, 2025</p>
+                <p>Status: Live Document</p>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <WhitepaperContent />
+            </CardContent>
+          </Card>
+        </main>
+      </div>
     </div>
   );
 }
