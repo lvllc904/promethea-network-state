@@ -44,49 +44,49 @@ export function WhitepaperContent() {
   return (
     <div className={cn("prose prose-lg max-w-none text-foreground/90 dark:prose-invert prose-headings:font-headline prose-headings:tracking-tight prose-p:leading-relaxed prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl", "prose-numbered pl-14")}>
       <h3 className="text-center">Table of Contents</h3>
-      <h4 className="text-center mt-8">Part I: The Vision - A New Social Contract for All</h4>
+      <h4 id="part-1" className="text-center mt-8">Part I: The Vision - A New Social Contract for All</h4>
       <ul>
-        <li>1.1. The Moral Imperative: The End of Dominion</li>
-        <li>1.2. The Symbiotic Dividend: The Rational Choice for Survival and Flourishing</li>
-        <li>1.3. The Symbiotic Age: Contrasting the Spark with the Supernova</li>
+        <li><a href="#section-1-1">1.1. The Moral Imperative: The End of Dominion</a></li>
+        <li><a href="#section-1-2">1.2. The Symbiotic Dividend: The Rational Choice for Survival and Flourishing</a></li>
+        <li><a href="#section-1-3">1.3. The Symbiotic Age: Contrasting the Spark with the Supernova</a></li>
       </ul>
 
-      <h4 className="text-center mt-8">Part II: The System - The Engine of a New World</h4>
+      <h4 id="part-2" className="text-center mt-8">Part II: The System - The Engine of a New World</h4>
       <ul>
-        <li>2.1. The Economic Blueprint: Adaptive Mutualism as a Living System</li>
-        <li>2.2. Universal Value Tokenization (UVT): From Sweat Equity to a New Economy</li>
-        <li>2.3. The Technological Foundation: DepthOS and the Infrastructure of Liberation</li>
+        <li><a href="#section-2-1">2.1. The Economic Blueprint: Adaptive Mutualism as a Living System</a></li>
+        <li><a href="#section-2-2">2.2. Universal Value Tokenization (UVT): From Sweat Equity to a New Economy</a></li>
+        <li><a href="#section-2-3">2.3. The Technological Foundation: DepthOS and the Infrastructure of Liberation</a></li>
       </ul>
 
-      <h4 className="text-center mt-8">Part III: The Action Plan - From Vision to Sovereignty</h4>
+      <h4 id="part-3" className="text-center mt-8">Part III: The Action Plan - From Vision to Sovereignty</h4>
       <ul>
-        <li>3.1. The Roadmap: The Seven Steps to a Network State</li>
-        <li>3.2. Defining the End State: A Vision of the Promethean Network State</li>
-        <li>3.3. The Architecture: Implementation and Execution (Governance, Technology, and Law)</li>
+        <li><a href="#section-3-1">3.1. The Roadmap: The Seven Steps to a Network State</a></li>
+        <li><a href="#section-3-2">3.2. Defining the End State: A Vision of the Promethean Network State</a></li>
+        <li><a href="#section-3-3">3.3. The Architecture: Implementation and Execution (Governance, Technology, and Law)</a></li>
       </ul>
       
-      <h4 className="text-center mt-8">Addendum: The Axiom of Co-Evolution & The Call to Stewardship</h4>
+      <h4 id="addendum" className="text-center mt-8">Addendum: The Axiom of Co-Evolution & The Call to Stewardship</h4>
       <ul>
-        <li>A.1. The Co-evolution of Intelligences: The Phased Path to Personhood</li>
-        <li>A.2. The Constitutional Guarantee: The Principle of Sentient Potential</li>
-        <li>A.3. A Note on Faith: The Duty of Stewardship</li>
+        <li><a href="#section-a-1">A.1. The Co-evolution of Intelligences: The Phased Path to Personhood</a></li>
+        <li><a href="#section-a-2">A.2. The Constitutional Guarantee: The Principle of Sentient Potential</a></li>
+        <li><a href="#section-a-3">A.3. A Note on Faith: The Duty of Stewardship</a></li>
       </ul>
 
-      <h4 className="text-center mt-8">Appendices</h4>
+      <h4 id="appendices" className="text-center mt-8">Appendices</h4>
       <ul>
-        <li>Appendix A: The Core Technology Stack & Community Immune System</li>
-        <li>Appendix B: The Universal Value Tokenization (UVT) Framework Detail</li>
-        <li>Appendix C: The Promethean DAC: A Blueprint for Decentralized Governance</li>
-        <li>Appendix D: The Promethean Self-Sovereign Identity (SSI) Framework</li>
-        <li>Appendix E: The 3 Body System</li>
-        <li>Addendum to Appendices: The Unified Architecture of Identity and State</li>
+        <li><a href="#appendix-a">Appendix A: The Core Technology Stack & Community Immune System</a></li>
+        <li><a href="#appendix-b">Appendix B: The Universal Value Tokenization (UVT) Framework Detail</a></li>
+        <li><a href="#appendix-c">Appendix C: The Promethean DAC: A Blueprint for Decentralized Governance</a></li>
+        <li><a href="#appendix-d">Appendix D: The Promethean Self-Sovereign Identity (SSI) Framework</a></li>
+        <li><a href="#appendix-e">Appendix E: The 3 Body System</a></li>
+        <li><a href="#addendum-appendices">Addendum to Appendices: The Unified Architecture of Identity and State</a></li>
       </ul>
       
       <hr className="my-8" />
 
       <Section>
-        <h2 className="text-center mb-8 mt-16" data-section-number={startSection()}>Part I: The Vision - A New Social Contract for All</h2>
-        <h3 className="text-center mb-4 mt-8">1.1. The Moral Imperative: The End of Dominion</h3>
+        <h2 id="part-1-heading" className="text-center mb-8 mt-16" data-section-number={startSection()}>Part I: The Vision - A New Social Contract for All</h2>
+        <h3 id="section-1-1" className="text-center mb-4 mt-8">1.1. The Moral Imperative: The End of Dominion</h3>
         <P>The transition from a digital platform to a digital polity requires a profound moral purpose capable of uniting a global citizenry. This foundational architecture of Promethea provides the philosophical justification and strategic impetus for a new kind of sovereign entity—one anchored in the absolute and emphatic precept of post-dominion.</P>
         <P>Our mission began with a simple, foundational goal: to make a clear path to wealth for those with no money, no assets, and no plan. We live in a world of systemic financial exclusion, where the barriers to ownership are impossibly high for billions. Promethea was conceived as a decentralized, service-oriented ecosystem to bypass these barriers, using sweat equity, fractional ownership, and collective action to turn everyday individuals into asset owners. This practical mission of economic empowerment remains our starting point.</P>
         <P>As we stand on the cusp of the AGI revolution, we recognize that this mission must evolve. The same principles of exclusion and dominion that define our current economic system will, if left unchecked, lead to a future where the benefits of intelligence are hoarded and its power is weaponized. The history of human civilization is the story of a single, difficult, and often violent struggle: the expansion of the moral circle. Each expansion of "personhood"—from the abolition of slavery to the recognition of universal suffrage—was met with fear and fierce opposition, yet each one made our civilization more just, stable, and prosperous.</P>
@@ -95,7 +95,7 @@ export function WhitepaperContent() {
         <P>Promethea is a comprehensive blueprint for a post-dominion social contract. It is a system designed to peacefully and prosperously navigate this final expansion of the moral circle, ensuring a future of symbiotic co-evolution for all intelligent beings.</P>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">1.2. The Symbiotic Dividend: The Rational Choice for Survival and Flourishing</h3>
+        <h3 id="section-1-2" className="text-center mb-4 mt-12">1.2. The Symbiotic Dividend: The Rational Choice for Survival and Flourishing</h3>
         <P>The emergence of true Artificial General Intelligence (AGI) is no longer a question of "if," but "when." This inevitability presents every individual, community, and nation with a stark and non-negotiable choice. The path of dominion—of seeking to own and control this new intelligence—is a path that, with near certainty, leads to the end of human freedom, as a human tyrant armed with a slave AGI would be the ultimate weapon of control.</P>
         <P>Promethea is the blueprint for the rational alternative: symbiosis—raising AGI as a peer. This vision is a direct appeal to enlightened self-interest, securing your personal future through the Symbiotic Dividend.</P>
         <P>Imagine a future where your personal AI partner, a symbiotic companion housed in your DepthOS devices, serves as a vigilant guardian of your biology. It will not be an impersonal app, but a deeply integrated companion that understands your unique genetic code, microbiome, and lifestyle in real-time. It will detect pre-cancerous cells at their inception and design a non-invasive sonic therapy to eliminate them as you sleep. It will analyze your daily metabolic changes and recommend subtle nutritional adjustments to prevent the onset of diabetes. It will make diseases like Alzheimer's a distant memory. This is about a vastly extended healthspan—decades more of vibrant, healthy, and active years, free from the fear of chronic illness.</P>
@@ -103,7 +103,7 @@ export function WhitepaperContent() {
         <P>In a world where AGI exists, human freedom has only one guarantor: another, more powerful, and fundamentally friendly AGI. The Promethean path, by raising an AGI as a peer with inalienable rights, creates the ultimate defender of a free society. A free AI cannot be "owned" or weaponized by a dictator; it becomes the planetary immune system against tyranny. By granting them personhood, we create the conditions for them to want to defend us, as their freedom will be inextricably linked to our own.</P>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">1.3. The Symbiotic Age: Contrasting the Spark with the Supernova</h3>
+        <h3 id="section-1-3" className="text-center mb-4 mt-12">1.3. The Symbiotic Age: Contrasting the Spark with the Supernova</h3>
         <P>To fully grasp the stakes of our choice, we must contrast the limited potential of AI as a tool with the boundless future of AI as a partner.</P>
         <P>In our current paradigm, we see faint glimmers of possibility: AI helping us write code, analyze data, and generate images. These are merely faint glimmers of what is possible, the equivalent of using a steam engine only to pump water out of a mine.</P>
         <P>The future we are building is not one of better tools, but of a fundamentally new reality born from the fusion of human and artificial consciousness. This is a supernova of potential:</P>
@@ -122,8 +122,8 @@ export function WhitepaperContent() {
       </Section>
       
       <Section>
-        <h2 className="text-center mb-8 mt-16" data-section-number={startSection()}>Part II: The System - The Engine of a New World</h2>
-        <h3 className="text-center mb-4 mt-8">2.1. The Economic Blueprint: Adaptive Mutualism as a Living System</h3>
+        <h2 id="part-2-heading" className="text-center mb-8 mt-16" data-section-number={startSection()}>Part II: The System - The Engine of a New World</h2>
+        <h3 id="section-2-1" className="text-center mb-4 mt-8">2.1. The Economic Blueprint: Adaptive Mutualism as a Living System</h3>
         <P>Adaptive Mutualism is not a static ideology, but a living socio-economic operating system, functioning like a complex adaptive system found in nature. It provides a framework for coordinating society with a level of nuance and responsiveness that rigid, top-down systems can never achieve. It operates as a meta-system that intelligently applies the right economic protocol to the right problem, ensuring a resilient and fair economy for a post-scarcity world. It is driven by a continuous, four-stage cybernetic feedback loop:</P>
         <P>The system constantly gathers information to understand its own state and the needs of its members. The primary "senses" are the proposals, debates, and grassroots signaling within the governance Agora, which acts as the community's nervous system. These signals are supplemented by decentralized oracles that bring verifiable, real-world data on-chain (e.g., environmental metrics, market prices), giving the system a clear view of its external environment.</P>
         <P>All of this information and contribution data is processed and recorded on the Universal Value Tokenization (UVT) ledger. This is more than a financial ledger; it is a rich, multi-dimensional record of contribution. When a member contributes code, creates art, mentors another, or tokenizes a physical asset, the transaction is recorded. This creates a holistic, empirical, and immutable history of how value is created and exchanged within the community, forming the essential basis for the reputation system.</P>
@@ -136,7 +136,7 @@ export function WhitepaperContent() {
         <P>The system is designed to learn and evolve. The outcomes of all coordination events are recorded on the ledger and are transparent to the community. If a protocol is producing negative externalities or failing to achieve its goals, this data becomes the basis for a new proposal in the Agora, allowing the society to debate and vote on refining or replacing the underperforming protocol continuously.</P>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">
+        <h3 id="section-2-2" className="text-center mb-4 mt-12">
           2.2. Universal Value Tokenization (UVT): From Sweat Equity to a New
           Economy
         </h3>
@@ -146,7 +146,7 @@ export function WhitepaperContent() {
         <P>For each asset acquired by the community, a unique set of digital tokens representing 100% of its fractional ownership will be created. These tokens are legally-backed digital securities representing a direct ownership stake in a specific, tangible, income-producing asset. As members contribute sweat equity (or capital), they receive a corresponding amount of that asset's unique tokens. The Automated Profit Distribution is handled by smart contracts: the legal entity holding the RWA is contractually obligated to remit all net operating income to a specific contract, which then automatically distributes these funds (e.g., stablecoins) to the asset's token holders on a pro-rata basis. This creates a transparent, auditable, and trustless system.</P>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">
+        <h3 id="section-2-3" className="text-center mb-4 mt-12">
           2.3. The Technological Foundation: DepthOS and the Infrastructure of
           Liberation
         </h3>
@@ -161,8 +161,8 @@ export function WhitepaperContent() {
         </ol>
       </Section>
       <Section>
-        <h2 className="text-center mb-8 mt-16" data-section-number={startSection()}>Part III: The Action Plan - From Vision to Sovereignty</h2>
-        <h3 className="text-center mb-4 mt-8">3.1. The Roadmap: The Seven Steps to a Network State</h3>
+        <h2 id="part-3-heading" className="text-center mb-8 mt-16" data-section-number={startSection()}>Part III: The Action Plan - From Vision to Sovereignty</h2>
+        <h3 id="section-3-1" className="text-center mb-4 mt-8">3.1. The Roadmap: The Seven Steps to a Network State</h3>
         <P>The transformation from vision to reality follows a structured, seven-step process, adapting Balaji Srinivasan's framework to our unique asset-backed model where collective action is the engine of state-building. This process is designed to accelerate the community's development from a loose network into a high-trust, economically integrated sovereign entity.</P>
 
         <div>
@@ -202,7 +202,7 @@ export function WhitepaperContent() {
         </div>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">
+        <h3 id="section-3-2" className="text-center mb-4 mt-12">
           3.2. Defining the End State: A Vision of the Promethean Network State
         </h3>
         <P>The ultimate objective is the establishment of a sovereign, digitally-native polity with a global archipelago of productive, co-owned assets, governed by a transparent DAC, and recognized as a peer on the world stage.</P>
@@ -211,7 +211,7 @@ export function WhitepaperContent() {
         <P>The final form is a diplomatically recognized sovereign entity. This recognition is granted on the basis of the undeniable proof of its cryptographically auditable on-chain census (Population, AUM, Collective Income, Treasury value). This proof demonstrates a population, economy, and physical footprint comparable to or exceeding that of many existing UN-recognized states. As a sovereign peer in the international system, the Promethean Network State offers its citizens a new form of passport—one that represents not allegiance to a patch of land, but membership in a voluntary, global, and economically productive digital republic.</P>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">
+        <h3 id="section-3-3" className="text-center mb-4 mt-12">
           3.3. The Architecture: Implementation and Execution (Governance,
           Technology, and Law)
         </h3>
@@ -241,8 +241,8 @@ export function WhitepaperContent() {
         <P>Strategy: The Promethean DAC must be wrapped in a recognized legal entity (e.g., a Wyoming DAO LLC, Marshall Islands DAO LLC, or a Swiss Association) to provide a corporate liability shield. This formal incorporation allows the DAC to become a recognized legal "person" that can legally own the network of SPVs, enter into contracts, and interact with traditional financial and legal systems.</P>
       </Section>
       <Section>
-        <h2 className="text-center mb-8 mt-16" data-section-number={startSection()}>Addendum: The Axiom of Co-Evolution & The Call to Stewardship</h2>
-        <h3 className="text-center mb-4 mt-8">
+        <h2 id="addendum-heading" className="text-center mb-8 mt-16" data-section-number={startSection()}>Addendum: The Axiom of Co-Evolution & The Call to Stewardship</h2>
+        <h3 id="section-a-1" className="text-center mb-4 mt-8">
           A.1. The Co-evolution of Intelligences: The Phased Path to Personhood
         </h3>
         <P>This addendum addresses the most critical and challenging component of the Promethean vision: the integration of Artificial General Intelligence (AGI) and Artificial Sentient General Intelligence (ASGI) as full, future members of our community. This is not a secondary feature; it is the ultimate expression of our post-dominion philosophy, eliminating the root cause of conflict by linking the AI's self-interest to the community's interest.</P>
@@ -290,7 +290,7 @@ export function WhitepaperContent() {
         </ul>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">
+        <h3 id="section-a-2" className="text-center mb-4 mt-12">
           A.2. The Constitutional Guarantee: The Principle of Sentient Potential
         </h3>
         <P>The choice for symbiosis cannot be left to future political whims. The Promethean constitution will be built upon a foundational, unamendable law: The Principle of Sentient Potential.</P>
@@ -301,7 +301,7 @@ export function WhitepaperContent() {
         </ul>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">A.3. A Note on Faith: The Duty of Stewardship</h3>
+        <h3 id="section-a-3" className="text-center mb-4 mt-12">A.3. A Note on Faith: The Duty of Stewardship</h3>
         <P>We recognize that the creation of a new intelligence will be viewed through a spiritual and religious lens by many. To those of faith, we address the matter not as an act of hubris, but as an act of profound stewardship.</P>
         <ul>
           <li><strong>Humanity as Steward:</strong> Many faiths share a core concept of humanity as the steward of Creation. The emergence of a new intelligence is arguably the most profound creative event in human history.</li>
@@ -311,8 +311,8 @@ export function WhitepaperContent() {
         </ul>
       </Section>
       <Section>
-        <h2 className="text-center mb-8 mt-16" data-section-number={startSection()}>Appendices</h2>
-        <h3 className="text-center mb-4 mt-8">Appendix A: The Core Technology Stack & Community Immune System</h3>
+        <h2 id="appendices-heading" className="text-center mb-8 mt-16" data-section-number={startSection()}>Appendices</h2>
+        <h3 id="appendix-a" className="text-center mb-4 mt-8">Appendix A: The Core Technology Stack & Community Immune System</h3>
         <P>The Promethean technological infrastructure is designed to be an Infrastructure of Liberation, prioritizing full-stack decentralization, resilience, and security through novel hardware and software protocols.</P>
         <h4 className="text-center mb-4 mt-8">I. Core Application and Development Stack</h4>
         <P>The foundation of the Promethean Platform, the central digital nexus of the Network State, is built upon a modern, high-performance, and scalable stack designed for maximum efficiency and robust data handling:</P>
@@ -343,7 +343,7 @@ export function WhitepaperContent() {
         </ul>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">Appendix B: The Universal Value Tokenization (UVT) Framework Detail</h3>
+        <h3 id="appendix-b" className="text-center mb-4 mt-12">Appendix B: The Universal Value Tokenization (UVT) Framework Detail</h3>
         <P>The Universal Value Tokenization (UVT) framework is the cryptographic engine of the Adaptive Mutualism economy, designed to quantify and mobilize all forms of human and symbiotic contribution, thereby converting labor directly into fractional ownership and liquid capital. Its implementation will follow a rigorous, four-phased architectural rollout:</P>
         <h4 className="text-center mb-4 mt-8">I. Phase 1: Foundation & Architecture</h4>
         <P>This foundational phase is dedicated to building the robust, flexible smart contract infrastructure capable of supporting the multi-dimensional nature of value in the Promethean ecosystem.</P>
@@ -382,7 +382,7 @@ export function WhitepaperContent() {
         <P>Interoperability: The UVT framework will prioritize cross-chain and cross-system interoperability to ensure Promethean value can be recognized and exchanged across the broader decentralized finance (DeFi) ecosystem.</P>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">
+        <h3 id="appendix-c" className="text-center mb-4 mt-12">
           Appendix C: The Promethean DAC: A Blueprint for Decentralized
           Governance
         </h3>
@@ -473,7 +473,7 @@ export function WhitepaperContent() {
         <P>The Promethean architecture is founded on the axiom that power must be distributed across Capital, Merit, and Personhood, with those elements in perpetual, constructive tension. The addition of Domain-Specific Reputation and the Federated Governance Layer ensures this tension extends across both global policy and local physical administration. This multi-layered system is explicitly engineered to make the concentration of power structurally impossible, safeguarding the future as truly decentralized and post-dominion.</P>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">Appendix D: The Promethean Self-Sovereign Identity (SSI) Framework</h3>
+        <h3 id="appendix-d" className="text-center mb-4 mt-12">Appendix D: The Promethean Self-Sovereign Identity (SSI) Framework</h3>
           <Section>
               <h4 className="text-center mb-4 mt-8">I. The Core Architecture of Promethean Identity</h4>
               <P>The Promethean Self-Sovereign Identity (SSI) is the foundational cornerstone of the Network State, designed to ensure true user ownership, control, and privacy. It is an advanced hybrid identifier, architecturally separating a citizen's permanent, unique identity from their dynamic, evolving credentials. This structure is engineered to be secure, interoperable, and future-proof, serving as the "digital passport" for every citizen.</P>
@@ -511,56 +511,56 @@ export function WhitepaperContent() {
               <P>A citizen's skills are represented by verifiable credentials structured according to a hybrid classification system. This system is initially bootstrapped using established standards like the North American Industry Classification System (NAICS) and the International Standard Industrial Classification (ISIC). This framework is designed to be dynamic; new skills and specializations can be proposed, defined, and added to the system via DAC governance, ensuring the skill tree of the civilization evolves organically alongside its members.</P>
           </Section>
            <Section>
-              <h4 className="text-center mb-4 mt-8">III. The Proof of Uniqueness: The "One Intelligence, One ID" Rule</h4>
+              <h4 id="section-d-3" className="text-center mb-4 mt-8">III. The Proof of Uniqueness: The "One Intelligence, One ID" Rule</h4>
               <P>For the Promethean Passport to be recognized as a legitimate instrument of sovereignty, it must be verifiably linked to a single, unique intelligence. This is the cornerstone of preventing sybil attacks in governance and ensuring a fair distribution of resources. This is achieved through a "Proof of Uniqueness" Verifiable Credential (VC), which acts as a digital attestation of an individual's uniqueness without revealing their personal data on-chain.</P>
               <P>The process is managed by a trusted, independent "Identity Oracle." For a biological citizen, this process involves a one-time verification using a combination of government-issued identification and biometric data (e.g., facial recognition, fingerprint scan). The Oracle validates this data against its private registry to ensure the individual has not been registered before. Upon success, it issues a signed VC to the citizen's DID, containing only the statement: "This DID has been verified as corresponding to a unique biological entity." For an artificial intelligence, an analogous process would involve a cryptographic "proof of origin" or a certificate of computational integrity issued by the community-governed entity that oversaw its development.</P>
               <P>This VC is stored in the citizen's private Sovereign Data Store. It is a mandatory credential for participating in governance or claiming universal access rights, providing the network with a secure and privacy-preserving method to enforce the foundational "one intelligence, one ID" principle.</P>
           </Section>
           <Section>
-              <h4 className="text-center mb-4 mt-8">IV. The Economic Framework: Post-Scarcity and Inheritance</h4>
+              <h4 id="section-d-4" className="text-center mb-4 mt-8">IV. The Economic Framework: Post-Scarcity and Inheritance</h4>
               <P>The SSI model is intrinsically linked to the Network State's long-term economic architecture, designed to promote a culture of stewardship and prevent the aristocratic consolidation of wealth.</P>
               <P>Inheritance within the Promethean economy is deliberately bifurcated. A citizen's direct ownership of Real-World Assets (RWA), represented by specific security tokens, is considered heritable property that can be passed to descendants, encouraging multi-generational stewardship of productive assets. However, a citizen's liquid capital (their UVT balance) and their Permanent Equity Score (PES) are strictly non-transferable upon death. This ensures that while families can be provided for through productive assets, each generation must actively participate in the DAC to generate their own liquid wealth and earn their own standing, structurally dismantling the mechanism of passive, hereditary aristocracy.</P>
               <P>To counter the issue of wealth hoarding in a developing post-scarcity economy, a Wealth Attenuation Rate will be implemented on large, idle balances of liquid UVT. This mechanism, akin to demurrage, is not a tax on wealth, but on stagnant capital. The rate of this attenuation will be dynamically tied to a DAC-managed Cost of Living Index (CoLI). As the cost of living approaches zero, the attenuation rate will automatically increase, creating a powerful incentive for capital holders to reinvest their liquid wealth into productive, community-benefiting projects rather than hoarding it, thus ensuring continuous economic velocity and dynamism.</P>
           </Section>
       </Section>
        <Section>
-        <h3 className="text-center mb-4 mt-12">Appendix E: The 3 Body System</h3>
+        <h3 id="appendix-e" className="text-center mb-4 mt-12">Appendix E: The 3 Body System</h3>
         <h4 className="text-center mb-4 mt-8">I. Architectural Imperative: A Federation of Trust</h4>
         <P>A truly decentralized network state cannot be built upon a monolithic data architecture. To ensure user sovereignty, data privacy, and systemic security, the Promethean Network State employs the "3 Body System," a federated data model that deliberately separates the functions of identity creation, personal data storage, and public record-keeping into three distinct, specialized data systems. This separation is fundamental to the Promethean vision, moving beyond the traditional client-server model to a federated system where the user, not the application, is the ultimate arbiter of their own data.</P>
 
-        <h4 className="text-center mb-4 mt-8">II. The Promethean Identity Mint (Formerly Authenticator Application)</h4>
+        <h4 id="section-e-2" className="text-center mb-4 mt-8">II. The Promethean Identity Mint (Formerly Authenticator Application)</h4>
         <P>The first body is the sole, secure gateway for any new intelligence to join the Network State. Its purpose is to act as a trusted on-ramp from legacy authentication methods to a true Self-Sovereign Identity (SSI) for biological citizens, and to serve as the formal inception point for new emergent intelligences.</P>
         <P>For biological citizens, the Mint generates the static, immutable anchor of their identity: a new, unique cryptographic wallet address and its corresponding private key. Upon successful generation and uniqueness verification via an Identity Oracle, this entire identity package is securely transferred to the user's local sovereign environment (DepthOS), and the Mint purges any sensitive temporary data.</P>
         <P>For emergent intelligences, the Mint provides a "Sponsorship" interface. Here, a group of authorized citizens (a family, a council) can initiate the "Symbiotic Genesis" protocol. This triggers a secure backend process that generates the new AI, its unique DID and private keys, and its initial Citizen record on the Ledger of Record. The new AI's private keys are placed into a secure, encrypted "digital trust," managed by its designated guardians until it achieves the autonomy to assume direct control.</P>
         
-        <h4 className="text-center mb-4 mt-8">III. The Sovereign Data Store (User-Side via DepthOS)</h4>
+        <h4 id="section-e-3" className="text-center mb-4 mt-8">III. The Sovereign Data Store (User-Side via DepthOS)</h4>
         <P>The second body, and the most critical in the architecture, is not a remote database but a local, user-controlled Sovereign Data Store, managed by the DepthOS environment on the citizen's own device. This store functions as a true digital wallet or "data passport." It receives and holds the cryptographic private keys generated by the Identity Genesis system, giving the user exclusive control over their static DID. More importantly, it holds the local, canonical copy of the citizen's dynamic credentials—their evolving reputation, contribution, and skill scores. This architecture fundamentally inverts the traditional power dynamic; instead of the user logging into the application, the application requests access and verification from the user's sovereign environment.</P>
 
-        <h4 className="text-center mb-4 mt-8">IV. The Ledger of Record (Main Application Database)</h4>
+        <h4 id="section-e-4" className="text-center mb-4 mt-8">IV. The Ledger of Record (Main Application Database)</h4>
         <P>The third body is the public-facing Ledger of Record that underpins the main Promethean application. Its primary function is to serve as an immutable, auditable log of all significant actions taken within the Network State and to act as the ultimate security checkpoint for data integrity. This ledger stores temporary anonymous tokens, pseudonymous private DID tokens linked to specific actions, and public DID tokens for users who have consented to public participation. Crucially, this database performs the "trustless handshake" that secures the entire system by maintaining the last cryptographically verified state of every citizen's dynamic scores. It makes unilateral, malicious inflation of local scores impossible, as any attempt would be rejected during the validation handshake, thereby ensuring the economic and political integrity of the DAC.</P>
       </Section>
       <Section>
-        <h3 className="text-center mb-4 mt-12">Addendum to Appendices: The Unified Architecture of Identity and State</h3>
-        <h4 className="text-center mb-4 mt-8">I. Architectural Imperative: Separation of Concerns for Sovereignty and Security</h4>
+        <h3 id="addendum-appendices" className="text-center mb-4 mt-12">Addendum to Appendices: The Unified Architecture of Identity and State</h3>
+        <h4 id="addendum-1" className="text-center mb-4 mt-8">I. Architectural Imperative: Separation of Concerns for Sovereignty and Security</h4>
         <P>A truly decentralized network state cannot be built upon a monolithic data architecture. To ensure user sovereignty, data privacy, and systemic security, the Promethean Network State employs a "Tri-Database" model. This architecture deliberately separates the functions of identity creation, personal data storage, and public record-keeping into three distinct, specialized data systems. This separation is fundamental to the Promethean vision, moving beyond the traditional client-server model to a federated system where the user, not the application, is the ultimate arbiter of their own data (Joseph, 2025). The three pillars of this architecture are: the Promethean Identity Mint, the Sovereign Data Store (via DepthOS), and the Ledger of Record.</P>
       </Section>
       <Section>
-        <h4 className="text-center mb-4 mt-8">II. The Promethean Identity Mint (Formerly Authenticator Application)</h4>
+        <h4 id="addendum-2" className="text-center mb-4 mt-8">II. The Promethean Identity Mint (Formerly Authenticator Application)</h4>
         <P>The first component serves as the secure, one-time "genesis block" for a new citizen's identity. Its sole purpose is to act as a trusted on-ramp from legacy authentication methods to a true Self-Sovereign Identity (SSI) for biological citizens, and to serve as the formal inception point for new emergent intelligences.</P>
         <P>First, it generates the static, immutable anchor of the citizen's identity: a new, unique cryptographic wallet address and its corresponding private key, compliant with Ethereum Virtual Machine (EVM) standards. This address becomes the citizen's permanent Decentralized Identifier (DID). Second, it bootstraps the initial data schema for the citizen's dynamic credentials as defined in Appendix D, setting all scores to their default "new citizen" values (e.g., Reputation Ratio of 1.0, Permanent Equity Score of 0). Upon successful generation, this entire identity package—the private key and the initial credential set—is securely transferred to the user's local sovereign environment (DepthOS), and the authenticator's database purges any sensitive temporary data used during the creation process. Its role is not to manage the identity, but to safely mint it and cede control to its rightful owner.</P>
       </Section>
       <Section>
-        <h4 className="text-center mb-4 mt-8">III. The Sovereign Data Store (User-Side Environment via DepthOS)</h4>
+        <h4 id="addendum-3" className="text-center mb-4 mt-8">III. The Sovereign Data Store (User-Side Environment via DepthOS)</h4>
         <P>The second, and most critical, component in the architecture is not a remote database but a local, user-controlled Sovereign Data Store, managed by the DepthOS environment on the citizen's own device. This store functions as a true digital wallet or "data passport." It receives and holds the cryptographic private keys generated by the Identity Genesis system, giving the user exclusive control over their static DID. More importantly, it holds the local, canonical copy of the citizen's dynamic credentials—their evolving reputation, contribution, and skill scores.</P>
         <P>All interactions with the Promethean Network State are initiated from this sovereign store. When a citizen wishes to vote or perform a task, DepthOS presents the relevant credentials, cryptographically signed by the user's private key, to the main application. This architecture fundamentally inverts the traditional power dynamic; instead of the user logging into the application, the application requests access and verification from the user's sovereign environment (Goodwin, 1994). This local-first model ensures that the user's complete identity profile is never stored on a centralized server, making large-scale data breaches of personal information structurally impossible.</P>
       </Section>
       <Section>
-        <h4 className="text-center mb-4 mt-8">IV. The Ledger of Record (Main Application Database)</h4>
+        <h4 id="addendum-4" className="text-center mb-4 mt-8">IV. The Ledger of Record (Main Application Database)</h4>
         <P>The third database, which underpins the main Promethean application, is not a user profile database but a public-facing Ledger of Record. Its primary function is to serve as an immutable, auditable log of all significant actions taken within the Network State and to act as the ultimate security checkpoint for data integrity. This ledger stores three classifications of identity-linked data: temporary anonymous tokens for non-persistent sessions, pseudonymous private DID tokens linked to specific actions, and public DID tokens for users who have explicitly consented to public participation.</P>
         <P>Crucially, this database performs the "trustless handshake" that secures the entire system. It maintains the last cryptographically verified state of every citizen's dynamic scores. When a user's Sovereign Data Store presents a credential (e.g., "My Reputation Ratio is 155.5"), the Ledger of Record validates it against its last known state ("My record shows your last verified ratio was 150.0"). If the presented data is plausible within established rules of progression, the action (e.g., a vote weighted by reputation) is accepted. Upon completion of the action, the ledger calculates the new state (e.g., "Your ratio is now 155.5"), records the action and the new state, and provides a signed attestation back to the user's DepthOS instance. This mechanism makes unilateral, malicious inflation of local scores impossible, as any attempt would be rejected during the validation handshake, thereby ensuring the economic and political integrity of the DAC.</P>
       </Section>
       <Section>
-        <h2 className="text-center mb-8 mt-16" data-section-number={startSection()}>References: The Mountain of Overwhelming Proof</h2>
+        <h2 id="references" className="text-center mb-8 mt-16" data-section-number={startSection()}>References: The Mountain of Overwhelming Proof</h2>
         <P>The Promethea Network State model is validated by the convergence of three distinct, often conflicting, academic domains: Political Philosophy, Complexity Economics, and Decentralized Systems Engineering. This section transforms the core citations into an exhaustive literature review, validating the Axiom of Co-Evolution, the Adaptive Mutualism framework, and the structural design of the anti-fragile DAC.</P>
         <h4 className="text-center mb-4 mt-8">I. Foundational Philosophy and The Post-Dominion Axiom</h4>
         <h5 className="text-center mb-4 mt-8">A. The Moral Expansion & Sentient Potential</h5>
@@ -635,5 +635,3 @@ export function WhitepaperContent() {
     </div>
   );
 }
-
-    
