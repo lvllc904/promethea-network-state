@@ -78,8 +78,10 @@ function LoginPageContent() {
         const emailFromFilename = parts[1];
         
         // We must attempt to decrypt the wallet first to ensure the password is correct.
+        // This proves the user has both the file and the password.
         await ethers.Wallet.fromEncryptedJson(keystoreJson, loginPassword);
 
+        // If decryption succeeds, we can then sign in to Firebase with the associated email.
         await signInWithEmailAndPassword(auth, emailFromFilename, loginPassword);
 
         toast({
@@ -91,12 +93,15 @@ function LoginPageContent() {
     } catch (error: any) {
       console.error(error);
       let description = "An unexpected error occurred during login. Please check the console for details.";
-      if (error.message?.includes('incorrect password')) {
+      // Check for ethers.js specific incorrect password error
+      if (error.code === 'INVALID_ARGUMENT' && error.message?.includes('invalid password')) {
         description = "Incorrect password for the provided keystore file. Please try again.";
-      } else if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-        description = "No Promethean Passport is associated with this keystore. Please mint a new passport.";
+      } else if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+        description = "No Promethean Passport is associated with this email or password. Please mint a new passport or check your credentials.";
       } else if (error.message?.includes("Invalid keystore filename format")) {
         description = "The keystore file has an invalid name. It may be corrupted or not a valid Promethean passport file.";
+      } else if (error.code === 'auth/email-already-in-use') {
+          description = "An account with this email already exists. Please login instead.";
       }
       toast({
         variant: "destructive",
@@ -170,10 +175,14 @@ function LoginPageContent() {
       router.push(redirectWithDid);
     } catch (error: any) {
         console.error("Signup failed:", error);
+        let description = error.message || "Could not create your account. Please try again.";
+        if (error.code === 'auth/email-already-in-use') {
+            description = "An account with this email already exists. Please proceed to the Login tab.";
+        }
         toast({
             variant: "destructive",
             title: "Sign-up Failed",
-            description: error.message || "Could not create your account. Please try again.",
+            description: description,
         });
     } finally {
         setIsSigningUp(false);
@@ -422,6 +431,3 @@ export default function LoginPage() {
     </FirebaseClientProvider>
   );
 }
-
-
-    
