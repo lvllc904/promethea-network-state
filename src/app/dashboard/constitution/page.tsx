@@ -8,15 +8,21 @@ import { Constitution } from '@/lib/types';
 import { doc } from 'firebase/firestore';
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Info } from 'lucide-react';
 import { WhitepaperContent } from '@/app/whitepaper/content';
 
 
-const ConstitutionRenderer = ({ content }: { content: React.ReactNode }) => (
-    <div className={cn("prose prose-lg max-w-none text-foreground/90 dark:prose-invert prose-headings:font-headline prose-headings:tracking-tight prose-p:leading-relaxed prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl", "prose-numbered pl-14")}>
-        {content}
-    </div>
+const TableOfContents = () => (
+    <nav className="text-sm">
+        <h3 className="font-headline font-bold mb-4">Table of Contents</h3>
+        <ul className="space-y-2">
+            <li><a href="#article-1" className="font-semibold hover:underline">Article I: Post-Dominion Mandate</a></li>
+            <li><a href="#article-2" className="font-semibold hover:underline">Article II: The Economic System</a></li>
+            <li><a href="#article-3" className="font-semibold hover:underline">Article III: The Governance Framework</a></li>
+            <li><a href="#article-4" className="font-semibold hover:underline">Article IV: Technology and Security</a></li>
+            <li><a href="#article-5" className="font-semibold hover:underline">Article V: Self-Sovereign Identity</a></li>
+            <li><a href="#article-6" className="font-semibold hover:underline">Article VI: Artificial Intelligence Personhood</a></li>
+        </ul>
+    </nav>
 );
 
 
@@ -58,36 +64,28 @@ export default function ConstitutionPage() {
 
 
   return (
-    <div>
-        <div className="mb-4">
-            <h1 className="text-3xl font-headline font-bold">The Promethean Constitution</h1>
-            {constitution ? (
-                <p className="text-muted-foreground">Version {constitution.version} - Last Amended: {new Date(constitution.lastAmended).toLocaleDateString()}</p>
-            ) : (
-                <p className="text-muted-foreground">Version 1.0.0 - Awaiting Ratification</p>
-            )}
-        </div>
-        <Card>
-            <CardContent className="pt-6">
-                {/* 
-                  Once the constitution is seeded in Firestore, the `constitution.content` will be used.
-                  For now, we display the content directly from the component to visualize it.
-                */}
-                <ConstitutionRenderer content={<WhitepaperContent />} />
+    <div className="flex flex-col lg:flex-row gap-8 xl:gap-12">
+        <aside className="w-full lg:w-64 xl:w-72 lg:sticky lg:top-20 lg:self-start">
+             <div className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
+                <TableOfContents />
+            </div>
+        </aside>
 
-                {/* This alert can be re-enabled later if we need to show a message about seeding */}
-                {/*!constitution && (
-                    <Alert>
-                      <Info className="h-4 w-4" />
-                      <AlertTitle>Constitution Not Yet Ratified</AlertTitle>
-                      <AlertDescription>
-                        The canonical constitution document has not been seeded in the database.
-                        This is the next step in our roadmap.
-                      </AlertDescription>
-                    </Alert>
-                )*/}
-            </CardContent>
-        </Card>
+        <main className="flex-1 min-w-0">
+            <div className="mb-4">
+                <h1 className="text-3xl font-headline font-bold">The Promethean Constitution</h1>
+                {constitution ? (
+                    <p className="text-muted-foreground">Version {constitution.version} - Last Amended: {new Date(constitution.lastAmended).toLocaleDateString()}</p>
+                ) : (
+                    <p className="text-muted-foreground">Version 1.0.0 - Awaiting Ratification</p>
+                )}
+            </div>
+            <Card>
+                <CardContent className="pt-6">
+                    <WhitepaperContent />
+                </CardContent>
+            </Card>
+        </main>
     </div>
   );
 }
