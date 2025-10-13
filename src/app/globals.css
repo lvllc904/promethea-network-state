@@ -105,7 +105,7 @@ body {
     top: -0.25em;
     font-size: 0.3rem;
     vertical-align: super;
-    color: hsl(var(--accent));
+    color: hsl(var(--destructive));
     opacity: 1;
   }
 }
