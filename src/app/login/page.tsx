@@ -68,8 +68,7 @@ function LoginPageContent() {
     
     try {
         const keystoreJson = await keystoreFile.text();
-        const wallet = await ethers.Wallet.fromEncryptedJson(keystoreJson, loginPassword);
-
+        
         // Extract the email from the keystore filename.
         // Format: promethea-keystore--[email]--[address].json
         const parts = keystoreFile.name.split('--');
@@ -77,6 +76,9 @@ function LoginPageContent() {
             throw new Error("Invalid keystore filename format. Cannot extract email.");
         }
         const emailFromFilename = parts[1];
+        
+        // We must attempt to decrypt the wallet first to ensure the password is correct.
+        await ethers.Wallet.fromEncryptedJson(keystoreJson, loginPassword);
 
         await signInWithEmailAndPassword(auth, emailFromFilename, loginPassword);
 
@@ -87,6 +89,7 @@ function LoginPageContent() {
         router.push(redirectUrl);
 
     } catch (error: any) {
+      console.error(error);
       let description = "An unexpected error occurred during login. Please check the console for details.";
       if (error.message?.includes('incorrect password')) {
         description = "Incorrect password for the provided keystore file. Please try again.";
@@ -154,7 +157,7 @@ function LoginPageContent() {
     setIsSigningUp(true);
 
     try {
-      // Use the user's actual email for auth, and the keystore password.
+      // createUserWithEmailAndPassword will also sign the user in.
       await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
       
       // Pass the DID to the dashboard so it can be used in profile creation
@@ -162,7 +165,7 @@ function LoginPageContent() {
 
       toast({
           title: 'Welcome to Promethea!',
-          description: 'Your account is being created. You will be redirected shortly.',
+          description: 'Your account has been created. Redirecting...',
       });
       router.push(redirectWithDid);
     } catch (error: any) {
@@ -419,5 +422,6 @@ export default function LoginPage() {
     </FirebaseClientProvider>
   );
 }
+
 
     
