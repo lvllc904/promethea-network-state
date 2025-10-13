@@ -21,12 +21,14 @@ import {
   BookOpen,
   Settings,
   GitMerge,
+  Scale,
 } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/dashboard/passport", icon: Wallet, label: "Passport" },
   { href: "/dashboard/governance", icon: Landmark, label: "Governance" },
+  { href: "/dashboard/constitution", icon: Scale, label: "Constitution" },
   { href: "/dashboard/assets", icon: FileText, label: "RWA Management" },
   { href: "/dashboard/ledger", icon: BookOpen, label: "UVT Ledger" },
   { href: "/dashboard/security", icon: Shield, label: "Immune System" },

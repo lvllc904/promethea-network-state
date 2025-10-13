@@ -1,3 +1,4 @@
+
 # Promethea Network State - Technical Roadmap
 
 This document outlines the phased technical roadmap for building the Promethea application, from its current state as a UI/Firebase prototype to a fully decentralized, AI-integrated network state platform.
@@ -8,7 +9,7 @@ This document outlines the phased technical roadmap for building the Promethea a
 
 **Objective:** Architect and implement the foundational "3 Body System" for decentralized identity. Decouple the core UI from a centralized user profile model and connect it to a client-side, self-sovereign identity (SSI) structure, verified by a public ledger of actions.
 
-**Key Technologies:** Next.js, Firebase (as a Ledger of Record), ShadCN UI, Tailwind CSS
+**Key Technologies:** Next.js, Firebase (as a Ledger of Record), ShadCN UI, Tailwind CSS, Ethers.js
 
 **Steps:**
 1.  **Architect the 3 Body System:**
@@ -18,6 +19,7 @@ This document outlines the phased technical roadmap for building the Promethea a
 
 2.  **Implement the Self-Sovereign Identity (SSI) Model:**
     - [x] Define the structure of the SSI token, including the static DID anchor and the dynamic credentials (Reputation, Contribution, and Skills scores) as outlined in Appendix D.
+    - [x] **Implement True Cryptographic Login:** Overhauled the login system to use a secure, encrypted keystore file (`ethers.js`) instead of a password, proving identity through cryptographic ownership.
     - [ ] **Decouple UI from Firestore Profiles:** Refactor pages like the Passport and Dashboard to read user data from a local-first provider (`useLocalCitizen` hook) instead of directly from a Firestore document.
     - [ ] **Implement the "Trustless Handshake":** Develop the logic where actions initiated from the client-side are signed, sent to the Ledger of Record for verification against the last known state, and then recorded, with the new state being attested back to the client.
 
@@ -34,18 +36,25 @@ This document outlines the phased technical roadmap for building the Promethea a
 **Key Technologies:** Genkit, Google AI (Gemini)
 
 **Steps:**
-1.  **Ethical Proposal Refinement:**
+1.  **Executable Constitution Framework (In Progress):**
+    - [ ] **Establish Canonical Constitution:** Store the full text of the Promethean whitepaper in a dedicated Firestore document, serving as the version-controlled, canonical source of truth for the Constitution.
+    - [ ] **Live Constitution Page:** Create a new `/dashboard/constitution` page that reads and displays the content directly from the canonical Firestore document.
+    - [ ] **Amendment Proposal Flow:** Add a "Constitutional Amendment" category to the "New Proposal" form. Integrate the AI Ethical Refinement tool to assist in drafting high-quality amendments.
+    - [ ] **Automated Ratification:** Implement a server-side function that, upon a successful vote on an amendment proposal, automatically updates the canonical Constitution document in Firestore.
+    - [ ] **(Future) AI Code Generation:** Evolve the ratification function into an AI-driven pipeline that translates natural language proposals into executable code changes, runs them through an automated test suite, and prepares them for deployment.
+
+2.  **Ethical Proposal Refinement:**
     - [x] UI for the Ethical Refinement Tool is complete.
     - [x] Genkit flow `refineProposal` is defined.
     - [ ] Connect the "Full Description" field from the "Create Proposal" form to the AI tool to allow real-time refinement before submission.
 
-2.  **AI Labor Allocation:**
+3.  **AI Labor Allocation:**
     - [x] UI for the Task Allocation Tool is complete.
     - [x] Genkit flow `allocateRWATasks` is defined.
     - [ ] Enhance the `allocateRWATasks` flow to query the Ledger of Record for citizen DIDs and their associated, publicly verifiable skills (Verifiable Credentials) to make better suggestions.
     - [ ] Implement the "Assign" functionality to update a task on the Ledger of Record with the assignee's DID.
 
-3.  **Community Immune System:**
+4.  **Community Immune System:**
     - [x] UI for the Threat Detector is complete.
     - [x] Genkit flow `detectNetworkThreats` is defined.
     - [ ] Enhance the `initiateCommunityVote` tool to create a new, high-priority proposal on the Ledger of Record.

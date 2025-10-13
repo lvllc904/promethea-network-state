@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "Citizen": {
@@ -283,6 +284,36 @@
         "value",
         "description"
       ]
+    },
+    "Constitution": {
+      "title": "Constitution",
+      "type": "object",
+      "description": "Represents the living constitution of the Promethean Network State.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the constitution document (e.g., 'canon')."
+        },
+        "version": {
+            "type": "string",
+            "description": "The semantic version of the constitution (e.g., '1.0.0', '1.1.0')."
+        },
+        "content": {
+          "type": "string",
+          "description": "The full text content of the constitution in Markdown format."
+        },
+        "lastAmended": {
+          "type": "string",
+          "description": "The timestamp of the last amendment.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "content",
+        "lastAmended"
+      ]
     }
   },
   "auth": {
@@ -333,7 +364,12 @@
         "$ref": "#/entities/DACParams"
       },
       "description": "Stores parameters for the DAC, such as governance thresholds or initial reputation values. Access should be restricted to administrators or potentially the DAC itself via a service account."
+    },
+    "/constitutions/{constitutionId}": {
+        "schema": {
+            "$ref": "#/entities/Constitution"
+        },
+        "description": "Stores versions of the living constitution. The document with id 'canon' is the current official version."
     }
   }
 }
-    

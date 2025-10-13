@@ -1,3 +1,4 @@
+
 export interface Citizen {
     id: string;
     decentralizedId: string;
@@ -62,6 +63,14 @@ export interface DACParams {
     value: string;
     description: string;
 }
+
+export interface Constitution {
+    id: string;
+    version: string;
+    content: string;
+    lastAmended: string;
+}
+
 
 // Below are the original types from the template, which you may want to remove or merge.
 export type User = {
