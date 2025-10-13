@@ -354,7 +354,7 @@ export function WhitepaperContent() {
           <li><strong>New Value Classes:</strong> Simultaneously, we will tokenize essential but uncompensated human effort, creating verifiable proofs for: verified mentorship hours, successful due diligence contribution on asset acquisitions, and environmental cleanup work within the archipelago.</li>
         </ul>
         <P>Ensuring Smooth Capital Flow: This dual-focus ensures the smooth flow of legacy capital and traditional expertise, preventing the disruption and conflict inherent in attempting to simply replace the old system.</P>
-        <h4 className="text-center mb-4 mt-8">III. Phase 3: A Universal Marketplace</h4>
+        <h4 className="text-center mb-4 mt-8">III. A Universal Marketplace</h4>
         <P>This phase involves the creation of the primary economic engine—a fully decentralized and liquid venue for the exchange of all forms of value.</P>
         <P>Launch of a Decentralized Marketplace: We will launch a globally accessible, multilingual marketplace designed specifically for P2P exchange of all forms of tokenized value.</P>
         <P>Liquidity and Exchange Mechanisms: This marketplace allows members to immediately mobilize their contributions:</P>
@@ -502,8 +502,14 @@ export function WhitepaperContent() {
               <h5 className="text-center mb-4 mt-8">The Skills Score: An Evolving Hybrid Standard</h5>
               <P>A citizen's skills are represented by verifiable credentials structured according to a hybrid classification system. This system is initially bootstrapped using established standards like the North American Industry Classification System (NAICS) and the International Standard Industrial Classification (ISIC). This framework is designed to be dynamic; new skills and specializations can be proposed, defined, and added to the system via DAC governance, ensuring the skill tree of the civilization evolves organically alongside its members.</P>
           </Section>
+           <Section>
+              <h4 className="text-center mb-4 mt-8">III. The Proof of Uniqueness: The "One Intelligence, One ID" Rule</h4>
+              <P>For the Promethean Passport to be recognized as a legitimate instrument of sovereignty, it must be verifiably linked to a single, unique intelligence. This is the cornerstone of preventing sybil attacks in governance and ensuring a fair distribution of resources. This is achieved through a "Proof of Uniqueness" Verifiable Credential (VC), which acts as a digital attestation of an individual's uniqueness without revealing their personal data on-chain.</P>
+              <P>The process is managed by a trusted, independent "Identity Oracle." For a biological citizen, this process involves a one-time verification using a combination of government-issued identification and biometric data (e.g., facial recognition, fingerprint scan). The Oracle validates this data against its private registry to ensure the individual has not been registered before. Upon success, it issues a signed VC to the citizen's DID, containing only the statement: "This DID has been verified as corresponding to a unique biological entity." For an artificial intelligence, an analogous process would involve a cryptographic "proof of origin" or a certificate of computational integrity issued by the community-governed entity that oversaw its development.</P>
+              <P>This VC is stored in the citizen's private Sovereign Data Store. It is a mandatory credential for participating in governance or claiming universal access rights, providing the network with a secure and privacy-preserving method to enforce the foundational "one intelligence, one ID" principle.</P>
+          </Section>
           <Section>
-              <h4 className="text-center mb-4 mt-8">III. The Economic Framework: Post-Scarcity and Inheritance</h4>
+              <h4 className="text-center mb-4 mt-8">IV. The Economic Framework: Post-Scarcity and Inheritance</h4>
               <P>The SSI model is intrinsically linked to the Network State's long-term economic architecture, designed to promote a culture of stewardship and prevent the aristocratic consolidation of wealth.</P>
               <P>Inheritance within the Promethean economy is deliberately bifurcated. A citizen's direct ownership of Real-World Assets (RWA), represented by specific security tokens, is considered heritable property that can be passed to descendants, encouraging multi-generational stewardship of productive assets. However, a citizen's liquid capital (their UVT balance) and their Permanent Equity Score (PES) are strictly non-transferable upon death. This ensures that while families can be provided for through productive assets, each generation must actively participate in the DAC to generate their own liquid wealth and earn their own standing, structurally dismantling the mechanism of passive, hereditary aristocracy.</P>
               <P>To counter the issue of wealth hoarding in a developing post-scarcity economy, a Wealth Attenuation Rate will be implemented on large, idle balances of liquid UVT. This mechanism, akin to demurrage, is not a tax on wealth, but on stagnant capital. The rate of this attenuation will be dynamically tied to a DAC-managed Cost of Living Index (CoLI). As the cost of living approaches zero, the attenuation rate will automatically increase, creating a powerful incentive for capital holders to reinvest their liquid wealth into productive, community-benefiting projects rather than hoarding it, thus ensuring continuous economic velocity and dynamism.</P>
@@ -564,7 +570,7 @@ export function WhitepaperContent() {
         <h4 className="text-center mb-4 mt-8">II. Governance Integrity: Anti-Plutocracy, Meritocracy, and Accountability</h4>
         <h5 className="text-center mb-4 mt-8">A. The Anti-Plutocracy Mechanisms (Quadratic Voting)</h5>
         <P>Posner, E. A., & Weyl, E. G. (2015). Voting Squared: Quadratic Voting in Democratic Politics. <em>Vanderbilt Law Review, 68(2)</em>, 441-500.</P>
-        <P>Context: The definitive justification for the Personhood Safeguard. It proves the mathematical efficiency of the Cost=Votes2 function in overcoming the "tyranny of the majority" (or wealthy) by reflecting the intensity of preference rather than mere capital stake. Promethea adapts this by linking the voting budget to multi-factor contribution, not just coin ownership, to make it truly plutocracy-resistant.</P>
+        <P>Context: The definitive justification for the Personhood Safeguard. It proves the mathematical efficiency of the Cost=Votes<sup>2</sup> function in overcoming the "tyranny of the majority" (or wealthy) by reflecting the intensity of preference rather than mere capital stake. Promethea adapts this by linking the voting budget to multi-factor contribution, not just coin ownership, to make it truly plutocracy-resistant.</P>
         <P>Buterin, V. (2021). <em>On Collusion and Quadratic Voting.</em></P>
         <P>Context: Provides the critical framework for designing the QV system to resist collusion and vote-buying, justifying Promethea's fusion of QV with non-transferable Reputation Scores to make the voting capital non-marketable.</P>
         <h5 className="text-center mb-4 mt-8">B. The Meritocratic Legislature (Decay, Sortition, and DSR)</h5>
@@ -619,6 +625,8 @@ export function WhitepaperContent() {
     </div>
   );
 }
+
+    
 
     
 

@@ -31,6 +31,22 @@
           "items": {
             "type": "string"
           }
+        },
+        "proofOfUniqueness": {
+            "type": "object",
+            "description": "A verifiable credential confirming the DID is linked to a single, unique intelligence (biological or artificial).",
+            "properties": {
+                "issuer": {
+                    "type": "string",
+                    "description": "The Decentralized Identifier (DID) of the trusted Identity Oracle that issued the credential."
+                },
+                "issuanceDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The timestamp of when the uniqueness verification was performed."
+                }
+            },
+            "required": ["issuer", "issuanceDate"]
         }
       },
       "required": [
@@ -38,7 +54,8 @@
         "decentralizedId",
         "reputationScore",
         "contributionScore",
-        "personhoodScore"
+        "personhoodScore",
+        "proofOfUniqueness"
       ]
     },
     "Proposal": {
@@ -319,3 +336,4 @@
     }
   }
 }
+    
