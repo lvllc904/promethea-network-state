@@ -17,12 +17,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth, useUser } from '@/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, LogOut, Copy, ShieldAlert } from 'lucide-react';
+import { Loader2, LogOut, Copy, ShieldAlert, Download } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { ethers } from 'ethers';
-import { Checkbox } from '@/components/ui/checkbox';
 
 function LoginPageSuspenseFallback() {
     return (
@@ -48,7 +47,6 @@ function LoginPageContent() {
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [generatedWallet, setGeneratedWallet] = useState<{ address: string; privateKey: string } | null>(null);
-  const [didConfirmed, setDidConfirmed] = useState(false);
   
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
@@ -82,9 +80,45 @@ function LoginPageContent() {
   const handleGenerateDid = (e: React.FormEvent) => {
     e.preventDefault();
     const wallet = ethers.Wallet.createRandom();
-    setGeneratedWallet({ address: wallet.address, privateKey: wallet.privateKey });
+    const newWallet = { address: wallet.address, privateKey: wallet.privateKey };
+    setGeneratedWallet(newWallet);
+    // Securely store the private key in localStorage
+    localStorage.setItem(`promethea_pk_${wallet.address}`, wallet.privateKey);
     setSignupStep(2);
   };
+
+  const handleDownloadKeystore = async () => {
+    if (!generatedWallet || !signupPassword) return;
+    setIsSigningUp(true); // Reuse spinner for encryption process
+    try {
+        const wallet = new ethers.Wallet(generatedWallet.privateKey);
+        const keystoreJson = await wallet.encrypt(signupPassword);
+
+        const blob = new Blob([keystoreJson], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `UTC--${new Date().toISOString().replace(/:/g, '-')}--${generatedWallet.address}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+         toast({
+            title: "Keystore Saved",
+            description: "Your encrypted backup file has been downloaded.",
+        });
+    } catch (error) {
+        console.error("Failed to create keystore:", error);
+        toast({
+            variant: "destructive",
+            title: "Backup Failed",
+            description: "Could not create your encrypted backup file.",
+        });
+    } finally {
+        setIsSigningUp(false);
+    }
+  };
+
 
   const handleCreatePassport = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,7 +126,7 @@ function LoginPageContent() {
     setIsSigningUp(true);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
+      await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
       // Pass the generated DID in the URL to the provider. This is a temporary mechanism.
       const redirectWithDid = `${redirectUrl}?did=${generatedWallet.address}`;
 
@@ -290,9 +324,9 @@ function LoginPageContent() {
                 <CardContent className="space-y-4">
                     <Alert variant="destructive">
                         <ShieldAlert className="h-4 w-4" />
-                        <AlertTitle>Save Your Private Key!</AlertTitle>
+                        <AlertTitle>CRITICAL: Back Up Your Identity</AlertTitle>
                         <AlertDescription>
-                            This key is your permanent password. If you lose it, you lose your identity. Store it in a secure password manager.
+                            Your identity is stored on this device. To prevent permanent loss, download your encrypted Keystore file. This is the ONLY way to recover your account.
                         </AlertDescription>
                     </Alert>
                     <div>
@@ -302,26 +336,15 @@ function LoginPageContent() {
                         <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(`did:prmth:${generatedWallet.address}`)}><Copy className="h-4 w-4"/></Button>
                       </div>
                     </div>
-                     <div>
-                      <Label htmlFor="did-pk">Your Private Key</Label>
-                      <div className="flex items-center gap-2">
-                        <Input id="did-pk" readOnly value={generatedWallet.privateKey} className="font-mono text-xs"/>
-                        <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(generatedWallet.privateKey)}><Copy className="h-4 w-4"/></Button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2 pt-4">
-                        <Checkbox id="did-confirmed" checked={didConfirmed} onCheckedChange={(checked) => setDidConfirmed(checked as boolean)} />
-                        <label
-                            htmlFor="did-confirmed"
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                            I have securely saved my Private Key.
-                        </label>
-                    </div>
+                    
+                    <Button onClick={handleDownloadKeystore} className="w-full" variant="secondary" disabled={isSigningUp}>
+                        <Download className="mr-2 h-4 w-4"/>
+                        Download Keystore Backup
+                    </Button>
+                    
 
                     <form onSubmit={handleCreatePassport}>
-                      <Button type="submit" className="w-full" disabled={!didConfirmed || isSigningUp}>
+                      <Button type="submit" className="w-full" disabled={isSigningUp}>
                         {isSigningUp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                         Create Passport & Login
                       </Button>
@@ -352,3 +375,5 @@ export default function LoginPage() {
     </FirebaseClientProvider>
   );
 }
+
+    
