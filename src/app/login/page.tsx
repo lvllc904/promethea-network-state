@@ -85,8 +85,8 @@ function LoginPageContent() {
     } catch (error: any) {
       console.error("Login failed:", error);
       let description = "Please check your keystore file and password.";
-      if (error.message?.includes('invalid password')) {
-        description = "Invalid password for the provided keystore file.";
+      if (error.message?.includes('incorrect password')) {
+        description = "Incorrect password for the provided keystore file. Please try again.";
       } else if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
         description = "No Promethean Passport is associated with this keystore. Please mint a new passport.";
       }
@@ -404,3 +404,5 @@ export default function LoginPage() {
     </FirebaseClientProvider>
   );
 }
+
+    
