@@ -86,7 +86,6 @@ const prometheaAssistantFlow = ai.defineFlow(
 
     const llmResponse = await ai.generate({
       prompt: prompt,
-      model: 'googleai/gemini-pro',
       tools: [getConstitutionTool],
       toolConfig: {
         // Allow the model to decide when to use the tool.
