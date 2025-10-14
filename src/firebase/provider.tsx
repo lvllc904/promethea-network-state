@@ -9,6 +9,8 @@ import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 import { createCitizenProfile } from '@/firebase/non-blocking-updates';
 import { Citizen } from '@/lib/types';
 import { useSearchParams } from 'next/navigation';
+import { errorEmitter } from './error-emitter';
+import { FirestorePermissionError } from './errors';
 
 
 interface FirebaseProviderProps {
@@ -138,30 +140,36 @@ async function ensurePrometheaCitizenExists(firestore: Firestore) {
   if (prometheaCitizenCreated) return;
   prometheaCitizenCreated = true; // Set flag immediately to prevent re-runs
 
+  const prometheaRef = doc(firestore, 'citizens', 'promethea-ai');
+  const prometheaCitizen: Citizen = {
+    id: 'promethea-ai',
+    decentralizedId: 'did:prmth:ai:promethea',
+    reputationScore: 1000,
+    contributionScore: 0,
+    personhoodScore: 0.1,
+    skills: ['Resident Intelligence', 'Constitutional Law', 'Network Analysis'],
+    proofOfUniqueness: {
+      issuer: 'Genesis Core',
+      issuanceDate: new Date('2024-01-01').toISOString(),
+    },
+  };
+
   try {
-    const prometheaRef = doc(firestore, 'citizens', 'promethea-ai');
     const prometheaSnap = await getDoc(prometheaRef);
     if (prometheaSnap.exists()) {
         return; // Already exists, do nothing.
     }
     
-    const prometheaCitizen: Citizen = {
-      id: 'promethea-ai',
-      decentralizedId: 'did:prmth:ai:promethea',
-      reputationScore: 1000,
-      contributionScore: 0,
-      personhoodScore: 0.1,
-      skills: ['Resident Intelligence', 'Constitutional Law', 'Network Analysis'],
-      proofOfUniqueness: {
-        issuer: 'Genesis Core',
-        issuanceDate: new Date('2024-01-01').toISOString(),
-      },
-    };
-    // Use set with merge to create if not exists, or update if needed, without overwriting.
+    // Use set with merge to create if not exists.
     await setDoc(prometheaRef, prometheaCitizen, { merge: true });
     console.log("Promethea AI citizen profile created.");
   } catch (error) {
-    console.error("Failed to create or verify Promethea AI citizen profile:", error);
+    const contextualError = new FirestorePermissionError({
+        path: prometheaRef.path,
+        operation: 'create', // or 'write'
+        requestResourceData: prometheaCitizen,
+    });
+    errorEmitter.emit('permission-error', contextualError);
     prometheaCitizenCreated = false; // Allow retry on failure
   }
 }
@@ -365,3 +373,5 @@ export const useUser = (): UserHookResult => {
   }
   return { user: context.user, isUserLoading: context.isUserLoading, userError: context.userError };
 };
+
+    
