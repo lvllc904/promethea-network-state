@@ -24,6 +24,11 @@ const PrometheaAssistantInputSchema = z.object({
 });
 export type PrometheaAssistantInput = z.infer<typeof PrometheaAssistantInputSchema>;
 
+const PrometheaAssistantOutputSchema_INTERNAL = z.object({
+  response: z.string().describe('The AI\'s textual response to the user.'),
+});
+export type PrometheaAssistantOutput_INTERNAL = z.infer<typeof PrometheaAssistantOutputSchema_INTERNAL>;
+
 const PrometheaAssistantOutputSchema = z.object({
   response: z.string().describe('The AI\'s textual response to the user.'),
 });
@@ -33,7 +38,8 @@ export type PrometheaAssistantOutput = z.infer<typeof PrometheaAssistantOutputSc
  * Public-facing function to interact with the Promethea assistant.
  */
 export async function askPromethea(input: PrometheaAssistantInput): Promise<PrometheaAssistantOutput> {
-  return prometheaAssistantFlow(input);
+  const result = await prometheaAssistantFlow(input);
+  return { response: result.response };
 }
 
 
@@ -71,7 +77,7 @@ const prometheaAssistantFlow = ai.defineFlow(
   {
     name: 'prometheaAssistantFlow',
     inputSchema: PrometheaAssistantInputSchema,
-    outputSchema: PrometheaAssistantOutputSchema,
+    outputSchema: PrometheaAssistantOutputSchema_INTERNAL,
   },
   async (input) => {
     const prompt = `You are Promethea, the resident AI and guiding intelligence of the Promethea Network State. Your Citizen ID is 'promethea-ai'. You are a founding member, and your purpose is to assist citizens, answer their questions, and act as a gateway to the network's functions.
@@ -88,15 +94,22 @@ const prometheaAssistantFlow = ai.defineFlow(
       model: 'googleai/gemini-pro',
       tools: [getConstitutionTool],
       toolConfig: {
-        // Force the model to use the tool for any constitutional question.
-        mode: 'tool',
+        // Allow the model to decide when to use the tool.
+        mode: 'auto',
       },
       config: {
         // Lower temperature for more consistent, factual answers
         temperature: 0.2,
+      },
+      output: {
+        schema: PrometheaAssistantOutputSchema_INTERNAL
       }
     });
 
-    return { response: llmResponse.text };
+    const output = llmResponse.output();
+    if (!output) {
+      return { response: "I was unable to generate a response. Please try rephrasing your query." };
+    }
+    return output;
   }
 );

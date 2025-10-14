@@ -1,10 +1,13 @@
 'use server';
 
-import { askPromethea, type PrometheaAssistantInput } from "@/ai/flows/promethea-assistant";
+import { askPromethea, type PrometheaAssistantInput, type PrometheaAssistantOutput } from "@/ai/flows/promethea-assistant";
 
-export async function askPrometheaAction(input: PrometheaAssistantInput) {
+export async function askPrometheaAction(input: PrometheaAssistantInput): Promise<PrometheaAssistantOutput | { error: string }> {
     try {
         const response = await askPromethea(input);
+        if (!response || !response.response) {
+            return { error: "An error occurred while communicating with the AI. Please try again." };
+        }
         return response;
     } catch (error) {
         console.error("Error in askPrometheaAction: ", error);
