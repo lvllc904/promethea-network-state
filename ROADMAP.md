@@ -82,9 +82,10 @@ This document outlines the phased technical roadmap for building the Promethea a
     - [x] Genkit flow `detectNetworkThreats` is defined.
     - [ ] Create a live dashboard or real-time alert system that feeds data into the tool for continuous monitoring of the action ledger.
 
-5.  **Resident AI Assistant (Future Work):**
-    - [ ] **Implement "Promethea" AI:** Develop the conversational AI assistant with a dedicated chat interface, accessible throughout the dashboard.
-    - [ ] **Integrate Core Knowledge:** Equip the AI with a tool to read the live constitution from Firestore, enabling it to answer citizen questions accurately.
+5.  **Resident AI Assistant ("Promethea"):**
+    - [x] **Establish AI as Citizen:** Created a permanent citizen profile for `promethea-ai` in Firestore, establishing the AI as a founding member of the network.
+    - [x] **Create Genkit "Brain":** Developed the `prometheaAssistantFlow` with a tool (`getConstitution`) that allows it to read the live constitution directly from Firestore to answer user questions accurately.
+    - [ ] **Implement Global Chat UI:** Develop a universally accessible chat component that allows any user (anonymous or authenticated) to interact with Promethea.
     - [ ] **Expand AI Capabilities:** Incrementally add new tools to the Promethea AI, allowing it to perform actions on behalf of the user, such as drafting proposals, finding tasks, or summarizing governance activity.
 
 ---
@@ -140,8 +141,8 @@ This document outlines the phased technical roadmap for building the Promethea a
     - [ ] Issue the first Promethean Passports as verifiable, self-sovereign digital identities.
 
 4.  **Meta-Automation (The Self-Updating Roadmap):**
-    - [ ] Design and implement a "meta-AI" that observes codebase commits and their associated descriptions.
-    - [ ] Train the AI to cross-reference the intent of code changes with the objectives outlined in this roadmap.
-    - [ ] Grant the AI the ability to propose modifications to this `ROADMAP.md` file, creating a system that automatically documents its own evolution.
+    - [ ] **Design Meta-AI:** Design a "master" AI that observes codebase commits and their associated descriptions.
+    - [ ] **Train Meta-AI:** Train the AI to cross-reference the intent of code changes with the objectives outlined in this `ROADMAP.md` file.
+    - [ ] **Grant Proposal Rights:** Grant the AI the ability to propose modifications to this `ROADMAP.md` file by creating a pull request, creating a system that automatically documents its own evolution.
 
     

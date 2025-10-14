@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -176,40 +177,14 @@ const Sidebar = React.forwardRef<
     ref
   ) => {
     const { isMobile, state, openMobile, setOpenMobile, setOpen } = useSidebar()
-    const [isPinned, setIsPinned] = React.useState(false);
-
-    React.useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'p' && (event.metaKey || event.ctrlKey)) {
-                event.preventDefault();
-                setIsPinned(prev => !prev);
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
-
+    
     const handleMouseEnter = () => {
-        if (!isPinned) {
-            setOpen(true);
-        }
+        setOpen(true);
     };
 
     const handleMouseLeave = () => {
-        if (!isPinned) {
-            setOpen(false);
-        }
+        setOpen(false);
     };
-
-    const handleTogglePin = () => {
-        setIsPinned(prev => !prev);
-        if (!isPinned) { // if it's about to be pinned
-            setOpen(true);
-        }
-    }
 
 
     if (collapsible === "none") {
@@ -798,3 +773,5 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+
+    

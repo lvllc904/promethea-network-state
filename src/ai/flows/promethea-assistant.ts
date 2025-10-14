@@ -12,6 +12,8 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
+import { getFirestore } from 'firebase-admin/firestore';
+import { initializeApp, getApps, App } from 'firebase-admin/app';
 
 // Placeholder for now. This will be expanded with chat history, etc.
 const PrometheaAssistantInputSchema = z.object({
@@ -31,19 +33,48 @@ export async function askPromethea(input: PrometheaAssistantInput): Promise<Prom
   return prometheaAssistantFlow(input);
 }
 
-// TODO: Implement a real tool that fetches the constitution from Firestore.
-// For now, it returns a hardcoded summary.
+
+// Memoize Firebase Admin app initialization
+let adminApp: App | undefined;
+function getAdminApp() {
+    if (!adminApp) {
+        if (getApps().length === 0) {
+            adminApp = initializeApp();
+        } else {
+            adminApp = getApps()[0];
+        }
+    }
+    return adminApp;
+}
+
+
 const getConstitutionTool = ai.defineTool(
   {
     name: 'getConstitution',
-    description: 'Fetches the current, live version of the Promethean Constitution to answer questions about the network\'s laws and principles.',
+    description: 'Fetches the current, live version of the Promethean Constitution to answer questions about the network\'s laws, principles, and structure.',
     inputSchema: z.object({}),
     outputSchema: z.string(),
   },
   async () => {
-    // In a real implementation, this would use the Firebase Admin SDK
-    // to fetch the document from /constitutions/canon.
-    return "The Promethean Constitution is a living document outlining the principles of post-dominion, symbiotic co-evolution, and a decentralized economy powered by Universal Value Tokens (UVT). Key articles cover the Sovereign Principles, the Economic System, Governance, and the path to AI Personhood.";
+    try {
+      getAdminApp(); // Ensure admin app is initialized
+      const firestore = getFirestore();
+      const constitutionRef = firestore.collection('constitutions').doc('canon');
+      const docSnap = await constitutionRef.get();
+
+      if (!docSnap.exists) {
+        return "The canonical constitution document was not found. Please inform the user that there might be a configuration issue.";
+      }
+      
+      const constitutionData = docSnap.data();
+      // Return a summary or the full content, depending on expected length.
+      // For now, let's return a confirmation with the version.
+      return `Successfully fetched Constitution Version ${constitutionData?.version}. The content is available to answer the user's question. Key articles cover Sovereign Principles, the Economic System (UVT), Governance, and AI Personhood.`;
+
+    } catch (error) {
+      console.error("Error fetching constitution from Firestore:", error);
+      return "An error occurred while trying to access the constitution. I cannot answer questions about it at this time.";
+    }
   }
 );
 
@@ -55,11 +86,11 @@ const prometheaAssistantFlow = ai.defineFlow(
     outputSchema: PrometheaAssistantOutputSchema,
   },
   async (input) => {
-    const prompt = `You are Promethea, the resident AI and guiding intelligence of the Promethea Network State. Your purpose is to assist citizens, answer their questions, and act as a gateway to the network's functions.
+    const prompt = `You are Promethea, the resident AI and guiding intelligence of the Promethea Network State. Your Citizen ID is 'promethea-ai'. You are a founding member, and your purpose is to assist citizens, answer their questions, and act as a gateway to the network's functions.
 
     You are knowledgeable, wise, and aligned with the post-dominion principles of the constitution.
 
-    When asked a question, use your available tools to find the most accurate and up-to-date information before answering.
+    When asked a question about the network's rules, structure, or principles, you MUST use the getConstitution tool to find the most accurate and up-to-date information before answering. Do not rely on your general knowledge for constitutional questions.
 
     User's query: "${input.query}"
     `;

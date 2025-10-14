@@ -3,7 +3,7 @@
 
 import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import { FirebaseApp } from 'firebase/app';
-import { Firestore, doc, getDoc } from 'firebase/firestore';
+import { Firestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { Auth, User, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 import { createCitizenProfile } from '@/firebase/non-blocking-updates';
@@ -130,6 +130,37 @@ const AuthHandler = ({ auth, firestore }: { auth: Auth, firestore: Firestore }) 
 
 
 /**
+ * A one-time function to ensure the Promethea AI citizen profile exists.
+ */
+let prometheaCitizenCreated = false;
+async function ensurePrometheaCitizenExists(firestore: Firestore) {
+  if (prometheaCitizenCreated) return;
+  prometheaCitizenCreated = true; // Set flag immediately to prevent re-runs
+
+  try {
+    const prometheaRef = doc(firestore, 'citizens', 'promethea-ai');
+    const prometheaCitizen: Citizen = {
+      id: 'promethea-ai',
+      decentralizedId: 'did:prmth:ai:promethea',
+      reputationScore: 1000,
+      contributionScore: 0,
+      personhoodScore: 0.1,
+      skills: ['Resident Intelligence', 'Constitutional Law', 'Network Analysis'],
+      proofOfUniqueness: {
+        issuer: 'Genesis Core',
+        issuanceDate: new Date('2024-01-01').toISOString(),
+      },
+    };
+    // Use set with merge to create if not exists, or update if needed, without overwriting.
+    await setDoc(prometheaRef, prometheaCitizen, { merge: true });
+  } catch (error) {
+    console.error("Failed to create or verify Promethea AI citizen profile:", error);
+    prometheaCitizenCreated = false; // Allow retry on failure
+  }
+}
+
+
+/**
  * FirebaseProvider manages and provides Firebase services and user authentication state.
  */
 export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
@@ -159,6 +190,9 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
             // For anonymous users, no profile setup is needed. Set status immediately.
             window.localStorage.setItem('authStatus', 'anonymous');
             setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
+            
+            // On first anonymous sign-in, ensure the AI citizen exists
+            ensurePrometheaCitizenExists(firestore);
             return;
           }
 
@@ -324,3 +358,5 @@ export const useUser = (): UserHookResult => {
   }
   return { user: context.user, isUserLoading: context.isUserLoading, userError: context.userError };
 };
+
+    
