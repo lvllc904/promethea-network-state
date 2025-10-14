@@ -8,7 +8,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { askPrometheaAction } from '@/app/actions';
-import { useUser } from '@/firebase';
+import { useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { doc } from 'firebase/firestore';
+import type { Constitution } from '@/lib/types';
+
 
 type Message = {
   id: number;
@@ -29,6 +32,14 @@ export function PrometheaChat() {
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
+  const firestore = useFirestore();
+
+  // Fetch the constitution content on the client side
+  const constitutionRef = useMemoFirebase(
+    () => (firestore ? doc(firestore, 'constitutions', 'canon') : null),
+    [firestore]
+  );
+  const { data: constitution, isLoading: isConstitutionLoading } = useDoc<Constitution>(constitutionRef);
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -52,8 +63,12 @@ export function PrometheaChat() {
     setIsLoading(true);
 
     try {
-      // The server action now returns a more structured object
-      const result = await askPrometheaAction({ query: input });
+      const constitutionContent = constitution?.content || "The constitution is not available at this moment.";
+      
+      const result = await askPrometheaAction({ 
+        query: input,
+        constitutionContent: constitutionContent,
+      });
       
       let aiText: string;
       if (result && 'error' in result && result.error) {
@@ -83,6 +98,8 @@ export function PrometheaChat() {
       setIsLoading(false);
     }
   };
+
+  const isChatDisabled = isLoading || isConstitutionLoading;
 
   return (
     <>
@@ -154,11 +171,11 @@ export function PrometheaChat() {
                   <Input
                     value={input}
                     onChange={e => setInput(e.target.value)}
-                    placeholder="Ask about the constitution..."
+                    placeholder={isConstitutionLoading ? "Learning the constitution..." : "Ask about the constitution..."}
                     className="flex-1"
-                    disabled={isLoading}
+                    disabled={isChatDisabled}
                   />
-                  <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+                  <Button type="submit" size="icon" disabled={isChatDisabled || !input.trim()}>
                     <Send className="h-4 w-4" />
                   </Button>
                 </form>

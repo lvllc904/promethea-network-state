@@ -4,6 +4,9 @@ import { askPromethea, type PrometheaAssistantInput, type PrometheaAssistantOutp
 
 export async function askPrometheaAction(input: PrometheaAssistantInput): Promise<PrometheaAssistantOutput | { error: string }> {
     try {
+        if (!input.constitutionContent) {
+            return { error: "Constitution content is missing. Cannot proceed." };
+        }
         const response = await askPromethea(input);
         if (!response?.response) {
              console.error("askPromethea returned an invalid response structure:", response);
