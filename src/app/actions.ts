@@ -5,13 +5,14 @@ import { askPromethea, type PrometheaAssistantInput, type PrometheaAssistantOutp
 export async function askPrometheaAction(input: PrometheaAssistantInput): Promise<PrometheaAssistantOutput | { error: string }> {
     try {
         const response = await askPromethea(input);
-        if (!response || !response.response) {
-            return { error: "An error occurred while communicating with the AI. Please try again." };
+        if (!response?.response) {
+             console.error("askPromethea returned an invalid response structure:", response);
+            return { error: "Received an invalid response from the AI. Please try again." };
         }
         return response;
     } catch (error) {
         console.error("Error in askPrometheaAction: ", error);
-        // Return a structured error response that the client can handle
-        return { error: "An error occurred while communicating with the AI. Please try again." };
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+        return { error: `An error occurred while communicating with the AI: ${errorMessage}` };
     }
 }

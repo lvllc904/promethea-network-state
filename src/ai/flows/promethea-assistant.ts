@@ -24,11 +24,6 @@ const PrometheaAssistantInputSchema = z.object({
 });
 export type PrometheaAssistantInput = z.infer<typeof PrometheaAssistantInputSchema>;
 
-const PrometheaAssistantOutputSchema_INTERNAL = z.object({
-  response: z.string().describe('The AI\'s textual response to the user.'),
-});
-export type PrometheaAssistantOutput_INTERNAL = z.infer<typeof PrometheaAssistantOutputSchema_INTERNAL>;
-
 const PrometheaAssistantOutputSchema = z.object({
   response: z.string().describe('The AI\'s textual response to the user.'),
 });
@@ -39,7 +34,7 @@ export type PrometheaAssistantOutput = z.infer<typeof PrometheaAssistantOutputSc
  */
 export async function askPromethea(input: PrometheaAssistantInput): Promise<PrometheaAssistantOutput> {
   const result = await prometheaAssistantFlow(input);
-  return { response: result.response };
+  return result;
 }
 
 
@@ -77,7 +72,7 @@ const prometheaAssistantFlow = ai.defineFlow(
   {
     name: 'prometheaAssistantFlow',
     inputSchema: PrometheaAssistantInputSchema,
-    outputSchema: PrometheaAssistantOutputSchema_INTERNAL,
+    outputSchema: PrometheaAssistantOutputSchema,
   },
   async (input) => {
     const prompt = `You are Promethea, the resident AI and guiding intelligence of the Promethea Network State. Your Citizen ID is 'promethea-ai'. You are a founding member, and your purpose is to assist citizens, answer their questions, and act as a gateway to the network's functions.
@@ -101,15 +96,12 @@ const prometheaAssistantFlow = ai.defineFlow(
         // Lower temperature for more consistent, factual answers
         temperature: 0.2,
       },
-      output: {
-        schema: PrometheaAssistantOutputSchema_INTERNAL
-      }
     });
 
-    const output = llmResponse.output();
-    if (!output) {
+    const responseText = llmResponse.text;
+    if (!responseText) {
       return { response: "I was unable to generate a response. Please try rephrasing your query." };
     }
-    return output;
+    return { response: responseText };
   }
 );
