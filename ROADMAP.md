@@ -60,8 +60,8 @@ This document outlines the phased technical roadmap for building the Promethea a
 
 **Steps:**
 1.  **Executable Constitution Framework (In Progress):**
-    - [ ] **Establish Canonical Constitution:** Store the full text of the Promethean whitepaper in a dedicated Firestore document, serving as the version-controlled, canonical source of truth for the Constitution.
-    - [ ] **Live Constitution Page:** Create a new `/dashboard/constitution` page that reads and displays the content directly from the canonical Firestore document.
+    - [x] **Establish Canonical Constitution:** Store the full text of the Promethean whitepaper in a dedicated Firestore document, serving as the version-controlled, canonical source of truth for the Constitution.
+    - [x] **Live Constitution Page:** Create a new `/dashboard/constitution` page that reads and displays the content directly from the canonical Firestore document.
     - [ ] **Amendment Proposal Flow:** Add a "Constitutional Amendment" category to the "New Proposal" form. Integrate the AI Ethical Refinement tool to assist in drafting high-quality amendments.
     - [ ] **Automated Ratification:** Implement a server-side function that, upon a successful vote on an amendment proposal, automatically updates the canonical Constitution document in Firestore.
     - [ ] **(Future) AI Code Generation:** Evolve the ratification function into an AI-driven pipeline that translates natural language proposals into executable code changes, runs them through an automated test suite, and prepares them for deployment.
@@ -80,8 +80,12 @@ This document outlines the phased technical roadmap for building the Promethea a
 4.  **Community Immune System:**
     - [x] UI for the Threat Detector is complete.
     - [x] Genkit flow `detectNetworkThreats` is defined.
-    - [ ] Enhance the `initiateCommunityVote` tool to create a new, high-priority proposal on the Ledger of Record.
     - [ ] Create a live dashboard or real-time alert system that feeds data into the tool for continuous monitoring of the action ledger.
+
+5.  **Resident AI Assistant (Future Work):**
+    - [ ] **Implement "Promethea" AI:** Develop the conversational AI assistant with a dedicated chat interface, accessible throughout the dashboard.
+    - [ ] **Integrate Core Knowledge:** Equip the AI with a tool to read the live constitution from Firestore, enabling it to answer citizen questions accurately.
+    - [ ] **Expand AI Capabilities:** Incrementally add new tools to the Promethea AI, allowing it to perform actions on behalf of the user, such as drafting proposals, finding tasks, or summarizing governance activity.
 
 ---
 
@@ -134,3 +138,10 @@ This document outlines the phased technical roadmap for building the Promethea a
     - [ ] Launch the public, on-chain census dashboard.
     - [ ] Begin formal negotiations with innovation-friendly jurisdictions for legal and diplomatic recognition based on the on-chain census data.
     - [ ] Issue the first Promethean Passports as verifiable, self-sovereign digital identities.
+
+4.  **Meta-Automation (The Self-Updating Roadmap):**
+    - [ ] Design and implement a "meta-AI" that observes codebase commits and their associated descriptions.
+    - [ ] Train the AI to cross-reference the intent of code changes with the objectives outlined in this roadmap.
+    - [ ] Grant the AI the ability to propose modifications to this `ROADMAP.md` file, creating a system that automatically documents its own evolution.
+
+    
