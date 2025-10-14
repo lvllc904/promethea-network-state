@@ -5,6 +5,29 @@ This document outlines the phased technical roadmap for building the Promethea a
 
 ---
 
+### Current Initiative: Enabling Hybrid Deployment (Firebase + IPFS)
+
+**Objective:** To configure the Promethea application to support two distinct deployment targets from a single codebase, laying the groundwork for the "3 Body System" architecture.
+
+1.  **Dynamic Host (The Ledger):** A server-backed application deployed to **Firebase Hosting** at `lvhllc.org`.
+2.  **Decentralized Host (The Sovereign Client):** A static, decentralized version of the application, ready for deployment to **IPFS** and accessible via a subdomain like `dweb.lvhllc.org`.
+
+**Implementation Plan:**
+
+*   **Phase 1: Implement Build & Export Configuration (AI Action - In Progress)**
+    *   **Modify `next.config.ts`:** Add `output: 'export'` configuration and adjust image optimization settings for static builds.
+    *   **Update `package.json`:** Add an `export` script to generate the static site output.
+
+*   **Phase 2: Deploy to IPFS & Configure DNS (User Action - Next Up)**
+    *   Run `npm run export` to generate the static `/out` directory.
+    *   Upload the `/out` directory to an IPFS pinning service to get a Content ID (CID).
+    *   Create a `TXT` record in Cloudflare for `_dnslink.dweb` to point to the new IPFS CID.
+
+*   **Phase 3: Evolve Architecture (Future Work)**
+    *   Implement logic for the static site to make secure API calls back to the dynamic `lvhllc.org` backend for any state-changing operations, fully realizing the client/server separation.
+
+---
+
 ### Phase 1: Foundational MVP & Decentralized Identity (Current Phase)
 
 **Objective:** Architect and implement the foundational "3 Body System" for decentralized identity. Decouple the core UI from a centralized user profile model and connect it to a client-side, self-sovereign identity (SSI) structure, verified by a public ledger of actions.

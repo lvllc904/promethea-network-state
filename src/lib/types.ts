@@ -20,6 +20,7 @@ export interface Proposal {
     status: 'Draft' | 'Active' | 'Passed' | 'Rejected';
     votingStartTime?: string;
     votingEndTime?: string;
+    ipfsCid?: string;
 }
 
 export interface RealWorldAsset {

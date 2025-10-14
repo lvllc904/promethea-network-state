@@ -47,6 +47,11 @@ export default function NewProposalPage() {
               <Label htmlFor="description">Full Description</Label>
               <Textarea id="description" placeholder="Provide all the details for your proposal here." className="min-h-[200px]" />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="ipfsCid">IPFS Content ID (CID)</Label>
+              <Input id="ipfsCid" placeholder="e.g., QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco" />
+              <p className="text-xs text-muted-foreground">Optional: Link to full proposal documentation on the InterPlanetary File System.</p>
+            </div>
             <Button size="lg" onClick={handleProtectedAction}>Submit Proposal to DAC</Button>
           </CardContent>
         </Card>

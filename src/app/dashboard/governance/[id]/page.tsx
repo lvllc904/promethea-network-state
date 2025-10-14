@@ -198,8 +198,14 @@ export default function ProposalDetailPage({
                 assessments, and the sweat equity task list, is available on
                 the IPFS-hosted document linked below.
               </p>
-              <Button variant="link" asChild>
-                <a href="#">View on IPFS</a>
+              <Button variant="link" asChild disabled={!proposal.ipfsCid}>
+                <a 
+                  href={proposal.ipfsCid ? `https://ipfs.io/ipfs/${proposal.ipfsCid}` : '#'} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  View on IPFS
+                </a>
               </Button>
             </div>
           </CardContent>

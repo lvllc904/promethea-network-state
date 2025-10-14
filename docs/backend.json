@@ -93,6 +93,10 @@
           "type": "string",
           "description": "The date and time when voting on the proposal ends.",
           "format": "date-time"
+        },
+        "ipfsCid": {
+            "type": "string",
+            "description": "The IPFS Content Identifier (CID) for the full proposal documentation."
         }
       },
       "required": [
