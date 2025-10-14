@@ -288,9 +288,6 @@ const Sidebar = React.forwardRef<
             className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
           >
             {children}
-            <Button onClick={handleTogglePin} variant="ghost" size="sm" className="absolute bottom-2 left-2 right-2 text-xs">
-              {isPinned ? 'Unpin (Cmd+P)' : 'Pin (Cmd+P)'}
-            </Button>
           </div>
         </div>
       </div>
