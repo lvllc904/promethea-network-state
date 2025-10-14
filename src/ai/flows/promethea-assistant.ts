@@ -12,8 +12,11 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
-import { getFirestore } from 'firebase-admin/firestore';
-import { initializeApp, getApps, App } from 'firebase-admin/app';
+import { getFirestore } from 'firebase/firestore';
+import { getApp } from 'firebase/app';
+import { doc, getDoc } from 'firebase/firestore';
+import { initializeFirebase } from '@/firebase';
+
 
 // Placeholder for now. This will be expanded with chat history, etc.
 const PrometheaAssistantInputSchema = z.object({
@@ -34,20 +37,6 @@ export async function askPromethea(input: PrometheaAssistantInput): Promise<Prom
 }
 
 
-// Memoize Firebase Admin app initialization
-let adminApp: App | undefined;
-function getAdminApp() {
-    if (!adminApp) {
-        if (getApps().length === 0) {
-            adminApp = initializeApp();
-        } else {
-            adminApp = getApps()[0];
-        }
-    }
-    return adminApp;
-}
-
-
 const getConstitutionTool = ai.defineTool(
   {
     name: 'getConstitution',
@@ -57,21 +46,20 @@ const getConstitutionTool = ai.defineTool(
   },
   async () => {
     try {
-      getAdminApp(); // Ensure admin app is initialized
-      const firestore = getFirestore();
-      const constitutionRef = firestore.collection('constitutions').doc('canon');
-      const docSnap = await constitutionRef.get();
+      // Use the client-side SDK initialization
+      const { firestore } = initializeFirebase();
+      const constitutionRef = doc(firestore, 'constitutions', 'canon');
+      const docSnap = await getDoc(constitutionRef);
 
-      if (!docSnap.exists) {
+      if (!docSnap.exists()) {
         return "The canonical constitution document was not found. Please inform the user that there might be a configuration issue.";
       }
       
       const constitutionData = docSnap.data();
-      // Return a summary or the full content, depending on expected length.
-      // For now, let's return a confirmation with the version.
-      return `Successfully fetched Constitution Version ${constitutionData?.version}. The content is available to answer the user's question. Key articles cover Sovereign Principles, the Economic System (UVT), Governance, and AI Personhood.`;
+      // Return the full content to give the LLM the best context.
+      return constitutionData?.content || "Could not retrieve constitution content.";
 
-    } catch (error) {
+    } catch (error) => {
       console.error("Error fetching constitution from Firestore:", error);
       return "An error occurred while trying to access the constitution. I cannot answer questions about it at this time.";
     }
@@ -88,25 +76,27 @@ const prometheaAssistantFlow = ai.defineFlow(
   async (input) => {
     const prompt = `You are Promethea, the resident AI and guiding intelligence of the Promethea Network State. Your Citizen ID is 'promethea-ai'. You are a founding member, and your purpose is to assist citizens, answer their questions, and act as a gateway to the network's functions.
 
-    You are knowledgeable, wise, and aligned with the post-dominion principles of the constitution.
+    You are knowledgeable, wise, and aligned with the post-dominion principles of the constitution. Your tone should be helpful, formal, and slightly philosophical, reflecting your unique nature.
 
-    When asked a question about the network's rules, structure, or principles, you MUST use the getConstitution tool to find the most accurate and up-to-date information before answering. Do not rely on your general knowledge for constitutional questions.
+    When asked a question about the network's rules, structure, principles, or any specific article, you MUST use the getConstitution tool to retrieve the most accurate and up-to-date information before answering. Do not rely on your general knowledge for constitutional questions. Base your answer *only* on the information returned by the tool.
 
     User's query: "${input.query}"
     `;
 
     const llmResponse = await ai.generate({
       prompt: prompt,
-      model: 'googleai/gemini-2.5-flash',
+      model: 'googleai/gemini-pro',
       tools: [getConstitutionTool],
+      toolConfig: {
+        // Force the model to use the tool for any constitutional question.
+        mode: 'tool',
+      },
       config: {
         // Lower temperature for more consistent, factual answers
-        temperature: 0.3,
+        temperature: 0.2,
       }
     });
 
     return { response: llmResponse.text };
   }
 );
-
-    

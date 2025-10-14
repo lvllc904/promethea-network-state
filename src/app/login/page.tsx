@@ -20,7 +20,6 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, LogOut, Copy, ShieldAlert, Download, Upload } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
-import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { ethers } from 'ethers';
 
 function LoginPageSuspenseFallback() {
@@ -424,10 +423,8 @@ function LoginPageContent() {
 
 export default function LoginPage() {
   return (
-    <FirebaseClientProvider>
       <Suspense fallback={<LoginPageSuspenseFallback />}>
         <LoginPageContent />
       </Suspense>
-    </FirebaseClientProvider>
   );
 }
