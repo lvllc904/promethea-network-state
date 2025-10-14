@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { Constitution } from '@/lib/types';
@@ -285,7 +285,7 @@ const TableOfContents = () => (
             <li><a href="#preamble" className="font-semibold hover:underline">Preamble</a></li>
             <li><a href="#article-1" className="font-semibold hover:underline">Article I: Post-Dominion Mandate</a></li>
             <li><a href="#article-2" className="font-semibold hover:underline">Article II: The Sovereign Principles</a></li>
-            <li><a href="#article-3" className="font-semibold hover-underline">Article III: The Economic System</a></li>
+            <li><a href="#article-3" className="font-semibold hover:underline">Article III: The Economic System</a></li>
             <li><a href="#article-4" className="font-semibold hover:underline">Article IV: The Governance Framework</a></li>
             <li><a href="#article-5" className="font-semibold hover:underline">Article V: Technology and Security</a></li>
             <li><a href="#article-6" className="font-semibold hover:underline">Article VI: Self-Sovereign Identity</a></li>
