@@ -160,7 +160,7 @@ async function ensurePrometheaCitizenExists(firestore: Firestore) {
     // Use set with merge to create if not exists, or update if needed, without overwriting.
     await setDoc(prometheaRef, prometheaCitizen, { merge: true });
     console.log("Promethea AI citizen profile created.");
-  } catch (error) => {
+  } catch (error) {
     console.error("Failed to create or verify Promethea AI citizen profile:", error);
     prometheaCitizenCreated = false; // Allow retry on failure
   }

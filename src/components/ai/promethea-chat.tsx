@@ -56,9 +56,9 @@ export function PrometheaChat() {
       const result = await askPrometheaAction({ query: input });
       
       let aiText: string;
-      if ('error' in result && result.error) {
+      if (result && 'error' in result && result.error) {
         aiText = result.error;
-      } else if ('response' in result) {
+      } else if (result && 'response' in result) {
         aiText = result.response;
       } else {
         aiText = "I received an unexpected response. Please try again.";
@@ -160,7 +160,7 @@ export function PrometheaChat() {
                   />
                   <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
                     <Send className="h-4 w-4" />
-                  </g>
+                  </Button>
                 </form>
               </div>
             </div>

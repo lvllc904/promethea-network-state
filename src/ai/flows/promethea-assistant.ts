@@ -11,7 +11,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 import { getFirestore } from 'firebase/firestore';
 import { getApp } from 'firebase/app';
 import { doc, getDoc } from 'firebase/firestore';
@@ -59,7 +59,7 @@ const getConstitutionTool = ai.defineTool(
       // Return the full content to give the LLM the best context.
       return constitutionData?.content || "Could not retrieve constitution content.";
 
-    } catch (error) => {
+    } catch (error) {
       console.error("Error fetching constitution from Firestore:", error);
       return "An error occurred while trying to access the constitution. I cannot answer questions about it at this time.";
     }
