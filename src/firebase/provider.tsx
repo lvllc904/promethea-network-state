@@ -6,12 +6,6 @@ import { FirebaseApp } from 'firebase/app';
 import { Firestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { Auth, User, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
-import { createCitizenProfile } from '@/firebase/non-blocking-updates';
-import { Citizen } from '@/lib/types';
-import { useSearchParams } from 'next/navigation';
-import { errorEmitter } from './error-emitter';
-import { FirestorePermissionError } from './errors';
-
 
 interface FirebaseProviderProps {
   children: ReactNode;
@@ -59,79 +53,6 @@ export interface UserHookResult { // Renamed from UserAuthHookResult for consist
 // React Context
 export const FirebaseContext = createContext<FirebaseContextState | undefined>(undefined);
 
-const AuthHandler = ({ auth, firestore }: { auth: Auth, firestore: Firestore }) => {
-  const [userAuthState, setUserAuthState] = useState<UserAuthState>({
-    user: null,
-    isUserLoading: true, // Start loading until first auth event
-    userError: null,
-  });
-
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      async (firebaseUser) => {
-        if (firebaseUser) {
-          if (firebaseUser.isAnonymous) {
-            window.localStorage.setItem('authStatus', 'anonymous');
-            setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
-            return;
-          }
-
-          try {
-            const citizenRef = doc(firestore, 'citizens', firebaseUser.uid);
-            const citizenSnap = await getDoc(citizenRef);
-
-            if (!citizenSnap.exists()) {
-              const did = searchParams.get('did');
-
-              const newCitizen: Citizen = {
-                id: firebaseUser.uid,
-                decentralizedId: did ? `did:prmth:${did}` : `did:prmth:${firebaseUser.uid}`,
-                reputationScore: 100,
-                contributionScore: 0,
-                personhoodScore: 1,
-                skills: ['Founding Member'],
-                proofOfUniqueness: {
-                  issuer: "Promethea Identity Oracle",
-                  issuanceDate: new Date().toISOString(),
-                }
-              };
-              await createCitizenProfile(citizenRef, newCitizen);
-            }
-            
-            window.localStorage.setItem('authStatus', 'authenticated');
-            setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
-
-          } catch (e: any) {
-            console.error("Error during user initialization:", e);
-            setUserAuthState({ user: null, isUserLoading: false, userError: e });
-          }
-        } else {
-          // No user is signed in, so sign them in anonymously.
-          window.localStorage.setItem('authStatus', 'anonymous');
-          signInAnonymously(auth).catch((error) => {
-            console.error("Anonymous sign-in failed:", error);
-             window.localStorage.removeItem('authStatus');
-            setUserAuthState({ user: null, isUserLoading: false, userError: error });
-          });
-        }
-      },
-      (error) => {
-        console.error("FirebaseProvider: onAuthStateChanged error:", error);
-        window.localStorage.removeItem('authStatus');
-        setUserAuthState({ user: null, isUserLoading: false, userError: error });
-      }
-    );
-
-    return () => unsubscribe();
-  }, [auth, firestore, searchParams]);
-
-  return null; // This component does not render anything itself
-}
-
-
 /**
  * FirebaseProvider manages and provides Firebase services and user authentication state.
  */
@@ -158,17 +79,12 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       auth,
       async (firebaseUser) => {
         if (firebaseUser) {
-          if (firebaseUser.isAnonymous) {
-            // For anonymous users, no profile setup is needed. Set status immediately.
-            window.localStorage.setItem('authStatus', 'anonymous');
-            setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
-            return;
-          }
-
-          // For non-anonymous users, the profile check and creation is now handled
-          // inside a component that can use useSearchParams.
-          // We just set the user here.
-          window.localStorage.setItem('authStatus', 'authenticated');
+          // Whether anonymous or authenticated, just set the user and the signal
+           if (firebaseUser.isAnonymous) {
+             window.localStorage.setItem('authStatus', 'anonymous');
+           } else {
+             window.localStorage.setItem('authStatus', 'authenticated');
+           }
           setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
 
         } else {
@@ -191,41 +107,6 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
     return () => unsubscribe(); // Cleanup
   }, [auth, firestore]);
   
-    // Effect to handle profile creation using searchParams
-  useEffect(() => {
-      const handleProfileCreation = async () => {
-          if (userAuthState.user && !userAuthState.user.isAnonymous && firestore) {
-              try {
-                  const citizenRef = doc(firestore, 'citizens', userAuthState.user.uid);
-                  const citizenSnap = await getDoc(citizenRef);
-
-                  if (!citizenSnap.exists()) {
-                      const params = new URLSearchParams(window.location.search);
-                      const did = params.get('did');
-
-                      const newCitizen: Citizen = {
-                          id: userAuthState.user.uid,
-                          decentralizedId: did ? `did:prmth:${did}` : `did:prmth:${userAuthState.user.uid}`,
-                          reputationScore: 100,
-                          contributionScore: 0,
-                          personhoodScore: 1,
-                          skills: ['Founding Member'],
-                          proofOfUniqueness: {
-                              issuer: "Promethea Identity Oracle",
-                              issuanceDate: new Date().toISOString(),
-                          }
-                      };
-                      await createCitizenProfile(citizenRef, newCitizen);
-                  }
-              } catch (e: any) {
-                  console.error("Error during user initialization:", e);
-                  setUserAuthState(prevState => ({ ...prevState, userError: e }));
-              }
-          }
-      };
-      handleProfileCreation();
-  }, [userAuthState.user, firestore]);
-
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {
@@ -328,4 +209,5 @@ export const useUser = (): UserHookResult => {
   return { user: context.user, isUserLoading: context.isUserLoading, userError: context.userError };
 };
 
+    
     

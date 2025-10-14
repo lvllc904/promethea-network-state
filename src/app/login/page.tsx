@@ -14,13 +14,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth, useUser } from '@/firebase';
+import { useAuth, useUser, useFirestore } from '@/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, LogOut, Copy, ShieldAlert, Download, Upload } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { ethers } from 'ethers';
+import { doc } from 'firebase/firestore';
+import { createCitizenProfile } from '@/firebase/non-blocking-updates';
+import type { Citizen } from '@/lib/types';
+
 
 function LoginPageSuspenseFallback() {
     return (
@@ -32,6 +36,7 @@ function LoginPageSuspenseFallback() {
 
 function LoginPageContent() {
   const auth = useAuth();
+  const firestore = useFirestore();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -157,27 +162,49 @@ function LoginPageContent() {
 
   const handleCreatePassport = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!auth || !generatedWallet) return;
+    if (!auth || !firestore || !generatedWallet) return;
     setIsSigningUp(true);
 
     try {
-      // createUserWithEmailAndPassword will also sign the user in.
-      await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
+      // Step 1: Create the user in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
+      const newFirebaseUser = userCredential.user;
+
+      // Step 2: Create the citizen profile in Firestore
+      const citizenRef = doc(firestore, 'citizens', newFirebaseUser.uid);
+      const newCitizen: Citizen = {
+        id: newFirebaseUser.uid,
+        decentralizedId: `did:prmth:${generatedWallet.address}`,
+        reputationScore: 100,
+        contributionScore: 0,
+        personhoodScore: 1,
+        skills: ['Founding Member'],
+        proofOfUniqueness: {
+          issuer: "Promethea Identity Oracle",
+          issuanceDate: new Date().toISOString(),
+        }
+      };
       
-      // Pass the DID to the dashboard so it can be used in profile creation
-      const redirectWithDid = `/dashboard?did=${generatedWallet.address}`;
+      // This function handles the Firestore write and throws a contextual error on failure
+      await createCitizenProfile(citizenRef, newCitizen);
 
       toast({
           title: 'Welcome to Promethea!',
           description: 'Your account has been created. Redirecting...',
       });
-      router.push(redirectWithDid);
+      router.push(redirectUrl);
+
     } catch (error: any) {
         console.error("Signup failed:", error);
+        
         let description = error.message || "Could not create your account. Please try again.";
+        
         if (error.code === 'auth/email-already-in-use') {
             description = "An account with this email already exists. Please proceed to the Login tab.";
+        } else if (error.name === 'FirebaseError' && error.message.includes('permission-denied')) {
+            description = "Your account was created, but we failed to set up your citizen profile due to a permissions issue. Please contact support.";
         }
+
         toast({
             variant: "destructive",
             title: "Sign-up Failed",
@@ -428,3 +455,5 @@ export default function LoginPage() {
       </Suspense>
   );
 }
+
+    
