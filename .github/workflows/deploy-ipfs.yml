@@ -42,7 +42,7 @@ jobs:
           cid: ${{ steps.deploy_pinata.outputs.ipfs_hash }}
           dnslink_domain: 'dweb.lvhllc.org'
           cf_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          cf_auth_token: ${{ secrets.CLOUDFLARE_API_TOKEN }} 
+          cf_auth_token: ${{ secrets.CLOUDFLARE_JWT }} 
           
       - name: Report Success
         run: |
