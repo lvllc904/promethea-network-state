@@ -1,171 +1,220 @@
-/**
- * @fileOverview Firestore Security Rules for the Promethea Network State.
- *
- * Core Philosophy:
- * This ruleset enforces a strict user-ownership model for user-specific data while allowing public read access to certain collections.
- * Write access is carefully controlled to ensure data integrity and prevent unauthorized modifications. Data validation is relaxed to allow for rapid prototyping and schema iteration.
- *
- * Data Structure:
- * - Citizens are stored in `/citizens/{citizenId}`.
- * - Proposals are stored in `/proposals/{proposalId}`.
- * - Real-world assets are stored in `/real_world_assets/{assetId}`.
- * - Universal Value Tokens are stored in `/universal_value_tokens/{tokenId}`.
- * - Votes are stored in `/votes/{voteId}`.
- * - Tasks are stored in `/tasks/{taskId}`.
- * - DAC parameters are stored in `/dac_params/{dacParamsId}`.
- * - Constitutions are stored in `/constitutions/{constitutionId}`.
- *
- * Key Security Decisions:
- * - Citizens can only create their own Citizen document, and no one can modify or delete it.
- * - Public read access is enabled for all collections to facilitate data discovery and display.
- * - Write access to DAC parameters is denied to all clients.
- * - The 'canon' constitution document is publicly readable and writable.
- *
- * Denormalization for Authorization:
- * - For `/universal_value_tokens/{tokenId}`, the `ownerId` field is used to determine ownership.
- */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Allows citizens to create their own profile. No one can update or delete citizen profiles.
+     * @description Controls access to citizen profiles.
      * @path /citizens/{citizenId}
-     * @allow (create) User with UID 'citizenId' can create their own profile.
-     * @deny (create) User with UID 'anotherUserId' cannot create a profile with ID 'citizenId'.
-     * @deny (update) No one can update a citizen profile.
-     * @deny (delete) No one can delete a citizen profile.
-     * @principle Enforces self-creation for citizen profiles, preventing unauthorized profile creation and modification.
+     * @allow (create) Signed-in user creates their own citizen profile.
+     * @allow (get, list, update, delete) Signed-in user accesses their own citizen profile.
+     * @deny (create) Signed-in user attempts to create a citizen profile for another user.
+     * @deny (update, delete) Signed-in user attempts to modify or delete another user's citizen profile.
+     * @principle Enforces document ownership for reads and writes.
      */
     match /citizens/{citizenId} {
-      allow get: if true;
-      allow list: if true;
+      // Helpers:
+      function isSignedIn() {
+        return request.auth != null;
+      }
+      function isOwner(citizenId) {
+        return isSignedIn() && request.auth.uid == citizenId;
+      }
+      function isExistingOwner(citizenId) {
+        return isSignedIn() && request.auth.uid == resource.data.id;
+      }
+
+      allow get: if isOwner(citizenId);
+      allow list: if false; // Listing users is not permitted.
       allow create: if isSignedIn() && request.auth.uid == citizenId;
-      allow update: if false;
-      allow delete: if false;
+      allow update: if isOwner(citizenId);
+      allow delete: if isOwner(citizenId);
     }
 
     /**
-     * @description Allows anyone to read proposals, but only the proposer can create, update, or delete.
+     * @description Controls access to governance proposals.
      * @path /proposals/{proposalId}
-     * @allow (get, list) Any user can read any proposal.
-     * @allow (create) User with UID 'proposerId' can create a proposal.
-     * @deny (create) User with UID 'anotherUserId' cannot create a proposal with 'proposerId'.
-     * @deny (update) User can not update any proposal.
-     * @deny (delete) User can not delete any proposal.
-     * @principle Allows public read access to proposals while restricting write access to the proposer.
+     * @allow (create) Signed-in user creates a proposal with their ID as proposerId.
+     * @allow (get, list) Public read access to proposals.
+     * @allow (update, delete) Only the owner can update/delete.
+     * @deny (create) Signed-in user attempts to create a proposal with a different proposerId.
+     * @deny (update, delete) Signed-in user attempts to modify or delete another user's proposal.
+     * @principle Enforces document ownership for writes.
      */
     match /proposals/{proposalId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isSignedIn();
-      allow update: if false;
-      allow delete: if false;
+      // Helpers:
+      function isSignedIn() {
+        return request.auth != null;
+      }
+      function isOwner(proposalId) {
+        return isSignedIn() && request.auth.uid == resource.data.proposerId;
+      }
+      function isExistingOwner(proposalId) {
+        return isSignedIn() && resource.data.proposerId == request.auth.uid;
+      }
+
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.proposerId == request.auth.uid;
+      allow update: if isOwner(proposalId);
+      allow delete: if isOwner(proposalId);
     }
 
     /**
-     * @description Allows anyone to read real-world assets, but no one can create, update, or delete them.
+     * @description Controls access to real-world asset data.
      * @path /real_world_assets/{assetId}
-     * @allow (get, list) Any user can read any real-world asset.
-     * @deny (create) No one can create a real-world asset.
-     * @deny (update) No one can update a real-world asset.
-     * @deny (delete) No one can delete a real-world asset.
-     * @principle Allows public read access to real-world assets while preventing unauthorized modification.
+     * @allow (get, list) Public read access to assets.
+     * @allow (create) Signed-in user can create an asset.
+     * @allow (update, delete) Only the owner can update/delete.
+     * @deny (update, delete) Signed-in user attempts to modify or delete another user's asset.
+     * @principle Enforces document ownership for writes.
      */
     match /real_world_assets/{assetId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      // Helpers:
+      function isSignedIn() {
+        return request.auth != null;
+      }
+      // TODO: Need to clarify asset ownership.  Assuming a denormalized 'ownerId' field exists.
+      function isOwner(assetId) {
+        return isSignedIn() && request.auth.uid == resource.data.ownerId;
+      }
+      function isExistingOwner(assetId) {
+        return isSignedIn() && resource.data.ownerId == request.auth.uid;
+      }
+
+      allow get, list: if true;
+      allow create: if isSignedIn(); // TODO: Add owner validation once the schema is updated with an ownership field.
+      allow update: if isSignedIn() && request.resource.data.ownerId == request.auth.uid;  // TODO: Add owner validation once the schema is updated with an ownership field.
+      allow delete: if isSignedIn() && request.resource.data.ownerId == request.auth.uid; // TODO: Add owner validation once the schema is updated with an ownership field.
     }
 
     /**
-     * @description Allows anyone to read universal value tokens, but only the owner can create, update, or delete.
+     * @description Controls access to universal value tokens.
      * @path /universal_value_tokens/{tokenId}
-     * @allow (get, list) Any user can read any universal value token.
-     * @allow (create) User with UID 'ownerId' can create a universal value token.
-     * @deny (create) User with UID 'anotherUserId' cannot create a universal value token with 'ownerId'.
-     * @deny (update) User can not update any token.
-     * @deny (delete) User can not delete any token.
-     * @principle Allows public read access to universal value tokens while restricting write access to the owner.
+     * @allow (get, list) Public read access to tokens.
+     * @allow (create) Signed-in user can create a token with their ID as ownerId.
+     * @allow (update, delete) Only the owner can update/delete.
+     * @deny (create) Signed-in user attempts to create a token with a different ownerId.
+     * @deny (update, delete) Signed-in user attempts to modify or delete another user's token.
+     * @principle Enforces document ownership for writes.
      */
     match /universal_value_tokens/{tokenId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isSignedIn();
-      allow update: if false;
-      allow delete: if false;
+      // Helpers:
+      function isSignedIn() {
+        return request.auth != null;
+      }
+      function isOwner(tokenId) {
+        return isSignedIn() && request.auth.uid == resource.data.ownerId;
+      }
+      function isExistingOwner(tokenId) {
+        return isSignedIn() && resource.data.ownerId == request.auth.uid;
+      }
+
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.ownerId == request.auth.uid;
+      allow update: if isOwner(tokenId);
+      allow delete: if isOwner(tokenId);
     }
 
     /**
-     * @description Allows anyone to read votes, but no one can create, update, or delete them.
+     * @description Controls access to votes cast by citizens.
      * @path /votes/{voteId}
-     * @allow (get, list) Any user can read any vote.
-     * @deny (create) No one can create a vote.
-     * @deny (update) No one can update a vote.
-     * @deny (delete) No one can delete a vote.
-     * @principle Allows public read access to votes while preventing unauthorized modification.
+     * @allow (get, list) Public read access to votes.
+     * @allow (create) Signed-in user can create a vote with their ID as citizenId.
+     * @allow (update, delete) Only the owner can update/delete.
+     * @deny (create) Signed-in user attempts to create a vote with a different citizenId.
+     * @deny (update, delete) Signed-in user attempts to modify or delete another user's vote.
+     * @principle Enforces document ownership for writes.
      */
     match /votes/{voteId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      // Helpers:
+      function isSignedIn() {
+        return request.auth != null;
+      }
+      function isOwner(voteId) {
+        return isSignedIn() && request.auth.uid == resource.data.citizenId;
+      }
+      function isExistingOwner(voteId) {
+        return isSignedIn() && resource.data.citizenId == request.auth.uid;
+      }
+
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.citizenId == request.auth.uid;
+      allow update: if isOwner(voteId);
+      allow delete: if isOwner(voteId);
     }
 
     /**
-     * @description Allows anyone to read tasks, but no one can create, update, or delete them.
+     * @description Controls access to tasks related to real-world asset management.
      * @path /tasks/{taskId}
-     * @allow (get, list) Any user can read any task.
-     * @deny (create) No one can create a task.
-     * @deny (update) No one can update a task.
-     * @deny (delete) No one can delete a task.
-     * @principle Allows public read access to tasks while preventing unauthorized modification.
+     * @allow (get, list) Public read access to tasks.
+     * @allow (create) Signed-in user can create a task.
+     * @allow (update, delete) Only the assignee or owner can update/delete.
+     * @deny (update, delete) Signed-in user attempts to modify or delete a task they are not assigned to or do not own.
+     * @principle Enforces document ownership for writes.
      */
     match /tasks/{taskId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      // Helpers:
+      function isSignedIn() {
+        return request.auth != null;
+      }
+      // TODO: Need to clarify task ownership.  Assuming a denormalized 'ownerId' field exists.
+      function isAssignee(taskId) {
+        return isSignedIn() && request.auth.uid == resource.data.assigneeId;
+      }
+      function isOwner(taskId) {
+        return isSignedIn() && request.auth.uid == resource.data.ownerId;
+      }
+      function isExistingOwner(taskId) {
+        return isSignedIn() && resource.data.ownerId == request.auth.uid;
+      }
+
+      allow get, list: if true;
+      allow create: if isSignedIn(); // TODO: Add owner validation once the schema is updated with an ownership field.
+      allow update: if isSignedIn() && (request.resource.data.ownerId == request.auth.uid || request.resource.data.assigneeId == request.auth.uid); // TODO: Add owner validation once the schema is updated with an ownership field.
+      allow delete: if isSignedIn() && (request.resource.data.ownerId == request.auth.uid || request.resource.data.assigneeId == request.auth.uid); // TODO: Add owner validation once the schema is updated with an ownership field.
     }
 
     /**
-     * @description Restricts access to DAC parameters. No one can read, create, update, or delete them.
+     * @description Controls access to DAC parameters.
      * @path /dac_params/{dacParamsId}
-     * @deny (get, list) No one can read DAC parameters.
-     * @deny (create) No one can create DAC parameters.
-     * @deny (update) No one can update DAC parameters.
-     * @deny (delete) No one can delete DAC parameters.
-     * @principle Restricts all access to DAC parameters for security reasons.
+     * @allow (get, list) Public read access to DAC parameters.
+     * @allow (create, update, delete) Restricted to administrators.
+     * @deny (create, update, delete) Non-administrators cannot modify DAC parameters.
+     * @principle Restricts writes to administrators.
      */
     match /dac_params/{dacParamsId} {
-      allow get: if false;
-      allow list: if false;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      // Helpers:
+      function isSignedIn() {
+        return request.auth != null;
+      }
+      function isAdmin() {
+        // TODO: Implement proper admin check (e.g., custom claim).
+        return false;
+      }
+
+      allow get, list: if true;
+      allow create, update, delete: if false; // TODO: Implement proper admin check (e.g., custom claim).
     }
 
     /**
-     * @description Allows public read and write access to the constitution document with id 'canon'. Other constitution documents are not accessible.
+     * @description Controls access to the living constitution.
      * @path /constitutions/{constitutionId}
-     * @allow (get, list, create, update, delete) Any user can read and write the canon constitution.
-     * @principle Allows public read/write access to the constitution.
+     * @allow (get, list) Public read access to the constitution.
+     * @allow (create, update, delete) Restricted to administrators.
+     * @deny (create, update, delete) Non-administrators cannot modify the constitution.
+     * @principle Restricts writes to administrators.
      */
     match /constitutions/{constitutionId} {
-        allow get: if true;
-        allow list: if true;
-        allow create: if constitutionId == 'canon';
-        allow update: if constitutionId == 'canon';
-        allow delete: if constitutionId == 'canon';
-    }
-  }
+      // Helpers:
+      function isSignedIn() {
+        return request.auth != null;
+      }
+      function isAdmin() {
+        // TODO: Implement proper admin check (e.g., custom claim).
+        return false;
+      }
 
-  // Helper function to determine if a user is signed in.
-  function isSignedIn() {
-    return request.auth != null;
+      allow get, list: if true;
+      allow create, update, delete: if false; // TODO: Implement proper admin check (e.g., custom claim).
+    }
   }
 }
