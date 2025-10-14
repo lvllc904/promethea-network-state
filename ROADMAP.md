@@ -10,18 +10,18 @@ This document outlines the phased technical roadmap for building the Promethea a
 **Objective:** To configure the Promethea application to support two distinct deployment targets from a single codebase, laying the groundwork for the "3 Body System" architecture.
 
 1.  **Dynamic Host (The Ledger):** A server-backed application deployed to **Firebase Hosting** at `lvhllc.org`.
-2.  **Decentralized Host (The Sovereign Client):** A static, decentralized version of the application, ready for deployment to **IPFS** and accessible via a subdomain like `dweb.lvhllc.org`.
+2.  **Decentralized Host (The Sovereign Client):** A static, decentralized version of the application, now automatically deployed to **IPFS** and accessible via a subdomain like `dweb.lvhllc.org`.
 
 **Implementation Plan:**
 
-*   **Phase 1: Implement Build & Export Configuration (AI Action - In Progress)**
-    *   **Modify `next.config.ts`:** Add `output: 'export'` configuration and adjust image optimization settings for static builds.
-    *   **Update `package.json`:** Add an `export` script to generate the static site output.
+*   **Phase 1: Implement Build & Export Configuration (AI Action - Complete)**
+    *   **Modified `next.config.ts`:** Added `output: 'export'` configuration and adjusted image optimization settings for static builds.
+    *   **Updated `package.json`:** Added an `export` script to generate the static site output.
 
-*   **Phase 2: Deploy to IPFS & Configure DNS (User Action - Next Up)**
-    *   Run `npm run export` to generate the static `/out` directory.
-    *   Upload the `/out` directory to an IPFS pinning service to get a Content ID (CID).
-    *   Create a `TXT` record in Cloudflare for `_dnslink.dweb` to point to the new IPFS CID.
+*   **Phase 2: Automated IPFS Deployment & DNS Configuration (Complete)**
+    *   **Created GitHub Actions Workflow (`.github/workflows/deploy-ipfs.yml`):** This workflow automates the entire process on every push to the `main` branch.
+    *   **Integrated Pinning Service (Pinata):** The workflow automatically uploads the static build to Pinata for persistent IPFS storage.
+    *   **Automated DNSLink Update (Cloudflare):** The workflow takes the new IPFS CID from Pinata and automatically updates the `_dnslink.dweb` TXT record in Cloudflare.
 
 *   **Phase 3: Evolve Architecture (Future Work)**
     *   Implement logic for the static site to make secure API calls back to the dynamic `lvhllc.org` backend for any state-changing operations, fully realizing the client/server separation.
