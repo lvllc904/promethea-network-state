@@ -47,5 +47,7 @@ jobs:
       - name: Report Success
         run: |
           echo "🎉 IPFS Deployment Complete!"
-          echo "🌐 Temporary Gateway Link: https://ipfs.io/ipfs/${{ steps.deploy_pinata.outputs.ipfs_hash }}"
-          echo "🔗 Permanent Decentralized Link (may take a few minutes to resolve): https://dweb.lvhllc.org"
+          echo "🌐 Universal Gateway Link (recommended): https://dweb.lvhllc.org.ipfs.dweb.link"
+          echo "🔗 Direct IPFS Gateway Link: https://ipfs.io/ipfs/${{ steps.deploy_pinata.outputs.ipfs_hash }}"
+          echo "💡 Your dweb.lvhllc.org address was updated and may take a few minutes to resolve on IPFS-native browsers."
+
