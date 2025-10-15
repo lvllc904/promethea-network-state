@@ -47,7 +47,7 @@ jobs:
       - name: Report Success
         run: |
           echo "🎉 IPFS Deployment Complete!"
-          echo "🌐 Universal Gateway Link (recommended): https://dweb.lvhllc.org.ipfs.dweb.link"
+          echo "🌐 Universal Gateway Link (recommended): https://cloudflare-ipfs.com/ipns/dweb.lvhllc.org"
           echo "🔗 Direct IPFS Gateway Link: https://ipfs.io/ipfs/${{ steps.deploy_pinata.outputs.ipfs_hash }}"
           echo "💡 Your dweb.lvhllc.org address was updated and may take a few minutes to resolve on IPFS-native browsers."
 
