@@ -99,6 +99,7 @@ const WhatIsPromethea = () => {
               src={visualImage.imageUrl}
               alt={visualImage.description}
               fill
+              sizes="(max-width: 768px) 250px, 350px"
               className="rounded-full shadow-2xl object-cover"
               data-ai-hint={visualImage.imageHint}
             />
@@ -167,6 +168,7 @@ export default function LandingPage() {
             src={heroImage.imageUrl}
             alt={heroImage.description}
             fill
+            sizes="100vw"
             className="object-cover"
             data-ai-hint={heroImage.imageHint}
             priority

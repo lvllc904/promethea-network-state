@@ -9,6 +9,7 @@ interface LocalProfileResult {
   localProfile: LocalCitizenProfile | null;
   isProfileLoading: boolean;
   setLocalProfile: (did: string, profile: LocalCitizenProfile) => void;
+  syncFromPublic: (did: string, publicData: Partial<LocalCitizenProfile>) => void;
 }
 
 /**
@@ -25,34 +26,26 @@ export function useLocalProfile(): LocalProfileResult {
 
   const loadProfile = useCallback(() => {
     if (!isAuthenticated || !user) {
-        setProfile(null);
-        setIsLoading(false);
-        return;
+      setProfile(null);
+      setIsLoading(false);
+      return;
     }
 
-    const did = localStorage.getItem(`did-for-uid-${user.uid}`);
+    const did = localStorage.getItem(`did-for-uid-${user.uid}`) || localStorage.getItem('userDID');
     if (did) {
-        const profileData = localStorage.getItem(`promethea-profile-${did}`);
-        if (profileData) {
-            setProfile(JSON.parse(profileData));
-        } else {
-            // If the user is authenticated but has no local profile for this session,
-            // we prompt them to create one.
-            const name = prompt("To continue, please provide a display name for this session:");
-            if (name) {
-                const newProfile = { displayName: name };
-                localStorage.setItem(`promethea-profile-${did}`, JSON.stringify(newProfile));
-                setProfile(newProfile);
-            } else {
-                // If they cancel the prompt, we treat them as if they have no profile.
-                setProfile(null);
-            }
-        }
+      const profileData = localStorage.getItem(`promethea-profile-${did}`);
+      if (profileData) {
+        setProfile(JSON.parse(profileData));
+      } else {
+        // Smoothly hydrate a default profile from identity state if missing
+        const newProfile = { displayName: 'Citizen ' + did.slice(0, 6) };
+        localStorage.setItem(`promethea-profile-${did}`, JSON.stringify(newProfile));
+        setProfile(newProfile);
+      }
     } else {
-        // This case can happen briefly during the login transition.
-        setProfile(null);
+      setProfile(null);
     }
-     setIsLoading(false);
+    setIsLoading(false);
   }, [user, isAuthenticated]);
 
 
@@ -65,14 +58,29 @@ export function useLocalProfile(): LocalProfileResult {
   }, [isAuthStatusLoading, loadProfile]);
 
 
-  const setLocalProfile = (did: string, profile: LocalCitizenProfile) => {
+  const setLocalProfile = useCallback((did: string, profile: LocalCitizenProfile) => {
     localStorage.setItem(`promethea-profile-${did}`, JSON.stringify(profile));
-    setProfile(profile); // Update the state immediately
-  };
+    setProfile(profile);
+  }, []);
+
+  const syncFromPublic = useCallback((did: string, publicData: Partial<LocalCitizenProfile>) => {
+    const profileData = localStorage.getItem(`promethea-profile-${did}`);
+    const currentProfile = profileData ? JSON.parse(profileData) : {};
+
+    const updatedProfile = {
+      ...currentProfile,
+      ...publicData,
+      // Ensure we don't overwrite local-only state if sensitive
+    };
+
+    localStorage.setItem(`promethea-profile-${did}`, JSON.stringify(updatedProfile));
+    setProfile(updatedProfile);
+  }, []);
 
   return {
     localProfile,
     isProfileLoading: isLoading || isAuthStatusLoading || isAuthUserLoading,
-    setLocalProfile
+    setLocalProfile,
+    syncFromPublic
   };
 }

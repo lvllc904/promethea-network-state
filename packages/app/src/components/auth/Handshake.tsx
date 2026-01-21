@@ -11,11 +11,16 @@ export function Handshake() {
     useEffect(() => {
         const did = searchParams.get('did');
         const token = searchParams.get('token');
+        const uid = searchParams.get('uid');
 
         if (did) {
-            console.log('[Handshake] DID detected:', did);
+            console.log('[Handshake] Identity detected:', { did, uid });
             localStorage.setItem('authStatus', 'authenticated');
             localStorage.setItem('userDID', did);
+
+            if (uid) {
+                localStorage.setItem('userUID', uid);
+            }
 
             if (token) {
                 localStorage.setItem('authToken', token);

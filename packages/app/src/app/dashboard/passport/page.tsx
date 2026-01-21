@@ -13,6 +13,7 @@ import { Badge } from '@promethea/ui';
 import { Separator } from '@promethea/ui';
 import { Copy, Star, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { Button } from '@promethea/ui';
+import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { useDoc, useFirestore, useUser, useMemoFirebase, useCollection } from '@promethea/firebase';
 import { doc, collection, query } from 'firebase/firestore';
@@ -39,6 +40,20 @@ export default function PassportPage() {
 
   const { data: citizen, isLoading: isCitizenLoading } = useDoc<Citizen>(citizenRef as any);
   const { data: citizens } = useCollection<Citizen>(citizensQuery as any);
+  const { syncFromPublic } = useLocalProfile();
+
+  // "Dehydration" sync: Public Ledger -> Sovereign Device
+  useEffect(() => {
+    if (citizen && user && user.uid !== 'anonymous') {
+      const did = citizen.decentralizedId;
+      syncFromPublic(did, {
+        displayName: citizen.displayName,
+        governanceTokens: citizen.governanceTokens,
+        reputation: citizen.reputationScore,
+        createdAt: citizen.createdAt,
+      });
+    }
+  }, [citizen, user, syncFromPublic]);
 
   const isLoading = isUserLoading || isCitizenLoading;
 

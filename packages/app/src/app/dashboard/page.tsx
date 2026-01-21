@@ -53,7 +53,7 @@ export default function DashboardPage() {
   const { user } = useUser();
 
   const citizenRef = useMemoFirebase(
-    () => (firestore && user ? doc(firestore, 'citizens', user.uid) : null) as DocumentReference<Citizen> | null,
+    () => (firestore && user && user.uid !== 'anonymous' ? doc(firestore, 'citizens', user.uid) : null) as DocumentReference<Citizen> | null,
     [firestore, user]
   );
   const { data: citizen, isLoading: isCitizenLoading } = useDoc<Citizen>(citizenRef as any);
@@ -70,18 +70,18 @@ export default function DashboardPage() {
   );
   const { data: activeProposals, isLoading: areProposalsLoading } = useCollection<Proposal>(proposalsQuery as any) as any;
 
+  // Contributions/UVTs are private per user
   const uvtsQuery = useMemoFirebase(
-    () => (firestore && user ? query(collection(firestore, 'universal_value_tokens'), where('ownerId', '==', user.uid)) : null) as unknown as Query<UniversalValueToken> | null,
+    () => (firestore && user && user.uid !== 'anonymous' ? query(collection(firestore, 'universal_value_tokens'), where('ownerId', '==', user.uid)) : null) as unknown as Query<UniversalValueToken> | null,
     [firestore, user]
   );
   const { data: myContributions, isLoading: areContributionsLoading } = useCollection<UniversalValueToken>(uvtsQuery as any) as any;
 
-  const isLoading = isCitizenLoading || areAssetsLoading || areProposalsLoading || areContributionsLoading;
+  const isLoading = isCitizenLoading || areAssetsLoading || areProposalsLoading || (user && user.uid !== 'anonymous' && areContributionsLoading);
 
   const portfolioStats = useMemo(() => {
     if (!myContributions) return { totalValue: 0, distribution: [] };
 
-    // In a real app, we'd fetch asset prices. Here we assume 1 UVT = $1 for simplicity in the demo.
     const totalValue = myContributions.reduce((sum: number, t: any) => sum + t.amount, 0);
     const distribution = myContributions.reduce((acc: any[], token: any) => {
       const existing = acc.find(item => item.name === token.tokenType);
@@ -144,13 +144,19 @@ export default function DashboardPage() {
     );
   }
 
+  const isGuest = !user || user.uid === 'anonymous';
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-headline font-bold tracking-tight">Welcome, {citizen?.displayName || 'Citizen'}</h2>
+          <h2 className="text-3xl font-headline font-bold tracking-tight">
+            {isGuest ? 'Welcome to Promethea' : `Welcome, ${citizen?.displayName || user?.displayName || 'Citizen'}`}
+          </h2>
           <p className="text-muted-foreground">
-            Here's what's happening with your Sovereign assets today.
+            {isGuest
+              ? "Exploring the public ledger of the Sovereign Digital Nation."
+              : "Here's what's happening with your Sovereign assets today."}
           </p>
         </div>
       </div>
@@ -207,25 +213,34 @@ export default function DashboardPage() {
             <CardDescription aria-hidden="true" className="sr-only">Visual breakdown of your Universal Value Token (UVT) holdings.</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <RechartsPieChart>
-                <Pie
-                  data={portfolioStats.distribution}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={5}
-                  dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                >
-                  {portfolioStats.distribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[entry.name as keyof typeof COLORS]} />
-                  ))}
-                </Pie>
-                <ChartTooltip content={<ChartTooltipContent />} />
-              </RechartsPieChart>
-            </ResponsiveContainer>
+            <ChartContainer
+              config={{
+                Labor: { label: "Labor", color: "hsl(var(--chart-1))" },
+                Capital: { label: "Capital", color: "hsl(var(--chart-2))" },
+                Reputation: { label: "Reputation", color: "hsl(var(--chart-3))" },
+              }}
+              className="h-full w-full"
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <RechartsPieChart>
+                  <Pie
+                    data={portfolioStats.distribution}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {portfolioStats.distribution.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[entry.name as keyof typeof COLORS]} />
+                    ))}
+                  </Pie>
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </RechartsPieChart>
+              </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
         <Card className="col-span-3">
