@@ -175,8 +175,8 @@
   {:status :ok :metrics {:cpu 10 :mem 20 :disk 30}})
 
 (defn get-gateway-status []
-  (println "[HANDS] Fetching Metabolic Status from Gateway (localhost:8080)...")
-  (let [res (run-shell "curl -s http://localhost:8080/status")]
+  (println "[HANDS] Fetching Metabolic Status from Gateway (localhost:8081)...")
+  (let [res (run-shell "curl -s http://localhost:8081/status")]
     (if (= (:status res) :ok)
       (try
         (let [json (cheshire.core/parse-string (:stdout res) true)]
@@ -192,7 +192,7 @@
 (defn coordinate-with-sentinel [agent-id task]
   (println "[HANDS] Sending task for Sentinel Audit...")
   (let [body (cheshire.core/generate-string {:agent_id agent-id :task task})
-        res (run-shell (str "curl -s -X POST -H 'Content-Type: application/json' -d '" body "' http://localhost:8080/coordinate"))]
+        res (run-shell (str "curl -s -X POST -H 'Content-Type: application/json' -d '" body "' http://localhost:8081/coordinate"))]
     (if (= (:status res) :ok)
       (try
         (let [json (cheshire.core/parse-string (:stdout res) true)]
