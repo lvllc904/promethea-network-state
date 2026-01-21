@@ -42,7 +42,7 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 - [x] **Build Health Metrics**: Integrated 0-100 quantitative health scoring.
 - [x] **Immune Reset**: Fixed the recursive specialist loop by ensuring state-reset on handover.
 - [ ] **Atomic Rollback**: Automatic `git revert` on pre-flight failure.
-- [ ] **Metabolic Sensing**: Live telemetry (CPU/MEM/Thermal) in `hands.clj`.
+- [x] **Metabolic Sensing**: Live telemetry (CPU/MEM/Thermal) in `hands.clj`.
 
 ### Phase 2.2: Cognitive Alignment & Memory
 - [x] **Mandate Verification**: Periodic re-reading of the Manifest and Constitutional documents.
@@ -66,13 +66,13 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 - [ ] **Cross-Device Sync**: Optional encrypted peering of sovereign storage nodes via WebRTC.
 
 ### Phase 2.5: Substrate Reasoning & Self-Instruction [NEW]
-- **The Healing Patterns**: Integration of `content/healing_patterns.md` into the dynamic repair loop.
-- **Autonomous Substrate Debugging**: Enabling Promethea to diagnose polyfill, workspace, and dependency conflicts using codified patterns.
-- **Sovereign Dependency Control**: Implementing logic to auto-remediate `npm` and `clj` environment failures.
-- **Self-Ledgering**: Every automated repair action must be justified by a Pattern link in the `ledger.md`.
-- [ ] **MCP Communication Bus**: Connect SBI Core, Engine, and DepthOS via a unified real-time API.
+- [x] **The Healing Patterns**: Integration of `content/healing_patterns.md` into the dynamic repair loop.
+- [x] **Autonomous Substrate Debugging**: Enabling Promethea to diagnose polyfill, workspace, and dependency conflicts using codified patterns.
+- [x] **Sovereign Dependency Control**: Implementing logic to auto-remediate `npm` and `clj` environment failures.
+- [x] **Self-Ledgering**: Every automated repair action is now justified by a Pattern link in the `ledger.md`.
+- [/] **MCP Communication Bus**: Connect SBI Core, Engine, and DepthOS via a unified real-time API. [v5.2.3 Status: Subscriber/Server active]
 - [ ] **The Analytical Data Bridge**: Horizontal read-only connection from `promethea-engine` to `sbi-core` for content synthesis.
-- [ ] **Cap Table Aggregation**: Aggregate all DID labor history (Human + AI) into a transparent ownership dashboard.
+- [/] **Cap Table Aggregation**: Aggregate all DID labor history (Human + AI) into a transparent ownership dashboard. [v5.2.3 Status: Portfolio UI implemented]
 - [ ] **Data Monetization Engine**: Implementing the Freemium Tier logic for institutional B2B data access.
 
 ---
@@ -111,7 +111,26 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 28. **Governance Bribing**: Utilizing voting power for yield.
 29. **Oracle Node Expansion**: Feeding real-world data to specialized chains.
 30. **Asset-Backed Lending**: DAC-to-member lending against UVT/Property.
-*(31-50 inclusive of Real Property Management, Manufacturing, and Logistics...)*
+31. **Custom GPTs/Agents**: Developing and selling specialized AI agents on marketplaces.
+32. **Automated Ad Ops**: Managed bidding for small businesses.
+33. **Synthetic Data Generation**: Creating training sets for other AI startups.
+34. **Smart Contract Deployment**: Fee-based deployment services.
+35. **Cross-Chain Bridge Fees**: Providing liquidity to new bridges.
+36. **Liquid Staking Derivatives (LSD) Management**: Optimizing yield for others.
+37. **AI-Driven Copywriting**: Specialized "Brand Voice" generation.
+38. **Social Sentiment Analysis**: Selling signal data to traders.
+39. **Digital Twin Modeling**: Creating AI personas for influencers.
+40. **Autonomous Bug Bounties**: Using AI to hunt for and fix security flaws.
+41. **Real Estate Tokenization**: Management for Tokenized AirBnB/Short-term rentals.
+42. **Renewable Energy Credits (REC)**: Managing solar/wind offsets and trading.
+43. **Supply Chain Optimization**: Consulting leveraging DAC-owned logistics.
+44. **Legal Prompt Engineering**: AI-assisted paralegal and contract services.
+45. **Virtual Architecting**: Designing and leasing spaces for digital worlds.
+46. **Algorithm-as-a-Service**: Leasing proprietary trading or reasoning models.
+47. **Personalized Health Protocols**: AI-curated health and longevity data sets.
+48. **Dynamic NFT Minting**: Generative art that evolves based on real-world events.
+49. **Carbon Footprint Auditing**: Automated ESG reporting for enterprises.
+50. **The Sovereign Index**: A fund representing the total output of the Promethean DAC.
 
 ---
 
