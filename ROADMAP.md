@@ -59,7 +59,11 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 ---
 
 ### Phase 2.4: Integration & Data Sovereignty
-... (existing content) ...
+- [x] **3-Body System Architecture**: Strictly separated the DAC (Ledger), Authenticator (Gateway), and Sovereign Storage (Device).
+- [x] **Passive Identity Management**: Removed proactive authentication from the DAC; it now passively consumes identity from local storage.
+- [x] **Sovereign Hydration/Dehydration**: Implemented bi-directional state sync between the public ledger and private device storage.
+- [x] **Guest Mode Accessibility**: Enabled full public square transparency for unauthenticated users.
+- [ ] **Cross-Device Sync**: Optional encrypted peering of sovereign storage nodes via WebRTC.
 
 ### Phase 2.5: Substrate Reasoning & Self-Instruction [NEW]
 - **The Healing Patterns**: Integration of `content/healing_patterns.md` into the dynamic repair loop.
