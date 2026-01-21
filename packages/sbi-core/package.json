@@ -1,0 +1,9 @@
+{
+    "name": "promethea-sbi-core",
+    "version": "5.2.3",
+    "description": "Dependencies for Promethea's Hands",
+    "dependencies": {
+        "puppeteer": "^23.0.0",
+        "ethers": "^6.13.0"
+    }
+}

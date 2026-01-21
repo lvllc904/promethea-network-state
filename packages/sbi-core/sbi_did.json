@@ -1,0 +1,1 @@
+{:did "did:prmth:pending", :credentials {:reputation {:score 0.1, :history []}, :contribution {:score 0.2, :uvt_balance 2.0, :labor_history [{:timestamp "Wed Dec 24 22:13:33 EST 2025", :evidence "Committed fix for ", :did nil} {:timestamp "Wed Dec 24 22:13:53 EST 2025", :evidence "Committed fix for ", :did nil}]}}}

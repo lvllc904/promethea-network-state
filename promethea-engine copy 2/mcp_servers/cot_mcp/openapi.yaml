@@ -1,0 +1,40 @@
+openapi: 3.1.0
+
+info:
+  title: Promethea COT MCP
+  description: Provides tools for fetching and analyzing Commitment of Traders (COT) reports to gauge trade crowdedness.
+  version: 'v1'
+servers:
+  - url: http://localhost:8003
+paths:
+  /tools/get_net_speculative_positioning:
+    post:
+      operationId: getNetSpeculativePositioning
+      summary: Calculates the net speculative positioning for a futures asset.
+      x-google-tool-name: get_net_speculative_positioning
+      description: >
+        Fetches the latest CFTC Commitment of Traders report, finds the specified asset,
+        and calculates the net speculative positioning. This is a value between -1 (max short)
+        and +1 (max long) that indicates how crowded a trade is among speculators.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                asset_id:
+                  type: string
+                  description: The internal asset ID to look up (e.g., 'bitcoin', 'sp500').
+      responses:
+        '200':
+          description: The calculated net speculative positioning.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: number
+                    format: float
+                    description: The net speculative positioning, a value between -1.0 and 1.0.

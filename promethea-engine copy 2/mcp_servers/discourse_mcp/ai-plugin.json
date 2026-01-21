@@ -1,0 +1,15 @@
+{
+    "schema_version": "v1",
+    "name_for_model": "promethea_discourse",
+    "name_for_human": "Promethea Discourse Analysis",
+    "description_for_model": "Tool for scraping and analyzing financial discussion forums like Reddit. Use it to get the mention count for a list of specific trading strategy keywords across a list of subreddits.",
+    "description_for_human": "Provides social media and forum discussion analysis for the Promethea agent.",
+    "auth": {
+      "type": "none"
+    },
+    "api": {
+      "type": "openapi",
+      "url": "http://localhost:8002/openapi.yaml"
+    },
+    "logo_url": "http://localhost:8002/logo.png"
+}

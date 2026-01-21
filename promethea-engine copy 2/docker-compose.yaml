@@ -1,0 +1,16 @@
+services:
+  db:
+    image: timescale/timescaledb:latest-pg14
+    container_name: promethea_db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres # Default DB, our script will create 'promethea'
+    ports:
+      - "5432:5432"
+    volumes:
+      - promethea_data:/var/lib/postgresql/data
+
+volumes:
+  promethea_data:
+  

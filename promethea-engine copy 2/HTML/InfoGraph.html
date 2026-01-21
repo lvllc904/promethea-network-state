@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promethea: The Architecture of Foresight</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            max-height: 35vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            color: #0A74DA;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center my-8 md:my-16">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">The Architecture of Foresight</h1>
+            <p class="text-lg md:text-xl text-blue-300 max-w-3xl mx-auto">Traditional trading bots react to the past. The Promethea framework imagines the future. This infographic visualizes its core components, from its multi-layered perception of the market to its generative decision-making process.</p>
+        </header>
+
+        <section id="philosophy" class="my-12 md:my-20">
+            <h2 class="text-3xl font-bold text-center mb-10 text-white">From Reaction to Generative Foresight</h2>
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-green-400">1. Perceive Reality</h3>
+                    <p class="text-gray-300">The agent ingests a high-dimensional <span class="font-semibold">Unified State Vector</span>, capturing a rich, multi-layered snapshot of the market ecosystem.</p>
+                </div>
+                <div class="hidden md:block flow-arrow font-mono">&rarr;</div>
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-yellow-400">2. Imagine Futures</h3>
+                    <p class="text-gray-300">A <span class="font-semibold">Generative World Model</span> simulates thousands of plausible future market trajectories based on potential actions.</p>
+                </div>
+                <div class="hidden md:block flow-arrow font-mono">&rarr;</div>
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-orange-400">3. Plan & Act</h3>
+                    <p class="text-gray-300">A <span class="font-semibold">Planning Algorithm (MCTS)</span> explores these simulated futures to select the action with the highest expected long-term utility.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="state-vector" class="my-12 md:my-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">The Unified State Vector (S&#x209C;)</h2>
+            <p class="text-lg text-blue-300 text-center max-w-3xl mx-auto mb-12">The agent's perception of reality is a composite of six distinct vectors, each capturing a different layer of the market. This is the sole input for its World Model.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <div class="glass-card rounded-xl p-6 flex flex-col">
+                    <h3 class="text-2xl font-semibold mb-3 text-white"><span class="text-3xl mr-2">📈</span>Core Technicals</h3>
+                    <p class="text-gray-300 mb-4 flex-grow">The ground truth of price, volume, and standard derived indicators. This vector provides the fundamental quantitative basis for the agent's analysis.</p>
+                    <div class="chart-container w-full max-w-xl mx-auto h-64">
+                        <canvas id="technicalChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2 text-center">A line chart showing price action and key moving averages, representing a fraction of the technical data ingested by the agent.</p>
+                </div>
+
+                <div class="glass-card rounded-xl p-6 flex flex-col">
+                    <h3 class="text-2xl font-semibold mb-3 text-white"><span class="text-3xl mr-2">🌍</span>Economic Vector</h3>
+                    <p class="text-gray-300 mb-4 flex-grow">Anchors the agent in fundamental reality by tracking key macroeconomic indicators like interest rates, inflation (CPI), and volatility (VIX).</p>
+                    <div class="chart-container w-full max-w-xl mx-auto h-64">
+                        <canvas id="economicChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2 text-center">A radar chart visualizing the current state of key macroeconomic indicators, normalized to show their relative strength or weakness.</p>
+                </div>
+
+                <div class="glass-card rounded-xl p-6 flex flex-col">
+                    <h3 class="text-2xl font-semibold mb-3 text-white"><span class="text-3xl mr-2">👥</span>Psychology Vector</h3>
+                    <p class="text-gray-300 mb-4 flex-grow">Quantifies the market's collective mindset by tracking sentiment distribution, shifts in public attention, and the influence of new AI-driven narratives.</p>
+                    <div class="chart-container w-full max-w-xl mx-auto h-64">
+                        <canvas id="psychologyChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2 text-center">A donut chart representing the sentiment distribution (δt) across public discourse, a key measure of market consensus.</p>
+                </div>
+                
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-2xl font-semibold mb-3 text-white"><span class="text-3xl mr-2">💥</span>Chaos Vector</h3>
+                    <p class="text-gray-300">Measures the market's internal stability and its propensity for sudden, chaotic state changes. It acts as an early warning system for events like flash crashes by tracking volatility acceleration and the breakdown of historical correlations.</p>
+                </div>
+
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-2xl font-semibold mb-3 text-white"><span class="text-3xl mr-2">🔗</span>Entanglement Vector</h3>
+                    <p class="text-gray-300">Models the interconnectedness between assets. It measures how price, volatility, and sentiment shocks propagate through the market network, revealing hidden relationships and contagion risks between different parts of the financial ecosystem.</p>
+                </div>
+
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-2xl font-semibold mb-3 text-white"><span class="text-3xl mr-2">🧠</span>Reflexivity Vector</h3>
+                    <p class="text-gray-300">Grants the agent self-awareness by modeling the market's feedback loops. It tracks the popularity of trading narratives (Dt), trade crowdedness (Ct), and the agent's own correlation to common strategies (ρM(t)) to avoid being exploited.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="mcts" class="my-12 md:my-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">The Planning Algorithm: MCTS</h2>
+            <p class="text-lg text-blue-300 text-center max-w-3xl mx-auto mb-12">Instead of a reactive policy, the agent uses Monte Carlo Tree Search (MCTS) to "imagine" thousands of futures and plan its optimal action.</p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-center">
+                <div class="glass-card p-4 rounded-lg w-full md:w-1/5">
+                    <h4 class="text-lg font-semibold text-green-400">Selection</h4>
+                    <p class="text-sm">Traverse the existing tree of simulated futures, prioritizing promising paths.</p>
+                </div>
+                <div class="flow-arrow font-mono rotate-90 md:rotate-0">&rarr;</div>
+                <div class="glass-card p-4 rounded-lg w-full md:w-1/5">
+                    <h4 class="text-lg font-semibold text-yellow-400">Expansion</h4>
+                    <p class="text-sm">When an unexplored path is reached, use the World Model to create a new future state.</p>
+                </div>
+                <div class="flow-arrow font-mono rotate-90 md:rotate-0">&rarr;</div>
+                 <div class="glass-card p-4 rounded-lg w-full md:w-1/5">
+                    <h4 class="text-lg font-semibold text-orange-400">Simulation</h4>
+                    <p class="text-sm">Run a fast, lightweight simulation (rollout) from the new state to estimate its value.</p>
+                </div>
+                <div class="flow-arrow font-mono rotate-90 md:rotate-0">&rarr;</div>
+                 <div class="glass-card p-4 rounded-lg w-full md:w-1/5">
+                    <h4 class="text-lg font-semibold text-red-400">Backpropagation</h4>
+                    <p class="text-sm">Update the value of all parent nodes based on the simulation's outcome.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="validation" class="my-12 md:my-20">
+             <h2 class="text-3xl font-bold text-center mb-4 text-white">Validation: The Adversarial Backtest</h2>
+             <p class="text-lg text-blue-300 text-center max-w-3xl mx-auto mb-12">A standard backtest is insufficient. To ensure true resilience, the Promethea agent is tested against an adversary designed to exploit its strategy.</p>
+            <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-green-400">Generative Agent (G)</h3>
+                    <p class="text-gray-300">Executes its strategy to maximize risk-adjusted returns.</p>
+                </div>
+                 <div class="text-center">
+                    <span class="text-5xl">⚔️</span>
+                    <p class="font-mono text-blue-400">Adapts & Resists</p>
+                </div>
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-red-400">Adversarial Agent (A)</h3>
+                    <p class="text-gray-300">Actively creates market conditions to cause G to lose money.</p>
+                </div>
+            </div>
+            <p class="text-center mt-8 text-gray-400">The Generative Agent is considered robust only if it maintains profitability in this hostile, adaptive environment.</p>
+        </section>
+    </div>
+
+    <script>
+        const vibrantTechPalette = {
+            blue: '#0A74DA',
+            green: '#00C49A',
+            yellow: '#FFC107',
+            orange: '#FF5722',
+            red: '#F44336',
+            gray: 'rgba(255, 255, 255, 0.2)'
+        };
+
+        const tooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            }
+                            return label;
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        color: '#cbd5e1'
+                    }
+                }
+            },
+             scales: {
+                y: {
+                    ticks: { color: '#94a3b8' },
+                    grid: { color: vibrantTechPalette.gray }
+                },
+                x: {
+                    ticks: { color: '#94a3b8' },
+                    grid: { color: vibrantTechPalette.gray }
+                },
+                r: {
+                     ticks: { 
+                        color: '#94a3b8',
+                        backdropColor: 'rgba(0,0,0,0)'
+                     },
+                     grid: { color: vibrantTechPalette.gray },
+                     pointLabels: { color: '#cbd5e1' }
+                }
+            }
+        };
+
+        function wrapLabel(str, maxWidth) {
+            if (str.length <= maxWidth) return str;
+            const words = str.split(' ');
+            let lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + word).length > maxWidth) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines.filter(line => line);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new Chart(document.getElementById('technicalChart'), {
+                type: 'line',
+                data: {
+                    labels: ['-30d', '-25d', '-20d', '-15d', '-10d', '-5d', 'Today'],
+                    datasets: [{
+                        label: 'Price (pt)',
+                        data: [65, 59, 80, 81, 56, 55, 72],
+                        borderColor: vibrantTechPalette.blue,
+                        backgroundColor: 'rgba(10, 116, 218, 0.2)',
+                        fill: true,
+                        tension: 0.3
+                    }, {
+                        label: 'Moving Average (MAt)',
+                        data: [60, 62, 68, 70, 65, 61, 68],
+                        borderColor: vibrantTechPalette.orange,
+                        fill: false,
+                        tension: 0.3
+                    }]
+                },
+                options: { ...tooltipConfig, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('economicChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Interest Rates', 'Inflation (CPI)', 'GDP Growth', 'Unemployment', 'Volatility (VIX)'],
+                    datasets: [{
+                        label: 'Macro State',
+                        data: [7, 4, 8, 3, 6],
+                        backgroundColor: 'rgba(0, 196, 154, 0.3)',
+                        borderColor: vibrantTechPalette.green,
+                        borderWidth: 2,
+                        pointBackgroundColor: vibrantTechPalette.green
+                    }]
+                },
+                options: { ...tooltipConfig, maintainAspectRatio: false }
+            });
+            
+            new Chart(document.getElementById('psychologyChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Positive Sentiment (ppos)', 'Negative Sentiment (pneg)', 'Neutral Sentiment (pneu)'],
+                    datasets: [{
+                        label: 'Sentiment Distribution (δt)',
+                        data: [45, 25, 30],
+                        backgroundColor: [
+                            vibrantTechPalette.green,
+                            vibrantTechPalette.red,
+                            vibrantTechPalette.yellow
+                        ],
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 2,
+                        hoverOffset: 4
+                    }]
+                },
+                options: { ...tooltipConfig, maintainAspectRatio: false, plugins: { ...tooltipConfig.plugins, legend: { position: 'bottom', ...tooltipConfig.plugins.legend } } }
+            });
+        });
+    </script>
+
+</body>
+</html>

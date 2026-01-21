@@ -1,0 +1,35 @@
+openapi: 3.1.0
+info:
+  title: Promethea Options Data MCP
+  description: Provides tools for fetching options-based market sentiment data to gauge market psychology.
+  version: 'v1'
+servers:
+  - url: http://localhost:8001
+paths:
+  /tools/get_put_call_ratio:
+    post:
+      operationId: getPutCallRatio
+      summary: Fetches the CBOE Total Put/Call ratio.
+      x-google-tool-name: get_put_call_ratio
+      description: >
+        Fetches the CBOE (Chicago Board Options Exchange) Total Put/Call ratio.
+        This is a general market sentiment indicator. A ratio > 1.0 is bearish;
+        < 1.0 is bullish. This tool does not require any parameters.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {} # No parameters
+      responses:
+        '200':
+          description: The calculated Put/Call ratio.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: number
+                    format: float
+                    description: The CBOE Total Put/Call ratio.

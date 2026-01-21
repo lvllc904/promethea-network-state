@@ -1,0 +1,47 @@
+.log-panel {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 16px 0;
+  border: 1px solid #444;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.log-panel h2 {
+  margin: 0 24px 16px 24px;
+  font-size: 1.2em;
+  color: #e0e0e0;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.connection-status {
+  font-size: 1.5em;
+  color: #dc3545; /* Red for disconnected */
+  transition: color 0.5s;
+}
+
+.connection-status.connected {
+  color: #28a745; /* Green for connected */
+}
+
+.log-container {
+  font-family: 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 0.85em;
+  height: 400px;
+  overflow-y: auto;
+  background-color: #1e1e1e;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column-reverse; /* Shows newest logs at the top */
+}
+
+.log-line {
+  white-space: pre-wrap;
+  color: #ccc;
+  padding: 2px 0;
+}

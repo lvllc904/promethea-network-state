@@ -1,0 +1,48 @@
+openapi: 3.1.0
+info:
+  title: Promethea Discourse MCP
+  description: Provides tools for scraping and analyzing discussion forums to gauge market reflexivity.
+  version: 'v1'
+servers:
+  - url: http://localhost:8002
+paths:
+  /tools/get_strategy_discourse_vector:
+    post:
+      operationId: getStrategyDiscourseVector
+      summary: Scrapes Reddit for mentions of strategy keywords.
+      x-google-tool-name: get_strategy_discourse_vector
+      description: >
+        Scrapes a list of subreddits for the mention counts of a list of trading
+        strategy keywords. This is useful for building the Strategy Discourse Metric (D_t)
+        as part of the Reflexivity Vector.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subreddits:
+                  type: array
+                  items:
+                    type: string
+                  description: A list of subreddit names to scrape (e.g., 'wallstreetbets', 'investing').
+                keywords:
+                  type: array
+                  items:
+                    type: string
+                  description: A list of keywords to search for (e.g., 'HODL', 'gamma squeeze').
+      responses:
+        '200':
+          description: A vector of mention counts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: number
+                      format: float
+                    description: A list of floats representing the mention count for each keyword, in the same order as the input keywords.

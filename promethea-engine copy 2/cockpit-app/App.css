@@ -1,0 +1,14 @@
+.cockpit-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: left;
+}
+
+.cockpit-header {
+  margin-bottom: 2rem;
+}
+.cockpit-header h1 {
+  margin: 0;
+}

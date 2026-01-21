@@ -1,0 +1,6 @@
+google-cloud-pubsub
+google-auth
+requests
+pyjwt
+cryptography
+eth-account

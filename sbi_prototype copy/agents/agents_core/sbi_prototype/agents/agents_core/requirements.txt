@@ -1,0 +1,9 @@
+# Core Frameworks for Agent-Core and Coordination API
+# LangChain/CrewAI for agent logic and flow orchestration
+langchain
+crewai
+# FastAPI for exposing the asynchronous API Gateway (Layer 3)
+fastapi
+uvicorn[standard]
+# Data manipulation and low-level physics simulation dependencies
+numpy
