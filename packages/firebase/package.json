@@ -1,0 +1,28 @@
+{
+  "name": "@promethea/firebase",
+  "version": "5.2.3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./server-init": "./dist/server-init.js",
+    "./admin": "./dist/admin.js"
+  },
+  "scripts": {
+    "build": "tsc --build --verbose",
+    "dev": "tsc --watch --preserveWatchOutput"
+  },
+  "dependencies": {
+    "firebase": "^9.23.0",
+    "firebase-admin": "^12.1.1",
+    "next": "14.2.33",
+    "reactfire": "^4.2.3",
+    "@promethea/lib": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.3"
+  }
+}

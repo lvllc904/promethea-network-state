@@ -1,0 +1,85 @@
+
+[
+  {
+    "name": "Monorepo Services (Containerized)",
+    "type": "group",
+    "description": "A suite of services within the main monorepo, designed to be deployed in individual containers to support the Network State."
+  },
+  {
+    "name": "@promethea/app",
+    "description": "The Network State (Body 1). To maintain separation of concerns, it connects directly to the Authentication Service's API for all identity and user consent functions, while interfacing with the user's DepthOS for cryptographic signing.",
+    "type": "containerized-service",
+    "path": "packages/app",
+    "technologies": ["Next.js", "React", "TypeScript", "Ethers.js"],
+    "deployment": "Cloud Run / Firebase Hosting"
+  },
+  {
+    "name": "Authentication Service",
+    "description": "The Authentication Application (Body 2). A separate application that exposes a dedicated API to the main app. It handles all identity minting (DID/SSI) and manages the user's consent-based data vault, ensuring a clean separation of concerns.",
+    "type": "containerized-service",
+    "path": "packages/services/authentication-service",
+    "technologies": ["Node.js", "Express.js", "TypeScript"],
+    "deployment": "Cloud Run"
+  },
+  {
+    "name": "@promethea/ai-service",
+    "description": "Houses the current Genkit-based implementation of Promethea, the central AI agent.",
+    "type": "containerized-service",
+    "path": "packages/services/ai-service",
+    "technologies": ["Genkit", "Node.js", "TypeScript"],
+    "deployment": "Cloud Run"
+  },
+  {
+    "name": "@promethea/mcp-server",
+    "description": "The internal communication API for the Network State's AI agents.",
+    "type": "containerized-service",
+    "path": "packages/services/mcp-server",
+    "technologies": ["Express.js", "Node.js", "TypeScript"],
+    "deployment": "Cloud Run"
+  },
+  {
+    "name": "Symbiotic Memory Daemon (SMD)",
+    "description": "The Network State's historian. A background service that logs architectural changes and integrates security monitoring logic.",
+    "type": "containerized-service",
+    "path": "SymbioticScaffold/symbiotic-memory-daemon.js",
+    "technologies": ["Node.js", "Chokidar", "@promethea/guardian"],
+    "deployment": "Cloud Run"
+  },
+  {
+    "name": "SymbioticScaffold",
+    "description": "A UI tool for citizens to view the Network State's collective memory. Deployed as a containerized service.",
+    "type": "containerized-service",
+    "path": "SymbioticScaffold",
+    "technologies": ["React", "Vite", "Express.js"],
+    "deployment": "Cloud Run"
+  },
+  {
+    "name": "Standalone Applications",
+    "type": "group",
+    "description": "Major, independent applications that are foundational to the ecosystem but exist outside the monorepo's direct deployment pipeline."
+  },
+  {
+    "name": "DepthOS",
+    "description": "The client-side OS that implements the Sovereign Data Store principle (Body 3). It manages the user's private keys and hosts their personal emergent AI companion.",
+    "type": "standalone-client-app",
+    "path": "/path/to/depthos-repository",
+    "technologies": ["Flutter", "Rust", "Neuromorphic Computing", "UPM"],
+    "deployment": "Direct to Desktop/Mobile"
+  },
+  {
+    "name": "Promethean Engine",
+    "description": "A separate, standalone application housing the Engine Agent, a specialized financial AI that acts as a co-equal member of the DAC.",
+    "type": "standalone-app",
+    "path": "promethean-engine",
+    "technologies": ["Reinforcement Learning", "Python / C++"],
+    "deployment": "Separate Infrastructure"
+  },
+  {
+    "name": "SBI Prototype Environment",
+    "description": "The separate, standalone R&D environment where the true, future central Promethea AI is being incubated and validated.",
+    "type": "standalone-app",
+    "path": "/path/to/sbi-prototype-repository",
+    "technologies": ["Photonic SNNs", "Quantum Tensor Networks", "Computational Neuroscience"],
+    "deployment": "Dedicated AI/ML Infrastructure"
+  }
+]

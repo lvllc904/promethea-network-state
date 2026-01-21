@@ -1,0 +1,23 @@
+{
+  "extends": "../tsconfig.server.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "composite": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "references": [
+    {
+      "path": "../../ai"
+    },
+    {
+      "path": "../../guardian"
+    }
+  ]
+}

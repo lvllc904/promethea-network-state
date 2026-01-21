@@ -1,0 +1,216 @@
+
+/**
+ * @fileOverview Firestore Security Rules for the Promethea Network State.
+ *
+ * Core Philosophy:
+ * This ruleset prioritizes ease of iteration and comprehensive platform-wide read access as per the request.
+ * All documents are readable by any user, regardless of authentication status.
+ * Write access to each document is strictly controlled based on ownership and relational integrity.
+ *
+ * Data Structure:
+ * The Firestore database consists of top-level collections for core entities
+ * such as `citizens`, `proposals`, `real_world_assets`, `universal_value_tokens`, `votes`,
+ * `tasks`, `dac_params`, and `constitutions`.
+ *
+ * Key Security Decisions:
+ * - Platform-wide read access is enabled to facilitate development and exploration, per the explicit request.
+ * - Write operations are strictly limited to authorized users based on ownership or, for certain collections, relational integrity.
+ * - Data validation is limited to checking ownership on document creation and enforcing immutability of key relational fields on updates.
+ *
+ * Denormalization for Authorization:
+ * - In the current data model, `ownerId`, `proposerId`, and `assigneeId` fields are used in various documents to denote ownership.
+ *   These fields are critical for authorization and are validated during creation and updates to ensure data integrity.
+ *
+ * Structural Segregation:
+ * - No structural segregation is currently implemented. All collections reside at the top level.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Controls access to citizen profiles.
+     * @path /citizens/{citizenId}
+     * @allow get, list: Anyone can read citizen data to promote transparency.
+     * @allow create: A user can only create their own citizen document. The document ID must match their Firebase Auth UID.
+     * @allow update: A user can only update their own document, and cannot change immutable fields like their ID or DID.
+     * @allow delete: Deleting a citizen profile is forbidden to preserve historical integrity.
+     * @principle Enforces strict ownership for creation and modification while allowing public reads.
+     */
+    match /citizens/{citizenId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.auth.uid == citizenId && request.resource.data.id == request.auth.uid;
+      allow update: if isSignedIn() && isOwner(citizenId) 
+                    && request.resource.data.id == resource.data.id 
+                    && request.resource.data.decentralizedId == resource.data.decentralizedId;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Grants read access to all users and restricts write access to the proposal creator.
+     * @path /proposals/{proposalId}
+     * @allow get, list: Anyone can read proposal data.
+     * @allow create: Only a signed-in user can create a proposal, and the proposerId must match their UID.
+     * @allow update, delete: Only the proposal creator can update/delete the proposal, and only if the document already exists.
+     * @deny create: if request.auth.uid != request.resource.data.proposerId; // A proposal's proposerId must match the user's UID on creation.
+     * @deny update: if request.auth.uid != resource.data.proposerId; // A proposal's proposerId cannot be changed.
+     * @deny delete: if request.auth.uid != resource.data.proposerId; // A proposal's proposerId cannot be changed.
+     * @principle Enforces document ownership for writes and platform wide read access.
+     */
+    match /proposals/{proposalId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.proposerId;
+      allow update: if isSignedIn() && isExistingProposer(resource.data.proposerId);
+      allow delete: if isSignedIn() && isExistingProposer(resource.data.proposerId);
+    }
+
+    /**
+     * @description Grants read access to all users and restricts write access.
+     * @path /real_world_assets/{assetId}
+     * @allow get, list: Anyone can read asset data.
+     * @allow create: if false; // Assets are only created via passed proposals by a backend function.
+     * @allow update: if false; // Future rule: allow asset owner to update.
+     * @allow delete: if false; // Future rule: allow asset owner to delete.
+     * @principle Write access is disabled for direct user interaction.
+     */
+    match /real_world_assets/{assetId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Grants read access to all users and restricts write access to the token owner.
+     * @path /universal_value_tokens/{tokenId}
+     * @allow get, list: Anyone can read token data.
+     * @allow create: Only a signed-in user can create a token, and the ownerId must match their UID.
+     * @allow update, delete: Only the token owner can update/delete the token, and only if the document already exists.
+     * @deny create: if request.auth.uid != request.resource.data.ownerId; // A token's ownerId must match the user's UID on creation.
+     * @deny update: if request.auth.uid != resource.data.ownerId; // A token's ownerId cannot be changed.
+     * @deny delete: if request.auth.uid != resource.data.ownerId; // A token's ownerId cannot be changed.
+     * @principle Enforces document ownership for writes and platform wide read access.
+     */
+    match /universal_value_tokens/{tokenId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.ownerId;
+      allow update: if isSignedIn() && isOwner(resource.data.ownerId);
+      allow delete: if isSignedIn() && isOwner(resource.data.ownerId);
+    }
+
+    /**
+     * @description Grants read access to all users and restricts write access to the voter.
+     * @path /votes/{voteId}
+     * @allow get, list: Anyone can read vote data.
+     * @allow create: Only a signed-in user can create a vote, and the citizenId must match their UID.
+     * @allow update, delete: Only the voter can update/delete their vote, and only if the document already exists.
+     * @deny create: if request.auth.uid != request.resource.data.citizenId; // A vote's citizenId must match the user's UID on creation.
+     * @deny update: if request.auth.uid != resource.data.citizenId; // A vote's citizenId cannot be changed.
+     * @deny delete: if request.auth.uid != resource.data.citizenId; // A vote's citizenId cannot be changed.
+     * @principle Enforces document ownership for writes and platform wide read access.
+     */
+    match /votes/{voteId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.citizenId;
+      allow update: if isSignedIn() && isExistingVoter(resource.data.citizenId);
+      allow delete: if isSignedIn() && isExistingVoter(resource.data.citizenId);
+    }
+
+    /**
+     * @description Grants read access to all users and restricts write access to the assignee.
+     * @path /tasks/{taskId}
+     * @allow get, list: Anyone can read task data.
+     * @allow create: Only a signed-in user can create a task.
+     * @allow update: Only the task assignee can update the task status.
+     * @allow delete: if false; // Tasks should be completed or archived, not deleted.
+     * @principle Enforces ownership for modification and platform wide read access.
+     */
+    match /tasks/{taskId} {
+      allow get, list: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && isExistingAssignee(resource.data.assigneeId);
+      allow delete: if false;
+    }
+
+    /**
+     * @description Controls access to pledges.
+     * @path /pledges/{pledgeId}
+     * @allow get, list: Anyone can read pledge data.
+     * @allow create: Only a signed-in user can create their own pledge.
+     * @allow update, delete: if false; // Pledges are immutable once made.
+     * @principle Enforces ownership for creation and immutability.
+     */
+    match /pledges/{pledgeId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.citizenId == request.auth.uid;
+      allow update, delete: if false;
+    }
+    
+    /**
+     * @description Controls access to gap loans.
+     * @path /gap_loans/{gapLoanId}
+     * @allow get, list: Anyone can read gap loan data.
+     * @allow create: Only a signed-in user can create a loan proposal.
+     * @allow update: Only the proposer (before funding) or the funder can update the document.
+     * @allow delete: if false; // Loans should be archived, not deleted.
+     * @principle Enforces ownership for creation and updates.
+     */
+    match /gap_loans/{gapLoanId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.proposerId == request.auth.uid;
+      allow update: if isSignedIn() && (request.auth.uid == resource.data.proposerId || request.auth.uid == resource.data.funderId);
+      allow delete: if false;
+    }
+
+    /**
+     * @description Grants read access to all users and restricts write access to administrators.
+     * @path /dac_params/{dacParamsId}
+     * @allow get, list: Anyone can read DAC parameters.
+     * @allow create: if false; // Only administrators can create DAC parameters.
+     * @allow update: if false; // Only administrators can update DAC parameters.
+     * @allow delete: if false; // Only administrators can delete DAC parameters.
+     * @principle Enforces strict administrative control over DAC parameters and platform wide read access.
+     */
+    match /dac_params/{dacParamsId} {
+      allow get, list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Grants read access to all users and restricts write access.
+     * @path /constitutions/{constitutionId}
+     * @allow get, list: if true;
+     * @allow create: if false; // No one can create constitutions for the purposes of the exercise.
+     * @allow update: if false; // No one can update the constitution for the purposes of the exercise.
+     * @allow delete: if false; // No one can delete the constitution for the purposes of the exercise.
+     * @principle Enforces platform wide read access and forbids write access.
+     */
+    match /constitutions/{constitutionId} {
+        allow get, list: if true;
+        allow create: if false;
+        allow update: if false;
+        allow delete: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isExistingProposer(proposerId) {
+        return isSignedIn() && isOwner(proposerId) && exists(/databases/$(database)/documents/proposals/$(proposerId));
+    }
+
+    function isExistingVoter(citizenId) {
+        return isSignedIn() && isOwner(citizenId) && exists(/databases/$(database)/documents/votes/$(citizenId));
+    }
+
+    function isExistingAssignee(assigneeId) {
+        return isSignedIn() && isOwner(assigneeId) && exists(/databases/$(database)/documents/tasks/$(assigneeId));
+    }
+  }
+}

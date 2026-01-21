@@ -1,0 +1,31 @@
+{
+  "name": "@promethea/hooks",
+  "version": "5.2.3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build --verbose",
+    "dev": "tsc --watch --preserveWatchOutput"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./use-local-profile": {
+      "types": "./dist/use-local-profile.d.ts",
+      "import": "./dist/use-local-profile.js",
+      "default": "./dist/use-local-profile.js"
+    }
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "swr": "^2.2.5",
+    "@promethea/lib": "workspace:*",
+    "@promethea/firebase": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.3"
+  }
+}

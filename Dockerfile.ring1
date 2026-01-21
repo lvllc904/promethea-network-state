@@ -1,0 +1,22 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy root config
+COPY package.json ./
+# Copy lib workspace
+COPY packages/lib ./packages/lib
+# Copy scripts
+COPY scripts ./scripts
+
+# Install dependencies for lib workspace (ignoring root workspace complexity)
+WORKDIR /app/packages/lib
+RUN npm install
+RUN npm install typescript @types/node --save-dev
+RUN npm run build
+
+# Return to root to run the script
+WORKDIR /app
+
+# The command to run the test
+CMD ["node", "scripts/runPennyTest.js"]

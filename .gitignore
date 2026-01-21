@@ -1,0 +1,54 @@
+# Node
+node_modules/
+dist/
+.npm
+.pnpm-debug.log*
+pnpm-lock.yaml
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# Firebase
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+pubsub-debug.log*
+ui-debug.log*
+
+# Secrets & Env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env1
+.secret-token
+*.pem
+
+# OS & Workspace
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Clojure / Bazel
+.cpcache/
+.m2/
+bazel-*
+MODULE.bazel.lock
+target/
+
+# Logs
+build_log.txt
+build_output.txt
+life.log
+processes.txt
+processes_tree.txt
+*.log
+
+# Temp
+tmp/
+*.vsix

@@ -1,0 +1,31 @@
+node_modules
+**/node_modules
+.next
+dist
+packages/*/dist
+packages/*/.next
+promethea-engine copy 2
+sbi_prototype copy
+promethean-engine
+Existence
+mcp
+patches
+Existence
+docs/adr
+
+# Nested node_modules required by aspect_rules_js
+packages/ai/node_modules
+packages/app/node_modules
+packages/components/node_modules
+packages/firebase/node_modules
+packages/guardian/node_modules
+packages/hooks/node_modules
+packages/lib/node_modules
+packages/sbi-core/node_modules
+packages/services/ai-service/node_modules
+packages/services/authentication-service/node_modules
+packages/services/mcp-server/node_modules
+packages/services/mcp-subscriber/node_modules
+packages/services/promethea-guardian/node_modules
+packages/services/pubsub/node_modules
+packages/ui/node_modules

@@ -1,0 +1,31 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "composite": true,
+    "declaration": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "references": [
+    {
+      "path": "../lib"
+    },
+    {
+      "path": "../firebase"
+    },
+    {
+      "path": "../hooks"
+    },
+    {
+      "path": "../ui"
+    },
+    {
+      "path": "../ai"
+    }
+  ]
+}

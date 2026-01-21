@@ -1,0 +1,38 @@
+{
+  "name": "@promethea/app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
+    "build:static": "NEXT_STATIC_EXPORT=true next build",
+    "export": "npm run build:static && next export",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "genkit:dev": "genkit start --port 4001 --attach"
+  },
+  "dependencies": {
+    "@promethea/ai": "workspace:*",
+    "@promethea/components": "workspace:*",
+    "@promethea/firebase": "workspace:*",
+    "@promethea/hooks": "workspace:*",
+    "@promethea/lib": "workspace:*",
+    "@promethea/ui": "workspace:*",
+    "@promethea/pubsub": "workspace:*",
+    "@promethea/guardian": "workspace:*",
+    "ethers": "^6.13.1",
+    "framer-motion": "^11.2.14",
+    "next": "14.2.33",
+    "qrcode.react": "3.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "recharts": "2.12.7"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.9",
+    "@types/qrcode.react": "1.0.5",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0"
+  }
+}

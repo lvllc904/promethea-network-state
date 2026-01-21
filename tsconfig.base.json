@@ -1,0 +1,95 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": false,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "downlevelIteration": true,
+    "paths": {
+      "@/ai/*": [
+        "packages/ai/src/*"
+      ],
+      "@/components/*": [
+        "packages/components/src/*"
+      ],
+      "@/firebase/*": [
+        "packages/firebase/src/*"
+      ],
+      "@/hooks/*": [
+        "packages/hooks/src/*"
+      ],
+      "@/lib/*": [
+        "packages/lib/src/*"
+      ],
+      "@/ui": [
+        "packages/ui/src"
+      ],
+      "@/ui/*": [
+        "packages/ui/src/*"
+      ],
+      "@/app/*": [
+        "packages/app/src/*"
+      ],
+      "@promethea/ai": [
+        "packages/ai/src"
+      ],
+      "@promethea/ai/*": [
+        "packages/ai/src/*"
+      ],
+      "@promethea/components": [
+        "packages/components/src"
+      ],
+      "@promethea/components/*": [
+        "packages/components/src/*"
+      ],
+      "@promethea/firebase": [
+        "packages/firebase/src"
+      ],
+      "@promethea/firebase/*": [
+        "packages/firebase/src/*"
+      ],
+      "@promethea/hooks": [
+        "packages/hooks/src"
+      ],
+      "@promethea/hooks/*": [
+        "packages/hooks/src/*"
+      ],
+      "@promethea/lib": [
+        "packages/lib/src"
+      ],
+      "@promethea/lib/*": [
+        "packages/lib/src/*"
+      ],
+      "@promethea/ui": [
+        "packages/ui/src"
+      ],
+      "@promethea/ui/*": [
+        "packages/ui/src/*"
+      ],
+      "@promethea/pubsub": [
+        "packages/services/pubsub/src"
+      ],
+      "@promethea/firebase-admin": [
+        "packages/firebase/src/admin"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

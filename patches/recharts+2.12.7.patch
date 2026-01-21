@@ -1,0 +1,12 @@
+diff --git a/node_modules/recharts/package.json b/node_modules/recharts/package.json
+index 5a53a15..b1a65af 100644
+--- a/node_modules/recharts/package.json
++++ b/node_modules/recharts/package.json
+@@ -95,6 +95,6 @@
+     "react-is": "^16.13.1",
+     "react-smooth": "^2.0.0",
+     "recharts-scale": "~0.5.0",
+-    "tiny-invariant": "^1.0.2"
++    "tiny-invariant": "^1.0.2",
+   }
+ }

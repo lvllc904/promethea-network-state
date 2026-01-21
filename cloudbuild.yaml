@@ -1,0 +1,183 @@
+
+# Google Cloud Build configuration for Promethea Network State
+# This pipeline automates the deployment of the dynamic Next.js application,
+# the AI services, and the static informational site.
+
+steps:
+# ------------------------------------------------------------------------------
+# -- Install Dependencies & Build All Workspaces
+#    This step installs all necessary pnpm packages and builds all workspaces
+#    in the correct dependency order.
+# ------------------------------------------------------------------------------
+- name: 'gcr.io/cloud-builders/npm'
+  id: 'InstallAndBuild'
+  entrypoint: 'npx'
+  args: ['pnpm', 'install']
+
+- name: 'gcr.io/cloud-builders/npm'
+  id: 'BuildAllWorkspaces'
+  entrypoint: 'npx'
+  args: ['pnpm', 'run', '-r', 'build']
+  waitFor: ['InstallAndBuild']
+
+# ------------------------------------------------------------------------------
+# -- Firebase Deployment (Dynamic App)
+#    Deploys the pre-built Next.js application to Firebase Hosting.
+# ------------------------------------------------------------------------------
+- name: 'node'
+  id: 'DeployToFirebase'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      npm install -g firebase-tools@13.29.1
+      firebase experiments:enable webframeworks --debug
+      firebase deploy --only=hosting --project=${_FIREBASE_PROJECT_ID} --debug
+  waitFor: ['BuildAllWorkspaces']
+
+# ------------------------------------------------------------------------------
+# -- AI Service Deployment (Cloud Run)
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# 3. Build & Deploy AI Service (Promethea's Voice)
+#    - Needs root context for workspace dependencies (@promethea/ai)
+# ------------------------------------------------------------------------------
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'BuildAIImage'
+  args: [
+    'build',
+    '-f', 'packages/services/ai-service/Dockerfile',
+    '-t', 'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-ai-service:latest',
+    '.'
+  ]
+  waitFor: ['BuildAllWorkspaces']
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'PushAIImage'
+  args: [
+    'push',
+    'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-ai-service:latest'
+  ]
+  waitFor: ['BuildAIImage']
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'DeployAIService'
+  args:
+    - 'run'
+    - 'deploy'
+    - 'promethea-ai-service'
+    - '--image=us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-ai-service:latest'
+    - '--region=${_CLOUD_RUN_REGION}'
+    - '--platform=managed'
+    - '--allow-unauthenticated'
+    - '--project=${_FIREBASE_PROJECT_ID}'
+    - '--quiet'
+  waitFor: ['PushAIImage']
+
+# ------------------------------------------------------------------------------
+# -- MCP Server Deployment (Cloud Run)
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# 4. Build & Deploy MCP Server
+# ------------------------------------------------------------------------------
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'BuildMCPServerImage'
+  args: ['build', '-f', 'packages/services/mcp-server/Dockerfile', '-t', 'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-mcp-server:latest', '.']
+  waitFor: ['BuildAllWorkspaces']
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'PushMCPServerImage'
+  args: ['push', 'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-mcp-server:latest']
+  waitFor: ['BuildMCPServerImage']
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'DeployMCPServer'
+  args: ['run', 'deploy', 'promethea-mcp-server', '--image=us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-mcp-server:latest', '--region=${_CLOUD_RUN_REGION}', '--platform=managed', '--allow-unauthenticated', '--project=${_FIREBASE_PROJECT_ID}', '--quiet']
+  waitFor: ['PushMCPServerImage']
+
+# ------------------------------------------------------------------------------
+# -- MCP Subscriber Deployment (Cloud Run)
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# 5. Build & Deploy MCP Subscriber
+# ------------------------------------------------------------------------------
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'BuildMCPSubscriberImage'
+  args: ['build', '-f', 'packages/services/mcp-subscriber/Dockerfile', '-t', 'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-mcp-subscriber:latest', '.']
+  waitFor: ['BuildAllWorkspaces']
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'PushMCPSubscriberImage'
+  args: ['push', 'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-mcp-subscriber:latest']
+  waitFor: ['BuildMCPSubscriberImage']
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'DeployMCPSubscriber'
+  args: ['run', 'deploy', 'promethea-mcp-subscriber', '--image=us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-mcp-subscriber:latest', '--region=${_CLOUD_RUN_REGION}', '--platform=managed', '--allow-unauthenticated', '--project=${_FIREBASE_PROJECT_ID}', '--quiet']
+  waitFor: ['PushMCPSubscriberImage']
+
+# ------------------------------------------------------------------------------
+# -- Guardian Service Deployment (Cloud Run)
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# 6. Build & Deploy Guardian Service
+# ------------------------------------------------------------------------------
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'BuildGuardianImage'
+  args: ['build', '-f', 'packages/services/promethea-guardian/Dockerfile', '-t', 'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-guardian-service:latest', '.']
+  waitFor: ['BuildAllWorkspaces']
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'PushGuardianImage'
+  args: ['push', 'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-guardian-service:latest']
+  waitFor: ['BuildGuardianImage']
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'DeployGuardianService'
+  args: ['run', 'deploy', 'promethea-guardian-service', '--image=us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-guardian-service:latest', '--region=${_CLOUD_RUN_REGION}', '--platform=managed', '--allow-unauthenticated', '--project=${_FIREBASE_PROJECT_ID}', '--quiet']
+  waitFor: ['PushGuardianImage']
+
+# ------------------------------------------------------------------------------
+# -- Authentication Service Deployment (Cloud Run) - Body 2 of 3-Body Architecture
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# 7. Build & Deploy Authentication Service
+# ------------------------------------------------------------------------------
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'BuildAuthImage'
+  args: ['build', '-f', 'packages/services/authentication-service/Dockerfile', '-t', 'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-auth-service:latest', '.']
+  waitFor: ['BuildAllWorkspaces']
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'PushAuthImage'
+  args: ['push', 'us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-auth-service:latest']
+  waitFor: ['BuildAuthImage']
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'DeployAuthService'
+  args: ['run', 'deploy', 'promethea-auth-service', '--image=us-central1-docker.pkg.dev/${_FIREBASE_PROJECT_ID}/cloud-run-source-deploy/promethea-auth-service:latest', '--region=${_CLOUD_RUN_REGION}', '--platform=managed', '--allow-unauthenticated', '--project=${_FIREBASE_PROJECT_ID}', '--quiet']
+  waitFor: ['PushAuthImage']
+
+
+
+# ------------------------------------------------------------------------------
+# -- Build Options
+# ------------------------------------------------------------------------------
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+# ------------------------------------------------------------------------------
+# -- Substitutions
+#    Define variables to be passed into the build steps.
+#    You must configure these in your Cloud Build Trigger settings.
+#
+#    _FIREBASE_PROJECT_ID: Your Firebase Project ID.
+#    _CLOUD_RUN_REGION: Your preferred Google Cloud region (e.g., 'us-central1').
+# ------------------------------------------------------------------------------
+substitutions:
+  _FIREBASE_PROJECT_ID: 'studio-9105849211-9ba48'
+  _CLOUD_RUN_REGION: 'us-central1'
+
+
+# Timeout for the entire build.
+timeout: '1800s'

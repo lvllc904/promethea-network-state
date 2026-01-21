@@ -1,0 +1,47 @@
+{
+  "name": "@promethea/app",
+  "version": "5.2.3",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
+    "build:static": "NEXT_STATIC_EXPORT=true next build",
+    "export": "npm run build:static && next export",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "genkit:dev": "genkit start --port 4001 --attach"
+  },
+  "type": "module",
+  "dependencies": {
+    "@promethea/ai": "workspace:*",
+    "@promethea/components": "workspace:*",
+    "@promethea/firebase": "workspace:*",
+    "@promethea/guardian": "workspace:*",
+    "@promethea/hooks": "workspace:*",
+    "@promethea/lib": "workspace:*",
+    "@promethea/pubsub": "workspace:*",
+    "@promethea/ui": "workspace:*",
+    "@google-cloud/pubsub": "^4.5.0",
+    "autoprefixer": "^10.4.23",
+    "d3": "^7.9.0",
+    "framer-motion": "^11.2.14",
+    "next": "14.2.33",
+    "postcss": "^8.5.6",
+    "qrcode.react": "3.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-force-graph-2d": "^1.29.0",
+    "recharts": "2.12.7",
+    "tailwindcss": "^3.4.19",
+    "firebase": "^9.23.0",
+    "lucide-react": "^0.395.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.9",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0"
+  }
+}

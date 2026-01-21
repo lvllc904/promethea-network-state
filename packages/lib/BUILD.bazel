@@ -1,0 +1,20 @@
+load("@npm//:defs.bzl", "npm_link_all_packages")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
+
+npm_link_all_packages(name = "node_modules")
+
+ts_project(
+    name = "lib",
+    srcs = glob(["src/**/*.ts"]),
+    declaration = True,
+    out_dir = "dist",
+    root_dir = "src",
+    tsconfig = "//:tsconfig.base.json",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":node_modules/clsx",
+        ":node_modules/tailwind-merge",
+        ":node_modules/ethers",
+    ],
+)

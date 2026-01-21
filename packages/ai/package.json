@@ -1,0 +1,30 @@
+{
+  "name": "@promethea/ai",
+  "version": "5.2.3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./*": "./dist/*"
+  },
+  "scripts": {
+    "build": "tsc --build --verbose",
+    "dev": "tsc --watch --preserveWatchOutput"
+  },
+  "dependencies": {
+    "@genkit-ai/ai": "^1.24.0",
+    "@genkit-ai/core": "^1.24.0",
+    "@genkit-ai/flow": "^0.5.17",
+    "@genkit-ai/google-genai": "^1.24.0",
+    "dotenv": "^16.5.0",
+    "genkit": "^1.24.0",
+    "wav": "^1.0.2",
+    "zod": "^3.24.2",
+    "@promethea/lib": "workspace:*",
+    "@promethea/firebase": "workspace:*"
+  }
+}

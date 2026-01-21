@@ -1,0 +1,29 @@
+{
+  "name": "promethea-antigravity-bundle",
+  "private": true,
+  "version": "5.2.3",
+  "scripts": {
+    "penny:test": "npm run build --workspace=@promethea/lib && node scripts/runPennyTest.js",
+    "clean": "rimraf dist",
+    "start:ai-service": "npm run start --workspace=@promethea/ai-service",
+    "prebuild": "node mcp_coordination_hub/sync-version.js"
+  },
+  "workspaces": [
+    "packages/*",
+    "packages/services/*"
+  ],
+  "packageManager": "pnpm@9.5.0",
+  "devDependencies": {
+    "typescript": "5.5.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "tailwindcss",
+      "sharp",
+      "genkit",
+      "@next/swc-darwin-arm64",
+      "@next/swc-linux-x64-gnu"
+    ]
+  }
+}

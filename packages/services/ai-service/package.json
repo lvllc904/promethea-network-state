@@ -1,0 +1,28 @@
+{
+  "name": "@promethea/ai-service",
+  "version": "5.2.3",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node .",
+    "build": "tsc -b",
+    "dev": "npm run build && node --watch dist/index.js"
+  },
+  "dependencies": {
+    "@genkit-ai/google-genai": "^1.20.0",
+    "@google-cloud/firestore": ">=7.11.0 <8.0.0-0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.19.2",
+    "firebase-admin": ">=12.2",
+    "genkit": "^1.20.0",
+    "zod": "^3.24.2",
+    "@promethea/ai": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "20.14.9",
+    "typescript": "5.5.4"
+  }
+}

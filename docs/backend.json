@@ -1,0 +1,539 @@
+{
+  "entities": {
+    "Citizen": {
+      "title": "Citizen",
+      "type": "object",
+      "description": "Represents a citizen's public, on-ledger data within the Promethea Network State.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Citizen entity, matching the Firebase Auth UID."
+        },
+        "decentralizedId": {
+          "type": "string",
+          "description": "The citizen's Decentralized Identifier (DID) - their Promethean Passport anchor."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The citizen's chosen public display name."
+        },
+        "reputationScore": {
+          "type": "number",
+          "description": "A non-transferable score representing the citizen's proven history of positive contributions."
+        },
+        "contributionScore": {
+          "type": "number",
+          "description": "A score representing the citizen's overall contributions to the network (sweat equity + capital invested)."
+        },
+        "personhoodScore": {
+          "type": "number",
+          "description": "A score calculated using Quadratic Voting principles to prevent domination by large token-holders."
+        },
+        "skills": {
+          "type": "array",
+          "description": "An array of verifiable skills possessed by the citizen (Verifiable Credentials).",
+          "items": {
+            "type": "string"
+          }
+        },
+        "proofOfUniqueness": {
+            "type": "object",
+            "description": "A verifiable credential confirming the DID is linked to a single, unique intelligence (biological or artificial).",
+            "properties": {
+                "issuer": {
+                    "type": "string",
+                    "description": "The Decentralized Identifier (DID) of the trusted Identity Oracle that issued the credential."
+                },
+                "issuanceDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The timestamp of when the uniqueness verification was performed."
+                }
+            },
+            "required": ["issuer", "issuanceDate"]
+        },
+        "isGovIdVerified": {
+            "type": "boolean",
+            "description": "A flag indicating whether the citizen has successfully verified their real-world government-issued identity via a trusted oracle."
+        }
+      },
+      "required": [
+        "id",
+        "decentralizedId",
+        "displayName",
+        "reputationScore",
+        "contributionScore",
+        "personhoodScore",
+        "proofOfUniqueness",
+        "isGovIdVerified"
+      ]
+    },
+    "Proposal": {
+      "title": "Proposal",
+      "type": "object",
+      "description": "Represents a governance proposal within the Promethean DAC. It now serves as a live dashboard for capital formation.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Proposal entity."
+        },
+        "proposerId": {
+          "type": "string",
+          "description": "Reference to Citizen who proposed the proposal."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the proposal."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the proposal."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the proposal (e.g., 'Draft', 'Active', 'Passed', 'Rejected')."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category of the proposal (e.g., 'RWA Acquisition', 'Governance')."
+        },
+        "votingStartTime": {
+          "type": "string",
+          "description": "The date and time when voting on the proposal starts.",
+          "format": "date-time"
+        },
+        "votingEndTime": {
+          "type": "string",
+          "description": "The date and time when voting on the proposal ends.",
+          "format": "date-time"
+        },
+        "ipfsCid": {
+            "type": "string",
+            "description": "The IPFS Content Identifier (CID) for the full proposal documentation."
+        },
+        "targetEquity": {
+            "type": "number",
+            "description": "The target amount of capital to be raised from citizen investors."
+        },
+        "pledgedCapital": {
+            "type": "number",
+            "description": "The current amount of capital pledged by citizens."
+        },
+        "pledgedSweatEquity": {
+            "type": "number",
+            "description": "The number of tasks that have been pledged by citizens."
+        },
+        "tasks": {
+            "type": "array",
+            "description": "A structured list of actionable tasks generated by the AI underwriter.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "priority": {
+                  "type": "string",
+                  "enum": ["High", "Medium", "Low"]
+                }
+              }
+            }
+        }
+      },
+      "required": [
+        "id",
+        "proposerId",
+        "title",
+        "description",
+        "status",
+        "category"
+      ]
+    },
+    "RealWorldAsset": {
+      "title": "RealWorldAsset",
+      "type": "object",
+      "description": "Represents a Real-World Asset (RWA) within the Promethean Network State.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the RealWorldAsset entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the real-world asset (e.g., 'Apartment Complex A', 'Farmland B')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the real-world asset."
+        },
+        "location": {
+          "type": "string",
+          "description": "The geographical location of the real-world asset."
+        },
+        "assetType": {
+          "type": "string",
+          "description": "The type of asset (e.g., 'Real Estate', 'Agriculture', 'Small Business')."
+        },
+        "value": {
+          "type": "number",
+          "description": "The estimated total value of the asset in USD."
+        },
+        "tokenIds": {
+          "type": "array",
+          "description": "References to UVT tokens representing fractional ownership of the asset. (Relationship: RealWorldAsset 1:N UniversalValueToken)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "location",
+        "assetType",
+        "value"
+      ]
+    },
+    "UniversalValueToken": {
+      "title": "UniversalValueToken",
+      "type": "object",
+      "description": "Represents a Universal Value Token (UVT) within the Promethean Network State.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UniversalValueToken entity."
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Reference to Citizen who owns the token."
+        },
+        "assetId": {
+          "type": "string",
+          "description": "Reference to RealWorldAsset the token represents fractional ownership of."
+        },
+        "tokenType": {
+          "type": "string",
+          "description": "The type of token (e.g., 'Labor', 'Capital', 'Reputation')."
+        },
+        "amount": {
+          "type": "number",
+          "description": "The amount of the token held."
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "assetId",
+        "tokenType",
+        "amount"
+      ]
+    },
+    "Vote": {
+      "title": "Vote",
+      "type": "object",
+      "description": "Represents a vote cast by a citizen on a proposal.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Vote entity."
+        },
+        "citizenId": {
+          "type": "string",
+          "description": "Reference to Citizen who cast the vote."
+        },
+        "proposalId": {
+          "type": "string",
+          "description": "Reference to Proposal being voted on."
+        },
+        "votePower": {
+          "type": "number",
+          "description": "The voting power used by the citizen in this vote."
+        },
+        "support": {
+          "type": "boolean",
+          "description": "Indicates whether the citizen supported the proposal (true) or opposed it (false)."
+        }
+      },
+      "required": [
+        "id",
+        "citizenId",
+        "proposalId",
+        "votePower",
+        "support"
+      ]
+    },
+    "Task": {
+      "title": "Task",
+      "type": "object",
+      "description": "Represents a task related to a proposal or real-world asset management. Now includes compensation choice.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Task entity."
+        },
+        "proposalId": {
+          "type": "string",
+          "description": "Reference to the Proposal the task is associated with. Required for pre-acquisition tasks."
+        },
+        "assetId": {
+          "type": "string",
+          "description": "Reference to RealWorldAsset the task is associated with. Can be optional until acquisition."
+        },
+        "assigneeId": {
+          "type": "string",
+          "description": "Reference to Citizen assigned to the task via a Pledge. Optional until a citizen applies."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the task."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the task (e.g., 'Open', 'In Progress', 'Completed')."
+        },
+        "priority": {
+          "type": "string",
+          "description": "The priority of the task (e.g., 'High', 'Medium', 'Low')."
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "The due date for the task.",
+          "format": "date-time"
+        },
+        "compensationChoice": {
+          "type": "string",
+          "enum": [
+            "Equity",
+            "ProfitShare",
+            "UpfrontCapital"
+          ],
+          "description": "The compensation model chosen by the citizen who pledged for this task. This may be pre-set by the proposal."
+        }
+      },
+      "required": [
+        "id",
+        "proposalId",
+        "description",
+        "status",
+        "priority"
+      ]
+    },
+    "Pledge": {
+      "title": "Pledge",
+      "description": "Represents a citizen's commitment to a proposal, either through capital or sweat equity.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "citizenId": {
+          "type": "string",
+          "description": "The DID of the citizen making the pledge."
+        },
+        "proposalId": {
+          "type": "string",
+          "description": "The ID of the proposal being pledged to."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["Capital", "SweatEquity"],
+          "description": "The type of pledge being made."
+        },
+        "amount": {
+          "type": "number",
+          "description": "For 'Capital' pledges, the amount of currency committed."
+        },
+        "taskId": {
+          "type": "string",
+          "description": "For 'SweatEquity' pledges, the ID of the task being committed to."
+        },
+        "compensationChoice": {
+          "type": "string",
+          "enum": ["Equity", "ProfitShare", "UpfrontCapital"],
+          "description": "The compensation model chosen by the citizen for their sweat equity."
+        }
+      },
+      "required": ["id", "citizenId", "proposalId", "type"]
+    },
+    "GapLoan": {
+        "title": "GapLoan",
+        "description": "Represents a short-term, peer-to-peer loan for a specific project need.",
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "string"
+            },
+            "proposalId": {
+                "type": "string",
+                "description": "The proposal this loan is associated with."
+            },
+            "title": {
+                "type": "string",
+                "description": "A short, descriptive title for the loan need."
+            },
+            "description": {
+                "type": "string",
+                "description": "A detailed explanation of what the funds will be used for."
+            },
+            "amountNeeded": {
+                "type": "number",
+                "description": "The total amount of capital required."
+            },
+            "amountFunded": {
+                "type": "number",
+                "description": "The amount of capital funded so far."
+            },
+            "repaymentTerms": {
+                "type": "string",
+                "description": "Human-readable repayment terms (e.g., 'Repay $110 within 30 days')."
+            },
+            "status": {
+                "type": "string",
+                "enum": ["Funding", "Funded", "Repaid", "Defaulted"],
+                "description": "The current status of the loan."
+            },
+            "proposerId": {
+                "type": "string",
+                "description": "The citizen ID of the user who proposed the loan."
+            },
+            "funderId": {
+                "type": "string",
+                "description": "The citizen ID of the user who funded the loan."
+            },
+            "repaymentDueDate": {
+                "type": "string",
+                "format": "date-time"
+            }
+        },
+        "required": ["id", "proposalId", "title", "amountNeeded", "repaymentTerms", "status", "proposerId"]
+    },
+    "DACParams": {
+      "title": "DACParams",
+      "type": "object",
+      "description": "Represents parameters within the Promethean DAC.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the DACParam entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the parameter (e.g., initialReputation, governanceThreshold)."
+        },
+        "value": {
+          "type": "string",
+          "description": "Value of the parameter (can be string, number, boolean, etc.)."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the parameter."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "value",
+        "description"
+      ]
+    },
+    "Constitution": {
+      "title": "Constitution",
+      "type": "object",
+      "description": "Represents the living constitution of the Promethean Network State.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the constitution document (e.g., 'canon')."
+        },
+        "version": {
+            "type": "string",
+            "description": "The semantic version of the constitution (e.g., '1.0.0', '1.1.0')."
+        },
+        "content": {
+          "type": "string",
+          "description": "The full text content of the constitution in Markdown format."
+        },
+        "lastAmended": {
+          "type": "string",
+          "description": "The timestamp of the last amendment.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "content",
+        "lastAmended"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "/citizens/{citizenId}": {
+      "schema": {
+        "$ref": "#/entities/Citizen"
+      },
+      "description": "Stores citizen data."
+    },
+    "/proposals/{proposalId}": {
+      "schema": {
+        "$ref": "#/entities/Proposal"
+      },
+      "description": "Stores governance proposals."
+    },
+    "/real_world_assets/{assetId}": {
+      "schema": {
+        "$ref": "#/entities/RealWorldAsset"
+      },
+      "description": "Stores real-world asset data."
+    },
+    "/universal_value_tokens/{tokenId}": {
+      "schema": {
+        "$ref": "#/entities/UniversalValueToken"
+      },
+      "description": "Stores universal value tokens."
+    },
+    "/votes/{voteId}": {
+      "schema": {
+        "$ref": "#/entities/Vote"
+      },
+      "description": "Stores votes cast by citizens."
+    },
+    "/tasks/{taskId}": {
+      "schema": {
+        "$ref": "#/entities/Task"
+      },
+      "description": "Stores tasks related to real-world asset management."
+    },
+    "/pledges/{pledgeId}": {
+      "schema": {
+        "$ref": "#/entities/Pledge"
+      },
+      "description": "Stores citizen pledges for proposals."
+    },
+    "/gap_loans/{gapLoanId}": {
+        "schema": {
+            "$ref": "#/entities/GapLoan"
+        },
+        "description": "Stores peer-to-peer gap financing loans."
+    },
+    "/dac_params/{dacParamsId}": {
+      "schema": {
+        "$ref": "#/entities/DACParams"
+      },
+      "description": "Stores parameters for the DAC."
+    },
+    "/constitutions/{constitutionId}": {
+        "schema": {
+            "$ref": "#/entities/Constitution"
+        },
+        "description": "Stores versions of the living constitution."
+    }
+  }
+}

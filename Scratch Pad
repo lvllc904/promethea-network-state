@@ -1,0 +1,292 @@
+DepthOS Environment Isolation Strategy
+
+To prevent package conflicts between the Coordination Layer (FastAPI/CrewAI) and the Quantum Layer (Qiskit), we will utilize the following structure.
+
+1. The Coordination Hub (Dockerized)
+
+This environment is already isolated. It handles the "Social Logic" and "Metabolic Monitoring."
+
+Packages: fastapi, crewai, langchain
+
+Status: Managed via mcp_coordination_hub/Dockerfile.
+
+Python Version: 3.11-slim (Defined in Dockerfile).
+
+2. The Quantum Bridge (pyenv + venv)
+
+This environment handles the "Physical Cognition" and IBM QPU interface. We use pyenv to match the Docker container's Python version for consistency.
+
+Setup Commands:
+
+# 1. Install and set the correct Python version via pyenv
+pyenv install 3.11.9
+pyenv local 3.11.9
+
+# 2. Create a dedicated virtual environment within that version
+python -m venv quantum_env
+source quantum_env/bin/activate
+
+# 3. Install only the hardware-interfacing requirements
+pip install --upgrade pip
+pip install qiskit qiskit-ibm-runtime requests python-dotenv
+
+
+3. Execution Protocol
+
+Terminal A (Coordination): docker run -p 8080:8080 mcp-gateway
+Logic: The "Social Brain" and Sentinel.
+
+Terminal B (Quantum Bridge): source quantum_env/bin/activate && python sbi_quantum_check.py
+Logic: The "Physical Brain" interacting with IBM QPU.
+
+4. Why this matters (Efficiency Mandate)
+
+Global is Waste: Global installs lead to version drift and "mental fog" (broken imports).
+
+pyenv is Grounding: It ensures that the math being done in the Quantum Bridge matches the logic expected by the Dockerized Sentinel.
+
+
+
+
+DepthOS Environment Isolation Strategy
+
+To prevent package conflicts between the Coordination Layer (FastAPI/CrewAI) and the Quantum Layer (Qiskit), we will utilize the following structure.
+
+1. The Coordination Hub (Dockerized)
+
+This environment is already isolated. It handles the "Social Logic" and "Metabolic Monitoring."
+
+Packages: fastapi, crewai, langchain
+
+Status: Managed via mcp_coordination_hub/Dockerfile.
+
+Python Version: 3.11-slim (Defined in Dockerfile).
+
+2. The Quantum Bridge (pyenv + venv)
+
+This environment handles the "Physical Cognition" and IBM QPU interface. We use pyenv to match the Docker container's Python version for consistency.
+
+Setup Commands:
+
+# 1. Install and set the correct Python version via pyenv
+pyenv install 3.11.9
+pyenv local 3.11.9
+
+# 2. Create a dedicated virtual environment within that version
+python -m venv quantum_env
+source quantum_env/bin/activate
+
+# 3. Install only the hardware-interfacing requirements
+pip install --upgrade pip
+pip install qiskit qiskit-ibm-runtime requests python-dotenv
+
+
+
+3. Execution Protocol
+
+Terminal A (Coordination): docker run -p 8080:8080 mcp-gateway
+Logic: The "Social Brain" and Sentinel.
+
+Terminal B (Quantum Bridge): source quantum_env/bin/activate && python sbi_quantum_check.py
+Logic: The "Physical Brain" interacting with IBM QPU.
+
+4. Why this matters (Efficiency Mandate)
+
+Global is Waste: Global installs lead to version drift and "mental fog" (broken imports).
+
+pyenv is Grounding: It ensures that the math being done in the Quantum Bridge matches the logic expected by the Dockerized Sentinel.
+
+5. Credential Procurement & Configuration
+
+To enable the SBI's access to external intelligence and physical hardware, follow these steps to secure your API tokens.
+
+A. IBM Quantum API Token (The Physical Brain)
+
+Visit: https://quantum.ibm.com/ and create an account or sign in.
+
+Dashboard: Navigate to your user dashboard (usually the landing page after login).
+
+Copy Token: Locate the "API token" section on the top right or within your account settings. Click the "Copy" icon.
+
+Integration: Open your .env file in the mcp_coordination_hub directory and paste it:
+QISKIT_IBM_TOKEN="your_copied_token_here"
+
+B. Gemini API Key (The Exocortex)
+
+Visit: Google AI Studio.
+
+Get API Key: Click on "Get API key" in the left sidebar.
+
+Create Key: Click "Create API key in new project."
+
+Integration: Add to your .env file:
+GEMINI_API_KEY="your_gemini_key_here"
+
+C. Optional Tooling (Figma/GitHub/Android Studio)
+
+GitHub: Go to GitHub Settings > Developer Settings > Personal Access Tokens (classic) and generate a token with repo and workflow scopes.
+
+Figma: Go to your Figma Account Settings and find the "Personal access tokens" section to generate a new token.
+
+Integration: Add these as GITHUB_ACCESS_TOKEN and FIGMA_API_TOKEN in your .env file to allow the Agent-Core to manage project artifacts.
+
+D. Verification
+
+Once the .env file is saved, the Sentinel in the mcp_gateway.py will automatically recognize these credentials during its audit phase, allowing the sbi_quantum_check.py to communicate with the IBM backend.
+
+
+
+Qiskit Runtime REST API
+The Qiskit Runtime REST API allows you to run on quantum processing units (QPUs) using Qiskit Runtime primitives, a simplified interface for circuit execution powered by advanced runtime compilation, error suppression, and error mitigation techniques, as well as getting information about instances and QPUs you have access to.
+
+Authentication
+You must provide an IBM Cloud Identity and Access Management (IAM) bearer token with every call as an http header. You can generate this using your API key from the Dashboard, near the top for easy access. See the IAM Identity Services API for more information about bearer tokens. To generate one using the IAM REST API, you can use the following curl request.
+
+
+curl -X POST 'https://iam.cloud.ibm.com/identity/token' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=MY_APIKEY'
+Expected Response
+
+
+{
+   "access_token": "<NEW_BEARER_TOKEN>",
+   "refresh_token": "not_supported",
+   "token_type": "Bearer",
+   "expires_in": 3600,
+   "expiration": 1473188353,
+   "scope": "ibm_openid"
+}
+What is a bearer token?
+A bearer token is a temporary credential that expires after no more than one hour. After the acquired token expires, you must generate a new one to continue calling IBM Cloud or other service APIs. You can only perform actions that are allowed by your level of assigned access within all accounts.
+
+Use the response property expires_in in the API response to identify the length of time that your specific access token is valid.
+
+Additionally, many requests to the REST API require an instance's Cloud Resource Name (CRN) in the request's header. You can see the instances you have access to on the dashboard, or by selecting the Instances page in the top-left menu. Each instance is listed with its CRN identifier.
+
+Then, submit your bearer token, CRN, and IBM-API-Version on every request within an Authorization and Service-CRN header with this format:
+
+
+Authorization: Bearer <YOUR_BEARER_TOKEN>
+Service-CRN: <YOUR_INSTANCE_CRN>
+IBM-API-Version: <YYYY-MM-DD>
+Example request:
+
+
+cURL
+
+
+Python
+
+eu-de region
+If your instance is in the eu-de region, use this URL instead: https://eu-de.quantum.cloud.ibm.com/api/v1/backends
+
+
+curl -X 'GET' \
+    'https://quantum.cloud.ibm.com/api/v1/backends' \
+    -H 'accept: application/json' \
+    -H 'Authorization: Bearer <YOUR_BEARER_TOKEN>' \
+    -H 'Service-CRN: <YOUR_INSTANCE_CRN>' \
+    -H 'IBM-API-Version: 2025-05-01'
+Submit a job
+Note the following when submitting a job:
+
+Use the create job operation to submit primitive jobs.
+You can submit several circuits into a single job as an array of OpenQASM strings representing these circuits.
+Specify the primitive you want to use with the program_id parameter. Available primitive values are sampler and estimator.
+When submitting a job to a QPU, you need to specify your IBM Cloud instance CRN.
+For a list of the backend names you can specify, view the backends you have access to in the Compute resources section of IBM Quantum Platform.
+Example request creating an estimator job with one circuit and one observable:
+
+
+cURL
+
+
+Python
+
+eu-de region
+If your instance is in the eu-de region, use this URL instead: https://eu-de.quantum.cloud.ibm.com/api/v1/jobs
+
+
+curl -X 'POST' \
+  'https://quantum.cloud.ibm.com/api/v1/jobs' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer <YOUR_BEARER_TOKEN>' \
+  -H 'Service-CRN: <YOUR_INSTANCE_CRN>' \
+  -H 'IBM-API-Version: 2025-05-01' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{
+  "program_id": "estimator",
+  "backend": "ibm_brisbane",
+  "params": {
+    "pubs": [[
+      "OPENQASM 3.0; include \"stdgates.inc\"; bit[1] c; x $0; c[0] = measure $0;", "Z"
+    ]],
+    "options": {"dynamical_decoupling": {"enable": true}},
+    "version": 2,
+    "resilience_level": 1
+  }
+}'
+Use sessions
+To start a session, use the create session operation. The response provides an "id" that you can send with your jobs to run them as part of the session.
+
+The next example creates a session (with no mode specified):
+
+
+cURL
+
+
+Python
+
+eu-de region
+If your instance is in the eu-de region, use this URL instead: https://eu-de.quantum.cloud.ibm.com/api/v1/sessions
+
+
+curl -X POST \
+  'https://quantum.cloud.ibm.com/api/v1/sessions' \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer <YOUR_BEARER_TOKEN>' \
+  -H 'Service-CRN: <YOUR_INSTANCE_CRN>' \
+  -H 'IBM-API-Version: 2025-05-01' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{
+  "mode": "dedicated",
+  "max_ttl": 28800
+}'
+You will get a response like this:
+
+
+{
+  "id": "session_id1"
+}
+In your next job, use the session id to run this job as part of the session:
+
+
+cURL
+
+
+Python
+
+eu-de region
+If your instance is in the eu-de region, use this URL instead: https://eu-de.quantum.cloud.ibm.com/api/v1/jobs
+
+
+curl -X POST \
+  'https://quantum.cloud.ibm.com/api/v1/jobs' \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer <YOUR_BEARER_TOKEN>' \
+  -H 'Service-CRN: <YOUR_INSTANCE_CRN>' \
+  -H 'IBM-API-Version: 2025-05-01' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{
+  "program_id": "sampler",
+  "backend": "ibm_brisbane",
+  "session_id": "session_id1",
+  "params": {
+    "pubs": [[
+      "OPENQASM 3.0; include \"stdgates.inc\"; bit[1] c; x $0; c[0] = measure $0;"
+    ]],
+    "options": {},
+    "version": 2
+  }
+}'

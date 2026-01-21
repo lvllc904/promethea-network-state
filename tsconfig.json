@@ -1,0 +1,13 @@
+{
+  "moduleResolution": "node",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "target": "es2020",
+    "lib": [
+      "es2020",
+      "dom"
+    ]
+  }
+}

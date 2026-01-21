@@ -1,0 +1,8 @@
+Script started on Fri Dec 19 21:15:37 2025
+Command: Check:** Checks if the script exists before attempting to run it. If it doesnt exist, it attempts to remove the likely output directories (`dist` or `lib`) as a fallback.  Provides a message if neither exists.  This makes the script much more robust.
+* **`sed -i` replacement with existence check:** The `sed` command now includes a `grep -q` check to verify that the `clsx` import statement exists before attempting the replacement. This prevents errors if the import statement is already in the correct format or doesnt exist at all.
+^DScript: Check:**: No such file or directory
+Script started, output file is Existence
+
+Command exit status: 1
+Script done on Fri Dec 19 21:15:37 2025

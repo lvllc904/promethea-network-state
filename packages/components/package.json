@@ -1,0 +1,34 @@
+{
+  "name": "@promethea/components",
+  "version": "5.2.3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./*": "./dist/*"
+  },
+  "scripts": {
+    "build": "tsc --build --verbose",
+    "dev": "tsc --watch --preserveWatchOutput"
+  },
+  "dependencies": {
+    "lucide-react": "^0.395.0",
+    "next": "^14.2.33",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-hook-form": "7.54.2",
+    "firebase": "^9.23.0",
+    "@promethea/lib": "workspace:*",
+    "@promethea/ui": "workspace:*",
+    "@promethea/firebase": "workspace:*",
+    "@promethea/hooks": "workspace:*",
+    "@promethea/ai": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.3"
+  }
+}

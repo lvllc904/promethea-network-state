@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promethea | Autonomous Identity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --background: #09090b;
+            --card: #18181b;
+            --text: #fafafa;
+            --text-muted: #a1a1aa;
+            --border: #27272a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            z-index: 10;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            backdrop-blur: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo svg { width: 32px; height: 32px; color: var(--primary); }
+
+        .logo span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        h2 { font-size: 1.25rem; margin-bottom: 0.5rem; text-align: center; }
+        p { color: var(--text-muted); font-size: 0.875rem; text-align: center; margin-bottom: 2rem; }
+
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        input {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: var(--text);
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        input:focus { outline: none; border-color: var(--primary); }
+
+        button {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 1rem;
+        }
+        button:hover { opacity: 0.9; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .tabs {
+            display: flex;
+            background: #000;
+            padding: 0.25rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .tab {
+            flex: 1;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border-radius: 0.25rem;
+            transition: background 0.2s;
+        }
+        .tab.active { background: var(--card); font-weight: 600; }
+
+        .hidden { display: none; }
+
+        .footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: 1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="container">
+        <div class="card">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2.5a9.5 9.5 0 0 1 9.5 9.5c0 2.22-0.76 4.26-2.06 5.88L12 21.5l-7.44-3.12A9.5 9.5 0 0 1 2.5 12 9.5 9.5 0 0 1 12 2.5Z" />
+                    <path d="M12 2.5v19" />
+                </svg>
+                <span>Promethea</span>
+            </div>
+
+            <div class="tabs">
+                <div id="tab-login" class="tab active" onclick="switchTab('login')">Sign In</div>
+                <div id="tab-register" class="tab" onclick="switchTab('register')">Mint Passport</div>
+            </div>
+
+            <form id="auth-form" onsubmit="handleAuth(event)">
+                <div id="register-fields" class="hidden">
+                    <div class="form-group">
+                        <label for="displayName">Display Name</label>
+                        <input type="text" id="displayName" placeholder="Sovereign Citizen">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="citizen@lvhllc.org" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Security Phrase</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" id="submit-btn" class="text-white">Continue to Network State</button>
+            </form>
+
+            <div class="footer">
+                Identity secured by Body 2 Authentication Service
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <script>
+        let mode = 'login';
+        
+        function switchTab(newMode) {
+            mode = newMode;
+            document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+            document.getElementById('tab-register').classList.toggle('active', mode === 'register');
+            document.getElementById('register-fields').classList.toggle('hidden', mode === 'login');
+            document.getElementById('submit-btn').textContent = mode === 'login' ? 'Sign In' : 'Mint Passport';
+        }
+
+        async function handleAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const displayName = document.getElementById('displayName').value;
+            const btn = document.getElementById('submit-btn');
+
+            btn.disabled = true;
+            btn.textContent = mode === 'login' ? 'Authenticating...' : 'Generating Identity...';
+
+            try {
+                if (mode === 'register') {
+                    // 1. Generate Wallet
+                    const resGen = await fetch('/auth/generate-wallet', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ password })
+                    });
+                    const wallet = await resGen.json();
+                    
+                    // 2. Register Citizen
+                    const resReg = await fetch('/auth/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password, displayName, did: wallet.did })
+                    });
+                    const regResult = await resReg.json();
+                    
+                    if (regResult.error) throw new Error(regResult.error);
+                    
+                    alert('Passport Minted! You will now be redirected.');
+                }
+
+                // Simplified redirect for demo - in production use Body 3 callback
+                window.location.href = 'https://lvhllc.org/dashboard';
+
+            } catch (err) {
+                alert('Auth Failed: ' + err.message);
+                btn.disabled = false;
+                btn.textContent = mode === 'login' ? 'Sign In' : 'Mint Passport';
+            }
+        }
+    </script>
+</body>
+</html>

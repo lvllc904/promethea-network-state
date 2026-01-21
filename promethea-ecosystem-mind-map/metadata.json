@@ -1,0 +1,8 @@
+{
+  "name": "Promethea Ecosystem Mind Map",
+  "description": "An interactive visualization of the Promethea .clj ecosystem, exploring the relationships between its cognitive, sensory, and regulatory components, with AI-powered conceptual image generation.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

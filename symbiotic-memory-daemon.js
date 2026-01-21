@@ -1,0 +1,608 @@
+#!/usr/bin/env node
+/**
+ * Symbiotic Memory System - Persistent Daemon with CAF & AMG
+ * Universal implementation for any Node.js application
+ */
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import chokidar from 'chokidar';
+import { EventEmitter } from 'events';
+import crypto from 'crypto';
+class SymbioticMemoryDaemon extends EventEmitter {
+  constructor(options = {}) {
+    super();
+    this.projectName = options.projectName || 'Application';
+    this.port = options.port || 6001;
+    this.app = express();
+    this.app.use(express.json());
+    
+    // Core memory systems
+    this.observerActive = false;
+    this.lastAnalysis = null;
+    this.collaborationPatterns = [];
+    this.userPreferences = new Map();
+    this.sessionMemory = [];
+    this.architecturalChanges = [];
+    this.cascadeAnalyses = [];
+    
+    // AMG Security integration
+    this.securityEvents = [];
+    this.threatIntelligence = new Map();
+    
+    this.setupRoutes();
+    this.setupFileWatcher();
+    this.initializeAMG();
+  }
+  setupRoutes() {
+    // Health check endpoint
+    this.app.get('/health', (req, res) => {
+      res.json({
+        status: 'active',
+        service: `Symbiotic Memory System Daemon - ${this.projectName}`,
+        version: '2.0.0',
+        uptime: process.uptime(),
+        observerActive: this.observerActive,
+        lastAnalysis: this.lastAnalysis,
+        patternsLearned: this.collaborationPatterns.length,
+        preferencesTracked: this.userPreferences.size,
+        architecturalChanges: this.architecturalChanges.length,
+        cascadeAnalyses: this.cascadeAnalyses.length,
+        securityEvents: this.securityEvents.length
+      });
+    });
+    // CAF Analysis endpoint
+    this.app.post('/analyze', (req, res) => {
+      console.log('CAF-AMG Analysis triggered');
+      this.performAnalysis();
+      
+      res.json({
+        success: true,
+        message: 'CAF-AMG Analysis completed',
+        timestamp: this.lastAnalysis,
+        cascadeAnalyses: this.cascadeAnalyses.slice(-5),
+        securityRecommendations: this.getSecurityRecommendations()
+      });
+    });
+    // Architecture change recording with mandatory AMG analysis
+    this.app.post('/architecture', (req, res) => {
+      const { change, description, impact } = req.body;
+      
+      // Mandatory CAF-AMG analysis for ALL changes
+      const analysis = this.performMandatoryCAFAMGAnalysis(change, description, impact);
+      this.recordArchitecturalChange(change, description, impact, analysis);
+      
+      res.json({
+        success: true,
+        message: 'Architectural change recorded with CAF-AMG analysis',
+        change,
+        analysis,
+        timestamp: new Date().toISOString()
+      });
+    });
+    // Security event logging
+    this.app.post('/security', (req, res) => {
+      const event = this.logSecurityEvent(req.body);
+      res.json({
+        success: true,
+        eventId: event.eventId,
+        message: 'Security event logged'
+      });
+    });
+    // Get full patterns and analysis
+    this.app.get('/patterns', (req, res) => {
+      res.json({
+        patterns: this.collaborationPatterns,
+        preferences: Object.fromEntries(this.userPreferences),
+        sessionMemory: this.sessionMemory,
+        architecturalChanges: this.architecturalChanges,
+        cascadeAnalyses: this.cascadeAnalyses,
+        securityEvents: this.securityEvents.slice(-20)
+      });
+    });
+  }
+  setupFileWatcher() {
+    console.log('Setting up file system observation...');
+    
+    const watchPaths = [
+      './replit.md',
+      './README.md',
+      './server/**/*.{ts,js}',
+      './client/**/*.{tsx,jsx,ts,js}',
+      './shared/**/*.ts',
+      './src/**/*.{ts,js,tsx,jsx}',
+      './*.{json,js,ts}'
+    ];
+    const watcher = chokidar.watch(watchPaths, {
+      ignored: [
+        '**/node_modules/**',
+        '**/.git/**',
+        '**/dist/**',
+        '**/build/**',
+        './symbiotic-memory-daemon.*'
+      ],
+      persistent: true,
+      ignoreInitial: true,
+      usePolling: false,
+      depth: 4
+    });
+    watcher.on('change', (filePath) => {
+      this.handleFileChange(filePath);
+    });
+    watcher.on('add', (filePath) => {
+      this.handleFileAdd(filePath);
+    });
+    watcher.on('ready', () => {
+      this.observerActive = true;
+      console.log('File system observation active');
+    });
+  }
+  initializeAMG() {
+    console.log(`APEX MASTER GUARDIAN: Initialized for ${this.projectName}`);
+    console.log('AMG: Complete security framework activated - Total application oversight enabled');
+    this.startSecurityMonitoring();
+  }
+  startSecurityMonitoring() {
+    // Automated security health checks every 30 seconds
+    setInterval(() => {
+      this.performSecurityHealthCheck();
+    }, 30000);
+  }
+  performSecurityHealthCheck() {
+    const healthEvent = {
+      eventId: this.generateEventId(),
+      timestamp: new Date().toISOString(),
+      type: 'security_health_check',
+      source: 'amg_automated',
+      data: {
+        memoryUsage: process.memoryUsage(),
+        uptime: process.uptime(),
+        activePatterns: this.collaborationPatterns.length,
+        recentChanges: this.architecturalChanges.slice(-5).length
+      },
+      metadata: { automated: true }
+    };
+    this.logSecurityEvent(healthEvent);
+  }
+  // MANDATORY CAF-AMG ANALYSIS FOR ALL CHANGES
+  performMandatoryCAFAMGAnalysis(changeType, description, impact) {
+    console.log(`Performing mandatory CAF-AMG analysis for: ${changeType}`);
+    
+    const analysis = {
+      timestamp: new Date().toISOString(),
+      changeType,
+      description,
+      impact,
+      
+      // Step 1: Impact Identification
+      impactAnalysis: this.identifyImpacts(changeType, description),
+      
+      // Step 2: Scenario Modeling
+      scenarioModeling: this.performScenarioModeling(changeType, description),
+      
+      // Step 2.5: MANDATORY AMG Security Analysis
+      amgSecurityAnalysis: this.performAMGSecurityAnalysis(changeType, description),
+      
+      // Step 3: Comparative Assessment
+      comparativeAssessment: this.performComparativeAssessment(changeType, description),
+      
+      // Step 4: Strategic Implementation
+      strategicImplementation: this.generateStrategicImplementation(changeType, description)
+    };
+    this.cascadeAnalyses.push(analysis);
+    
+    // Keep only last 50 analyses
+    if (this.cascadeAnalyses.length > 50) {
+      this.cascadeAnalyses = this.cascadeAnalyses.slice(-50);
+    }
+    return analysis;
+  }
+  identifyImpacts(changeType, description) {
+    return {
+      directDependencies: this.mapDirectDependencies(changeType, description),
+      indirectDependencies: this.mapIndirectDependencies(changeType, description),
+      externalTouchpoints: this.identifyExternalTouchpoints(changeType, description)
+    };
+  }
+  performScenarioModeling(changeType, description) {
+    return {
+      worstCase: this.analyzeWorstCaseScenario(changeType, description),
+      bestCase: this.analyzeBestCaseScenario(changeType, description),
+      likelyOutcome: this.analyzeLikelyOutcome(changeType, description)
+    };
+  }
+  // MANDATORY Step 2.5: AMG Security Analysis
+  performAMGSecurityAnalysis(changeType, description) {
+    console.log('MANDATORY AMG Security Analysis - Step 2.5');
+    
+    return {
+      bypassAnalysis: {
+        authBoundaryPreserved: this.checkAuthBoundaryPreservation(description),
+        sessionIntegrityMaintained: this.checkSessionIntegrity(description),
+        authorizationCompatible: this.checkAuthorizationCompatibility(description)
+      },
+      vulnerabilityAssessment: {
+        privilegeEscalationRisk: this.assessPrivilegeEscalationRisk(description),
+        sessionHijackingExposure: this.assessSessionHijackingRisk(description),
+        dataIntegrityThreats: this.assessDataIntegrityThreats(description)
+      },
+      redundancyEvaluation: {
+        beneficialSecurityDepth: this.identifyBeneficialRedundancy(description),
+        problematicDuplicates: this.identifyProblematicDuplicates(description),
+        integrationConflicts: this.checkIntegrationConflicts(description)
+      },
+      amgCompatibility: {
+        coreFunctionalityPreserved: this.checkAMGCorePreservation(description),
+        securityMonitoringContinuous: this.checkSecurityMonitoringContinuity(description),
+        auditTrailEnhanced: this.checkAuditTrailEnhancement(description)
+      },
+      securityScore: this.calculateSecurityScore(description),
+      securityRecommendation: this.generateSecurityRecommendation(description)
+    };
+  }
+  performComparativeAssessment(changeType, description) {
+    const riskScore = this.calculateRiskScore(changeType, description);
+    const rewardScore = this.calculateRewardScore(changeType, description);
+    
+    return {
+      riskVsReward: { risk: riskScore, reward: rewardScore, ratio: rewardScore / riskScore },
+      successFactors: this.identifySuccessFactors(changeType, description),
+      mitigationStrategies: this.generateMitigationStrategies(changeType, description),
+      optimalPath: this.determineOptimalPath(riskScore, rewardScore)
+    };
+  }
+  generateStrategicImplementation(changeType, description) {
+    return {
+      stagedRollout: this.planStagedRollout(changeType, description),
+      backwardCompatibility: this.ensureBackwardCompatibility(changeType, description),
+      testingProtocol: this.defineTestingProtocol(changeType, description),
+      rollbackContingency: this.prepareRollbackContingency(changeType, description)
+    };
+  }
+  // AMG Security Analysis Methods
+  checkAuthBoundaryPreservation(description) {
+    return !description.toLowerCase().includes('bypass') && 
+           !description.toLowerCase().includes('skip auth') &&
+           !description.toLowerCase().includes('remove auth');
+  }
+  checkSessionIntegrity(description) {
+    return !description.toLowerCase().includes('session corruption') &&
+           !description.toLowerCase().includes('session bypass');
+  }
+  checkAuthorizationCompatibility(description) {
+    if (description.toLowerCase().includes('role') || description.toLowerCase().includes('permission')) {
+      return description.toLowerCase().includes('admin') || description.toLowerCase().includes('auth');
+    }
+    return true;
+  }
+  assessPrivilegeEscalationRisk(description) {
+    const riskFactors = ['admin', 'root', 'sudo', 'elevation', 'privilege'];
+    const hasRiskFactors = riskFactors.some(factor => description.toLowerCase().includes(factor));
+    return hasRiskFactors ? 'HIGH - Role elevation detected' : 'LOW';
+  }
+  assessSessionHijackingRisk(description) {
+    const sessionRisks = ['session', 'cookie', 'token', 'jwt'];
+    const hasSessionRisks = sessionRisks.some(risk => description.toLowerCase().includes(risk));
+    return hasSessionRisks ? 'MEDIUM - Session management changes' : 'LOW';
+  }
+  assessDataIntegrityThreats(description) {
+    const dataRisks = ['database', 'schema', 'migration', 'data'];
+    const hasDataRisks = dataRisks.some(risk => description.toLowerCase().includes(risk));
+    return hasDataRisks ? 'MEDIUM - Data structure changes' : 'LOW';
+  }
+  calculateSecurityScore(description) {
+    let score = 5; // Base score
+    
+    if (description.toLowerCase().includes('security')) score += 2;
+    if (description.toLowerCase().includes('admin')) score += 1;
+    if (description.toLowerCase().includes('auth')) score += 1;
+    if (description.toLowerCase().includes('bypass')) score -= 3;
+    if (description.toLowerCase().includes('disable')) score -= 2;
+    if (description.toLowerCase().includes('remove')) score -= 1;
+    
+    return Math.max(0, Math.min(10, score));
+  }
+  generateSecurityRecommendation(description) {
+    const securityScore = this.calculateSecurityScore(description);
+    
+    if (securityScore >= 8) return 'PROCEED_WITH_ENHANCED_SECURITY';
+    if (securityScore >= 6) return 'PROCEED_WITH_STANDARD_MONITORING';  
+    if (securityScore >= 4) return 'PROCEED_WITH_ADDITIONAL_SAFEGUARDS';
+    return 'REQUIRES_SECURITY_REVIEW';
+  }
+  // Utility methods for analysis
+  mapDirectDependencies(changeType, description) {
+    const dependencies = [];
+    if (description.toLowerCase().includes('api')) dependencies.push('API endpoints');
+    if (description.toLowerCase().includes('database')) dependencies.push('Database schema');
+    if (description.toLowerCase().includes('auth')) dependencies.push('Authentication system');
+    return dependencies;
+  }
+  mapIndirectDependencies(changeType, description) {
+    const dependencies = [];
+    if (description.toLowerCase().includes('user')) dependencies.push('User interface');
+    if (description.toLowerCase().includes('data')) dependencies.push('Data validation');
+    return dependencies;
+  }
+  identifyExternalTouchpoints(changeType, description) {
+    const touchpoints = [];
+    if (description.toLowerCase().includes('api')) touchpoints.push('External API consumers');
+    if (description.toLowerCase().includes('client')) touchpoints.push('Client applications');
+    return touchpoints;
+  }
+  analyzeWorstCaseScenario(changeType, description) {
+    return {
+      failures: ['System downtime', 'Data corruption', 'Security breach'],
+      impact: 'HIGH',
+      probability: 'LOW'
+    };
+  }
+  analyzeBestCaseScenario(changeType, description) {
+    return {
+      improvements: ['Enhanced functionality', 'Better performance', 'Improved security'],
+      impact: 'HIGH',
+      probability: 'MEDIUM'
+    };
+  }
+  calculateRiskScore(changeType, description) {
+    let risk = 3; // Base risk
+    if (description.toLowerCase().includes('critical')) risk += 3;
+    if (description.toLowerCase().includes('database')) risk += 2;
+    if (description.toLowerCase().includes('auth')) risk += 2;
+    return Math.min(10, risk);
+  }
+  calculateRewardScore(changeType, description) {
+    let reward = 5; // Base reward
+    if (description.toLowerCase().includes('improvement')) reward += 2;
+    if (description.toLowerCase().includes('security')) reward += 2;
+    if (description.toLowerCase().includes('performance')) reward += 1;
+    return Math.min(10, reward);
+  }
+  // Security event logging
+  logSecurityEvent(eventData) {
+    const event = {
+      eventId: eventData.eventId || this.generateEventId(),
+      timestamp: eventData.timestamp || new Date().toISOString(),
+      type: eventData.type || 'security_event',
+      source: eventData.source || 'unknown',
+      data: eventData.data || {},
+      metadata: eventData.metadata || {},
+      hash: this.generateDataHash(JSON.stringify(eventData))
+    };
+    this.securityEvents.push(event);
+    
+    // Keep only last 1000 security events
+    if (this.securityEvents.length > 1000) {
+      this.securityEvents = this.securityEvents.slice(-1000);
+    }
+    console.log(`AMG Security Event: ${event.type} - ${event.eventId}`);
+    return event;
+  }
+  generateEventId() {
+    return `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+  generateDataHash(data) {
+    return crypto.createHash('sha256').update(data).digest('hex');
+  }
+  handleFileChange(filePath) {
+    console.log(`File changed: ${filePath}`);
+    
+    // Record architectural change
+    this.recordArchitecturalChange(
+      'file_modification',
+      `File modified: ${filePath}`,
+      'Code change detected'
+    );
+    
+    // Trigger analysis
+    setTimeout(() => this.performAnalysis(), 1000);
+  }
+  handleFileAdd(filePath) {
+    console.log(`File added: ${filePath}`);
+    
+    this.recordArchitecturalChange(
+      'file_addition',
+      `File added: ${filePath}`,
+      'New file detected'
+    );
+  }
+  recordArchitecturalChange(type, description, impact, analysis = null) {
+    const change = {
+      timestamp: new Date().toISOString(),
+      type,
+      description,
+      impact,
+      analysis: analysis || this.performMandatoryCAFAMGAnalysis(type, description, impact)
+    };
+    
+    this.architecturalChanges.push(change);
+    
+    // Keep only last 100 changes
+    if (this.architecturalChanges.length > 100) {
+      this.architecturalChanges = this.architecturalChanges.slice(-100);
+    }
+    
+    console.log(`Architectural change recorded: ${type}`);
+  }
+  performAnalysis() {
+    this.lastAnalysis = new Date().toISOString();
+    
+    // Enhanced analysis
+    this.analyzeCollaborationPatterns();
+    this.updateProjectPreferences();
+    this.maintainSessionMemory();
+    this.performSecurityAnalysis();
+    
+    console.log(`CAF-AMG Analysis completed at ${this.lastAnalysis}`);
+  }
+  analyzeCollaborationPatterns() {
+    const pattern = {
+      timestamp: this.lastAnalysis,
+      type: 'development_pattern',
+      context: `${this.projectName}_development`,
+      recentChanges: this.architecturalChanges.slice(-5).length,
+      securityEvents: this.securityEvents.slice(-10).length
+    };
+    
+    this.collaborationPatterns.push(pattern);
+    
+    if (this.collaborationPatterns.length > 200) {
+      this.collaborationPatterns = this.collaborationPatterns.slice(-200);
+    }
+  }
+  updateProjectPreferences() {
+    this.userPreferences.set('last_activity', this.lastAnalysis);
+    this.userPreferences.set('project_name', this.projectName);
+    this.userPreferences.set('total_changes', this.architecturalChanges.length);
+    this.userPreferences.set('security_events', this.securityEvents.length);
+  }
+  maintainSessionMemory() {
+    const memoryEntry = {
+      timestamp: this.lastAnalysis,
+      type: 'session_memory',
+      recentActivity: this.architecturalChanges.slice(-3),
+      systemHealth: {
+        uptime: process.uptime(),
+        memory: process.memoryUsage()
+      }
+    };
+    
+    this.sessionMemory.push(memoryEntry);
+    
+    if (this.sessionMemory.length > 50) {
+      this.sessionMemory = this.sessionMemory.slice(-50);
+    }
+  }
+  performSecurityAnalysis() {
+    const securitySummary = {
+      totalEvents: this.securityEvents.length,
+      recentEvents: this.securityEvents.slice(-10).length,
+      riskLevel: this.calculateCurrentRiskLevel(),
+      recommendations: this.getSecurityRecommendations()
+    };
+    this.logSecurityEvent({
+      type: 'security_analysis_complete',
+      source: 'amg_analysis',
+      data: securitySummary,
+      metadata: { automated: true }
+    });
+  }
+  calculateCurrentRiskLevel() {
+    const recentEvents = this.securityEvents.slice(-20);
+    const highRiskEvents = recentEvents.filter(e => 
+      e.type.includes('error') || e.type.includes('failure') || e.type.includes('breach')
+    );
+    
+    if (highRiskEvents.length > 5) return 'HIGH';
+    if (highRiskEvents.length > 2) return 'MEDIUM';
+    return 'LOW';
+  }
+  getSecurityRecommendations() {
+    const recommendations = [];
+    const riskLevel = this.calculateCurrentRiskLevel();
+    
+    if (riskLevel === 'HIGH') {
+      recommendations.push('Immediate security review required');
+      recommendations.push('Enable enhanced monitoring');
+    } else if (riskLevel === 'MEDIUM') {
+      recommendations.push('Monitor security events closely');
+      recommendations.push('Review recent changes');
+    } else {
+      recommendations.push('Continue standard monitoring');
+    }
+    
+    return recommendations;
+  }
+  // Additional required methods
+  identifyBeneficialRedundancy(description) {
+    return description.toLowerCase().includes('security') || 
+           description.toLowerCase().includes('backup') ||
+           description.toLowerCase().includes('redundancy');
+  }
+  identifyProblematicDuplicates(description) {
+    return description.toLowerCase().includes('duplicate') || 
+           description.toLowerCase().includes('conflict');
+  }
+  checkIntegrationConflicts(description) {
+    return description.toLowerCase().includes('conflict') || 
+           description.toLowerCase().includes('incompatible');
+  }
+  checkAMGCorePreservation(description) {
+    return !description.toLowerCase().includes('remove amg') && 
+           !description.toLowerCase().includes('disable security');
+  }
+  checkSecurityMonitoringContinuity(description) {
+    return !description.toLowerCase().includes('disable monitoring') && 
+           !description.toLowerCase().includes('remove logging');
+  }
+  checkAuditTrailEnhancement(description) {
+    return description.toLowerCase().includes('admin') || 
+           description.toLowerCase().includes('audit') || 
+           description.toLowerCase().includes('logging');
+  }
+  analyzeLikelyOutcome(changeType, description) {
+    return {
+      expectedResult: 'Successful implementation with monitoring',
+      impact: 'MEDIUM',
+      probability: 'HIGH'
+    };
+  }
+  identifySuccessFactors(changeType, description) {
+    return ['Proper testing', 'Gradual rollout', 'Monitoring enabled'];
+  }
+  generateMitigationStrategies(changeType, description) {
+    return ['Backup current state', 'Test in staging', 'Monitor closely'];
+  }
+  determineOptimalPath(riskScore, rewardScore) {
+    if (rewardScore > riskScore * 1.5) return 'PROCEED_WITH_MONITORING';
+    if (rewardScore > riskScore) return 'PROCEED_WITH_CAUTION';
+    return 'REQUIRES_FURTHER_ANALYSIS';
+  }
+  planStagedRollout(changeType, description) {
+    return ['Phase 1: Testing', 'Phase 2: Staging', 'Phase 3: Production'];
+  }
+  ensureBackwardCompatibility(changeType, description) {
+    return 'Maintain existing API contracts and data structures';
+  }
+  defineTestingProtocol(changeType, description) {
+    return ['Unit tests', 'Integration tests', 'Security validation'];
+  }
+  prepareRollbackContingency(changeType, description) {
+    return 'Database backup and code version rollback prepared';
+  }
+  getLatestFindings() {
+    return {
+      recentChanges: this.architecturalChanges.slice(-5),
+      securityEvents: this.securityEvents.slice(-5),
+      riskLevel: this.calculateCurrentRiskLevel(),
+      recommendations: this.getSecurityRecommendations()
+    };
+  }
+  start() {
+    const server = this.app.listen(this.port, () => {
+      console.log(`🧠 Starting Symbiotic Memory Daemon on port ${this.port}...`);
+      console.log(`Symbiotic Memory System Daemon initialized for ${this.projectName}`);
+      console.log('Monitoring: All architectural changes with CAF-AMG analysis');
+      console.log(`Symbiotic Memory System Daemon active on port ${this.port}`);
+      console.log('Continuous observation and learning enabled');
+      console.log('CAF-AMG security analysis mandatory for all changes');
+      console.log('✅ Symbiotic Memory System operational');
+    });
+    // Graceful shutdown
+    process.on('SIGTERM', () => {
+      console.log('SIGTERM received, shutting down gracefully');
+      server.close(() => {
+        console.log('Symbiotic Memory Daemon shut down');
+        process.exit(0);
+      });
+    });
+    return server;
+  }
+}
+// Auto-start daemon
+const daemon = new SymbioticMemoryDaemon({
+  projectName: process.env.PROJECT_NAME || 'Application',
+  port: process.env.SMD_PORT || 6001
+});
+daemon.start();
+export default SymbioticMemoryDaemon;

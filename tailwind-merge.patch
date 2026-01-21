@@ -1,0 +1,9 @@
+--- a/src/utils.ts
++++ b/src/utils.ts
+@@ -1,4 +1,4 @@
+ import clsx from "clsx";
+-import { twMerge } from "tailwind-merge";
++import twMerge from "tailwind-merge";
+ 
+ export function cn(...inputs: string[]) {
+   return twMerge(clsx(inputs));
