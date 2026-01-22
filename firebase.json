@@ -1,6 +1,8 @@
 {
     "hosting": {
         "source": "packages/app",
+        "framework": "nextjs",
+        "target": "app",
         "ignore": [
             "firebase.json",
             "**/.*",

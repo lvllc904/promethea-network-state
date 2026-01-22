@@ -9,7 +9,7 @@
     "dev": "npm run build && node --watch dist/index.js"
   },
   "dependencies": {
-    "@promethea/guardian": "workspace:*",
+    "@promethea/guardian": "5.2.3",
     "@genkit-ai/google-genai": "^1.20.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

@@ -17,7 +17,7 @@
     "firebase-admin": ">=12.2",
     "genkit": "^1.20.0",
     "zod": "^3.24.2",
-    "@promethea/ai": "workspace:*"
+    "@promethea/ai": "5.2.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

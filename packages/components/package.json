@@ -22,11 +22,11 @@
     "react-dom": "18.3.1",
     "react-hook-form": "7.54.2",
     "firebase": "^9.23.0",
-    "@promethea/lib": "workspace:*",
-    "@promethea/ui": "workspace:*",
-    "@promethea/firebase": "workspace:*",
-    "@promethea/hooks": "workspace:*",
-    "@promethea/ai": "workspace:*"
+    "@promethea/lib": "5.2.3",
+    "@promethea/ui": "5.2.3",
+    "@promethea/firebase": "5.2.3",
+    "@promethea/hooks": "5.2.3",
+    "@promethea/ai": "5.2.3"
   },
   "devDependencies": {
     "@types/react": "18.3.3"

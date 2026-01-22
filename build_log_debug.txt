@@ -1,0 +1,113 @@
+
+> @promethea/app@5.2.3 build
+> NODE_OPTIONS='--max-old-space-size=4096' ../../node_modules/.bin/next build
+
+  ▲ Next.js 14.2.33
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings
+
+../../node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+../../node_modules/require-in-the-middle/index.js
+../../node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+../../node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+../../node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+../../node_modules/@opentelemetry/instrumentation/build/esm/index.js
+../../node_modules/@opentelemetry/sdk-node/build/src/sdk.js
+../../node_modules/@opentelemetry/sdk-node/build/src/index.js
+../../node_modules/@genkit-ai/core/lib/tracing/node-telemetry-provider.js
+../../node_modules/@genkit-ai/core/lib/node.js
+../../node_modules/genkit/lib/common.js
+../../node_modules/genkit/lib/index.mjs
+../ai/dist/genkit.js
+../ai/dist/index.js
+./src/app/dashboard/assets/[id]/actions.ts
+
+Failed to compile.
+
+./src/app/globals.css.webpack[javascript/auto]!=!../../node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!../../node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./src/app/globals.css
+Error: Cannot find module 'tailwindcss/plugin'
+Require stack:
+- /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/tailwindcss-animate/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/server/require-hook.js:55:36
+    at Function.resolve (node:internal/modules/helpers:193:19)
+    at _resolve (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:246378)
+    at jiti (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:249092)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/tailwindcss-animate/index.js:1:91
+    at evalModule (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:251913)
+    at jiti (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:249841)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/tailwind.config.ts:108:13
+    at evalModule (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:251913)
+
+Import trace for requested module:
+./src/app/globals.css.webpack[javascript/auto]!=!../../node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!../../node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./src/app/globals.css
+./src/app/globals.css
+
+./src/app/globals.css
+Error: Cannot find module 'tailwindcss/plugin'
+Require stack:
+- /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/tailwindcss-animate/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/server/require-hook.js:55:36
+    at Function.resolve (node:internal/modules/helpers:193:19)
+    at _resolve (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:246378)
+    at jiti (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:249092)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/tailwindcss-animate/index.js:1:91
+    at evalModule (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:251913)
+    at jiti (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:249841)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/tailwind.config.ts:108:13
+    at evalModule (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:251913)
+    at tryRunOrWebpackError (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:312989)
+    at __webpack_require_module__ (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:131165)
+    at __nested_webpack_require_153728__ (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:130607)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:131454
+    at symbolIterator (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/neo-async/async.js:1:14444)
+    at done (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/neo-async/async.js:1:14824)
+    at Hook.eval [as callAsync] (eval at create (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:13:28858), <anonymous>:15:1)
+    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:13:26012)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:130328
+    at symbolIterator (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/neo-async/async.js:1:14402)
+-- inner error --
+Error: Cannot find module 'tailwindcss/plugin'
+Require stack:
+- /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/tailwindcss-animate/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/server/require-hook.js:55:36
+    at Function.resolve (node:internal/modules/helpers:193:19)
+    at _resolve (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:246378)
+    at jiti (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:249092)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/tailwindcss-animate/index.js:1:91
+    at evalModule (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:251913)
+    at jiti (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:249841)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/tailwind.config.ts:108:13
+    at evalModule (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/node_modules/jiti/dist/jiti.js:1:251913)
+    at Object.<anonymous> (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/src/app/globals.css:1:7)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:922493
+    at Hook.eval [as call] (eval at create (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:13:28636), <anonymous>:7:1)
+    at Hook.CALL_DELEGATE [as _call] (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:13:25906)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:131198
+    at tryRunOrWebpackError (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:312943)
+    at __webpack_require_module__ (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:131165)
+    at __nested_webpack_require_153728__ (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:130607)
+    at /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/webpack/bundle5.js:28:131454
+    at symbolIterator (/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/compiled/neo-async/async.js:1:14444)
+
+Generated code for /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app/src/app/globals.css
+
+Import trace for requested module:
+./src/app/globals.css
+
+
+> Build failed because of webpack errors
+npm error Lifecycle script `build` failed with error:
+npm error code 1
+npm error path /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app
+npm error workspace @promethea/app@5.2.3
+npm error location /Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/packages/app
+npm error command failed
+npm error command sh -c NODE_OPTIONS='--max-old-space-size=4096' ../../node_modules/.bin/next build
