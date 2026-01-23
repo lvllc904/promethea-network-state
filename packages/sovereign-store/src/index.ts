@@ -1,2 +1,3 @@
 export { intentLogger } from './intent-logger';
-// Future exports: sync-engine, identity-manager, etc.
+export { syncEngine } from './sync-engine';
+// Future exports: identity-manager, etc.
