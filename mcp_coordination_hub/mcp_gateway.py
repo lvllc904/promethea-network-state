@@ -123,3 +123,37 @@ async def health_check():
 @app.get("/metrics")
 async def get_sbi_metrics():
     return execute_sbi_simulation()["metrics"]
+
+@app.get("/api/analytics/aggregate")
+async def get_analytics_aggregate():
+    """
+    Analytical Data Bridge (Phase 2.5)
+    Provides read-only aggregated metrics from Firestore for Body 1 dashboard.
+    """
+    try:
+        # TODO: Replace with actual Firestore queries when firebase-admin is configured
+        # For now, return mock data structure
+        analytics = {
+            "revenue": {
+                "total": 0.0,
+                "monthly": 0.0,
+                "methods_active": 0
+            },
+            "labor": {
+                "claims_pending": 0,
+                "claims_approved": 0,
+                "total_compensation_usd": 0.0
+            },
+            "treasury": {
+                "operating_balance": 0.0,
+                "reserve_balance": 0.0,
+                "reserve_percentage": 30.0
+            },
+            "system": {
+                "uptime_hours": 0,
+                "last_sync": "2026-01-23T00:00:00Z"
+            }
+        }
+        return analytics
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Analytics aggregation failed: {str(e)}")

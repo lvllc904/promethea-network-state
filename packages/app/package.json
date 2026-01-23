@@ -22,6 +22,7 @@
     "@promethea/hooks": "file:../hooks",
     "@promethea/lib": "file:../lib",
     "@promethea/pubsub": "file:../pubsub",
+    "@promethea/sovereign-store": "file:../sovereign-store",
     "@promethea/ui": "file:../ui",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
