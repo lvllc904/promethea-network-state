@@ -1,4 +1,4 @@
-import { BaseMethod, ExecutionResult } from './base-method';
+import { BaseMethod, ExecutionResult } from '../methods/base-method';
 
 /**
  * Task Queue Scheduler (Phase 3)
