@@ -22,11 +22,12 @@
     "react-dom": "18.3.1",
     "react-hook-form": "7.54.2",
     "firebase": "^9.23.0",
-    "@promethea/lib": "5.2.3",
-    "@promethea/ui": "5.2.3",
-    "@promethea/firebase": "5.2.3",
-    "@promethea/hooks": "5.2.3",
-    "@promethea/ai": "5.2.3"
+    "@promethea/lib": "file:../lib",
+    "@promethea/ui": "file:../ui",
+    "@promethea/firebase": "file:../firebase",
+    "@promethea/hooks": "file:../hooks",
+    "@promethea/ai": "file:../ai",
+    "@promethea/sovereign-store": "file:../sovereign-store"
   },
   "devDependencies": {
     "@types/react": "18.3.3"

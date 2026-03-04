@@ -1,0 +1,8 @@
+# .gcloudignore
+node_modules/
+.dist/
+.next/
+.firebase/
+.gemini/
+*.log
+*.pdf

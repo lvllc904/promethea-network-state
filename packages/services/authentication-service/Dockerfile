@@ -1,18 +1,16 @@
 FROM node:20-slim
 WORKDIR /app
-RUN npm install -g pnpm
-COPY package.json pnpm-workspace.yaml ./
+# Copy root package files and workspace definition
+COPY package*.json ./
 
-# Copy the service code
-COPY packages/services/authentication-service ./packages/services/authentication-service
-
-# Install dependencies (package name is @promethea/authentication-service)
-RUN pnpm install --filter @promethea/authentication-service...
-
-WORKDIR /app/packages/services/authentication-service
-
-# Build
-RUN pnpm run build
-
+# Copy all source files
+COPY . ./
+# Install all workspace dependencies
+RUN npm install
+# Build the entire monorepo (including guardian and lib)
+RUN npm run build
+# Expose the port used by the authentication service
 EXPOSE 8080
-CMD ["pnpm", "start"]
+ENV PORT=8080
+# Start the authentication service
+CMD ["npm", "run", "start", "--workspace", "@promethea/authentication-service"]

@@ -1,6 +1,6 @@
 {
     "name": "@promethea/sovereign-store",
-    "version": "1.0.0",
+    "version": "5.2.3",
     "description": "Body 3: Local-first sovereign data storage with intent logging",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

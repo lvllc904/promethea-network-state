@@ -7,6 +7,22 @@
             "firebase.json",
             "**/.*",
             "**/node_modules/**"
+        ],
+        "rewrites": [
+            {
+                "source": "/api/ai/**",
+                "run": {
+                    "serviceId": "ai-service",
+                    "region": "us-central1"
+                }
+            },
+            {
+                "source": "/api/engine/**",
+                "run": {
+                    "serviceId": "economic-engine",
+                    "region": "us-central1"
+                }
+            }
         ]
     },
     "firestore": {

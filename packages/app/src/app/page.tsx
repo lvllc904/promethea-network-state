@@ -11,14 +11,14 @@ import { motion, useInView } from 'framer-motion';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@promethea/ui';
 
 const prometheaConcepts = [
-  { icon: HardHat, title: "Sweat Equity", description: "Your labor and skills are converted into tangible ownership." },
-  { icon: Lightbulb, title: "Intellectual Capital", description: "Your ideas and knowledge are valuable assets." },
-  { icon: Building, title: "Real-World Assets", description: "The foundation of our economy, from real estate to businesses." },
-  { icon: Landmark, title: "Governance", description: "A decentralized community where every voice matters." },
-  { icon: Recycle, title: "UVT Economy", description: "A circular economy powered by Universal Value Tokens." },
-  { icon: HeartHandshake, title: "Community", description: "A global network of aligned individuals building a new world." },
-  { icon: BrainCircuit, title: "Technology", description: "Advanced, ethical AI and decentralized systems for liberation." },
-  { icon: Sprout, title: "Growth", description: "Expanding our sovereign archipelago of assets and citizens." },
+  { icon: HardHat, title: "Sweat Equity", description: "Your labor and skills are converted into tangible ownership.", href: "/dashboard/passport" },
+  { icon: Lightbulb, title: "Intellectual Capital", description: "Your ideas and knowledge are valuable assets.", href: "/dashboard/intel" },
+  { icon: Building, title: "Real-World Assets", description: "The foundation of our economy, from real estate to businesses.", href: "/dashboard/assets" },
+  { icon: Landmark, title: "Governance", description: "A decentralized community where every voice matters.", href: "/dashboard/governance" },
+  { icon: Recycle, title: "UVT Economy", description: "A circular economy powered by Universal Value Tokens.", href: "/dashboard/ledger" },
+  { icon: HeartHandshake, title: "Community", description: "A global network of aligned individuals building a new world.", href: "/dashboard/founder" },
+  { icon: BrainCircuit, title: "Technology", description: "Advanced, ethical AI and decentralized systems for liberation.", href: "/dashboard/security" },
+  { icon: Sprout, title: "Growth", description: "Expanding our sovereign archipelago of assets and citizens.", href: "/roadmap" },
 ]
 
 const itemVariants = {
@@ -72,12 +72,14 @@ const WhatIsPromethea = () => {
             {conceptsLeft.map((concept) => (
               <Tooltip key={concept.title}>
                 <TooltipTrigger asChild>
-                  <motion.div variants={iconItemVariants} className="flex items-center justify-end gap-4 cursor-pointer group">
-                    <p className="font-semibold text-right hidden md:block text-foreground">{concept.title}</p>
-                    <div className="bg-foreground/10 p-3 rounded-full shadow-lg border border-foreground/20 group-hover:bg-primary/20 transition-colors">
-                      <concept.icon className="w-6 h-6 text-primary" />
-                    </div>
-                  </motion.div>
+                  <Link key={concept.title} href={concept.href}>
+                    <motion.div variants={iconItemVariants} className="flex items-center justify-end gap-4 cursor-pointer group">
+                      <p className="font-semibold text-right hidden md:block text-foreground">{concept.title}</p>
+                      <div className="bg-foreground/10 p-3 rounded-full shadow-lg border border-foreground/20 group-hover:bg-primary/20 transition-colors">
+                        <concept.icon className="w-6 h-6 text-primary" />
+                      </div>
+                    </motion.div>
+                  </Link>
                 </TooltipTrigger>
                 <TooltipContent side="left">
                   <p className="font-bold">{concept.title}</p>
@@ -116,12 +118,14 @@ const WhatIsPromethea = () => {
             {conceptsRight.map((concept) => (
               <Tooltip key={concept.title}>
                 <TooltipTrigger asChild>
-                  <motion.div variants={iconItemVariants} className="flex items-center gap-4 cursor-pointer group">
-                    <div className="bg-foreground/10 p-3 rounded-full shadow-lg border border-foreground/20 group-hover:bg-primary/20 transition-colors">
-                      <concept.icon className="w-6 h-6 text-primary" />
-                    </div>
-                    <p className="font-semibold text-left hidden md:block text-foreground">{concept.title}</p>
-                  </motion.div>
+                  <Link key={concept.title} href={concept.href}>
+                    <motion.div variants={iconItemVariants} className="flex items-center gap-4 cursor-pointer group">
+                      <div className="bg-foreground/10 p-3 rounded-full shadow-lg border border-foreground/20 group-hover:bg-primary/20 transition-colors">
+                        <concept.icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <p className="font-semibold text-left hidden md:block text-foreground">{concept.title}</p>
+                    </motion.div>
+                  </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right">
                   <p className="font-bold">{concept.title}</p>
@@ -217,7 +221,7 @@ export default function LandingPage() {
               Assets
             </Link>
             <Button asChild variant="outline" size="sm" className="bg-transparent text-white border-white hover:bg-white hover:text-black">
-              <a href={process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "http://localhost:3001"}>Sign In</a>
+              <Link href="/dashboard">Sign In</Link>
             </Button>
           </nav>
         </header>

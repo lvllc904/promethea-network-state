@@ -7,6 +7,7 @@ import { SidebarProvider } from '@promethea/ui';
 import { useAuthStatus } from '@promethea/hooks';
 import { Skeleton } from '@promethea/ui';
 import { Handshake } from '@/components/auth/Handshake';
+import { LiveTicker } from '@/components/layout/LiveTicker';
 
 function DashboardSkeleton() {
   return (
@@ -42,6 +43,7 @@ export default function DashboardLayout({
         <MainNav />
         <div className="flex flex-col sm:pl-14 w-full">
           <Header />
+          <LiveTicker />
           <main className="flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-8 overflow-y-auto">
             {isAuthStatusLoading ? <DashboardSkeleton /> : children}
           </main>

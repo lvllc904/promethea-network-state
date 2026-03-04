@@ -1,34 +1,25 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20-slim
-
-# Set the working directory in the container
+FROM node:20
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
+# Copy entire monorepo
+COPY . .
 
-# Copy root workspace files
-COPY package.json pnpm-workspace.yaml ./
+# Install dependencies (workspaces handle the rest)
+RUN npm install
 
-# Copy shared packages
-COPY packages/lib ./packages/lib
-COPY packages/firebase ./packages/firebase
-COPY packages/ai ./packages/ai
-
-# Copy the service code
-COPY packages/services/ai-service ./packages/services/ai-service
-
-# Install dependencies (filtered for this service and its deps)
-RUN pnpm install --filter @promethea/ai-service...
+# Build in specific order to resolve typescript reference issues
+RUN npm run build --workspace=@promethea/lib || npx tsc --build packages/lib/tsconfig.json
+RUN npm run build --workspace=@promethea/firebase || npx tsc --build packages/firebase/tsconfig.json
+RUN npm run build --workspace=@promethea/ai || npx tsc --build packages/ai/tsconfig.json
+RUN npm run build --workspace=@promethea/guardian || npx tsc --build packages/guardian/tsconfig.json
+RUN npm run build --workspace=@promethea/ai-service || npx tsc --build packages/services/ai-service/tsconfig.json
 
 # Set workdir to the service
 WORKDIR /app/packages/services/ai-service
 
-# Build the TypeScript code (if not already handled by pnpm install lifecycle, but usually needs explicit build)
-RUN pnpm run build
-
-# Expose the port the app runs on
+# Environment
+ENV NODE_ENV=production
+ENV PORT=8080
 EXPOSE 8080
 
-# Command to run the application
-CMD ["pnpm", "start"]
+CMD ["npm", "start"]

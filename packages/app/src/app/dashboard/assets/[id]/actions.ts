@@ -73,3 +73,56 @@ export async function applyForTask(
     return { success: false, error: errorMessage };
   }
 }
+
+export async function purchaseFractionalShare(
+  assetId: string,
+  citizenId: string,
+  amount: number,
+  tokenType: 'Capital' | 'Reputation',
+  assetPath: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const admin = await getServerFirebase();
+    const db = admin.firestore();
+
+    await db.runTransaction(async (transaction) => {
+      const assetRef = db.collection('real_world_assets').doc(assetId);
+      const citizenRef = db.collection('citizens').doc(citizenId);
+      const uvtRef = db.collection('universal_value_tokens').doc();
+
+      const citizenDoc = await transaction.get(citizenRef);
+      if (!citizenDoc.exists) throw new Error("Citizen profile not found.");
+
+      const citizenData = citizenDoc.data();
+      const currentBalance = tokenType === 'Capital' ? (citizenData?.capital || 0) : (citizenData?.reputation || 0);
+
+      if (currentBalance < amount) {
+        throw new Error(`Insufficient ${tokenType} balance. Required: ${amount}, Available: ${currentBalance}`);
+      }
+
+      // 1. Deduct from citizen (simulated for capital, actual for reputation)
+      if (tokenType === 'Reputation') {
+        transaction.update(citizenRef, { reputation: currentBalance - amount });
+      }
+
+      // 2. Create the UVT certificate
+      transaction.set(uvtRef, {
+        ownerId: citizenId,
+        assetId: assetId,
+        tokenType: tokenType,
+        amount: amount,
+        status: 'Active',
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // 3. Update asset value/pool (optional log)
+      console.log(`[Asset Swap] Citizen ${citizenId} acquired ${amount} fractional shares in ${assetId}`);
+    });
+
+    revalidatePath(assetPath);
+    return { success: true };
+  } catch (error: any) {
+    console.error('Fractional purchase error:', error);
+    return { success: false, error: error.message || "Failed to acquire fractional share." };
+  }
+}

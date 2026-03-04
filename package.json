@@ -3,11 +3,11 @@
   "private": true,
   "version": "5.2.3",
   "scripts": {
-    "penny:test": "npm run build --workspace=@promethea/lib && node scripts/runPennyTest.js",
-    "clean": "rimraf dist",
-    "start:ai-service": "npm run start --workspace=@promethea/ai-service",
-    "substrate:init": "node scripts/init-substrate.js",
-    "prebuild": "node mcp_coordination_hub/sync-version.js"
+    "build:lib": "npm run build --workspace=@promethea/lib",
+    "build:guardian": "npm run build --workspace=@promethea/guardian",
+    "build:auth": "npm run build --workspace=@promethea/authentication-service",
+    "build": "npm run build:lib && npm run build:guardian && npm run build:auth",
+    "penny:test": "npm run build:lib && node scripts/runPennyTest.js"
   },
   "workspaces": [
     "packages/*",
@@ -17,6 +17,8 @@
   "devDependencies": {
     "dotenv": "^16.5.0",
     "firebase-admin": "^13.6.0",
+    "firebase-frameworks": "^0.11.8",
+    "sharp": "0.33.5",
     "typescript": "5.5.4",
     "tailwindcss": "^3.4.19"
   }

@@ -17,7 +17,7 @@
     "firebase-admin": "^12.1.1",
     "next": "14.2.33",
     "reactfire": "^4.2.3",
-    "@promethea/lib": "5.2.3"
+    "@promethea/lib": "file:../lib"
   },
   "peerDependencies": {
     "react": "18.3.1"

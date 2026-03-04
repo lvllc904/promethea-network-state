@@ -22,8 +22,8 @@
   "dependencies": {
     "react": "18.3.1",
     "swr": "^2.2.5",
-    "@promethea/lib": "5.2.3",
-    "@promethea/firebase": "5.2.3"
+    "@promethea/lib": "file:../lib",
+    "@promethea/firebase": "file:../firebase"
   },
   "devDependencies": {
     "@types/react": "18.3.3"

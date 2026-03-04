@@ -1,0 +1,18 @@
+# Exclude heavy directories and files from Docker build context
+node_modules/
+**/node_modules/
+.next/
+**/.next/
+.firebase/
+**/.firebase/
+.gemini/
+**/.gemini/
+.dist/
+**/.dist/
+.dist/
+**/.dist/
+**/dist/
+**/tsconfig.tsbuildinfo
+*.log
+*.pdf
+.git/

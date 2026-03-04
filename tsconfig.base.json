@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2020",
     "lib": [
       "dom",
       "dom.iterable",
@@ -86,6 +86,9 @@
       ],
       "@promethea/firebase-admin": [
         "packages/firebase/src/admin"
+      ],
+      "@promethea/guardian": [
+        "packages/guardian/src"
       ]
     }
   },

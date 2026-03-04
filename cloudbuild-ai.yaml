@@ -1,0 +1,5 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/studio-9105849211-9ba48/ai-service', '-f', 'packages/services/ai-service/Dockerfile', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/studio-9105849211-9ba48/ai-service']

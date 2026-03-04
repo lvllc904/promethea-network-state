@@ -58,7 +58,7 @@ function AssetCard({ asset }: { asset: RealWorldAsset }) {
         <div className="flex items-center gap-2 mt-4 pt-4 border-t">
           <DollarSign className="w-4 h-4 text-muted-foreground" />
           <span className="font-semibold">
-            ${(asset.value || 0).toLocaleString()}
+            ${(asset.price || 0).toLocaleString()}
           </span>
           <span className="text-xs text-muted-foreground">VALUE</span>
         </div>

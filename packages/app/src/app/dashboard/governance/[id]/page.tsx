@@ -59,7 +59,7 @@ import { Skeleton } from '@promethea/ui';
 import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@promethea/ui';
 import { applyForTask } from '../../assets/[id]/actions';
-import { pledgeCapital } from './actions';
+import { pledgeCapital, castVote } from './actions';
 import { useToast } from '@promethea/hooks';
 import { Label } from '@promethea/ui';
 
@@ -199,13 +199,26 @@ export default function ProposalDetailPage({
   const [isPledging, setIsPledging] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [applyingTaskId, setApplyingTaskId] = useState<string | null>(null);
-
+  const [voteCredits, setVoteCredits] = useState(1);
+  const [isCastingVote, setIsCastingVote] = useState(false);
   const proposalRef = useMemoFirebase(
     () => (firestore ? doc(firestore, 'proposals', params.id) : null) as unknown as DocumentReference<Proposal> | null,
     [firestore, params.id]
   );
   const { data: proposal, isLoading: isProposalLoading } =
     useDoc<Proposal>(proposalRef as any);
+
+  const currentCitizenRef = useMemoFirebase(
+    () => (firestore && user && !user.isAnonymous ? doc(firestore, 'citizens', user.uid) : null) as unknown as DocumentReference<Citizen> | null,
+    [firestore, user]
+  );
+  const { data: currentCitizen } = useDoc<Citizen>(currentCitizenRef as any);
+
+  // QV math with Trust Multiplier (Reputation weighted)
+  const trustMultiplier = currentCitizen ? 1 + (currentCitizen.reputation / 1000) : 1;
+  const qvVoiceValue = Math.sqrt(voteCredits) * trustMultiplier;
+  const qvVoice = qvVoiceValue.toFixed(3);
+  const qvCost = voteCredits * voteCredits;
 
   const tasksQuery = useMemoFirebase(
     () =>
@@ -254,13 +267,29 @@ export default function ProposalDetailPage({
     fetchVotesAndProposer();
   }, [proposal, firestore, isProposalLoading]);
 
-  const handleVote = (support: boolean) => {
-    if (user && !user.isAnonymous) {
-      toast({
-        title: "Vote Cast!",
-        description: `You have voted ${support ? 'FOR' : 'AGAINST'} this proposal.`
-      });
-    } else {
+  const handleVote = async (support: boolean) => {
+    if (user && !user.isAnonymous && proposal) {
+      setIsCastingVote(true);
+      try {
+        const result = await castVote(proposal.id, user.uid, support, pathname, voteCredits);
+        if (result.success) {
+          toast({
+            title: "Vote Recorded!",
+            description: `You spent ${qvCost} rep for ${qvVoice} Voice — ${support ? 'FOR' : 'AGAINST'} — on the Ledger.`,
+          });
+        } else {
+          throw new Error(result.error);
+        }
+      } catch (error: any) {
+        toast({
+          variant: 'destructive',
+          title: "Voting Failed",
+          description: error.message || "An unexpected error occurred."
+        });
+      } finally {
+        setIsCastingVote(false);
+      }
+    } else if (!user || user.isAnonymous) {
       window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
     }
   };
@@ -337,9 +366,10 @@ export default function ProposalDetailPage({
 
 
   const totalVotes = votes.length;
-  const forVotes = votes.filter((v) => v.support).length;
-  const againstVotes = totalVotes - forVotes;
-  const forPercentage = totalVotes > 0 ? (forVotes / totalVotes) * 100 : 0;
+  const totalWeight = votes.reduce((sum, v) => sum + (v.weight || 1), 0);
+  const forWeight = votes.filter((v) => v.support).reduce((sum, v) => sum + (v.weight || 1), 0);
+  const againstWeight = totalWeight - forWeight;
+  const forPercentage = totalWeight > 0 ? (forWeight / totalWeight) * 100 : 0;
 
   const capitalProgress = proposal?.targetEquity ? ((proposal.pledgedCapital || 0) / proposal.targetEquity) * 100 : 0;
 
@@ -601,34 +631,110 @@ export default function ProposalDetailPage({
 
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle className="font-headline">Cast Your Vote</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Your Voice is calculated based on your reputation,
-                contributions, and quadratic voting principles.
-              </p>
-              <div className="grid grid-cols-2 gap-4">
-                <Button
-                  variant="default"
-                  size="lg"
-                  className="bg-green-600 hover:bg-green-700 h-12"
-                  onClick={() => handleVote(true)}
-                >
-                  <Check className="mr-2 h-5 w-5" />
-                  Vote For
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="lg"
-                  className="h-12"
-                  onClick={() => handleVote(false)}
-                >
-                  <X className="mr-2 h-5 w-5" />
-                  Vote Against
-                </Button>
+              <div className="flex justify-between items-center">
+                <CardTitle className="font-headline">Cast Your Vote</CardTitle>
+                {trustMultiplier > 1 && (
+                  <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/20 text-[10px] animate-pulse">
+                    Trust Multiplier: {trustMultiplier.toFixed(2)}x
+                  </Badge>
+                )}
               </div>
-              {user?.isAnonymous && (
+              <CardDescription className="text-xs">
+                Sovereign Voice = (√Credits) × Trust. Cost = Credits².
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-5">
+
+              {proposal.status === 'Passed' ? (
+                <div className="pt-2">
+                  <Button
+                    variant="default"
+                    size="lg"
+                    className="w-full bg-purple-600 hover:bg-purple-700 h-12"
+                    onClick={async () => {
+                      if (!user || user.isAnonymous) return;
+                      try {
+                        const { executeProposalAction } = await import('./actions');
+                        const res = await executeProposalAction(proposal.id, user.uid, pathname);
+                        if (res.success) {
+                          toast({ title: 'Success', description: 'Actionable Execution triggered on the Engine.' });
+                        } else {
+                          toast({ variant: 'destructive', title: 'Execution Failed', description: res.error });
+                        }
+                      } catch (e: any) {
+                        toast({ variant: 'destructive', title: 'Execution Error', description: e.message });
+                      }
+                    }}
+                  >
+                    <Wrench className="mr-2 h-5 w-5" />
+                    Trigger Sovereign Execution
+                  </Button>
+                  <p className="text-xs text-center text-muted-foreground pt-2">
+                    This proposal has passed consensus. Any citizen can trigger the on-chain execution.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {/* QV Credit Selector */}
+                  <div className="space-y-3 rounded-xl border border-zinc-700 bg-zinc-900/40 p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-zinc-400 font-medium uppercase tracking-wider">Vote Credits</span>
+                      <span className="text-lg font-bold text-white tabular-nums">{voteCredits}</span>
+                    </div>
+                    <input
+                      id="qv-credits-slider"
+                      type="range"
+                      min={1}
+                      max={25}
+                      value={voteCredits}
+                      onChange={e => setVoteCredits(Number(e.target.value))}
+                      className="w-full accent-amber-500 cursor-pointer"
+                      disabled={proposal.status !== 'Active'}
+                    />
+                    <div className="grid grid-cols-2 gap-2 text-center">
+                      <div className="rounded-lg bg-zinc-800 p-2">
+                        <p className="text-[10px] text-zinc-500 uppercase">Voice Weight</p>
+                        <p className="text-base font-bold text-amber-400">{qvVoice}</p>
+                      </div>
+                      <div className="rounded-lg bg-zinc-800 p-2">
+                        <p className="text-[10px] text-zinc-500 uppercase">Rep Cost</p>
+                        <p className="text-base font-bold text-red-400">{qvCost} pts</p>
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-zinc-600 text-center">
+                      Spending more credits amplifies your voice but at quadratic cost, protecting minority dissent.
+                    </p>
+                  </div>
+
+                  {/* For / Against Buttons */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <Button
+                      id="vote-for-btn"
+                      variant="default"
+                      size="lg"
+                      className="bg-green-600 hover:bg-green-700 h-12"
+                      onClick={() => handleVote(true)}
+                      disabled={proposal.status !== 'Active' || isCastingVote}
+                    >
+                      {isCastingVote ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-5 w-5" />}
+                      For
+                    </Button>
+                    <Button
+                      id="vote-against-btn"
+                      variant="destructive"
+                      size="lg"
+                      className="h-12"
+                      onClick={() => handleVote(false)}
+                      disabled={proposal.status !== 'Active' || isCastingVote}
+                    >
+                      {isCastingVote ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <X className="mr-2 h-5 w-5" />}
+                      Against
+                    </Button>
+                  </div>
+                </>
+              )}
+
+              {user?.isAnonymous && proposal.status === 'Active' && (
                 <p className="text-xs text-center text-muted-foreground pt-2">
                   Create a Promethean Passport to vote.
                 </p>
@@ -677,7 +783,7 @@ export default function ProposalDetailPage({
                   className="h-3 [&>div]:bg-green-600"
                 />
                 <p className="text-xs text-right text-muted-foreground mt-1">
-                  {forVotes.toLocaleString()} Votes
+                  {forWeight.toLocaleString()} Voice
                 </p>
               </div>
               <div>
@@ -694,7 +800,7 @@ export default function ProposalDetailPage({
                   className="h-3 [&>div]:bg-red-600"
                 />
                 <p className="text-xs text-right text-muted-foreground mt-1">
-                  {againstVotes.toLocaleString()} Votes
+                  {againstWeight.toLocaleString()} Voice
                 </p>
               </div>
             </CardContent>

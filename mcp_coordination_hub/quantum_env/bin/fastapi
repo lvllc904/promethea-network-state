@@ -1,9 +1,0 @@
-#!/bin/sh
-'''exec' "/Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/mcp_coordination_hub/quantum_env/bin/python" "$0" "$@"
-' '''
-import sys
-from fastapi.cli import main
-if __name__ == '__main__':
-    if sys.argv[0].endswith('.exe'):
-        sys.argv[0] = sys.argv[0][:-4]
-    sys.exit(main())

@@ -88,10 +88,10 @@ const sevenSteps = [
 ];
 
 const progressData = [
-  { name: 'Phase 1: Foundational MVP', progress: 80, status: 'In Progress', color: 'bg-amber-500' },
-  { name: 'Phase 2: AI Integration', progress: 30, status: 'In Progress', color: 'bg-amber-500' },
-  { name: 'Phase 3: Decentralization', progress: 0, status: 'Planned', color: 'bg-gray-400' },
-  { name: 'Phase 4: Full Symbiosis', progress: 0, status: 'Planned', color: 'bg-gray-400' },
+  { name: 'Phase 0-1: Foundation & Identity', progress: 100, status: 'Complete', color: 'bg-green-500' },
+  { name: 'Phase 2: Cognitive Alignment', progress: 85, status: 'In Progress', color: 'bg-amber-500' },
+  { name: 'Phase 3: Economic Sovereignty', progress: 65, status: 'In Progress', color: 'bg-amber-500' },
+  { name: 'Phase 6: Sovereign Hardening', progress: 40, status: 'In Progress', color: 'bg-amber-500' },
 ]
 
 // --- Animation Variants ---
@@ -189,26 +189,94 @@ export default function RoadmapPage() {
         </header>
 
         <AnimatedSection className="py-0 md:py-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="font-headline text-2xl">Overall Progress</CardTitle>
-              <CardDescription>A high-level overview of our current development status across all phases.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {progressData.map((phase) => (
-                <div key={phase.name}>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-medium text-sm">{phase.name}</span>
-                    <Badge variant="outline" className={cn(
-                      phase.status === 'In Progress' && 'border-amber-500 text-amber-500',
-                      phase.status === 'Planned' && 'border-gray-400 text-gray-400'
-                    )}>{phase.status}</Badge>
+          <div className="space-y-12">
+            <Card>
+              <CardHeader>
+                <CardTitle className="font-headline text-2xl">Overall Progress</CardTitle>
+                <CardDescription>A high-level overview of our current development status across all phases.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {progressData.map((phase) => (
+                  <div key={phase.name}>
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-medium text-sm">{phase.name}</span>
+                      <Badge variant="outline" className={cn(
+                        phase.status === 'In Progress' && 'border-amber-500 text-amber-500',
+                        phase.status === 'Planned' && 'border-gray-400 text-gray-400'
+                      )}>{phase.status}</Badge>
+                    </div>
+                    <Progress value={phase.progress} className="h-2 [&>div]:bg-green-500" />
                   </div>
-                  <Progress value={phase.progress} className="h-2 [&>div]:bg-green-500" />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/20 bg-primary/5">
+              <CardHeader>
+                <CardTitle className="font-headline text-2xl flex items-center gap-2">
+                  <Landmark className="w-6 h-6 text-primary" />
+                  Sovereign Substrate Progress
+                </CardTitle>
+                <CardDescription>The technical audit of the Network State core systems (The Four Pillars).</CardDescription>
+              </CardHeader>
+              <CardContent className="overflow-x-auto">
+                <table className="w-full text-sm text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-primary/10">
+                      <th className="py-3 px-4 font-headline uppercase tracking-wider text-xs">Type</th>
+                      <th className="py-3 px-4 font-headline uppercase tracking-wider text-xs">Element</th>
+                      <th className="py-3 px-4 font-headline uppercase tracking-wider text-xs">Status</th>
+                      <th className="py-3 px-4 font-headline uppercase tracking-wider text-xs">Category</th>
+                      <th className="py-3 px-4 font-headline uppercase tracking-wider text-xs">Phase</th>
+                      <th className="py-3 px-4 font-headline uppercase tracking-wider text-xs">Pillar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { type: "Finance", el: "Cap Table", status: "Complete ✅", cat: "Economic", phase: "Phase 2.5", pillar: "🏛️ Treasury" },
+                      { type: "Finance", el: "Pro Forma Reports", status: "Complete ✅", cat: "Economic", phase: "Phase 3.1", pillar: "🏛️ Treasury" },
+                      { type: "Finance", el: "Contribution Records", status: "Complete ✅", cat: "Labor", phase: "Phase 4.1", pillar: "🏛️ Treasury" },
+                      { type: "Finance", el: "Payment Distribution", status: "Complete ✅", cat: "Ledger", phase: "Phase 3.5", pillar: "🏛️ Treasury" },
+                      { type: "Finance", el: "Reserve Manager", status: "Complete ✅", cat: "Treasury", phase: "Phase 3.1", pillar: "🏛️ Treasury" },
+                      { type: "Finance", el: "Revenue Distribution", status: "Complete ✅", cat: "Yield", phase: "Phase 3.1", pillar: "🏛️ Treasury" },
+                      { type: "Settlement", el: "Solana SPL Bridge", status: "Complete ✅", cat: "Blockchain", phase: "Wave 1", pillar: "🏛️ Treasury" },
+                      { type: "Governance", el: "Reputation Voting", status: "Complete ✅", cat: "Legislative", phase: "Wave 3", pillar: "🗳️ Will" },
+                      { type: "Governance", el: "Quadratic Voting UI", status: "Complete ✅", cat: "Interface", phase: "Wave 3", pillar: "🗳️ Will" },
+                      { type: "Exchange", el: "22 Economic Methods", status: "Complete ✅", cat: "Revenue", phase: "Phase 3.1", pillar: "🛒 Exchange" },
+                      { type: "Exchange", el: "Live Narrative Sync", status: "Complete ✅", cat: "Media", phase: "Phase 3.1", pillar: "🛒 Exchange" },
+                      { type: "Exchange", el: "AI Voice Synthesis", status: "Complete ✅", cat: "Media", phase: "Wave 4", pillar: "🛒 Exchange" },
+                      { type: "Security", el: "Log Sanitization", status: "Complete ✅", cat: "Defense", phase: "Phase 6.1", pillar: "🛡️ Immune System" },
+                      { type: "Security", el: "Threat Detection", status: "Complete ✅", cat: "Defense", phase: "Wave 4", pillar: "🛡️ Immune System" },
+                      { type: "Security", el: "Metabolic Sensing", status: "Complete ✅", cat: "Health", phase: "Phase 2.1", pillar: "🛡️ Immune System" },
+                      { type: "Security", el: "Identity (SSI/DID)", status: "Complete ✅", cat: "Identity", phase: "Phase 2.4", pillar: "🛡️ Immune System" },
+                    ].map((row, i) => (
+                      <tr key={i} className="border-b border-primary/5 hover:bg-primary/5 transition-colors">
+                        <td className="py-3 px-4 font-bold">{row.type}</td>
+                        <td className="py-3 px-4">{row.el}</td>
+                        <td className="py-3 px-4 text-green-500">{row.status}</td>
+                        <td className="py-3 px-4">{row.cat}</td>
+                        <td className="py-3 px-4">{row.phase}</td>
+                        <td className="py-3 px-4">{row.pillar}</td>
+                      </tr>
+                    ))}
+                    {[
+                      { type: "Governance", el: "Grant Automation", status: "In Progress 🌀", cat: "Executive", phase: "Phase 4.0", pillar: "🗳️ Will" },
+                      { type: "Exchange", el: "50 Method Scale-up", status: "In Progress 🌀", cat: "Revenue", phase: "Wave 4", pillar: "🛒 Exchange" },
+                    ].map((row, i) => (
+                      <tr key={i + 100} className="border-b border-primary/5 bg-amber-500/5 hover:bg-amber-500/10 transition-colors">
+                        <td className="py-3 px-4 font-bold">{row.type}</td>
+                        <td className="py-3 px-4">{row.el}</td>
+                        <td className="py-3 px-4 text-amber-500">{row.status}</td>
+                        <td className="py-3 px-4">{row.cat}</td>
+                        <td className="py-3 px-4">{row.phase}</td>
+                        <td className="py-3 px-4">{row.pillar}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </CardContent>
+            </Card>
+          </div>
         </AnimatedSection>
 
         {/* Phase 1 */}

@@ -91,8 +91,8 @@ export default function GovernancePage() {
 
 
   const renderProposalCard = (proposal: EnrichedProposal) => {
-    const totalVotes = proposal.votes?.length || 0;
-    const forVotes = proposal.votes?.filter((v) => v.support).length || 0;
+    const totalVotes = proposal.votes?.reduce((acc, v) => acc + (v.weight || 1), 0) || 0;
+    const forVotes = proposal.votes?.filter((v) => v.support).reduce((acc, v) => acc + (v.weight || 1), 0) || 0;
     const forPercentage = totalVotes > 0 ? (forVotes / totalVotes) * 100 : 0;
     const endsIn = proposal.votingEndTime
       ? `${Math.ceil(

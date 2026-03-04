@@ -1,0 +1,26 @@
+{
+  "name": "@promethea/lib",
+  "version": "5.2.3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./utils": "./dist/utils.js",
+    "./types": "./dist/types.d.ts",
+    "./placeholder-images": "./dist/placeholder-images.js"
+  },
+  "scripts": {
+    "build": "tsc --build --verbose",
+    "dev": "tsc --watch --preserveWatchOutput",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "clsx": "2.1.1",
+    "tailwind-merge": "3.0.1",
+    "ethers": "^6.13.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}

@@ -23,13 +23,13 @@ import {
 } from '@promethea/ui';
 import { Badge } from '@promethea/ui';
 import { Button } from '@promethea/ui';
-import { DollarSign, MapPin, Wrench, PieChart, Briefcase, Star, Users, Loader2 } from 'lucide-react';
+import { DollarSign, MapPin, Wrench, PieChart, Briefcase, Star, Users, Loader2, Key } from 'lucide-react';
 import { TaskAllocationTool } from '@promethea/components';
 import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@promethea/firebase';
 import { doc, collection, query, where } from 'firebase/firestore';
 import { RealWorldAsset, Task, UniversalValueToken } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
-import { handleAllocate, applyForTask } from './actions';
+import { handleAllocate, applyForTask, purchaseFractionalShare } from './actions';
 import { Pie, Cell, ResponsiveContainer, PieChart as RechartsPieChart } from 'recharts';
 import { type DocumentReference, type Query } from 'firebase/firestore';
 import { Avatar, AvatarFallback } from '@promethea/ui';
@@ -235,7 +235,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                 </h3>
                 <p className="text-2xl font-bold flex items-center gap-2">
                   <DollarSign className="w-5 h-5" />
-                  {asset.value.toLocaleString()}
+                  {asset.price?.toLocaleString()}
                 </p>
               </div>
               <div>
@@ -422,6 +422,57 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
           }
           return result as { suggestedMembers: string[] };
         }} />
+        <Card className="border-primary/20 bg-primary/5 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="font-headline text-xl flex items-center gap-2">
+              <Key className="w-5 h-5 text-primary" />
+              Fractional Buy-In
+            </CardTitle>
+            <CardDescription aria-hidden="true" className="sr-only">Interface to acquire fractional ownership of this asset.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Acquire a fractional share in this asset to start earning metabolic yield.
+              Swap your **Reputation** or **Capital** for UVT ownership.
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                className="text-[10px] h-9 hover:bg-primary/10 border-primary/20"
+                onClick={async () => {
+                  if (!user || user.isAnonymous) return window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+                  const amountString = window.prompt("Enter amount of Reputation to swap for UVT (1:1):");
+                  const amount = parseInt(amountString || "0");
+                  if (amount > 0) {
+                    const res = await purchaseFractionalShare(params.id, user.uid, amount, 'Reputation', pathname);
+                    if (res.success) toast({ title: "Acquisition Successful", description: `You now own ${amount} more fractional shares.` });
+                    else toast({ variant: 'destructive', title: "Acquisition Failed", description: res.error });
+                  }
+                }}
+              >
+                Swap Reputation
+              </Button>
+              <Button
+                variant="outline"
+                className="text-[10px] h-9 hover:bg-primary/10 border-primary/20"
+                onClick={async () => {
+                  if (!user || user.isAnonymous) return window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+                  toast({ title: "Capital Swap", description: "Atomic capital swaps (USDC/SOL) are Wave 6 protocol. Simulate with Reputation for now." });
+                }}
+              >
+                Swap Capital
+              </Button>
+            </div>
+            <div className="pt-2 border-t border-primary/10">
+              <div className="flex justify-between text-[10px] font-mono">
+                <span className="text-muted-foreground uppercase">Your Holding</span>
+                <span className="text-primary font-bold">
+                  {uvts?.filter(t => t.ownerId === user?.uid).reduce((s, t) => s + t.amount, 0).toLocaleString() || 0} UVT
+                </span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

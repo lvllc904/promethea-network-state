@@ -5,6 +5,7 @@ import { initializeApp, cert, App } from 'firebase-admin/app';
 import { getAuth, Auth } from 'firebase-admin/auth';
 import { getFirestore, Firestore } from 'firebase-admin/firestore';
 import crypto from 'crypto';
+import { guardianSingleton } from '@promethea/guardian';
 
 const app = express();
 app.use(cors({
@@ -41,6 +42,26 @@ try {
   db = getFirestore(adminApp);
 
   console.log('[Auth Service] Firebase Admin initialized successfully');
+
+  // Initialize Apex Master Guardian
+  try {
+    // Top-level async is tricky in this file scope, so we just let it run async
+    guardianSingleton.on('consciousness_pulse', async (state: any) => {
+      try {
+        await db.collection('security_telemetry').doc('pulse').set({
+          ...state,
+          timestamp: new Date().toISOString()
+        });
+      } catch (e) {
+        console.error('[Auth Service] Failed to write AMG pulse to Firestore:', e);
+      }
+    });
+
+    console.log('[Auth Service] AMG initialized and monitoring gates.');
+  } catch (error) {
+    console.error('[Auth Service] AMG Failed to initialize', error);
+  }
+
 } catch (error) {
   console.error('[Auth Service] Failed to initialize Firebase Admin:', error);
   // Do not exit here to allow for local development without Firebase if needed, 
@@ -71,8 +92,14 @@ app.get('/health', (req, res) => {
 });
 
 // 1. Generate authentication challenge
-app.post('/auth/challenge', (req, res) => {
+app.post('/auth/challenge', async (req, res) => {
   try {
+    const analysis = await guardianSingleton.processRequest(req, res, null);
+    if (analysis.riskLevel === 'CRITICAL' || analysis.riskLevel === 'HIGH') {
+      console.warn(`[Auth Service] AMG Blocked challenge request. Risk Level: ${analysis.riskLevel}`);
+      return res.status(403).json({ error: 'Security anomaly detected by Guardian' });
+    }
+
     const { did } = req.body;
 
     if (!did) {
@@ -103,6 +130,12 @@ app.post('/auth/challenge', (req, res) => {
 // 2. Verify signature and issue Firebase token
 app.post('/auth/verify', async (req, res) => {
   try {
+    const analysis = await guardianSingleton.processRequest(req, res, null);
+    if (analysis.riskLevel === 'CRITICAL' || analysis.riskLevel === 'HIGH') {
+      console.warn(`[Auth Service] AMG Blocked verify request. Risk Level: ${analysis.riskLevel}`);
+      return res.status(403).json({ error: 'Security anomaly detected by Guardian' });
+    }
+
     const { did, signature, uid } = req.body;
 
     if (!did || !signature || !uid) {
@@ -265,6 +298,26 @@ app.post('/auth/encrypt-keystore', async (req, res) => {
   } catch (error: any) {
     console.error('[Auth Service] Keystore encryption error:', error);
     res.status(500).json({ error: error.message || 'Failed to encrypt keystore' });
+  }
+});
+
+// 6. Intent Ledger (Real-time Mirroring)
+app.get('/auth/intent-ledger', (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit as string) || 50;
+    const ledger = guardianSingleton.getThoughtLog(limit);
+
+    res.json({
+      service: 'authentication-service',
+      guardian: 'Apex Master Guardian',
+      ledger: ledger.map(item => ({
+        ...item,
+        id: crypto.randomBytes(4).toString('hex')
+      }))
+    });
+  } catch (error: any) {
+    console.error('[Auth Service] Intent ledger retrieval error:', error);
+    res.status(500).json({ error: 'Failed to retrieve intent ledger' });
   }
 });
 

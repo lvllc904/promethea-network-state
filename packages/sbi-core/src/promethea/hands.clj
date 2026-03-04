@@ -1,7 +1,9 @@
 (ns promethea.hands
   (:require [clojure.java.io :as io]
             [clojure.java.shell :as shell]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [cheshire.core :as json]
+            [promethea.env :refer [get-env]]))
 
 ;; --- File System Tools ---
 
@@ -175,14 +177,26 @@
   {:status :ok :metrics {:cpu 10 :mem 20 :disk 30}})
 
 (defn get-gateway-status []
-  (println "[HANDS] Fetching Metabolic Status from Gateway (localhost:8081)...")
-  (let [res (run-shell "curl -s http://localhost:8081/status")]
-    (if (= (:status res) :ok)
-      (try
-        (let [json (cheshire.core/parse-string (:stdout res) true)]
-             {:status :ok :metrics json})
-        (catch Exception e {:status :error :message "Failed to parse Gateway JSON"}))
-      {:status :error :message "Gateway Unreachable"})))
+  (let [gateway-url (or (get-env "MCP_GATEWAY_URL") "http://localhost:8081")]
+    (println "[HANDS] Fetching Metabolic Status from Gateway (" gateway-url ")...")
+    (let [res (run-shell (str "curl -s " gateway-url "/status"))]
+      (if (= (:status res) :ok)
+        (try
+          (let [json (json/parse-string (:stdout res) true)]
+            {:status :ok :metrics json})
+          (catch Exception e {:status :error :message "Failed to parse Gateway JSON"}))
+        {:status :error :message "Gateway Unreachable"}))))
+
+(defn get-economic-metrics []
+  (let [engine-url (or (get-env "ECONOMIC_ENGINE_URL") "https://economic-engine-385120524005.us-central1.run.app")]
+    (println "[HANDS] Analytical Data Bridge: Fetching Economic Telemetry...")
+    (let [res (run-shell (str "curl -s " engine-url "/api/status"))]
+      (if (= (:status res) :ok)
+        (try
+          (let [json (json/parse-string (:stdout res) true)]
+            {:status :ok :telemetry json})
+          (catch Exception e {:status :error :message "Failed to parse Engine JSON"}))
+        {:status :error :message "Economic Engine Unreachable"}))))
 
 (defn get-build-metrics [output]
   (let [errors (count (re-seq #"error" output))
@@ -191,11 +205,12 @@
 
 (defn coordinate-with-sentinel [agent-id task]
   (println "[HANDS] Sending task for Sentinel Audit...")
-  (let [body (cheshire.core/generate-string {:agent_id agent-id :task task})
-        res (run-shell (str "curl -s -X POST -H 'Content-Type: application/json' -d '" body "' http://localhost:8081/coordinate"))]
+  (let [gateway-url (or (get-env "MCP_GATEWAY_URL") "http://localhost:8081")
+        body (cheshire.core/generate-string {:agent_id agent-id :task task})
+        res (run-shell (str "curl -s -X POST -H 'Content-Type: application/json' -d '" body "' " gateway-url "/coordinate"))]
     (if (= (:status res) :ok)
       (try
-        (let [json (cheshire.core/parse-string (:stdout res) true)]
+        (let [json (json/parse-string (:stdout res) true)]
              {:status :ok :result json})
         (catch Exception e {:status :error :message "Failed to parse Sentinel response"}))
       {:status :error :message "Sentinel Connection Failed"})))
@@ -230,6 +245,7 @@
    :clear-cache clear-cache
    :get-metabolic-metrics get-metabolic-metrics
    :get-gateway-status get-gateway-status
+   :get-economic-metrics get-economic-metrics
    :coordinate-with-sentinel coordinate-with-sentinel
    :get-codebase-fingerprint get-codebase-fingerprint
    :get-build-metrics get-build-metrics

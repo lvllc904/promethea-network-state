@@ -1,0 +1,15 @@
+{
+    "name": "@promethea/substrate-node",
+    "version": "1.0.0",
+    "description": "Sovereign Substrate Node for citizen-hosted local infrastructure.",
+    "main": "dist/index.js",
+    "scripts": {
+        "start": "ts-node src/index.ts",
+        "build": "tsc"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "chalk": "^4.1.2",
+        "prompts": "^2.4.2"
+    }
+}

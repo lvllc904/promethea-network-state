@@ -64,6 +64,28 @@
   (println "[VOICE] Mocking Google Sites Update...")
   {:status :mock :platform :googlesites})
 
+;; --- 9. Discord (Webhooks) ---
+(defmethod broadcast :discord [_ content]
+  (let [webhook-url (get-env "DISCORD_WEBHOOK_URL")]
+    (if webhook-url
+      (try
+        (println "[VOICE] Posting to Discord Webhook...")
+        (http/post webhook-url 
+                   {:content-type :json
+                    :form-params {:content content}})
+        {:status :success :platform :discord}
+        (catch Exception e
+          (println "[VOICE] Discord Posting Failed:" (.getMessage e))
+          {:status :error :platform :discord :error (.getMessage e)}))
+      (do
+        (println "[VOICE] Mocking Discord Post (No Webhook Found)")
+        {:status :mock :platform :discord}))))
+
+;; --- 10. Clubhouse (Audio/Social Mock) ---
+(defmethod broadcast :clubhouse [_ content]
+  (println "[VOICE] Pulsing Sovereign Voice to Clubhouse (Simulation)...")
+  {:status :mock :platform :clubhouse :message "Audio stream simulated"})
+
 ;; --- 8. TEAM CHAT (Direct Communication with Assistant & User) ---
 (defmethod broadcast :team-chat [_ content]
   (let [chat-file (str (System/getenv "HOME") "/.gemini/antigravity/brain/promethea_messages.md")
@@ -73,7 +95,7 @@
       (io/make-parents chat-file)
       (spit chat-file message :append true)
       (println "[VOICE] Message sent to team chat:" (subs content 0 (min 100 (count content))))
-      {:status :success :platform :team-chat :file chat-file})
+      {:status :success :platform :team-chat :file chat-file}
       (catch Exception e
         (println "[VOICE] Failed to write team message:" (.getMessage e))
         {:status :error :platform :team-chat}))))

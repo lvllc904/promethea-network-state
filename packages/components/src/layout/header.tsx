@@ -23,6 +23,8 @@ import { useUser } from "@promethea/firebase";
 import { useState, useEffect } from "react";
 import type { LocalCitizenProfile } from "@promethea/lib";
 
+import { syncEngine } from '@promethea/sovereign-store';
+
 function getPageTitle(pathname: string): string {
   const segments = pathname.split('/').filter(Boolean);
   if (segments.length === 1) return "Dashboard";
@@ -69,6 +71,16 @@ export function Header() {
     );
   }
 
+  const handleLogout = () => {
+    console.log('[Header] De-hydrating Sovereign Datastore...');
+    syncEngine.disable();
+    localStorage.removeItem('authStatus');
+    localStorage.removeItem('userDID');
+    localStorage.removeItem('userUID');
+    localStorage.removeItem('authToken');
+    window.location.href = '/';
+  };
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
       <SidebarTrigger className="sm:hidden" />
@@ -94,19 +106,23 @@ export function Header() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>{userDisplayName}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/security/settings">Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/security/detect">Support (Shield)</Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => { localStorage.removeItem('authStatus'); window.location.href = '/'; }}>
+                <DropdownMenuItem onClick={handleLogout}>
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <Button asChild>
-              <a href={process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "http://localhost:3001"}>
+              <Link href="/dashboard">
                 Sign In
-              </a>
+              </Link>
             </Button>
           )}
         </div>

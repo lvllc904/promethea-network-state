@@ -7,6 +7,7 @@ import type { TextToSpeechInput, TextToSpeechOutput, SpeechToTextInput, SpeechTo
 type PrometheaAssistantInput = {
     query: string;
     constitutionContent: string;
+    whitePaperContent: string;
 };
 
 // The local type definition for the assistant output
@@ -22,10 +23,13 @@ export async function askPrometheaAction(input: PrometheaAssistantInput): Promis
         if (!input.constitutionContent) {
             return { error: "Constitution content is missing. Cannot proceed." };
         }
+        if (!input.whitePaperContent) {
+            return { error: "White Paper content is missing. Cannot proceed." };
+        }
 
         // The AI service now runs on its own port, which we'll fetch from an environment variable.
         // For local development, we'll default to 4002 if not set.
-        const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://localhost:4002';
+        const aiServiceUrl = process.env.AI_SERVICE_URL || process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://localhost:4002';
 
         const response = await fetch(`${aiServiceUrl}/api/ask-promethea`, {
             method: 'POST',

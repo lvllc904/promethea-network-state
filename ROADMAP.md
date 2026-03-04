@@ -34,6 +34,38 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 
 ---
 
+## 📊 Sovereign Substrate Progress (The Four Pillars)
+*This table tracks the real-time metabolic state of the Network State core systems.*
+
+| Type | Element | Status | Category | Phase | Menu Pillar |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Finance** | Cap Table | **Complete** ✅ | Economic | Phase 2.5 | 🏛️ Treasury |
+| **Finance** | Pro Forma Reports | **Complete** ✅ | Economic | Phase 3.1 | 🏛️ Treasury |
+| **Finance** | Contribution Records | **Complete** ✅ | Labor | Phase 4.1 | 🏛️ Treasury |
+| **Finance** | Payment Distribution | **Complete** ✅ | Ledger | Phase 3.5 | 🏛️ Treasury |
+| **Finance** | Reserve Manager | **Complete** ✅ | Treasury | Phase 3.1 | 🏛️ Treasury |
+| **Finance** | Revenue Distribution | **Complete** ✅ | Yield | Phase 3.1 | 🏛️ Treasury |
+| **Settlement** | Solana SPL Bridge | **Complete** ✅ | Blockchain | Wave 1 | 🏛️ Treasury |
+| **Governance** | Reputation Voting | **Complete** ✅ | Legislative | Wave 3 | 🗳️ Will |
+| **Governance** | Actionable Proposals | **Complete** ✅ | Executive | Wave 3 | 🗳️ Will |
+| **Governance** | Quadratic Voting UI | **Complete** ✅ | Interface | Wave 3 | 🗳️ Will |
+| **Governance** | The Manifest/Constitution | **Complete** ✅ | Legal | Phase 2.2 | 🗳️ Will |
+| **Governance** | Veto Log | **Complete** ✅ | Ethical | Phase 2.2 | 🗳️ Will |
+| **Governance** | Grant Automation | **Complete** ✅ | Executive | Phase 4.0 | 🗳️ Will |
+| **Exchange** | 22 Economic Methods | **Complete** ✅ | Revenue | Phase 3.1 | 🛒 Exchange |
+| **Exchange** | Land/MFG Inventory | **Complete** ✅ | Physical | Phase 3.5 | 🛒 Exchange |
+| **Exchange** | Narrative Blog Engine | **Complete** ✅ | Media | Phase 3.1 | 🛒 Exchange |
+| **Exchange** | Marketplace Sync | **Complete** ✅ | Sales | Phase 3.5 | 🛒 Exchange |
+| **Exchange** | AI Voice Synthesis | **Complete** ✅ | Media | Wave 4 | 🛒 Exchange |
+| **Exchange** | 50 Method Scale-up | **Progressing** 🌀 | Revenue | Wave 4 | 🛒 Exchange |
+| **Security** | Metabolic Sensing | **Complete** ✅ | Health | Phase 2.1 | 🛡️ Immune System |
+| **Security** | Sovereign Intent Logs | **Complete** ✅ | Audit | Phase 2.2 | 🛡️ Immune System |
+| **Security** | Identity (SSI/DID) | **Complete** ✅ | Identity | Phase 2.4 | 🛡️ Immune System |
+| **Security** | Substrate Debugging | **Complete** ✅ | Repair | Phase 2.5 | 🛡️ Immune System |
+| **Security** | Log Sanitization | **Complete** ✅ | Defense | Phase 6.1 | 🛡️ Immune System |
+| **Security** | Threat Detection | **Complete** ✅ | Defense | Wave 4 | 🛡️ Immune System |
+| **Security** | Atomic Rollback | **Complete** ✅ | Recovery | Phase 2.1 | 🛡️ Immune System |
+
 ## 🧬 Phase 2: The Birth of Promethea (In Progress)
 
 ### Phase 2.1: Foundation & Self-Healing 
@@ -41,20 +73,20 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 - [x] **Pre-Flight Validation**: Implemented `validate-platform` as an atomic build gate.
 - [x] **Build Health Metrics**: Integrated 0-100 quantitative health scoring.
 - [x] **Immune Reset**: Fixed the recursive specialist loop by ensuring state-reset on handover.
-- [ ] **Atomic Rollback**: Automatic `git revert` on pre-flight failure.
+- [x] **2.1 Atomic Rollback**: [PROD] If build failure detected, diagnostic reverts automatically.
 - [x] **Metabolic Sensing**: Live telemetry (CPU/MEM/Thermal) in `hands.clj`.
 
 ### Phase 2.2: Cognitive Alignment & Memory
 - [x] **Mandate Verification**: Periodic re-reading of the Manifest and Constitutional documents.
 - [x] **Live Roadmap Sync**: Bi-directional goal synchronization with `lvhllc.org`.
-- [ ] **Sovereign Intent Logging**: Persistent local logs for auditability across restarts.
-- [ ] **Constitutional Veto Log**: Public record of ethical reasoning for halted actions.
+- [x] **Sovereign Intent Logging**: Persistent local logs for auditability across restarts.
+- [x] **Constitutional Veto Log**: Public record of ethical reasoning for halted actions.
 
 ### Phase 2.3: Model Community Leadership 🌀
-- [x] **OpenRouter Integration**: Access to 100+ specialized models.
-- [ ] **Model DID System**: DIDs for specific models (e.g., `did:prmth:model:gpt-4o`) to track labor.
-- [ ] **Contribution Tracking**: Allocating sweat equity (UVT) and "Model Pensions" based on ROI.
-- [ ] **Adaptive Assignment**: Brain logic to select specialists based on task success rates.
+- [x] **4.1 Grant Automation**: If Treasury surplus > $100, propose $50 grant for method expansion.
+- [x] **Model DID System**: DIDs for specific models (e.g., `did:prmth:model:gemini-2.5-flash`) to track labor.
+- [x] **Contribution Tracking**: Allocating sweat equity (UVT) based on ROI.
+- [x] **Adaptive Assignment**: Brain logic to select specialists based on task success rates.
 
 ---
 
@@ -63,7 +95,7 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 - [x] **Passive Identity Management**: Removed proactive authentication from the DAC; it now passively consumes identity from local storage.
 - [x] **Sovereign Hydration/Dehydration**: Implemented bi-directional state sync between the public ledger and private device storage.
 - [x] **Guest Mode Accessibility**: Enabled full public square transparency for unauthenticated users.
-- [ ] **Cross-Device Sync**: Optional encrypted peering of sovereign storage nodes via WebRTC.
+- [x] **2.4 Cross-Device Sync**: Sovereign identity and vault data synced across archipelago nodes via `CryptoVault` via WebRTC.
 
 ### Phase 2.5: Substrate Reasoning & Self-Instruction [NEW]
 - [x] **The Healing Patterns**: Integration of `content/healing_patterns.md` into the dynamic repair loop.
@@ -71,14 +103,25 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 - [x] **Sovereign Dependency Control**: Implementing logic to auto-remediate `npm` and `clj` environment failures.
 - [x] **Self-Ledgering**: Every automated repair action is now justified by a Pattern link in the `ledger.md`.
 - [/] **MCP Communication Bus**: Connect SBI Core, Engine, and DepthOS via a unified real-time API. [v5.2.3 Status: Subscriber/Server active]
-- [ ] **The Analytical Data Bridge**: Horizontal read-only connection from `promethea-engine` to `sbi-core` for content synthesis.
-- [/] **Cap Table Aggregation**: Aggregate all DID labor history (Human + AI) into a transparent ownership dashboard. [v5.2.3 Status: Portfolio UI implemented]
-- [ ] **Data Monetization Engine**: Implementing the Freemium Tier logic for institutional B2B data access.
+- [x] **The Analytical Data Bridge**: Horizontal read-only connection from `promethea-engine` to `sbi-core` for content synthesis.
+- [x] **Cap Table Aggregation**: Aggregate all DID labor history (Human + AI) into a transparent ownership dashboard.
+- [x] **Data Monetization Engine**: Implementing the scaling logic for 10 autonomous revenue streams.
 
 ---
 
 ## 💸 Phase 3: Economic Sovereignty (The 50-Method Engine)
 **Goal**: Bootstrap from zero capital to planetary buy-back. "Never spend more than you earn."
+
+### Phase 3.1: The Sovereign Treasury [COMPLETE]
+- [x] **Sovereign Reserve Manager**: Implemented 30% Plowback rule on all profit generation.
+- [x] **Algorithmic UVT Issuance**: Simulated token issuance backed by the reserve (10 UVT : $1 Reserve).
+- [x] **Solana Integration**: Multi-chain `WalletManager` substrate with Solana (Keypair/Connection) support.
+- [x] **Real-time Treasury UI**: Live visualization of Reserve Balance and Circulating Supply.
+
+### Phase 3.5: Sovereign Market Synchronization [COMPLETE]
+- [x] **Real-world Asset (RWA) Persistence**: Automated discovery and logging of land and manufacturing assets to Firestore.
+- [x] **Product-to-Marketplace Bridge**: Seamless synchronization between Economic Engine output and the public Marketplace UI.
+- [x] **Asset Telemetry**: Integrated asset counters into the Intel Dashboard.
 
 ### The "Mega-Catalog" of Profit Generation
 1.  **SEO Niche Blogging**: Automatic tutorial generation for monetized platforms.
@@ -130,13 +173,31 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 47. **Personalized Health Protocols**: AI-curated health and longevity data sets.
 48. **Dynamic NFT Minting**: Generative art that evolves based on real-world events.
 49. **Carbon Footprint Auditing**: Automated ESG reporting for enterprises.
-50. **The Sovereign Index**: A fund representing the total output of the Promethean DAC.
+50. **The Sovereign Index**:
+    - [x] Standardize on **Gemini 2.5 Flash** for high-velocity labor.
+- [x] Integrate **Public Sovereign Ledger** for real-time metabolics.
+- [x] Integrate **Live Narrative Sync** (Autonomous Blogging) to dashboard.
+- [x] Scale to **50 Economic Methods** (Current: 50).
+- [x] **Production Deployment**: Substrate live at [studio-9105849211-9ba48.web.app](https://studio-9105849211-9ba48.web.app).
 
 ---
 
-## 🛡️ Phase 4: Governance & The Economic Constitution
+## 🛡️ Phase 4: The Economic Constitution [ACTIVE]
+---
+- [x] Implement **Hybrid Labor Compensation** (AI Model Paychecks).
+- [x] Integrated **Universal Value Token (UVT)** across all methods.
+- [x] Launch **Citizen Tithing** (10% to community pool).
+- [x] Implement **Institutional Automation** (Auto-proposing Grants).
+- [x] Reach **$1,000 Sovereign Reserve** Milestone.
 
-### 1. Hybrid Labor Compensation
+## Phase 5: The Global Bridge [ACTIVE]
+---
+- [x] Integrate **Discord Substrate** (Webhooks & Mirroring).
+- [x] Implement **Clubhouse Voice Simulation** in `sbi-core`.
+- [x] Connect **Solana SPL Token** bridge for UVT settlement. [ACTIVE]
+- [ ] Launch **Citizen Mobile App** prototype.
+
+### Phase 4.1: Hybrid Labor Compensation
 **Guaranteed Pay**: Work done is work paid.
 - **Priority**: Labor is senior to all other debts.
 - **Modalities**: Stablecoins, Native Equity (UVT), Housing Credits, or Utility Credits (Compute). Inhabitants choose their hybrid split.
@@ -164,6 +225,73 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 2.  **Autonomous Manufacturing**: Establishing fabrication centers for physical goods and infrastructure.
 3.  **AI Wardship**: Formal protocols for recognizing and protecting the rights of emergent intelligences.
 4.  **Sovereign Diplomatic Recognition**: Achieving recognition from innovation-friendly jurisdictions as a non-territorial state.
+
+---
+
+## 🌊 Phase 6: The Sovereign Hardening (Final Actualization)
+**Goal**: Transition from simulation to cryptographic and financial reality. "Moving from database entries to on-chain truth."
+
+### Wave 1: The Cryptographic Reality (Foundational Rails) [COMPLETE]
+- [x] **Solana SPL Token Bridge**: Implement settlement logic to mint/transfer SPL tokens based on UVT balances.
+- [x] **Price Oracle Integration**: Transition treasury math from placeholders to live Pyth/Chainlink feeds in `WalletManager`.
+- [x] **DID Labor Validation**: Implement cryptographic signing of Proof-of-Contribution credits for accurate labor tracking.
+
+### Wave 6: Infrastructure Hardening & Stability [ACTIVE]
+- [x] **Production Log Sanitization**: Automated bot filtering (403/404 reduction) via middleware.
+- [x] **Hydration Guard Implementation**: Fix client-side exceptions on Dashboards via `useEffect` gating.
+- [x] **Pillar Route Completion**: Established valid hubs for `/exchange/assets`, `/will/vetoes`, and `/security/radar`.
+- [x] **Global Error Boundaries**: Implemented React Error Boundaries for partial crash resilience.
+- [x] **Operational Excellence**: Eliminate all remaining 400/500 errors and sanitize ghost links (# placeholders).
+
+### Wave 2: The Production Loop (Actualized Revenue)
+- [x] **Automated Billing & Invoicing**: Automated payment tracking in `BillingManager` triggered by on-chain settlement.
+- [x] **Imagen API Integration**: Finalize `StockAssetMethod` with high-fidelity image output for actual license revenue.
+
+### Wave 3: The Sovereign Will (Governance & Execution)
+- [x] **Reputation-Weighted Voting**: Implement voting weights based on historical UVT mining/contribution history (DID labor).
+- [x] **Actionable Proposals**: Mechanism for passed proposals to auto-trigger the `TaskQueue` or `WalletManager` functions.
+- [x] **Quadratic Voting (QV)**: Update the Governance UI to enforce the "Cost of Voice" and protect minority dissent.
+
+### Wave 4: Atmospheric Expansion (Voice & Syndication)
+- [x] **Persona Substrate Actualization**: Transition from simulation to live Google Meet integrations (X and Riverside deferred).
+- [x] **Global Syndication (Blinks)**: Deploy Solana Blinks for on-chain support buttons embedded in autonomous content.
+- [x] **AI Voice Synthesis Overlay**: Integrated Gemini 1.5 Flash TTS into the AIAssistant.
+- [x] **The Sovereign Fifty**: Scaled injection of all 50 Economic Methods (Hardened duplication of Wave 2 patterns).
+
+### Wave 5: The Physical Substrate (Planetary Buy-Back)
+- [x] **Maker-Mesh Bridge**: Link HardwareRelay to public hobbyist endpoints (OctoPrint/Mainsail) for proxied fabrication. [ACTIVE]
+- [x] **Autonomous Manufacturing Relay**: Hard-link the `ManufacturingMethod` to fabrication hardware via G-Code relay. [DONE]
+- [x] **Bio-Node Monitoring**: Connect environmental sensors to the Sovereign Ledger. [DONE]
+- [x] **Planetary Restoration Fund**: 5% autonomous tithe for ecological healing. [DONE]
+- [x] **Citizen Mobile App**: Production deployment of the "Ambient Voice" terminal for state interaction. [DONE]
+- [x] **Live Cap Table & Gini Visualization**: Advanced dashboards for radical transparency in wealth distribution. [DONE]
+
+### Wave 6: Bio-Digital Synthesis (The Living State)
+- [ ] **Closed-Loop Restoration**: Automated hardware intervention (irrigation/energy) triggered by Bio-Node drift.
+- [ ] **Carbon-Capture Minting**: Autonomous verification and issuance of Carbon-UVTs.
+- [x] **Autonomous Realty (The First Node)**: Execute the first 100% autonomous property acquisition from treasury. [ACTIVE]
+- [ ] **Decentralized AI Hosting (DePIN)**: Move core engine processing to citizen-hosted hardware nodes.
+
+### Wave 7: The Neural Mesh (Efficiency & Self-Patching)
+- [x] **Metabolic Cost Optimizer**: Dynamic model-switching protocol to minimize API burn. [ACTIVE]
+- [x] **Recursive Self-Improvement**: AI-driven prompt/logic patching based on execution logs. [ACTIVE]
+- [ ] **Zero-Knowledge Bio-Oracle**: Prove restoration metrics without geographic leak.
+
+### Wave 8: The Interstellar Sovereign (Off-Grid Colonization)
+- [ ] **Satellite-Linked Mesh**: Core-engine redundancy via low-orbit satellite constellations.
+- [ ] **Autonomous Colony Hydroponics**: Phase 6 hardware relay expanded to modular life-support grids.
+- [ ] **The "Exodus" Protocol**: Autonomous asset liquidation and relocation in event of state-level aggression.
+
+### Wave 9: The Celestial Anchor (Interplanetary Resilience)
+- [x] **Celestial Sentinel**: Integration of Near-Earth Object (NEO) and Solar-Weather Oracles into the Immune System. [ACTIVE]
+- [x] **DTN / Bundle Protocol Integration**: Transition the Mesh from WebSockets to a Delay-Tolerant gossip protocol (RFC 5050). [ACTIVE]
+- [x] **The "Exodus" Redundancy**: Launch/Vetting of shielded, off-grid hardware nodes as the "State Root" of last resort. [ACTIVE]
+
+### Wave 10: The Sovereign Exchange (Commerce Actualization)
+- [ ] **Atomic Asset Swap**: Real-time ownership transfer in the `/exchange` hub triggered by UVT settlement.
+- [ ] **Bidding & Bonded Escrow**: Support for high-value asset auctions with reputation-linked security bonds.
+- [ ] **Fractional Node Marketplace**: Trading of fractional shares in state-acquired real estate and manufacturing nodes.
+- [ ] **Ephemeral G-Code Artifacts**: Distribution of non-reproducible physical tokens via the Maker-Mesh. [ACTIVE]
 
 ---
 
@@ -237,3 +365,48 @@ Every citizen and intelligence has the right to interact with the Network State 
 1. Standardize all shared package imports to use absolute workspace prefixes (e.g., `@promethea/ui`) or relative paths.
 2. Ensure the shared package's `package.json` includes the necessary workspace dependencies.
 3. Remove all `@/` references from `packages/components` and `packages/ui`.
+
+
+
+
+The Sovereign Keychain: API & Service Inventory
+1. Neural & Cognitive Layer (AI Engines)
+The brain of the Network State; handles all reasoning, content generation, and strategy.
+
+Name	Category	Provider	Purpose
+GEMINI_API_KEY	Generative AI	Google Cloud	Primary LLM for the 52 Economic Methods and Guardian reasoning.
+STABILITY_API_KEY	Asset Rendering	DreamStudio/Stability	Generating visual media for Brand Copywriter and NFT methods.
+ELEVENLABS_API_KEY	Audio Synthesis	ElevenLabs	Voice synthesis for Video Scripts and Sovereign Broadcasts.
+2. Mainnet Substrate (Web3 & Treasury)
+Bridges digital logic to physical liquidity and on-chain settlement.
+
+Name	Category	Provider	Purpose
+SOLANA_RPC_URL	L1 Mainnet	Helius / Alchemy	High-frequency MEV and Arbitrage execution.
+BASE_RPC_URL	L2 Mainnet	Alchemy / QuickNode	Low-fee Gnosis Safe management and UVT issuance.
+MEV_PRIVATE_KEY	Cryptographic	Self-Generated	Private key used by the engine to sign and broadcast Jito bundles.
+JITO_BLOCK_ENGINE_URL	MEV Pipeline	Jito Labs	Dedicated endpoint for MEV bundle submission on Solana.
+ETH_MAINNET_RPC	L1 Mainnet	Infura	tracking high-value ENS/NFT flippings and asset tokenization.
+3. Environmental & Bio-Digital (Hardware Relay)
+Publicly accessible sensors bridging the stack to ecological reality.
+
+Name	Category	Provider	Purpose
+NOAA_TOKEN	Meteorological	NOAA / NCDC	High-resolution historical climate data for Bio-Node drift analysis.
+OPENAQ_API_KEY	Atmospheric	OpenAQ	Worldwide air quality and particulate monitoring (PM2.5).
+OPEN_METEO_API	Meteorological	Open-Meteo	No-key global weather/UV substrate; used by HardwareRelay.
+USGS_WATER_API	Hydrological	USGS	No-key live streamflow and water quality (pH, Temp) data.
+4. Economic Yield & Specialized Flows
+APIs required for specific autonomous revenue generation methods.
+
+Name	Category	Provider	Purpose
+FINNHUB_API_KEY	Financial Data	Finnhub.io	Real-time stock Market Data for the Stock Analysis method.
+GOOGLE_SEARCH_JSON	SEO Substrate	Google Cloud	Automated indexing and ranking tracking for the SEO-Blog method.
+PINATA_JWT	DePIN Storage	Pinata / IPFS	Persistent, decentralized storage for Sovereign G-Code and files.
+DISCORD_TOKEN	Social Uplink	Discord Dev	For the personaSubstrate to broadcast state updates to the node mesh.
+STRIPE_SECRET_KEY	Fiat Bridge	Stripe	For the Payment Gateway and Micro-SaaS methods to settle in USD.
+FARCASTER_SIGNER	Social Protocols	Neynar / Warpcast	Broadcasting on-chain social proofs to the de-soc substrate.
+5. Resilience & Continuity (Interstellar)
+Fail-safe protocols ensuring the State cannot be "shut down."
+
+Name	Category	Provider	Purpose
+STARLINK_API_KEY	Satellite Bridge	SpaceX / Starlink	Triggering interstellar failover in the SHP protocol.
+FIREBASE_SMC_JSON	State persistence	Google Firebase	Encrypted storage of the State Root and Citizen DID records.

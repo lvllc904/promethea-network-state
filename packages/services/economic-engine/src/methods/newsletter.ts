@@ -1,6 +1,9 @@
 import { BaseMethod, ExecutionResult } from './base-method';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
+import Parser from 'rss-parser';
+import { googleWorkspace } from '../tools/google-workspace';
+import { BlinkGenerator } from '../tools/blink-generator';
 
 /**
  * Method 3: Newsletter Curation (Phase 3)
@@ -13,6 +16,7 @@ import axios from 'axios';
 
 export class NewsletterMethod extends BaseMethod {
     private genAI: GoogleGenerativeAI;
+    private rssParser: Parser;
     private rssFeedUrls: string[] = [
         'https://news.ycombinator.com/rss',
         'https://techcrunch.com/feed/',
@@ -28,6 +32,7 @@ export class NewsletterMethod extends BaseMethod {
         });
 
         this.genAI = new GoogleGenerativeAI(apiKey);
+        this.rssParser = new Parser();
     }
 
     async execute(): Promise<ExecutionResult> {
@@ -44,16 +49,21 @@ export class NewsletterMethod extends BaseMethod {
             const newsletter = await this.generateNewsletter(articles);
             logs.push(`Newsletter generated: ${newsletter.length} characters`);
 
-            // Step 3: Send via email (placeholder)
-            logs.push('Sending newsletter...');
-            const sendResult = await this.sendNewsletter(newsletter);
-            logs.push(`Sent to ${sendResult.recipientCount} subscribers`);
+            // Step 3: Append Syndication Blinks
+            const supportBlink = BlinkGenerator.getSupportBlink(0.25);
+            const fullNewsletter = `${newsletter}\n\n---\n\n⚡ Support the Sovereign Infrastructure: [Solana Blink](${supportBlink})`;
+
+            // Step 4: Send via email (Hard-Linked to Google Workspace)
+            logs.push('Sending newsletter via Gmail API...');
+            const subject = `Promethean Sovereign Intelligence: Daily Curation - ${new Date().toLocaleDateString()}`;
+            const sendResult = await this.sendNewsletter(subject, fullNewsletter);
+            logs.push(`Sent to ${sendResult.recipientCount} lead subscribers`);
 
             // Revenue calculation
             const subscriberCount = sendResult.recipientCount;
             const revenuePerSubscriber = 5; // $5/month per subscriber
             const dailyRevenue = (subscriberCount * revenuePerSubscriber) / 30;
-            const apiCost = 0.02; // Gemini API cost
+            const apiCost = 0.05; // Gemini API cost
 
             return {
                 success: true,
@@ -61,14 +71,15 @@ export class NewsletterMethod extends BaseMethod {
                 cost: apiCost,
                 profit: dailyRevenue - apiCost,
                 timestamp: Date.now(),
+                modelDID: 'did:prmth:model:gemini-2.0-flash',
                 logs,
             };
         } catch (error) {
             return {
                 success: false,
                 revenue: 0,
-                cost: 0.02,
-                profit: -0.02,
+                cost: 0.05,
+                profit: -0.05,
                 timestamp: Date.now(),
                 logs,
                 error: error instanceof Error ? error.message : 'Unknown error',
@@ -77,17 +88,29 @@ export class NewsletterMethod extends BaseMethod {
     }
 
     private async fetchRSSFeeds(): Promise<any[]> {
-        // TODO: Implement actual RSS parsing
-        // For now, return mock data
-        return [
-            { title: 'AI Breakthrough in 2026', url: 'https://example.com/1' },
-            { title: 'Web3 Adoption Grows', url: 'https://example.com/2' },
-            { title: 'Quantum Computing Update', url: 'https://example.com/3' },
-        ];
+        const allChapters = [];
+
+        for (const url of this.rssFeedUrls) {
+            try {
+                const feed = await this.rssParser.parseURL(url);
+                const recentItems = feed.items.slice(0, 5).map(item => ({
+                    title: item.title,
+                    url: item.link,
+                    content: item.contentSnippet || item.content,
+                    source: feed.title
+                }));
+                allChapters.push(...recentItems);
+            } catch (err: any) {
+                console.error(`[NewsletterMethod] Failed to fetch feed ${url}:`, err.message);
+            }
+        }
+
+        // Return top 10 articles total
+        return allChapters.slice(0, 10);
     }
 
     private async generateNewsletter(articles: any[]): Promise<string> {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
         const articleList = articles.map((a, i) => `${i + 1}. ${a.title} (${a.url})`).join('\n');
 
@@ -96,10 +119,9 @@ export class NewsletterMethod extends BaseMethod {
 ${articleList}
 
 Requirements:
-- Catchy subject line
-- Brief intro paragraph
+- Brief intro paragraph (Voice of Promethea)
 - 3-5 key highlights with summaries
-- Call-to-action at the end
+- Call-to-action at the end (Join the Network State)
 - Professional tone, easy to scan
 
 Write the newsletter now:`;
@@ -108,11 +130,17 @@ Write the newsletter now:`;
         return result.response.text();
     }
 
-    private async sendNewsletter(content: string): Promise<{ recipientCount: number }> {
-        // TODO: Integrate with SendGrid/Beehiiv API
-        // For now, return placeholder
+    private async sendNewsletter(subject: string, content: string): Promise<{ recipientCount: number }> {
+        // Hard-Linked to Gmail for now
+        // Subscriptions stored in Firestore 'subscribers' collection
+        const subscribers = ['officeone@example.com']; // Placeholder until DB reauth
+
+        for (const email of subscribers) {
+            await googleWorkspace.sendNewsletter(email, subject, content);
+        }
+
         return {
-            recipientCount: 10, // Start with 10 subscribers
+            recipientCount: subscribers.length,
         };
     }
 }

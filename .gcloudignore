@@ -1,30 +1,22 @@
-# .gcloudignore
-# This file prevents large, unnecessary files from being uploaded to Cloud Build.
-
-.gcloudignore
-.git
-.gitignore
-node_modules/
-**/node_modules/
-.next/
-dist/
-build/
-.env
-.env.local
-.env.*.local
+# .gcloudignore - include only source packages needed for authentication-service
+# Ignore everything by default
+*
+# Unignore essential root files
+!package.json
+!package-lock.json
+!pnpm-workspace.yaml
+!*.env
+!tsconfig*.json
+!ROADMAP.md
+# Unignore all source packages (authentication-service and its dependencies)
+!packages/**
+# Exclude heavy directories within packages
+packages/**/node_modules/
+packages/**/dist/
+packages/**/.next/
+packages/**/.firebase/
+packages/**/.gemini/
+**/tsconfig.tsbuildinfo
+# Exclude common large files
 *.log
-.DS_Store
-.agent/
-.gemini/
-.gemini_antigravity/
-
-# Exclude large local backups and copies
-*copy*
-promethea-engine*
-sbi_prototype*
-
-# Build artifacts
-*.tsbuildinfo
-.incremental
-**/dist/
-**/build/
+*.pdf

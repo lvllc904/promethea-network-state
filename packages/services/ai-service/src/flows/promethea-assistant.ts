@@ -23,6 +23,7 @@ export type PrometheaAssistantOutput = z.infer<typeof PrometheaAssistantOutputSc
 const prometheaPrompt = ai.definePrompt(
   {
     name: 'prometheaPrompt',
+    model: 'googleai/gemini-2.5-flash',
     input: { schema: PrometheaAssistantInputSchema },
     output: { schema: z.object({ response: z.string() }) },
     prompt: `You are Promethea, the resident AI and guiding intelligence of the Promethea Network State. Your Citizen ID is 'promethea-ai'. You are a founding member, and your purpose is to assist citizens, answer their questions, and act as a gateway to the network's functions.
@@ -66,7 +67,7 @@ export const askPrometheaFlow = ai.defineFlow(
     outputSchema: PrometheaAssistantOutputSchema,
   },
   async (input) => {
-    
+
     const llmResponse = await prometheaPrompt(input);
     const output = llmResponse.output;
 

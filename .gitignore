@@ -1,5 +1,6 @@
 # Node
 node_modules/
+.node_modules_hidden/
 dist/
 .npm
 .pnpm-debug.log*
@@ -52,3 +53,4 @@ processes_tree.txt
 # Temp
 tmp/
 *.vsix
+*.production.yaml

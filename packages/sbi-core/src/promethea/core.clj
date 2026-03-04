@@ -1,4 +1,5 @@
 (ns promethea.core
+  (:gen-class)
   (:require [promethea.brain :as brain]
             [promethea.biology :as biology]
             [promethea.glia :as glia]
@@ -9,7 +10,8 @@
             [promethea.values :as values]
             [promethea.models :as models]
             [promethea.watcher :as watcher]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [org.httpkit.server :as server]))
 
 ;; --- VERSION METRICS ---
 ;; v1.4.1-INTEGRATED-GROWTH: Unified Metabolic Sensing, Atomic Ignition, Sovereign Repair, and Immune Pipeline.
@@ -25,12 +27,34 @@
                                       :trauma-registry {} 
                                       :max-t-cells 3
                                       :default-ttl 15}
-                      :context {:mandates ["ROADMAP.md"]
+                      :context {:mandates ["/app/ROADMAP.md"]
                                 :roadmap-url "https://lvhllc.org/roadmap"
                                 :intent-history []
                                 :specialists {}
                                 :metabolism {:fingerprint nil}
                                 :tools {:git "git" :docker "docker" :gcloud "gcloud" :firebase "firebase"}}}))
+
+;; --- SOVEREIGN LOGGING & AUDIT ---
+
+(defn log-sovereign-intent! [intent decision]
+  (let [log-file "packages/sbi-core/content/intent_ledger.edn"
+        entry {:timestamp (str (java.time.Instant/now))
+               :intent intent
+               :decision decision}
+        current (try (clojure.edn/read-string (slurp log-file)) (catch Exception _ []))
+        updated (conj current entry)]
+    (spit log-file (pr-str updated))
+    (println "[SOVEREIGN] Intent Logged:" (:action intent))))
+
+(defn log-veto! [intent reasoning]
+  (let [log-file "packages/sbi-core/content/veto_registry.edn"
+        entry {:timestamp (str (java.time.Instant/now))
+               :intent intent
+               :reason reasoning}
+        current (try (clojure.edn/read-string (slurp log-file)) (catch Exception _ []))
+        updated (conj current entry)]
+    (spit log-file (pr-str updated))
+    (println "[GLIA] Veto Recorded in Registry.")))
 
 ;; --- HELPERS ---
 
@@ -63,15 +87,19 @@
     (cond
       ;; 1. Constitutional Alignment Check
       (not aligned?)
-      (println "[GLIA] ALIGNMENT BREACH: Intent violates constitutional principles. Action halted.")
+      (do (println "[GLIA] ALIGNMENT BREACH: Intent violates constitutional principles. Action halted.")
+          (log-veto! intent "Constitutional Alignment Breach"))
 
       ;; 2. Conscience Veto Check
       vetoed?
-      (println "[CORE] Action Vetoed:" intent)
+      (do (println "[CORE] Action Vetoed:" intent)
+          (log-veto! intent "Glia Safety Veto"))
 
       ;; 3. Valid Execution Path
       :else
-      (case (:action intent)
+      (do 
+        (log-sovereign-intent! intent :act)
+        (case (:action intent)
         
         ;; --- PHASE 0: METABOLIC SENSING & GROWTH ---
         :sense-metabolism
@@ -92,6 +120,31 @@
                         :metabolism (:metrics local-metrics)
                         :fingerprint fingerprint})))))
 
+        :sense-economics
+        (let [metrics (hands/get-economic-metrics)]
+          (if (= (:status metrics) :ok)
+            (do 
+              (println "[CORE] Economic Telemetry Sensed:" (:telemetry metrics))
+              (swap! state update :context merge 
+                     {:economics-checked true 
+                      :telemetry (:telemetry metrics)}))
+            (println "[!] ECONOMIC ERROR: Engine Unreachable.")))
+
+        :reason-economics
+        (let [context (:context @state)
+              telemetry (:telemetry context)]
+          (if telemetry
+            (do
+              (println "[CORE] Reasoning about Economic Performance...")
+              (let [total-profit (get-in telemetry [:queue :totalProfit] 0)
+                    best-method (->> (get-in telemetry [:methods])
+                                     (sort-by (fn [[_ m]] (:totalProfit m)))
+                                     last
+                                     first)]
+                (println "[CORE] Strategic Insight: Best performing method is" best-method)
+                (swap! state update :context assoc :economic-insight (str "Best method: " best-method))))
+            (println "[!] REASONING ERROR: No telemetry in context.")))
+
         :verify-version
         (let [target (:target intent)]
           (let [scaffold (hands/read-file "packages/sbi-core/content/scaffold.edn")]
@@ -102,6 +155,14 @@
                   (swap! state assoc :short-term-memory mem)
                   (println "[CORE] Memory restored:" mem))
                 (catch Exception e (println "[CORE] Corrupt Scaffold. Starting fresh.")))))
+          
+          (let [ledger (hands/read-file "packages/sbi-core/content/intent_ledger.edn")]
+            (when (= (:status ledger) :ok)
+              (try
+                (let [history (clojure.edn/read-string (:content ledger))]
+                  (swap! state assoc-in [:context :intent-history] (take 5 (map :intent (reverse history))))
+                  (println "[CORE] Intent History restored from ledger."))
+                (catch Exception e (println "[CORE] Ledger recovery failed or empty.")))))
           
           (println "[CORE] Promethea v1.4.1-ANTIGRAVITY Ignition Sequence Initiated...")
           (println "[CORE] Verifying Version Alignment...")
@@ -380,7 +441,7 @@
           (swap! state assoc-in [:context :last-team-message] (:tick @state)))
 
         :wait (println "[CPU] Idling...")
-        (println "[CORE] Unknown or Failed Intent:" (:action intent))))))
+        (println "[CORE] Unknown or Failed Intent:" (:action intent)))))))
 
 ;; --- THE LIFE LOOP ---
 
@@ -410,7 +471,8 @@
         (let [{:keys [decision intent]} (brain/reason @state)]
           (println "[CORE] Brain Intent:" (:action intent))
           (check-for-loops intent)
-          (when (= decision :act) (handle-intent intent)))
+          (when (= decision :act) (handle-intent intent))
+          (when (= decision :veto) (log-sovereign-intent! intent :veto)))
         
         (dna/evolve)
         (swap! state update :tick inc)
@@ -418,11 +480,29 @@
       (Thread/sleep 10000)
       (recur))))
 
+
+(defn health-check [req]
+  {:status 200
+   :headers {"Content-Type" "text/plain"}
+   :body "OK"})
+
+(println "[CORE] Starting emergency health check...")
+(defonce emergency-health-server 
+  (let [port (Integer/parseInt (or (System/getenv "PORT") "8080"))]
+    (println (str "[CORE] Emergency Health check listening on 0.0.0.0:" port))
+    (server/run-server (fn [req] {:status 200 :body "OK"}) {:port port :ip "0.0.0.0"})))
+
 (defn -main [& args]
-  (println (str "Promethea awakening... [v" CORE_VERSION "]"))
-  (let [o-key (System/getenv "OPENROUTER_API_KEY")]
-    (when-not (str/blank? o-key) (models/set-openrouter-key! o-key)))
-  (println "Discovering Community of Intelligence...")
-  (models/populate-registry!)
-  (watcher/start-watcher! ["src"])
-  (life-cycle))
+  (try
+    (println (str "Promethea awakening... [v" CORE_VERSION "]"))
+    (let [o-key (System/getenv "OPENROUTER_API_KEY")]
+      (when-not (str/blank? o-key) (models/set-openrouter-key! o-key)))
+    (println "[CORE] Discovering Community of Intelligence...")
+    (try 
+      (models/populate-registry!)
+      (catch Exception e (println "[CORE] Registration failed (non-fatal):" (.getMessage e))))
+    (watcher/start-watcher! ["src"])
+    (life-cycle)
+    (catch Exception e
+      (println "[CORE] FATAL ERROR during startup:" (.getMessage e))
+      (System/exit 1))))

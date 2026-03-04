@@ -4,7 +4,7 @@ import cors from 'cors';
 import { askPrometheaFlow } from './flows/promethea-assistant';
 
 const app = express();
-const port = process.env.PORT || 4002;
+const port = Number(process.env.PORT) || 8080;
 
 // Middleware
 app.use(cors()); // Enable CORS for all routes
@@ -56,6 +56,6 @@ app.get('/health', (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
-    console.log(`AI service listening on http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`AI service listening on http://0.0.0.0:${port}`);
 });

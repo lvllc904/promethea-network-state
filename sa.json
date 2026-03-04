@@ -1,0 +1,29 @@
+{"type": "service_account", "project_id": "promethea-identity", "private_key_id": "31031efa8bdd3f4c8b742d720820470643345b21", "private_key": "-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCxh19L6lTjII6R
+LKrd6SAFksELUD+zxsJVrQwtF2HncplQ7zlSVNezWM0ZqJWEPcinv2S5xR8gjUmz
+XMw+jPww99nWNOOjsMM2vT79XEU2Jn1J+dCexYm9NAMPbvq7B9ZcII0n4CLHactk
+E1X9sQLRTZ5TozsuyrXYJUrXql4ywVAXLnq9VFGYcXzWIfZ5KVlSKz59PCXHuJ+x
+1h3I4mR/Xl15ZOOPRTdKlAWnQgdCGxh2GuV+5HaBdwoqkW8yYIRZLKz59PCXHuJ+x
+1h3I4mR/Xl15ZOOPRTdKlAWnQgdCGxh2GuV+5HaBdwoqkW8yYIRZLynAgZQLJQrI
+5guQET6EbvD8Ja4QEpnPMW2S95o9PVP+8mw3+VlJTrJKzql6NMYShn+72HqGZQO/
+ApuQw51nAgMBAAECggEAI4Hj+Zcg61yzpy277y6VjQfRPKYMV7TFYcV+zfYDSvuM
+1rdCS8lUazazrxIc9Zo16/dH+jAHDce0mf9RiqFAP7sTAtkJPtA3+1bWpm4yGaaR
+IJ6qr1brOcCRbCDSXV4v7bVFBli6HBB48cc8R8WDvsE7jZb0W2IA3dSBNi6hoP2
+bNHzJutMDeXMEi5stg0Be+IgOnCC3kR0+4ePvHz2ko9N6RJNX72VXlu8UFG0ibIR
+0SFXrBH8twTI38fCueyng86ieKZo6oRAKPwJGGkJUNETjk02cYYUFa5ojlyTp7kO
+hDEeExD7QS+K0Zrbq3Xe0+JszKxEP6mNNIrQeel6wQKBgQDW8okaWp8BvOAIlXVz
+rT3nkk7gNaliPQ7TSTxoisQYuYk86eqUThQ6UrtT6xFF09044eXaloz2CE+pmlmG
+kK+fp1UbTKigHy3ljC0GLAdBWiFpnZeQAPVmJ77BV5ZGAvbPHeSt72Be7tbiXUui
+H0S16JOkLNmsxlLfMwvyfTNPCQKBgQDTb1JV0odRtZDKa29dSiDjPaRamM3MFKME
+Q8uQInM7JHpDoQz4vFRG3vuP1HJIHyISc2nCEmqMP/DF888tvC+ThNADN5l9FTCq
+9HUsDTSv3j7BvMDNirCpTs+Xl9o4QTbZ7XthPSHgnAjNo8/LyEanXs/Er9z1q811
+SDue6Bc07wKBgQCEBx+9x1IJ4DkALMWjExOGLTEzuOJdDEIR99caI7pFsZkhiFDl
+XXxBQtX7utS2PmeQ6/iipnzZFsvP0pYQ+MhXWZIGHbUp/VzUtaBmPR8Lvk/trrYM
+5vnVEK6z1ZfhUyrEl4kCaZmZVj05d7LgVzJ+ReiCHGZsILmAjbtV7B9a+QKBgCy+
+eTEaTXK4NrzvgXC/mDgeumJFxf9zOpBTfIezEqmobYtUULduu3MICzqD3e9vTzmS
+XQYp+YxWl7B8iRKHqZXRXGfh40R6MINtGkLJRKYXJTbAqBiXSg16VSoig5a2DlKO
+FDcexcWPn7lM+lOIvZL72IIqKVuAEQnJ0HwvZ4HXAoGAIhB+u/Z6KQRcHi6cxU9l
+100jb/ij32hyyDuVSjjuCEAte16tPcmW4G21S12T8KXyMpkEqTiZBlFNc/g4ZNlS
+uMo/CUR+YmDwLC8EJ2gYbNtP8p6oAcr7s/edqJJPUYLm+Zod9yI1J1eIfZPmNxqX
+K5Bq9p5+r+H+TgcQHvKFouI=
+-----END PRIVATE KEY-----", "client_email": "promethea-agent@promethea-identity.iam.gserviceaccount.com", "client_id": "111708803781384212181", "auth_uri": "https://accounts.google.com/o/oauth2/auth", "token_uri": "https://oauth2.googleapis.com/token", "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/promethea-agent%40promethea-identity.iam.gserviceaccount.com", "universe_domain": "googleapis.com"}

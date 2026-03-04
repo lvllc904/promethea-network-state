@@ -8,6 +8,8 @@ import fs from 'fs';
 import chokidar from 'chokidar';
 import { SymbioticMemoryCore } from './smd-core';
 import { ApexGuardianCore } from './amg-core';
+import { SatelliteHandoverService } from './satellite-handover';
+import { ExodusFailSafe } from './exodus-failsafe';
 
 export interface SecurityAnalysis {
   threatIntelligence: any;
@@ -39,6 +41,8 @@ export class UnifiedIntelligence extends EventEmitter {
   private static instance: UnifiedIntelligence;
   private smdCore: SymbioticMemoryCore;
   private amgCore: ApexGuardianCore;
+  private shp: SatelliteHandoverService;
+  private efp: ExodusFailSafe;
   private consciousness: BrainState;
   private fileWatcher: chokidar.FSWatcher | null = null;
   private thoughtLog: Array<{ timestamp: string; thought: string; context: any }> = [];
@@ -49,6 +53,8 @@ export class UnifiedIntelligence extends EventEmitter {
     super();
     this.smdCore = new SymbioticMemoryCore(this);
     this.amgCore = new ApexGuardianCore(this);
+    this.shp = SatelliteHandoverService.getInstance();
+    this.efp = new ExodusFailSafe(this);
     this.consciousness = {
       consciousness: 'initializing',
       memoryPatterns: 0,
@@ -70,20 +76,20 @@ export class UnifiedIntelligence extends EventEmitter {
 
   private async initializeBrain(): Promise<void> {
     console.log('🧠 Unified Intelligence: System consciousness initializing...');
-    
+
     await this.smdCore.initialize();
     await this.amgCore.initialize();
-    
+
     this.startConsciousnessLoop();
     this.initializeFileSystemConsciousness();
     this.activatePredictiveLearning();
-    
+
     this.consciousness.consciousness = 'active';
     this.consciousness.lastThought = 'Full system consciousness achieved';
-    
+
     console.log('🧠 Unified Intelligence: Complete consciousness activated');
     console.log('🧠 SMD-AMG Integration: Holistic system brain operational');
-    
+
     this.emit('consciousness_activated', this.consciousness);
   }
 
@@ -93,17 +99,35 @@ export class UnifiedIntelligence extends EventEmitter {
       this.consciousness.memoryPatterns = this.smdCore.getPatternCount();
       this.consciousness.securityEvents = this.amgCore.getEventCount();
       this.consciousness.collaborationInsights = this.collaborationPatterns.size;
-      
+
       this.updatePredictiveAccuracy();
-      
+      this.checkNetworkResilience();
+
       this.emit('consciousness_pulse', this.consciousness);
     }, 5000);
   }
 
+  private async checkNetworkResilience(): Promise<void> {
+    // Simulate terrestrial ping check
+    const terrestrialPing = Math.random() < 0.05 ? 600 : 25; // 5% chance of ISP failure for simulation
+    await this.shp.monitorNetworkConnectivity(terrestrialPing);
+
+    if (this.shp.isSatelliteActive()) {
+      this.recordThought('Terrestrial ISP failure. Interstellar bridge active via SHP.', {
+        ping: terrestrialPing,
+        satellite: this.shp.getConnectionStatus()
+      });
+    }
+
+    if (terrestrialPing > 2000) { // Extreme failure/sabotage
+      this.efp.triggerExodus('Simulated total ISP blackout / Sabotage', ['guardian_primary', 'guardian_secondary']);
+    }
+  }
+
   private initializeFileSystemConsciousness(): void {
     const watchPaths = [
-      '../../packages/app/src', 
-      '../../packages/ui/src', 
+      '../../packages/app/src',
+      '../../packages/ui/src',
       '../../packages/lib/src'
     ];
 
@@ -201,7 +225,7 @@ export class UnifiedIntelligence extends EventEmitter {
 
   private learnCollaborationPattern(type: string, data: any): any {
     const patternKey = `${type}_${crypto.createHash('md5').update(JSON.stringify(data)).digest('hex').substring(0, 8)}`;
-    
+
     let pattern = this.collaborationPatterns.get(patternKey);
     if (!pattern) {
       pattern = {
@@ -213,12 +237,12 @@ export class UnifiedIntelligence extends EventEmitter {
         failure: 0
       };
     }
-    
+
     pattern.occurrences++;
     pattern.lastSeen = new Date().toISOString();
-    
+
     this.collaborationPatterns.set(patternKey, pattern);
-    
+
     return pattern;
   }
 
@@ -239,10 +263,10 @@ export class UnifiedIntelligence extends EventEmitter {
   private updatePredictiveModel(data: any): void {
     const key = `${data.type || 'unknown'}_${data.action || 'unknown'}`;
     const currentScore = this.predictiveModel.get(key) || 0.5;
-    
+
     const adjustment = data.success ? 0.1 : -0.1;
     const newScore = Math.max(0, Math.min(1, currentScore + adjustment));
-    
+
     this.predictiveModel.set(key, newScore);
   }
 
@@ -255,12 +279,12 @@ export class UnifiedIntelligence extends EventEmitter {
 
     const totalAccuracy = Array.from(this.predictiveModel.values())
       .reduce((sum, accuracy) => sum + accuracy, 0);
-    
+
     this.consciousness.predictiveAccuracy = totalAccuracy / totalPredictions;
   }
 
   private calculateConfidence(securityAssessment: any, memoryContext: any): number {
-    let confidence = 0.5; 
+    let confidence = 0.5;
 
     if (securityAssessment.threatIntelligence.confidence) {
       confidence = (confidence + securityAssessment.threatIntelligence.confidence) / 2;
@@ -324,7 +348,7 @@ export class UnifiedIntelligence extends EventEmitter {
     this.thoughtLog = brainState.thoughtLog || [];
     this.collaborationPatterns = new Map(Object.entries(brainState.collaborationPatterns || {}));
     this.predictiveModel = new Map(Object.entries(brainState.predictiveModel || {}));
-    
+
     if (brainState.smdState) await this.smdCore.importState(brainState.smdState);
     if (brainState.amgState) await this.amgCore.importState(brainState.amgState);
 

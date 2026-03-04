@@ -1,4 +1,4 @@
-import type {Config} from 'tailwindcss';
+import type { Config } from 'tailwindcss';
 
 const config = {
   darkMode: ['class'],
@@ -6,8 +6,8 @@ const config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-     '../ui/src/**/*.{js,ts,jsx,tsx,mdx}',
-     '../components/src/**/*.{js,ts,jsx,tsx,mdx}',
+    '../ui/src/**/*.{js,ts,jsx,tsx,mdx}',
+    '../components/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   prefix: "",
   theme: {
@@ -105,7 +105,7 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 } satisfies Config;
 
 export default config;

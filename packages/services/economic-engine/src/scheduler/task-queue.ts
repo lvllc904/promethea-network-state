@@ -1,4 +1,5 @@
 import { BaseMethod, ExecutionResult } from '../methods/base-method';
+import { reserveManager } from '../treasury/reserve-manager';
 
 /**
  * Task Queue Scheduler (Phase 3)
@@ -87,13 +88,20 @@ export class TaskQueue {
     }
 
     /**
+     * Get all registered methods
+     */
+    getMethods(): BaseMethod[] {
+        return Array.from(this.methods.values());
+    }
+
+    /**
      * Get queue status
      */
     getStatus() {
         return {
             running: this.running,
             queueLength: this.queue.length,
-            registeredMethods: this.methods.size,
+            registeredMethodsCount: this.methods.size,
             nextTask: this.queue[0]?.method.methodName ?? null,
         };
     }

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { syncEngine, intentLogger } from '@promethea/sovereign-store';
 
 export function Handshake() {
     const searchParams = useSearchParams();
@@ -25,6 +26,11 @@ export function Handshake() {
             if (token) {
                 localStorage.setItem('authToken', token);
             }
+
+            // Body 3 Hydration
+            console.log('[Handshake] Hydrating Sovereign Datastore for', did);
+            intentLogger.init().catch(err => console.error("IntentLogger failed to init", err));
+            syncEngine.init(did).catch(err => console.error("SyncEngine failed to init", err));
 
             // Clean up the URL by removing the did/token params
             const newParams = new URLSearchParams(searchParams.toString());

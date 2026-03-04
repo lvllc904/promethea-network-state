@@ -1,0 +1,28 @@
+# .gcloudignore
+.git
+**/node_modules/
+node_modules/
+**/.next/
+.next/
+**/.firebase/
+.firebase/
+**/.venv/
+.venv/
+**/.m2/
+.m2/
+!packages/services/economic-engine/dist/
+build/
+**/build/
+.env
+*.log
+.DS_Store
+.gemini/
+*copy*
+"sbi_prototype copy"
+"promethea-engine copy 2"
+mcp_coordination_hub/
+SymbioticScaffold/
+promethean-engine/
+*.tsbuildinfo
+# **/dist/  <-- REMOVE THIS to allow packages/services/economic-engine/dist
+**/build/

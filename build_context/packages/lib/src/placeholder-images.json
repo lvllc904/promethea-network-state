@@ -1,0 +1,70 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "Futuristic city skyline at dusk",
+      "imageUrl": "https://images.unsplash.com/photo-1519608487953-e999c86e7455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmdXR1cmlzdGljJTIwY2l0eXxlbnwwfHx8fDE3NjA4NDg3NDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "futuristic city"
+    },
+    {
+      "id": "founder",
+      "description": "Portrait of the project founder",
+      "imageUrl": "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE2NjgyMjg2MDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "founder portrait"
+    },
+    {
+      "id": "gemini",
+      "description": "Abstract image representing artificial intelligence",
+      "imageUrl": "https://images.unsplash.com/photo-1534723452862-4c874018d66d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyb2JvdHxlbnwwfHx8fDE3NjA4NjU2MjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "robot abstract"
+    },
+    {
+      "id": "user1",
+      "description": "Portrait of a man with glasses",
+      "imageUrl": "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjA4MjUzNjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "user2",
+      "description": "Portrait of a woman smiling",
+      "imageUrl": "https://images.unsplash.com/photo-1521119989659-a83eee488004?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGVyc29uJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzYwODI1MzY2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "user3",
+      "description": "Portrait of a person looking thoughtfully",
+      "imageUrl": "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjA4MjUzNjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "asset1",
+      "description": "Exterior of a modern apartment complex",
+      "imageUrl": "https://images.unsplash.com/photo-1640195208442-f63dfdaf2f67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxidWlsZGluZyUyMGV4dGVyaW9yfGVufDB8fHx8MTc2MDg3ODgxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "building exterior"
+    },
+    {
+      "id": "asset2",
+      "description": "Vast green farmland under a blue sky",
+      "imageUrl": "https://images.unsplash.com/photo-1660910480517-e734223654b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmYXJtbGFuZCUyMGxhbmRzY2FwZXxlbnwwfHx8fDE3NjA5MDg0MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "farmland landscape"
+    },
+    {
+      "id": "asset3",
+      "description": "Storefront of a small community-owned cafe",
+      "imageUrl": "https://images.unsplash.com/photo-1571217748526-261477b6ac62?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjYWZlJTIwc3RvcmVmcm9udHxlbnwwfHx8fDE3NjA4ODM4MDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cafe storefront"
+    },
+    {
+      "id": "asset4",
+      "description": "Rooftop solar panels on a building",
+      "imageUrl": "https://images.unsplash.com/flagged/photo-1566838616631-f2618f74a6a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c29sYXIlMjBwYW5lbHN8ZW58MHx8fHwxNzYwODQyMDMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "solar panels"
+    },
+    {
+      "id": "roadmap-visual",
+      "description": "Stylized rocket ship with icons representing society, technology, and nature",
+      "imageUrl": "https://images.unsplash.com/photo-1752282474887-e0e74aaa2a67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxyb2NrZXQlMjBzaGlwJTIwaWxsdXN0cmF0aW9ufGVufDB8fHx8MTc2MDkwODQzMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "rocket ship illustration"
+    }
+  ]
+}
