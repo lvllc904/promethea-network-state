@@ -102,7 +102,7 @@ export default function NarrativePage() {
                                 </div>
                             </CardContent>
                             <div className="p-4 pt-0">
-                                <Link href={`/dashboard/narrative/${post.id}`}>
+                                <Link href={`/dashboard/narrative/${post.id || 'missing'}`}>
                                     <Button className="w-full group/btn justify-between" variant="ghost">
                                         <div className="flex items-center gap-2">
                                             <BookOpen className="w-4 h-4" />

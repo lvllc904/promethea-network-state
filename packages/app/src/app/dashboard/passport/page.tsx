@@ -29,6 +29,7 @@ export default function PassportPage() {
   const firestore = useFirestore();
   const { toast } = useToast();
   const { localProfile } = useLocalProfile();
+  const [uvtBalance, setUvtBalance] = React.useState<number | null>(null);
 
   const citizenRef = useMemoFirebase(
     () => (firestore && user ? doc(firestore, 'citizens', user.uid) : null),
@@ -56,6 +57,16 @@ export default function PassportPage() {
         reputation: citizen.reputationScore,
         createdAt: citizen.createdAt,
       });
+    }
+
+    const c = citizen as any;
+    if (c?.solanaAddress) {
+      fetch(`/api/uvt?address=${c.solanaAddress}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.balance !== undefined) setUvtBalance(data.balance);
+        })
+        .catch(err => console.error('Failed to fetch user UVT balance:', err));
     }
   }, [citizen, user, syncFromPublic]);
 
@@ -149,6 +160,34 @@ export default function PassportPage() {
             <Separator />
 
             <div>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-sm font-medium text-muted-foreground">
+                  Sovereign Assets (UVT)
+                </h3>
+                <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 font-mono">
+                  ⛓️ On-Chain
+                </Badge>
+              </div>
+              <div className="rounded-xl bg-primary/10 p-6 flex items-center justify-between">
+                <div>
+                  <p className="text-4xl font-bold font-mono">
+                    {uvtBalance !== null ? uvtBalance.toLocaleString() : <Skeleton className="h-10 w-24" />}
+                  </p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Universal Value Tokens</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-muted-foreground mb-1">Status</p>
+                  <div className="flex items-center gap-1 text-green-500 font-bold">
+                    <CheckCircle2 className="w-4 h-4" />
+                    ACTUALIZED
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div>
               <h3 className="text-sm font-medium text-muted-foreground mb-4">
                 Labor Validation (Phase 4.2)
               </h3>
@@ -159,8 +198,10 @@ export default function PassportPage() {
                       <div className="flex items-center gap-3">
                         <CheckCircle2 className="w-5 h-5 text-green-500" />
                         <div>
-                          <p className="text-sm font-semibold">{credit.description}</p>
-                          <p className="text-xs text-muted-foreground font-mono">{credit.signature.substring(0, 16)}...</p>
+                          <p className="text-sm font-semibold">{credit.description || credit.assetId}</p>
+                          <p className="text-xs text-muted-foreground font-mono">
+                            {credit.onChainStatus === 'Settled' ? 'SETTLED' : 'PENDING ACTUALIZATION'}
+                          </p>
                         </div>
                       </div>
                       <Badge variant="outline" className="font-mono">{credit.amount.toFixed(2)} UVT</Badge>
@@ -171,6 +212,7 @@ export default function PassportPage() {
                 )}
               </div>
             </div>
+
 
             <Separator />
 

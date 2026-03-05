@@ -63,8 +63,26 @@ async function bootstrap() {
         proposalExecutor.executePassedProposals().catch((err: any) => console.error('[Bootstrap] Executor Loop Error:', err.message));
     }, 5 * 60 * 1000);
 
-    // 3. Settlement Loop (Wait for transfers to be marked as Pending)
-    // Handled on-demand for now by individual methods or can be a separate loop.
+    // 3. Settlement Loop (Bridges Simulation -> Solana)
+    const { settlementService } = require('./services/settlement-service');
+    const { db, COLLECTIONS } = require('./db');
+
+    setInterval(async () => {
+        try {
+            console.log('[Bootstrap] ⛓️ Settlement Loop: Checking for pending on-chain transfers...');
+            const pending = await db.collection(COLLECTIONS.UVT_TRANSFERS)
+                .where('onChainStatus', '==', 'Pending')
+                .limit(5) // Process in small batches
+                .get();
+
+            for (const doc of pending.docs) {
+                console.log(`[Bootstrap] 🏛️ Actualizing transfer ${doc.id} on-chain...`);
+                await settlementService.settleUVT(doc.id);
+            }
+        } catch (err: any) {
+            console.error('[Bootstrap] Settlement Loop Error:', err.message);
+        }
+    }, 15 * 60 * 1000); // Every 15 minutes
 
     // Schedule initial executions
     taskQueue.schedule('seo-blog', 1); // High priority

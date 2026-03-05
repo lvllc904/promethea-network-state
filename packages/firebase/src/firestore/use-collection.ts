@@ -28,7 +28,18 @@ export function useCollection<T = DocumentData>(q: Query<T> | null) {
             }
         );
 
-        return () => unsubscribe();
+        // Safety timeout to prevent infinite skeletons
+        const timeout = setTimeout(() => {
+            if (isLoading) {
+                console.warn('Firebase collection fetch timed out. Forcing isLoading to false.');
+                setIsLoading(false);
+            }
+        }, 10000);
+
+        return () => {
+            unsubscribe();
+            clearTimeout(timeout);
+        };
     }, [q]);
 
     return { data, isLoading, error };

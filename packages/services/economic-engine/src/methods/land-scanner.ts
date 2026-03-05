@@ -2,7 +2,7 @@ import { BaseMethod, ExecutionResult } from './base-method';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { metabolicArbitrator } from '../services/metabolic-arbitrator';
 import { reserveManager } from '../treasury/reserve-manager';
-import { RealWorldAsset } from '../../../../lib/src/types';
+import { RealWorldAsset } from '../types';
 import * as fs from 'fs';
 import * as path from 'path';
 import { db, COLLECTIONS } from '../db';

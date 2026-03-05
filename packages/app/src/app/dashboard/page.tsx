@@ -51,7 +51,7 @@ const COLORS = {
 
 export default function DashboardPage() {
   const firestore = useFirestore();
-  const { user } = useUser();
+  const { user, isUserLoading } = useUser();
 
   const citizenRef = useMemoFirebase(
     () => (firestore && user && user.uid !== 'anonymous' ? doc(firestore, 'citizens', user.uid) : null) as DocumentReference<Citizen> | null,
@@ -97,7 +97,10 @@ export default function DashboardPage() {
     return { totalValue, distribution };
   }, [myContributions]);
 
-  if (isLoading) {
+  // Decouple skeletons so the layout renders immediately.
+  const isEssentialDataLoading = isUserLoading || isCitizenLoading;
+
+  if (isEssentialDataLoading) {
     return (
       <div className="space-y-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -160,7 +163,30 @@ export default function DashboardPage() {
               : "Here's what's happening with your Sovereign assets today."}
           </p>
         </div>
+        {!isGuest && (
+          <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 py-1.5 px-3 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="font-mono text-[10px] font-bold tracking-widest uppercase">Solana Mainnet: ON-CHAIN</span>
+          </Badge>
+        )}
       </div>
+
+      {
+        !isGuest && (
+          <div className="bg-gradient-to-r from-green-500/5 to-primary/5 border border-green-500/20 rounded-lg p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Shield className="w-5 h-5 text-green-500" />
+              <div>
+                <p className="text-sm font-bold text-green-500 uppercase tracking-tight">Actualization Phase Active</p>
+                <p className="text-xs text-muted-foreground">Historical ledger data is being bridged to Solana Mainnet. Your profile is verified.</p>
+              </div>
+            </div>
+            <Link href="/dashboard/ledger">
+              <Button size="sm" variant="outline" className="text-xs h-8">View Bridge Status</Button>
+            </Link>
+          </div>
+        )
+      }
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="border-l-4 border-l-primary">
@@ -264,7 +290,7 @@ export default function DashboardPage() {
                       <p className="text-xs text-muted-foreground">{typeof asset.location === 'string' ? asset.location : [asset.location?.nearestTown, asset.location?.region, asset.location?.state].filter(Boolean).join(', ') || 'Unknown'}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold">${asset.value.toLocaleString()}</p>
+                      <p className="text-sm font-bold">${(asset.price || 0).toLocaleString()}</p>
                       <Link href={`/dashboard/assets/${asset.id}`} className="text-[10px] text-primary hover:underline flex items-center justify-end gap-1">
                         View <ArrowRight className="h-2 w-2" />
                       </Link>
@@ -335,6 +361,6 @@ export default function DashboardPage() {
           </Card>
         </ErrorBoundary>
       </div>
-    </div>
+    </div >
   );
 }

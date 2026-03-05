@@ -175,9 +175,10 @@ export default function ConstitutionPage() {
         );
     }
 
-    // Heuristic to check if content is junk source code instead of document
-    const isJunkContent = constitution?.content?.includes('const TableOfContents');
-    const displayContent = (isJunkContent || !constitution) ? DEFAULT_CONSTITUTION : constitution.content;
+    // Priority: Always use the hardcoded full version to ensure completeness, 
+    // unless Firestore has a more recent version (validated by length).
+    const isFirestoreContentValid = constitution?.content && constitution.content.length > 5000;
+    const displayContent = isFirestoreContentValid ? constitution.content : DEFAULT_CONSTITUTION;
 
     return (
         <div className="flex flex-col lg:flex-row gap-8 xl:gap-12">
@@ -191,7 +192,7 @@ export default function ConstitutionPage() {
                 <div className="mb-4">
                     <h1 className="text-3xl font-headline font-bold">The Promethean Constitution</h1>
                     <p className="text-muted-foreground">
-                        {constitution ? `Version ${constitution.version} - Last Amended: ${new Date(constitution.lastAmended).toLocaleDateString()}` : 'Standard Sovereign Edition'}
+                        {constitution?.lastAmended ? `Version ${constitution.version} - Last Amended: ${new Date(constitution.lastAmended).toLocaleDateString()}` : 'Version 1.0.0 - Standard Sovereign Edition'}
                     </p>
                 </div>
                 <Card>

@@ -1,7 +1,8 @@
 import { BaseMethod, ExecutionResult } from './base-method';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
-import Parser from 'rss-parser';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Parser = require('rss-parser');
 import { googleWorkspace } from '../tools/google-workspace';
 import { BlinkGenerator } from '../tools/blink-generator';
 
@@ -16,7 +17,7 @@ import { BlinkGenerator } from '../tools/blink-generator';
 
 export class NewsletterMethod extends BaseMethod {
     private genAI: GoogleGenerativeAI;
-    private rssParser: Parser;
+    private rssParser: any;
     private rssFeedUrls: string[] = [
         'https://news.ycombinator.com/rss',
         'https://techcrunch.com/feed/',
@@ -32,7 +33,7 @@ export class NewsletterMethod extends BaseMethod {
         });
 
         this.genAI = new GoogleGenerativeAI(apiKey);
-        this.rssParser = new Parser();
+        this.rssParser = new (Parser as any)();
     }
 
     async execute(): Promise<ExecutionResult> {

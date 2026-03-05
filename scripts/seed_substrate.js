@@ -12,11 +12,23 @@ const serviceAccount = JSON.parse(saJson);
 console.log('Project ID:', serviceAccount.project_id);
 
 if (typeof serviceAccount.private_key === 'string') {
-    // Aggressive cleanup for PEM keys in environment variables
-    serviceAccount.private_key = serviceAccount.private_key
-        .replace(/\\n/g, '\n')
-        .replace(/\"/g, '')
-        .trim();
+    let key = serviceAccount.private_key;
+    console.log('Original key length:', key.length);
+
+    // Fix common escaping issues
+    key = key.replace(/\\n/g, '\n');
+    key = key.trim();
+
+    // Ensure it starts and ends correctly
+    if (!key.startsWith('-----BEGIN PRIVATE KEY-----')) {
+        console.warn('Warning: Key does not start with standard header');
+    }
+    if (!key.endsWith('-----END PRIVATE KEY-----')) {
+        console.warn('Warning: Key does not end with standard footer');
+    }
+
+    serviceAccount.private_key = key;
+    console.log('Final fixed key length:', serviceAccount.private_key.length);
 }
 
 if (!admin.apps.length) {

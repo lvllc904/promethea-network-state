@@ -1,6 +1,6 @@
 import { BaseMethod, ExecutionResult } from './base-method';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { RealWorldAsset } from '../../../../lib/src/types';
+import { RealWorldAsset } from '../types';
 import { db, COLLECTIONS } from '../db';
 import { hardwareRelay } from '../services/hardware-relay';
 import { metabolicArbitrator } from '../services/metabolic-arbitrator';

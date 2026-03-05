@@ -299,6 +299,27 @@ setInterval(() => {
 governanceService.processPendingProposals();
 proposalExecutor.executePassedProposals();
 
+// --- Sovereign Settlement Bridge (Phase 3) ---
+const { settlementService } = require('./services/settlement-service');
+const { db, COLLECTIONS } = require('./db');
+
+setInterval(async () => {
+    try {
+        console.log('[SettlementBridge] ⛓️ Checking for pending on-chain actualizations...');
+        const pending = await db.collection(COLLECTIONS.UVT_TRANSFERS)
+            .where('onChainStatus', '==', 'Pending')
+            .limit(25)
+            .get();
+
+        for (const doc of pending.docs) {
+            console.log(`[SettlementBridge] 🏛️ Actualizing ${doc.id} on-chain...`);
+            await settlementService.settleUVT(doc.id);
+        }
+    } catch (err: any) {
+        console.error('[SettlementBridge] Loop Error:', err.message);
+    }
+}, 2 * 60 * 1000); // Every 2 minutes
+
 // Create HTTP server
 const server = http.createServer(async (req, res) => {
     // CORS headers
@@ -313,6 +334,43 @@ const server = http.createServer(async (req, res) => {
     }
 
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
+    console.log(`[Server] Received ${req.method} ${url.pathname}`);
+
+    // [NEW] Mass Actualization endpoint
+    if (url.pathname === '/api/engine/actualize-all' && req.method === 'POST') {
+        try {
+            console.log('[Admin] 🏛️ Mass actualization triggered...');
+            const { db, COLLECTIONS } = require('./db');
+            const snapshot = await db.collection(COLLECTIONS.UVT_TRANSFERS).get();
+            const batch = db.batch();
+            let count = 0;
+
+            snapshot.docs.forEach((doc: any) => {
+                const data = doc.data();
+                if (data.onChainStatus !== 'Settled' && data.onChainStatus !== 'Pending') {
+                    batch.update(doc.ref, {
+                        onChainStatus: 'Pending',
+                        actualizedAt: new Date()
+                    });
+                    count++;
+                }
+            });
+
+            if (count > 0) {
+                await batch.commit();
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: true, message: `Marked ${count} transactions for on-chain settlement.` }));
+            } else {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: true, message: 'No transactions need actualization.' }));
+            }
+        } catch (error: any) {
+            console.error('[Admin] Actualize error:', error.message);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: error.message }));
+        }
+        return;
+    }
 
     // Health check endpoint
     if (url.pathname === '/health') {
@@ -405,32 +463,6 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // [NEW] Proposal Execution endpoint
-    if ((url.pathname === '/api/engine/proposals/execute' || url.pathname === '/api/proposals/execute') && req.method === 'POST') {
-        let body = '';
-        req.on('data', chunk => body += chunk);
-        req.on('end', async () => {
-            try {
-                const { proposalId } = JSON.parse(body);
-                if (proposalId) {
-                    await proposalExecutor.executeProposalId(proposalId);
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ success: true, message: `Proposal ${proposalId} execution triggered.` }));
-                } else {
-                    await proposalExecutor.executePassedProposals();
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ success: true, message: 'Passed proposals execution sweep triggered.' }));
-                }
-            } catch (error) {
-                res.writeHead(500, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({
-                    error: 'Proposal execution failed',
-                    message: error instanceof Error ? error.message : 'Unknown error'
-                }));
-            }
-        });
-        return;
-    }
     // [NEW] Marketplace Ingestion endpoint
     if (url.pathname === '/api/market/ingest' && req.method === 'POST') {
         let body = '';

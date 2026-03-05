@@ -20,6 +20,7 @@ import { useCollection, useFirestore, useMemoFirebase, useUser } from '@promethe
 import { collection, query, where, type Query } from 'firebase/firestore';
 import { UniversalValueToken } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
+import { ExternalLink, CheckCircle2 } from 'lucide-react';
 
 export default function LedgerPage() {
   const firestore = useFirestore();
@@ -97,23 +98,45 @@ export default function LedgerPage() {
                     <div className="font-medium">
                       Token Mint for Asset {token.assetId}
                     </div>
-                    <div className="text-xs text-muted-foreground font-mono">
+                    <div className="text-xs text-muted-foreground font-mono flex items-center gap-2">
                       {token.id}
+                      {token.onChainSignature && (
+                        <a
+                          href={`https://solscan.io/tx/${token.onChainSignature}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline flex items-center gap-0.5"
+                        >
+                          Verify <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell className="font-mono text-xs">
                     {token.ownerId}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={getBadgeVariant(token.tokenType) as any}>
-                      {token.tokenType}
-                    </Badge>
+                    <div className="flex flex-col gap-1">
+                      <Badge variant={getBadgeVariant(token.tokenType) as any}>
+                        {token.tokenType}
+                      </Badge>
+                      {token.onChainStatus === 'Settled' ? (
+                        <span className="text-[10px] text-green-400 flex items-center gap-1 font-mono uppercase tracking-tighter">
+                          <CheckCircle2 className="w-2.5 h-2.5" />
+                          On-Chain
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-muted-foreground font-mono uppercase tracking-tighter animate-pulse">Pending Actualization</span>
+                      )}
+
+                    </div>
                   </TableCell>
                   <TableCell className="text-right font-mono font-semibold">
                     {token.amount.toLocaleString()}
                   </TableCell>
                 </TableRow>
               ))}
+
             </TableBody>
           </Table>
         </CardContent>

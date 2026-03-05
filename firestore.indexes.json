@@ -1,4 +1,33 @@
 {
-    "indexes": [],
+    "indexes": [
+        {
+            "collectionGroup": "uvt_transfers",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "beneficiaryId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "timestamp",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "uvt_transfers",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "ownerId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "timestamp",
+                    "order": "DESCENDING"
+                }
+            ]
+        }
+    ],
     "fieldOverrides": []
 }

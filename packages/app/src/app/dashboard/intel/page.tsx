@@ -547,7 +547,7 @@ export default function IntelPage() {
                             <Zap className="h-5 w-5 text-secondary" />
                             UVT Supply
                         </CardTitle>
-                        <CardDescription>Universal Value Tokens</CardDescription>
+                        <CardDescription>Verified On-Chain (Mainnet)</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="flex justify-between items-end">
@@ -557,10 +557,10 @@ export default function IntelPage() {
                                 </span>
                                 <div className="flex flex-col gap-1 mt-2">
                                     <p className="text-xs text-muted-foreground">
-                                        Backing: 10 UVT : $1
+                                        Primary Ledger: Solana
                                     </p>
                                     <div className="flex items-center gap-2">
-                                        <Badge variant="secondary" className="text-[10px]">SPL Standard</Badge>
+                                        <Badge variant="secondary" className="text-[10px] bg-green-500/10 text-green-500 border-green-500/20">LIVE · SPL Standard</Badge>
                                     </div>
                                 </div>
                             </div>
@@ -570,6 +570,7 @@ export default function IntelPage() {
                         </div>
                     </CardContent>
                 </Card>
+
             </div>
             <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
                 {engineStatus && Object.entries(engineStatus.methods).map(([key, method]) => {

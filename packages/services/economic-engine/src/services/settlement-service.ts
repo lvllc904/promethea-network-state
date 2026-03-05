@@ -9,9 +9,8 @@ import { laborValidator } from '../tools/labor-validator';
  * Handles the automatic minting/transfer of SPL tokens based on verified labor contributions.
  */
 export class SettlementService {
-    // Current placeholder for the UVT SPL Token Mint on Solana
-    // In production, this would be the actual mint address controlled by the DAC.
-    private readonly UVT_MINT = process.env.UVT_MINT_ADDRESS || 'PRMTH11111111111111111111111111111111111';
+    // Live UVT SPL Token Mint on Solana Mainnet
+    private readonly UVT_MINT = process.env.UVT_MINT_ADDRESS || 'Bm2GRKS92odxL6P4grmYyDMNChWNhQPHrLgcJRab7vf1';
 
     /**
      * Settle a UVT transfer on-chain.
@@ -56,8 +55,7 @@ export class SettlementService {
                     // It's a Model DID, check for linked wallet in model registry (TODO)
                     // For now, check if the DID itself is a valid Solana public key
                     const parts = ownerId.split(':');
-                    if (parts.length === 4 && parts[2] === 'model') {
-                        // could be did:prmth:model:<address>
+                    if (parts.length === 4 && parts[2] === 'model' && parts[3].length >= 32) {
                         solanaAddress = parts[3];
                     }
                 } else {
@@ -69,28 +67,22 @@ export class SettlementService {
 
             if (!solanaAddress) {
                 console.warn(`[Settlement] No Solana address found for owner ${data.ownerId}.`);
-                return { success: false, error: 'No destination Solana address' };
+                return { success: false, error: 'No destination Solana address linked to Citizen.' };
             }
 
             // 3. Trigger the SPL Transfer via WalletManager
-            console.log(`[Settlement] Bridging $${data.amount} UVT to Solana address: ${solanaAddress}`);
+            console.log(`[Settlement] 🌉 Bridging ${data.amount} UVT to Solana address: ${solanaAddress}`);
 
-            let signature = 'sim_hash_' + Math.random().toString(16).slice(2);
-
-            if (process.env.SOLANA_PRIVATE_KEY) {
-                try {
-                    signature = await walletManager.transferSPL(
-                        this.UVT_MINT,
-                        solanaAddress,
-                        data.amount,
-                        9
-                    );
-                } catch (err: any) {
-                    console.error('[Settlement] WalletManager transfer failed:', err.message);
-                    // Continue with simulation if configured for development
-                    if (process.env.STRICT_SETTLEMENT === 'true') throw err;
-                }
+            if (!process.env.SOLANA_PRIVATE_KEY) {
+                throw new Error('SOLANA_PRIVATE_KEY missing from environment. Cannot settle on-chain.');
             }
+
+            const signature = await walletManager.transferSPL(
+                this.UVT_MINT,
+                solanaAddress,
+                data.amount,
+                9
+            );
 
             // 4. Update the record status
             await recordRef.update({

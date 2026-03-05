@@ -44,6 +44,25 @@ const nextConfig = {
         }
         return config;
     },
+    async redirects() {
+        return [
+            {
+                source: '/dashboard/citizens',
+                destination: '/dashboard/passport',
+                permanent: false,
+            },
+            {
+                source: '/dashboard/reports',
+                destination: '/dashboard/intel',
+                permanent: false,
+            },
+            {
+                source: '/dashboard/founders',
+                destination: '/dashboard/founder',
+                permanent: false,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

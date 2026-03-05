@@ -41,12 +41,36 @@ export class ReserveManager {
                 this.totalProfitRealized = data.totalProfitRealized || 0;
                 this.reserveBalance = data.reserveBalance || 0;
                 this.communityPoolBalance = data.communityPoolBalance || 0;
-                this.uvtCirculatingSupply = data.circulatingSupply || 0;
                 this.restorationBalance = data.restorationBalance || 0;
+
+                // Note: uvtCirculatingSupply is now derived from on-chain data
                 console.log(`[ReserveManager] Persistent state loaded. Reserve: $${this.reserveBalance.toFixed(2)}, Restoration: $${this.restorationBalance.toFixed(2)}`);
             }
+
+            // Fetch live supply from Solana
+            await this.refreshLiveSupply();
         } catch (err) {
             console.error('[ReserveManager] Failed to load state:', err);
+        }
+    }
+
+    private async refreshLiveSupply() {
+        try {
+            const rpcUrl = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
+            const mintAddress = process.env.UVT_MINT_ADDRESS || 'Bm2GRKS92odxL6P4grmYyDMNChWNhQPHrLgcJRab7vf1';
+
+            const { Connection, PublicKey } = require('@solana/web3.js');
+            const { getMint } = require('@solana/spl-token');
+
+            const connection = new Connection(rpcUrl, 'confirmed');
+            const mintInfo = await getMint(connection, new PublicKey(mintAddress));
+
+            const supply = Number(mintInfo.supply) / Math.pow(10, mintInfo.decimals);
+            this.uvtCirculatingSupply = supply;
+
+            console.log(`[ReserveManager] ⛓️ Live supply synchronized: ${this.uvtCirculatingSupply.toLocaleString()} UVT`);
+        } catch (err) {
+            console.warn('[ReserveManager] ⚠️ Failed to fetch live supply, using last known:', err instanceof Error ? err.message : 'Unknown error');
         }
     }
 
@@ -57,7 +81,7 @@ export class ReserveManager {
                 reserveBalance: this.reserveBalance,
                 communityPoolBalance: this.communityPoolBalance,
                 restorationBalance: this.restorationBalance,
-                circulatingSupply: this.uvtCirculatingSupply,
+                circulatingSupply: this.uvtCirculatingSupply, // Cache for UI
                 lastUpdated: new Date()
             });
         } catch (err) {
@@ -85,58 +109,17 @@ export class ReserveManager {
         const restorationAmount = profit * this.restorationRate;
         this.restorationBalance += restorationAmount;
 
-        // Simulate issuance of UVT (Universal Value Token)
-        this.uvtCirculatingSupply += plowbackAmount * 10;
+        // We stop simulated supply increments here. 
+        // Actual supply increases only via the SettlementService minting/transferring.
 
         console.log(`[ReserveManager] Profit: $${profit.toFixed(2)} | Reserve: $${this.reserveBalance.toFixed(2)} | Restoration: $${this.restorationBalance.toFixed(2)}`);
 
         this.saveState();
-
-        // Phase 4.2: Treasury Neutrality Verification
         this.verifyTreasuryNeutrality();
 
-        // Phase 4.2: Sovereign Buy-Back Threshold
         if (this.reserveBalance >= 50000 && !this.isBuyBackProposed()) {
             this.proposeSovereignBuyBack();
         }
-
-        // Phase 4.3: Auto-Propose Community Grants
-    }
-
-    private async proposeGrant() {
-        try {
-            const amount = Math.floor(this.communityPoolBalance * 0.5); // Propose spending 50% of pool
-            const proposalId = `grant-${Date.now()}`;
-
-            await db.collection(COLLECTIONS.PROPOSALS).add({
-                id: proposalId,
-                title: `Community Grant: Autonomous Substrate Expansion`,
-                description: `Proposed allocation of $${amount} from the Community Pool to fund the implementation of 10 additional economic methods.`,
-                category: 'Grant',
-                amount: amount,
-                status: 'Proposed',
-                proposer: 'did:prmth:engine:reserve-manager',
-                votesFor: 0,
-                votesAgainst: 0,
-                createdAt: new Date(),
-                deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 1 week deadline
-            });
-
-            console.log(`[ReserveManager] 🏛️ Autonomous Grant Proposal created for $${amount}`);
-
-            // Phase 5: Persona Broadcast (Discord + Farcaster)
-            await personaSubstrate.broadcastUpdate(
-                'New Autonomous Grant Proposed',
-                `The Community Pool has reached a surplus threshold. A new grant of **$${amount}** has been proposed for network expansion.`,
-                `$${amount} USD`
-            );
-        } catch (err) {
-            console.error('[ReserveManager] Failed to create grant proposal:', err);
-        }
-    }
-
-    private async proposeRestorationEvent() {
-        // ... (existing logic)
     }
 
     private verifyTreasuryNeutrality(): void {
@@ -195,6 +178,8 @@ export class ReserveManager {
             restorationBalance: this.restorationBalance,
         };
     }
+
+
 
     /**
      * Allocates funds from the Sovereign Reserve for major acquisitions or interventions.
