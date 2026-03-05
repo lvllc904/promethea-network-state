@@ -22,6 +22,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@promethea/ui';
 import { Badge } from '@promethea/ui';
 import { Progress } from '@promethea/ui';
 
+function formatLocation(location: any): string {
+  if (!location) return 'Unknown';
+  if (typeof location === 'string') return location;
+  // Handle object format: { region, nearestTown, state, coordinates }
+  const { nearestTown, region, state } = location as Record<string, string>;
+  return [nearestTown, region, state].filter(Boolean).join(', ') || JSON.stringify(location);
+}
+
 function AssetCard({ asset }: { asset: RealWorldAsset }) {
   const assetImage = PlaceHolderImages.find(
     (p) => p.id === `asset${asset.id}`
@@ -48,7 +56,7 @@ function AssetCard({ asset }: { asset: RealWorldAsset }) {
         </CardTitle>
         <CardDescription className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
           <MapPin className="w-4 h-4" />
-          {asset.location}
+          {formatLocation(asset.location)}
         </CardDescription>
 
         <p className="text-sm text-muted-foreground mt-4 flex-grow line-clamp-2">

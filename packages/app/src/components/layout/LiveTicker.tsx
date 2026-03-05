@@ -35,10 +35,16 @@ export function LiveTicker() {
     ]);
 
     useEffect(() => {
+        let consecutiveFailures = 0;
+        const MAX_FAILURES = 3;
+
         const fetchTicker = async () => {
             try {
-                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,chainlink&vs_currencies=usd&include_24hr_change=true');
+                // Use our server-side proxy — avoids CORS and rate-limiting
+                const response = await fetch('/api/ticker');
+                if (!response.ok) throw new Error(`Ticker proxy ${response.status}`);
                 const data = await response.json();
+                consecutiveFailures = 0; // reset on success
 
                 if (data && data.bitcoin) {
                     const formatted: TickerData[] = [
@@ -52,13 +58,17 @@ export function LiveTicker() {
                     setTickerData(formatted);
                 }
             } catch (error) {
-                console.error("Failed to fetch ticker data", error);
+                consecutiveFailures++;
+                if (consecutiveFailures >= MAX_FAILURES) {
+                    // Stop hammering — keep showing last good data silently
+                    clearInterval(intervalId);
+                }
             }
         };
 
         fetchTicker();
-        const interval = setInterval(fetchTicker, 60000); // 1 minute
-        return () => clearInterval(interval);
+        const intervalId = setInterval(fetchTicker, 5 * 60 * 1000); // 5 minutes matches server cache
+        return () => clearInterval(intervalId);
     }, []);
 
     return (

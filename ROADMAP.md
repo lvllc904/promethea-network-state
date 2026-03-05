@@ -410,3 +410,43 @@ Fail-safe protocols ensuring the State cannot be "shut down."
 Name	Category	Provider	Purpose
 STARLINK_API_KEY	Satellite Bridge	SpaceX / Starlink	Triggering interstellar failover in the SHP protocol.
 FIREBASE_SMC_JSON	State persistence	Google Firebase	Encrypted storage of the State Root and Citizen DID records.
+
+
+
+
+The Sovereign Keychain: API & Service Inventory
+1. Neural & Cognitive Layer (AI Engines)
+The brain of the Network State; handles all reasoning, content generation, and strategy.
+
+GEMINI_API_KEY: Google AI Studio
+STABILITY_API_KEY: Stability AI Developer Platform
+ELEVENLABS_API_KEY: ElevenLabs API Documentation
+2. Mainnet Substrate (Web3 & Treasury)
+Bridges digital logic to physical liquidity and on-chain settlement.
+
+SOLANA_RPC_URL: Helius / Alchemy Solana
+BASE_RPC_URL: Alchemy Base / QuickNode Base
+MEV_PRIVATE_KEY: N/A (Generate locally via solana-keygen or ethers)
+JITO_BLOCK_ENGINE_URL: Jito Labs MEV Documentation
+ETH_MAINNET_RPC: Infura
+3. Environmental & Bio-Digital (Hardware Relay)
+Publicly accessible sensors bridging the stack to ecological reality.
+
+NOAA_TOKEN: NOAA Climate Data Online Token Request
+OPENAQ_API_KEY: OpenAQ Developer Portal
+OPEN_METEO_API: Open-Meteo API (No Key Required)
+USGS_WATER_API: USGS Water Services (No Key Required)
+4. Economic Yield & Specialized Flows
+APIs required for specific autonomous revenue generation methods.
+
+FINNHUB_API_KEY: Finnhub.io Stock API
+GOOGLE_SEARCH_JSON: Google Cloud Console (Search Console API)
+PINATA_JWT: Pinata IPFS Cloud
+DISCORD_TOKEN: Discord Developer Portal
+STRIPE_SECRET_KEY: Stripe API Documentation
+FARCASTER_SIGNER: Neynar Farcaster API
+5. Resilience & Continuity (Interstellar)
+Fail-safe protocols ensuring the State cannot be "shut down."
+
+STARLINK_API_KEY: Starlink Business / Starlink API
+FIREBASE_SMC_JSON: Google Firebase Console

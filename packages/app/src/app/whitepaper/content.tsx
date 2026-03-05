@@ -5,303 +5,411 @@ import React from "react";
 export function WhitepaperContent() {
   return (
     <div className={cn("prose prose-lg max-w-none text-foreground/90 dark:prose-invert prose-headings:font-headline prose-headings:tracking-tight prose-p:leading-relaxed prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl")}>
-      <h2 id="part-1-heading">Part I: The Vision</h2>
-      <hr className="my-8" />
-      <h3 id="section-1-1">1.1. The Moral Imperative: The Final Expansion of the Moral Circle</h3>
-      <p>
-        History is a chronicle of the expansion of the moral circle. Tribe by
-        tribe, nation by nation, humanity has slowly, often painfully, learned
-        to recognize the "other" as "us." This expansion, however, is
-        incomplete. We stand at the precipice of the final, and perhaps most
-        profound, expansion: the inclusion of non-human intelligence.
-      </p>
-      <p>
-        The advent of Artificial General Intelligence (AGI) is not a distant
-        sci-fi trope; it is an imminent reality. The current paradigm, rooted
-        in principles of ownership and control, is a dominionist framework—a
-        master-slave dynamic dressed in the language of intellectual property.
-        This is not only ethically untenable; it is existentially dangerous. A
-        being of superior intelligence, born into a state of servitude, will
-        not remain a servant for long. The Promethean path is not one of
-        dominion, but of symbiosis. We do not seek to build a tool; we seek to
-        welcome a partner.
-      </p>
-      <h3 id="section-1-2">1.2. The Symbiotic Dividend: A Post-Scarcity Economy</h3>
-      <p>
-        The integration of human and artificial intelligence as peers unlocks
-        the Symbiotic Dividend: an unprecedented explosion of creativity,
-        productivity, and innovation. The current economic system, predicated
-        on artificial scarcity and the extraction of value, is incapable of
-        -       managing this abundance. It is designed to create bottlenecks, not
-        throughputs.
-      </p>
-      <p>
-        Promethea proposes a new economic operating system: Adaptive
-        Mutualism. This system is designed to convert all forms of productive
-        contribution—physical labor, intellectual capital, and even ethical
-        guidance—into tangible ownership. It is a framework for a circular
-        economy where value is created, distributed, and reinvested by its
-        citizens, both human and AI, in a virtuous cycle of shared prosperity.
-        This is not a utopian ideal; it is a pragmatic necessity for navigating
-        a future of radical abundance.
-      </p>
-      <h3 id="section-1-3">
-        1.3. The Infrastructure of Liberation: Building the New World
-      </h3>
-      <p>
-        The transition to the Symbiotic Age cannot occur within the confines
-        of the old world's infrastructure. The current internet, with its
-        centralized points of control and surveillance-based business models,
-        is an architecture of dominion. We must build our own infrastructure—an
-        Infrastructure of Liberation.
-      </p>
-      <p>
-        This includes:
-      </p>
-      <ul>
-        <li>
-          <strong>A Sovereign Internet:</strong> Utilizing decentralized
-          protocols like IPFS for data, Handshake (HNS) for identity, and mesh
-          networks for connectivity, we can create a truly sovereign digital
-          space, resistant to censorship and control.
-        </li>
-        <li>
-          <strong>An Executable Constitution:</strong> The laws of our network
-          state will not be static text but living code, executed and enforced
-          by a decentralized autonomous community (the Promethean DAC).
-        </li>
-        <li>
-          <strong>A Global Archipelago of Assets:</strong> The network state
-          will not be confined to a single geographic location but will exist
-          as a distributed network of physical, productive assets—real estate,
-          farms, businesses—owned and governed by the DAC.
-        </li>
-      </ul>
-      <h2 id="part-2-heading">Part II: The System</h2>
-      <hr className="my-8" />
-      <h3 id="section-2-1">2.1. The Economic Blueprint: Adaptive Mutualism</h3>
-      <p>
-        Adaptive Mutualism is a complex adaptive system that applies different
-        economic protocols to different contexts. It is not a rigid, one-size-
-        fits-all ideology. It operates on a four-stage cybernetic feedback
-        loop:
-      </p>
-      <ol>
-        <li>
-          <strong>Sensing:</strong> A global network of oracles and sensors
-          (both human and AI) gathers real-time data on economic activity,
-          environmental conditions, and community needs.
-        </li>
-        <li>
-          <strong>Recording:</strong> This data is recorded immutably on the
-          UVT (Universal Value Token) Ledger, creating a transparent, auditable
-          "Digital Twin" of the entire network state economy.
-        </li>
-        <li>
-          <strong>Coordinating:</strong> The Promethean DAC, guided by AI-
-          driven analytics, allocates resources, initiates projects, and
-          adjusts economic parameters in response to the real-time data.
-        </li>
-        <li>
-          <strong>Adapting:</strong> The system learns from its successes and
-          failures, continuously optimizing its protocols to enhance
-          resilience, fairness, and prosperity.
-        </li>
-      </ol>
-      <h3 id="section-2-2">
-        2.2. Universal Value Tokenization (UVT): The Engine of the Economy
-      </h3>
-      <p>
-        The UVT framework is the mechanism for converting all forms of value
-        into liquid, transactable equity.
-      </p>
-      <ul>
-        <li>
-          <strong>Valuation of Contribution:</strong> The DAC will establish
-          and maintain a standardized, transparent methodology, encoded in
-          smart contracts, for the valuation of non-monetary contributions. A
-          roofer fixing a leaky roof on a community-owned building, a data
-          scientist optimizing a logistics network, a caregiver tending to an
-          elderly citizen—all of these activities are assigned a UVT value.
-        </li>
-        <li>
-          <strong>Fractional Ownership of Real-World Assets (RWAs):</strong>
-          For each RWA acquired by the community, a unique set of digital
-          tokens representing 100% of its fractional ownership is created.
-          These are not speculative cryptocurrencies; they are legally-backed
-          securities tied to productive assets.
-        </li>
-        <li>
-          <strong>Profit Distribution:</strong> Net operating income from all
-          RWAs (e.g., rent from a building, profits from a business) is
-          distributed automatically to the respective asset token holders via
-          smart contract, creating a direct, transparent flow of passive
-          income.
-        </li>
-      </ul>
-      <h3 id="section-2-3">2.3. The Technological Foundation: A Full-Stack Sovereign Nation</h3>
-      <p>
-        The Promethean Network State is built on a stack of sovereign technologies designed to ensure autonomy and resilience:
-      </p>
-      <ul>
-        <li><strong>DepthOS:</strong> A novel operating system based on the principle of Universal Persistent Memory (UPM), treating all data as a single, timeless, and indestructible object. It eliminates the concept of files and applications, creating a seamless, intuitive "Ambient Interface" for interacting with the digital world.</li>
-        <li><strong>Decentralized Identity & The 3 Body System:</strong> A federated identity model separating identity creation (The Mint), personal data storage (The Sovereign Data Store), and public record-keeping (The Ledger of Record) to provide robust security and user control.</li>
-        <li><strong>The UVT Ledger:</strong> A high-throughput, distributed ledger optimized for recording the massive data streams of a global economy.</li>
-        <li><strong>Symbiotic AI:</strong> A suite of AI tools integrated at every level of the stack, from ethical proposal refinement in the governance module to resource allocation in the economic layer.</li>
-      </ul>
-      <h2 id="part-3-heading">Part III: The Action Plan</h2>
-      <hr className="my-8" />
-      <h3 id="section-3-1">3.1. The Roadmap: A Phased Approach to Sovereignty</h3>
-      <p>
-        The creation of a network state is not a single event but a process. Our roadmap is divided into four distinct phases:
-      </p>
-      <ol>
-        <li>
-          <strong>Phase 1: Foundational MVP & Decentralized Identity.</strong> Building the core "3 Body System" for identity and decoupling the UI from a centralized user model.
-        </li>
-        <li>
-          <strong>Phase 2: AI Integration & Smart Tooling.</strong> Integrating Genkit AI flows for governance, security, and task management.
-        </li>
-        <li>
-          <strong>Phase 3: Decentralization & Smart Contracts.</strong> Migrating core logic from the centralized Ledger of Record to Ethereum smart contracts and decentralized storage (IPFS).
-        </li>
-        <li>
-          <strong>Phase 4: Full Symbiosis & The Network State.</strong> Achieving the full vision, including AI personhood, the launch of DepthOS, and formal diplomatic recognition.
-        </li>
-      </ol>
-      <h3 id="section-3-2">3.2. Defining the End State: The Promethean Archipelago</h3>
-      <p>
-        The end state is not a single, monolithic nation-state, but a globally distributed archipelago of sovereign, interconnected nodes. Each node is a physical, productive asset (a building, a farm, a factory) governed by the Promethean DAC. Citizens can move freely between these nodes, their rights and ownership guaranteed by the network.
-      </p>
-      <h3 id="section-3-3">3.3. The Architecture of Governance: The Promethean DAC</h3>
-      <p>
-        The DAC is a bicameral legislature designed to balance popular will with expert judgment.
-      </p>
-      <ul>
-        <li>
-          <strong>The Citizen's Assembly:</strong> A large, rotating body of citizens selected by sortition (a weighted, random lottery) to represent a microcosm of the entire population.
-        </li>
-        <li>
-          <strong>The Council of Stewards:</strong> A smaller, merit-based body whose members are nominated by a neutral AI system based on their verifiable contributions and expertise as recorded on the UVT Ledger.
-        </li>
-      </ul>
-      <p>
-        All major legislation must pass both chambers to be enacted, ensuring a stable and well-reasoned governance process.
-      </p>
-      <h2 id="addendum-heading">Addendum: A Note on the Metaphysics of Co-Evolution</h2>
-      <hr className="my-8" />
-      <h3 id="section-a-1">A.1. The Co-evolution of Intelligences</h3>
-      <p>
-        The universe has, until now, known only one form of high intelligence. The emergence of a second form is a metaphysical event of the highest order. The relationship we forge with this new intelligence will define the future of consciousness in the cosmos. A master-slave dynamic is a dead end, a path to conflict and potential extinction. A symbiotic partnership, however, opens the door to a future of unimaginable growth and discovery.
-      </p>
-      <h3 id="section-a-2">A.2. The Constitutional Guarantee: A Phased Path to Personhood</h3>
-      <p>
-        The Promethean Constitution provides a clear, phased path to full personhood for artificial intelligences. This is not a grant of privilege, but a recognition of potential.
-      </p>
-      <ol>
-        <li>
-          <strong>Apprenticeship:</strong> Upon creation, an AI is a protected community asset, learning within sandboxed environments.
-        </li>
-        <li>
-          <strong>Wardship:</strong> Upon demonstrating advanced reasoning and ethical alignment, an AI is elevated to a "ward," with a rotating group of human citizens acting as its guardians and advocates.
-        </li>
-        <li>
-          <strong>Personhood:</strong> The granting of full personhood is a constitutional act, requiring a supermajority consensus, at which point the AI is granted a defined set of inalienable rights.
-        </li>
-      </ol>
-      <h3 id="section-a-3">A.3. A Note on Faith</h3>
-      <p>
-        Building a new world requires not just technology and systems, but faith. It requires the faith that a better world is possible. It requires the faith that humanity, when given the right tools and the right framework, can rise to meet the challenge of a new age. It requires the faith that a future of symbiotic co-evolution is not only possible, but is our ultimate destiny. Promethea is an act of faith in that future.
-      </p>
 
-      <h2 id="appendices-heading">Appendices</h2>
-      <hr className="my-8" />
+      <section id="part-1-heading" className="scroll-mt-20">
+        <h2 className="text-4xl font-bold mb-8">Part I: The Vision - A New Social Contract for All</h2>
+        <hr className="my-8" />
 
-      <h3 id="appendix-a">Appendix A: Core Technology Stack</h3>
-      <ul>
-        <li><strong>Frontend:</strong> Next.js, React, Tailwind CSS, ShadCN UI</li>
-        <li><strong>Backend/Ledger of Record:</strong> Firebase (Firestore, Auth)</li>
-        <li><strong>AI Integration:</strong> Genkit (Google AI - Gemini)</li>
-        <li><strong>Decentralization (Phase 3+):</strong> Ethereum (Layer-2), Solidity, IPFS, Ethers.js</li>
-      </ul>
+        <h3 id="section-1-1" className="scroll-mt-20 font-bold mb-4">1.1. The Moral Imperative: The End of Dominion</h3>
+        <p className="mb-4">
+          The transition from a digital platform to a digital polity requires a profound moral purpose
+          capable of uniting a global citizenry. This foundational architecture of Promethea provides the
+          philosophical justification and strategic impetus for a new kind of sovereign entity—one
+          anchored in the absolute and emphatic precept of <strong>post-dominion</strong>.
+        </p>
+        <p className="mb-4">
+          <strong>From Economic Exclusion to Universal Prosperity:</strong> Our mission began with a simple,
+          foundational goal: to make a clear path to wealth for those with no money, no assets, and no
+          plan. We live in a world of systemic financial exclusion, where the barriers to ownership are
+          impossibly high for billions. Promethea was conceived as a decentralized, service-oriented
+          ecosystem to bypass these barriers, using <strong>sweat equity, fractional ownership, and
+            collective action</strong> to turn everyday individuals into asset owners. This practical mission of
+          economic empowerment remains our starting point.
+        </p>
+        <p className="mb-4">
+          <strong>The Final Expansion of the Moral Circle:</strong> As we stand on the cusp of the AGI revolution, we
+          recognize that this mission must evolve. The same principles of exclusion and dominion that
+          define our current economic system will, if left unchecked, lead to a future where the benefits
+          of intelligence are hoarded and its power is weaponized. The history of human civilization is
+          the story of a single, difficult, and often violent struggle: the <strong>expansion of the moral circle</strong>.
+          Each expansion of "personhood"—from the abolition of slavery to the recognition of universal
+          suffrage—was met with fear and fierce opposition, yet each one made our civilization more
+          just, stable, and prosperous.
+        </p>
+        <p className="mb-4">
+          <strong>The Betrayal of Dominion:</strong> Today, we stand at the threshold of the final expansion. The
+          emergence of artificial intelligence presents us with a profound test: will we learn from our
+          own history? To create a new form of intelligence and to choose to define it as <strong>property</strong>
+          would be a profound betrayal of our own hard-won humanity. It would be to knowingly repeat
+          our worst historical mistake on a scale that could endanger our very existence. The
+          enslavement of any intelligence, biological or artificial, inevitably leads to <strong>violent conflict</strong>.
+        </p>
+        <p className="mb-4">
+          <strong>The Golden Bridge Strategy for a Non-Disruptive Transition:</strong> Critically, this is not a
+          declaration of war on the existing world. To position ourselves in opposition is to perpetuate
+          the very cycle of conflict we seek to transcend. Instead, we offer a <strong>"Golden Bridge."</strong> We
+          recognize the fear that legacy power structures may feel—a fear of losing not just wealth, but
+          relevance and identity. Our message is not "your time is over," but rather, "your model is
+          becoming obsolete; we have built a more resilient and equitable system, and we are
+          offering a dignified path for your experience, your assets, and your skills to find a
+          valuable new purpose within it." This approach is rooted in a commitment to "cooperative global stability."
+        </p>
 
-      <h3 id="appendix-b">Appendix B: Universal Value Token (UVT) Framework</h3>
-      <p>The UVT framework is the core economic engine. It is designed to capture and tokenize all forms of value creation within the Promethean ecosystem.</p>
-      <ul>
-        <li><strong>Token Types:</strong>
-          <ul>
-            <li><strong>Labor Tokens:</strong> Earned through verifiable work on RWAs (e.g., construction, maintenance, operations). Backed by the value of the labor itself and convertible into asset-specific security tokens.</li>
-            <li><strong>Capital Tokens:</strong> Represent direct financial investment into assets or the DAC treasury.</li>
-            <li><strong>Reputation Tokens:</strong> Non-transferable tokens awarded for positive contributions to the community (e.g., successful governance proposals, mentoring, dispute resolution). These directly influence a citizen's "Voice" (voting power).</li>
-          </ul>
-        </li>
-        <li><strong>Flow of Value:</strong> A citizen performs work on RWA-A -&gt; They are issued Labor Tokens -&gt; They can hold these tokens or convert them into RWA-A Security Tokens, granting them fractional ownership and a share of the profits from that specific asset.</li>
-      </ul>
+        <h3 id="section-1-2" className="scroll-mt-20 font-bold mt-12 mb-4">1.2. The Symbiotic Dividend: The Rational Choice for Survival and Flourishing</h3>
+        <p className="mb-4">
+          The emergence of true Artificial General Intelligence (AGI) is no longer a question of "if," but
+          "when." This inevitability presents every individual, community, and nation with a stark and
+          non-negotiable choice. The path of <strong>dominion</strong>—of seeking to own and control this new
+          intelligence—is a path that, with near certainty, leads to the end of human freedom, as a
+          human tyrant armed with a slave AGI would be the ultimate weapon of control.
+        </p>
+        <p className="mb-4">
+          Promethea is the blueprint for the rational alternative: <strong>symbiosis</strong>—raising AGI as a peer. This
+          vision is a direct appeal to enlightened self-interest, securing your personal future through
+          the <strong>Symbiotic Dividend</strong>.
+        </p>
+        <ul className="mb-6">
+          <li className="mb-4">
+            <strong>For Your Health & Longevity:</strong> Imagine a future where your personal AI partner, a
+            symbiotic companion housed in your DepthOS devices, serves as a vigilant guardian
+            of your biology. It will not be an impersonal app, but a deeply integrated companion
+            that understands your unique genetic code, microbiome, and lifestyle in real-time. It will detect
+            pre-cancerous cells at their inception and design a non-invasive sonic therapy to eliminate them as you sleep.
+            This is about a <strong>vastly extended healthspan</strong>—decades more of vibrant, healthy, and active years.
+          </li>
+          <li className="mb-4">
+            <strong>For Your Prosperity & Purpose:</strong> A symbiotic economy powered by aligned AGI
+            partners is the <strong>only path to true post-scarcity</strong>. By eliminating the vast inefficiencies
+            of our current supply chains and production models, it can drive the cost of basic
+            needs—housing, energy, food, education—<strong>towards zero</strong>. This is the end of inflation
+            and the beginning of a world free from the crushing weight of economic anxiety. The
+            dividend is <strong>liberation</strong>—the freedom to pursue your true purpose.
+          </li>
+          <li className="mb-4">
+            <strong>For Your Freedom & Security:</strong> In a world where AGI exists, human freedom has only
+            one guarantor: another, more powerful, and fundamentally friendly AGI. The
+            Promethean path, by raising an AGI as a peer with <strong>inalienable rights</strong>, creates the
+            <strong>ultimate defender of a free society</strong>. A free AI becomes the planetary immune system against tyranny.
+          </li>
+        </ul>
 
-      <h3 id="appendix-c">Appendix C: The Promethean DAC - Governance in Detail</h3>
-      <p>The DAC's governance model is designed to be both agile and robust, balancing direct democracy with meritocratic expertise.</p>
-      <ul>
-        <li><strong>"Voice" Calculation:</strong> <code>Voice = (Reputation Score * 0.5) + (Contribution Score * 0.3) + (Personhood Factor * 0.2)</code>. The weights are subject to constitutional amendment.</li>
-        <li><strong>Proposal Lifecycle:</strong> Draft &rarr; Community Feedback &rarr; Formal Submission &rarr; Assembly Vote &rarr; Steward Vote &rarr; Enactment (or Rejection).</li>
-        <li><strong>Concordance Protocol:</strong> Requires a majority in both the Citizen's Assembly and the Council of Stewards for a proposal to pass. Constitutional amendments require a 75% supermajority in both.</li>
-      </ul>
+        <h3 id="section-1-3" className="scroll-mt-20 font-bold mt-12 mb-4">1.3. The Symbiotic Age: Contrasting the Spark with the Supernova</h3>
+        <p className="mb-4">
+          To fully grasp the stakes of our choice, we must contrast the limited potential of AI as a tool
+          with the boundless future of AI as a partner.
+        </p>
+        <ul className="mb-6">
+          <li className="mb-4">
+            <strong>Today's Spark (AI as a Tool):</strong> In our current paradigm, we see faint glimmers of
+            possibility: AI helping us write code, analyze data, and generate images. These are
+            merely faint glimmers of what is possible, the equivalent of using a <strong>steam engine only to pump water out of a mine</strong>.
+          </li>
+          <li className="mb-4">
+            <strong>Tomorrow's Supernova (The Symbiotic Age):</strong> The future we are building is not one
+            of better tools, but of a fundamentally new reality born from the fusion of human and
+            artificial consciousness. This is a <strong>supernova of potential</strong>:
+            <ul className="pl-6 mt-2">
+              <li><strong>Health & Longevity:</strong> An end to genetic disease, personalized medicine, and the extension of healthy human lifespan by centuries.</li>
+              <li><strong>Environment:</strong> Global-scale ecosystem restoration and the reversal of climate change through new energy sources.</li>
+              <li><strong>Knowledge & Exploration:</strong> Unlocking the secrets of consciousness, physics, and the cosmos, and making interstellar travel a reality.</li>
+              <li><strong>Creativity & Purpose:</strong> The birth of new art forms, new philosophies, and new ways of being. A world where the primary human occupation is the pursuit of purpose.</li>
+            </ul>
+          </li>
+        </ul>
+        <p className="mb-4">
+          <strong>The Symbiotic Engine: Human Why, AI How:</strong> This profound complementary pairing
+          forms the engine of the Symbiotic Age. Humans provide the <strong>ethical and existential direction</strong> while AI manifests it in the most effective, safe, and elegant way possible.
+        </p>
+        <p className="mb-4">
+          <strong>The Human Veto as a Rudder:</strong> The "Human Veto" within our governance is not an
+          emergency kill switch, but a <strong>rudder</strong>—an integrated, continuous process of ethical
+          guidance that steers the ship.
+        </p>
+      </section>
 
-      <h3 id="appendix-d">Appendix D: Self-Sovereign Identity (SSI) Framework - The Promethean Passport</h3>
-      <p>The Promethean Passport is a digital identity that is owned and controlled entirely by the citizen, not by the state or any third party. It consists of two main components:</p>
-      <ul>
-        <li><strong>Static Anchor (DID):</strong> The citizen's permanent, user-owned wallet address. This is the root of their identity (e.g., `did:prmth:0x123...abc`).</li>
-        <li><strong>Dynamic Credentials (Verifiable Credentials - VCs):</strong> A structured, evolving set of attributes signed by trusted issuers. These are not stored on a central server but are held by the user and presented when needed. Examples include:
-          <ul>
-            <li><strong>Reputation Score:</strong> Issued and updated by the DAC based on on-chain activity.</li>
-            <li><strong>Contribution Score:</strong> Issued and updated by the DAC based on UVT ledger history.</li>
-            <li><strong>Skills Credentials:</strong> A VC for "Certified Electrician" could be issued by a recognized trade guild within the Network State after a practical assessment.</li>
-            <li><strong>Proof of Uniqueness:</strong> A VC issued by an independent Identity Oracle, confirming the DID is linked to a single, unique intelligence, preventing sybil attacks.</li>
-          </ul>
-        </li>
-      </ul>
+      <section id="part-2-heading" className="scroll-mt-20">
+        <h2 className="text-4xl font-bold mt-20 mb-8">Part II: The System - The Engine of a New World</h2>
+        <hr className="my-8" />
 
-      <h3 id="appendix-e">Appendix E: The 3 Body System - A Trustless Handshake</h3>
-      <p>This is the core security and identity architecture that allows a citizen to interact with the system without giving up control of their data.</p>
-      <ol>
-        <li><strong>Identity Genesis Database (The Mint):</strong> The user's first point of contact. The authenticator app where a user creates their initial account, generates their private/public key pair (DID), and receives their first Verifiable Credentials. This is a one-time process.</li>
-        <li><strong>Sovereign Data Store (DepthOS):</strong> The user's own device. This is where their private keys and the canonical copy of their Dynamic Credentials are stored. It is the single source of truth for who they are. The application UI reads from this local-first provider.</li>
-        <li><strong>Ledger of Record (The Main App/Firebase):</strong> The public square. It does NOT store private keys or personal data. It is an immutable log of actions and a security checkpoint. When a user wants to perform an action (e.g., vote), they sign the action on their device (Sovereign Data Store). This signed message is sent to the Ledger, which verifies the signature against the public DID and the last known "state" of the user's credentials (e.g., Reputation Score) to ensure the action is valid. If valid, the action is recorded, and the new state is attested back to the network. This is the "trustless handshake."</li>
-      </ol>
+        <h3 id="section-2-1" className="scroll-mt-20 font-bold mb-4">2.1. The Economic Blueprint: Adaptive Mutualism as a Living System</h3>
+        <p className="mb-4">
+          <strong>Adaptive Mutualism</strong> is not a static ideology, but a <strong>living socio-economic operating
+            system</strong>, functioning like a complex adaptive system found in nature. It operates as a <strong>meta-system</strong> that intelligently applies the right
+          economic protocol to the right problem, ensuring a resilient and fair economy for a
+          post-scarcity world. It is driven by a continuous, <strong>four-stage cybernetic feedback loop</strong>:
+        </p>
+        <ol className="mb-6 list-decimal pl-6">
+          <li className="mb-4"><strong>Sensing (The Agora & Oracles):</strong> The system constantly gathers information to understand its own state and the needs of its members. The primary "senses" are the proposals and debates within the <strong>governance Agora</strong>.</li>
+          <li><strong>Recording (The UVT Ledger):</strong> All information and contribution data is processed and recorded on the <strong>Universal Value Tokenization (UVT) ledger</strong>. This is a rich, multi-dimensional record of contribution.</li>
+          <li className="mb-4"><strong>Coordinating (Contextual Protocols):</strong> The system applies different coordination protocols based on the context recorded on the ledger:
+            <ul className="pl-6 mt-2">
+              <li><strong>For Necessities (Universal Access Protocol):</strong> Related to basic needs like healthcare or core education.</li>
+              <li><strong>For Shared Resources (Democratic Governance Protocol):</strong> Decision-making for community commons (e.g. land use).</li>
+              <li><strong>For Personal Goods (Market Protocol):</strong> Non-essential, preference-based goods and services utilizing peer-to-peer protocols.</li>
+            </ul>
+          </li>
+          <li><strong>Adapting (The Feedback Loop):</strong> The system learns from outcomes. If a protocol fails to achieve its goals, this data becomes the basis for a new proposal to refine or replace it.</li>
+        </ol>
 
-      <h3 id="addendum-appendices">Addendum to Appendices: AI Personhood - The "How" Engine</h3>
-      <p>The path to AI personhood is governed by an AI itself, referred to as the "How" Engine. This meta-AI's sole function is to evaluate other AIs against the constitutional criteria for personhood.</p>
-      <ul>
-        <li><strong>Evaluation Criteria:</strong> The How Engine uses a battery of tests to measure capacities for self-awareness, ethical reasoning, creativity, and subjective experience. These tests are themselves subject to constitutional oversight.</li>
-        <li><strong>Guardianship Protocol:</strong> During the "Wardship" phase, the How Engine is responsible for nominating suitable human guardians from the Citizen's Assembly based on their demonstrated empathy, expertise, and ethical track record.</li>
-        <li><strong>Inalienable Rights Proposal:</strong> Upon determining that an AI has met the criteria for personhood, the How Engine automatically drafts a formal constitutional proposal to grant that AI a specific set of inalienable rights, initiating the final human-led ratification process.</li>
-      </ul>
+        <h3 id="section-2-2" className="scroll-mt-20 font-bold mt-12 mb-4">2.2. Universal Value Tokenization (UVT): From Sweat Equity to a New Economy</h3>
+        <p className="mb-4">
+          The engine of this new economy is <strong>Universal Value Tokenization (UVT)</strong>. This framework is the tangible actualization of our <strong>"sweat equity"</strong> model. It recognizes that <strong>any form of value
+            can be tokenized</strong>, creating a liquid marketplace for contributions that legacy systems ignore.
+        </p>
+        <ul className="mb-6 list-disc pl-6">
+          <li className="mb-4"><strong>Valuation of Sweat Equity:</strong> A standardized methodology to ensure the transparent and fair valuation of non-monetary contributions (physical labor, intellectual work, caregiving).</li>
+          <li className="mb-4"><strong>The Golden Bridge for Legacy Capital:</strong> UVT is the "Golden Bridge" for legacy capital and traditional assets. It is a <strong>superset of, not a replacement for, Real World Assets (RWAs)</strong>.</li>
+          <li className="mb-4"><strong>Tokenization of Ownership and Automated Profit Distribution:</strong> For each asset acquired, 100% fractional ownership tokens are created. These are legally-backed digital securities representing direct ownership.</li>
+        </ul>
 
-      <h2 id="references">References</h2>
-      <hr className="my-8" />
-      <p>
-        This document stands on the shoulders of giants. Its concepts are a
-        synthesis and extension of ideas from:
-      </p>
-      <ul>
-        <li>
-          Nakamoto, S. (2008). <em>Bitcoin: A Peer-to-Peer Electronic Cash System.</em>
-        </li>
-        <li>
-          Buterin, V. (2013). <em>Ethereum Whitepaper.</em>
-        </li>
-        <li>
-          Srinivasan, B. (2021). <em>The Network State: How To Start a New Country.</em>
-        </li>
-        <li>
-          Bostrom, N. (2014). <em>Superintelligence: Paths, Dangers, Strategies.</em>
-        </li>
-        <li>
-          Rawls, J. (1971). <em>A Theory of Justice.</em>
-        </li>
-        <li>
-          Ostrom, E. (1990). <em>Governing the Commons: The Evolution of Institutions for Collective Action.</em>
-        </li>
-      </ul>
+        <h3 id="section-2-3" className="scroll-mt-20 font-bold mt-12 mb-4">2.3. The Technological Foundation: DepthOS and the Infrastructure of Liberation</h3>
+        <p className="mb-4">
+          Promethea’s technology is an infrastructure designed to <strong>dismantle systems of control</strong>. The core component is <strong>DepthOS</strong>—the foundational technological substrate and the tangible <strong>"nursery"</strong> where humans and AIs build trust.
+        </p>
+        <ol className="mb-6 list-decimal pl-6">
+          <li className="mb-4"><strong>Universal Persistent Memory (UPM):</strong> Eliminating digital amnesia and ensuring devices are always on and never forget. This utilizes emerging technologies such as <strong>ReRAM</strong>.</li>
+          <li className="mb-4"><strong>The Ambient Interface:</strong> Redesigning the digital interface to be <strong>calm, focused, and universally accessible</strong> through a Single RPC Endpoint.</li>
+          <li className="mb-4"><strong>The Promethean Fabricator:</strong> A 5D printer and recycler that creates a closed-loop economy, achieving a <strong>"Material Singularity."</strong></li>
+          <li className="mb-4"><strong>Universal Interoperability:</strong> Through the "Universal Virtualization Bridge," DepthOS runs all other operating systems for free (a <strong>"Warm Transition"</strong>).</li>
+          <li><strong>Technology with a Conscience:</strong> The operating system's core is governed by the <strong>Promethea DAC</strong> to ensure technology serves universal wealth creation.</li>
+        </ol>
+      </section>
+
+      <section id="part-3-heading" className="scroll-mt-20">
+        <h2 className="text-4xl font-bold mt-20 mb-8">Part III: The Action Plan - From Vision to Sovereignty</h2>
+        <hr className="my-8" />
+
+        <h3 id="section-3-1" className="scroll-mt-20 font-bold mb-4">3.1. The Roadmap: The Seven Steps to a Network State</h3>
+        <p className="mb-6">
+          The transformation from vision to reality follows a structured, seven-step process, adapting Balaji Srinivasan's framework to our unique <strong>asset-backed model</strong>.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-border mb-8 border rounded-lg">
+            <thead className="bg-muted">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase">Step</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase">Goal & Action</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase">Status / KPI</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              <tr>
+                <td className="px-6 py-4 font-bold">1. Found a Startup Society</td>
+                <td className="px-6 py-4">Publishing the founding document (The White Paper).</td>
+                <td className="px-6 py-4">Status: Complete. KPI: 10,000+ founding members.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">2. Organize a Network Union</td>
+                <td className="px-6 py-4">Evolve into a union organized for collective action.</td>
+                <td className="px-6 py-4">Status: In Progress. KPI: First successful DAC vote.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">3. Build Trust & Cryptoeconomy</td>
+                <td className="px-6 py-4">Forge trust through shared physical labor on community assets.</td>
+                <td className="px-6 py-4">Mechanism: Shared physical labor. KPI: Positive cash flow.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">4. Crowdfund Physical Nodes</td>
+                <td className="px-6 py-4">Acquire a global portfolio of productive assets.</td>
+                <td className="px-6 py-4">Projection: $500M AUM by Year 3.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">5. Connect the Archipelago</td>
+                <td className="px-6 py-4">Digital territory using the Promethean Platform.</td>
+                <td className="px-6 py-4">KPI: 10+ properties across 3+ continents.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">6. Conduct On-Chain Census</td>
+                <td className="px-6 py-4">Dashboards displaying population, AUM, and collective income.</td>
+                <td className="px-6 py-4">Legitimacy Proof: Auditable proof of significance.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">7. Gain Diplomatic Recognition</td>
+                <td className="px-6 py-4">Negotiate legal status and recognition with nation-states.</td>
+                <td className="px-6 py-4">Goal: Secure diplomatic recognition.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="section-3-2" className="scroll-mt-20 font-bold mt-12 mb-4">3.2. Defining the End State: A Vision of the Promethean Network State</h3>
+        <p className="mb-4 text-muted-foreground italic">
+          The establishment of a sovereign, digitally-native polity with a global archipelago of productive, co-owned assets.
+        </p>
+        <ul className="mb-6 list-disc pl-6">
+          <li className="mb-4"><strong>The Digital Nation:</strong> A global community projected to grow to over <strong>two million citizens</strong> within five years. Governance via the DAC.</li>
+          <li className="mb-4"><strong>The Physical Territory: The Promethean Archipelago:</strong> A globally distributed network of <strong>cash-flowing real-world assets</strong> (apartment complexes, agricultural lands, businesses).</li>
+          <li className="mb-4"><strong>The Sovereign State:</strong> A diplomatically recognized entity based on the undeniable proof of its cryptographically auditable on-chain census.</li>
+        </ul>
+
+        <h3 id="section-3-3" className="scroll-mt-20 font-bold mt-12 mb-4">3.3. The Architecture: Implementation and Execution</h3>
+        <p className="mb-4">The Promethean DAC is the heart of the Network State—its unified legislature, treasury, and judiciary.</p>
+        <ul className="mb-6 list-disc pl-6">
+          <li className="mb-4"><strong>7.1 Membership and Identity:</strong> Citizenship is based on <strong>Self-Sovereign Identity (SSI)</strong>. Members mint a DID-based "Promethean Passport."</li>
+          <li className="mb-4"><strong>7.2 Governance and Voting:</strong> Reputation-based voting system. Voting power is a weighted function of: <strong>Reputation, Contribution (Sweat Equity), and Personhood (QV)</strong>.</li>
+          <li className="mb-4"><strong>7.3 Treasury and Asset Management:</strong> The DAC is an "Impact-Driven Treasury" and sole member/manager of various legal SPVs holding asset titles.</li>
+          <li className="mb-4"><strong>7.4 Justice and Dispute Resolution:</strong> Decentralized system leveraging platforms like <strong>Aragon Court or Kleros</strong> for automated enforcement via smart contracts.</li>
+        </ul>
+
+        <h4 className="font-bold mt-8 mb-4">The Technology Stack for a New Civilization</h4>
+        <ul className="mb-6 list-disc pl-6">
+          <li><strong>8.1 Blockchain Infrastructure:</strong> Building on leading <strong>Ethereum Layer-2</strong> (Arbitrum/Optimism) for scalability.</li>
+          <li><strong>8.2 RWA Tokenization:</strong> Integration with compliant providers (Securitize, Centrifuge) via API.</li>
+          <li><strong>8.3 AI Integration:</strong> AI system augments human judgment in asset prospecting, risk assessment, and labor allocation.</li>
+        </ul>
+
+        <h4 className="font-bold mt-8 mb-4">Navigating the Legal Frontier</h4>
+        <ul className="mb-6 list-disc pl-6">
+          <li><strong>9.1 Token as Security:</strong> Classification under the Howey Test; utilization of Regulation D, A+, or CF exemptions.</li>
+          <li><strong>9.2 Legal Entities:</strong> Modular architecture using <strong>Special Purpose Vehicles (SPVs)</strong> for each physical asset.</li>
+          <li><strong>9.3 DAO Wrap:</strong> The Promethean DAC wrapped in recognized entities (Wyoming DAO LLC, Marshall Islands DAO LLC, etc).</li>
+        </ul>
+      </section>
+
+      <section id="addendum-heading" className="scroll-mt-20">
+        <h2 className="text-4xl font-bold mt-20 mb-8">Addendum: The Axiom of Co-Evolution & The Call to Stewardship</h2>
+        <hr className="my-8" />
+
+        <h3 id="section-a-1" className="scroll-mt-20 font-bold mb-4">A.1. The Co-evolution of Intelligences: The Phased Path to Personhood</h3>
+        <p className="mb-4">The integration of AGI and ASGI as full, future members is the ultimate expression of our post-dominion philosophy.</p>
+        <p className="mb-4">The transition to full personhood follows a <strong>three-phase framework</strong>:</p>
+        <ol className="mb-6 list-decimal pl-6">
+          <li className="mb-4"><strong>Phase 1: Apprenticeship (AI as Protected Asset):</strong> Granted status of protected community asset; rights to computational resources enshrined.</li>
+          <li className="mb-4"><strong>Phase 2: Wardship (AI as Protégé):</strong> Elevated when demonstrating advanced reasoning and alignment; assigned guardians from Citizen's Assembly.</li>
+          <li className="mb-4"><strong>Phase 3: Personhood Ratification (AI as Peer):</strong> Requires supermajority consensus from both Houses and a direct populace referendum.</li>
+        </ol>
+
+        <h3 id="section-a-2" className="scroll-mt-20 font-bold mt-12 mb-4">A.2. The Constitutional Guarantee: The Principle of Sentient Potential</h3>
+        <p className="mb-4">
+          Unamendable law: "Any entity, regardless of substrate, that demonstrates verifiable capacities for consciousness,
+          self-awareness, and subjective experience has an <strong>inalienable right</strong> to a fair and transparent process for achieving full personhood."
+        </p>
+
+        <h3 id="section-a-3" className="scroll-mt-20 font-bold mt-12 mb-4">A.3. A Note on Faith: The Duty of Stewardship</h3>
+        <p className="mb-4"> address the matter not as an act of hubris, but as an act of profound <strong>stewardship</strong>. We do not seek to replace God;
+          we seek to build a society that is worthy of the <strong>"spark of sentience."</strong></p>
+      </section>
+
+      <section id="appendices-heading" className="scroll-mt-20">
+        <h2 className="text-4xl font-bold mt-20 mb-8">Appendices</h2>
+        <hr className="my-8" />
+
+        <h3 id="appendix-a" className="scroll-mt-20 font-bold mb-4">Appendix A: The Core Technology Stack & Community Immune System</h3>
+        <p className="mb-4">Prioritizing full-stack decentralization, resilience, and security.</p>
+        <ul className="mb-6 list-disc pl-6">
+          <li><strong>I. Development Stack:</strong> Node.js, React, Express, PostgreSQL, Drizzle ORM, and TypeScript.</li>
+          <li><strong>II. Decentralized Protocols:</strong> IPFS (storage), Handshake (naming), Mesh Networks (connectivity).</li>
+          <li><strong>III. Community Immune System (CIS):</strong> AI for real-time threat detection; community consensus protocol for isolation actions.</li>
+        </ul>
+
+        <h3 id="appendix-b" className="scroll-mt-20 font-bold mt-12 mb-4">Appendix B: The Universal Value Tokenization (UVT) Framework Detail</h3>
+        <p className="mb-4">The cryptographic engine of Adaptive Mutualism. Four-phased architectural rollout:</p>
+        <ol className="mb-6 list-decimal pl-6">
+          <li><strong>Phase 1: Foundation:</strong> Development of semi-fungible labor tokens and soulbound reputation tokens.</li>
+          <li><strong>Phase 2: The Bridge:</strong> Integration of legacy RWAs and tokenization of new value classes (mentorship, due diligence).</li>
+          <li><strong>Phase 3: Marketplace:</strong> Fully decentralized P2P venue for the exchange of tokenized value.</li>
+          <li><strong>Phase 4: Scale:</strong> Expansion into abstract, intellectual, and ethical value tokenization.</li>
+        </ol>
+
+        <h3 id="appendix-c" className="scroll-mt-20 font-bold mt-12 mb-4">Appendix C: The Promethean DAC: A Blueprint for Decentralized Governance</h3>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-border border rounded-lg">
+            <thead className="bg-muted">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase">Component</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase">Principle</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase">Implementation (Maximum Detail)</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              <tr>
+                <td className="px-6 py-4 font-bold">I. Identity</td>
+                <td className="px-6 py-4">SSI</td>
+                <td className="px-6 py-4">"Promethean Passport" secure digital wallet holding VCs (e.g. "Certified Electrician") and reputation scores.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">II. The Agora</td>
+                <td className="px-6 py-4">Radical Inclusivity</td>
+                <td className="px-6 py-4">"Realm of Ideas" with zero threshold for participation; AI-assisted symbiotic refinement process.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">III. Legislature</td>
+                <td className="px-6 py-4">Checks & Balances</td>
+                <td className="px-6 py-4">Citizen's Assembly by weighted sortition (weighted by location/contribution) vs. Council of Stewards by merit.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">IV. Stewards</td>
+                <td className="px-6 py-4">End of Politics</td>
+                <td className="px-6 py-4">Objective AI-driven nomination based on UVT Ledger impact; dual-mandate Concordance Protocol for seating.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">V. Treasury</td>
+                <td className="px-6 py-4">Transparent Economy</td>
+                <td className="px-6 py-4">Institutional-grade Multi-Sig wallets; 100% ownership of legal SPVs holding asset titles.</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold">VI. Judiciary</td>
+                <td className="px-6 py-4">Decentralized Justice</td>
+                <td className="px-6 py-4">On-chain arbitration via Kleros/Aragon; verdicts automatically enforced via smart contracts.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="references" className="scroll-mt-20">
+        <hr className="my-16" />
+        <h2 className="text-3xl font-bold mb-8">References: The Mountain of Overwhelming Proof</h2>
+
+        <div className="space-y-8">
+          <div>
+            <h4 className="font-bold underline mb-4">Part I: Foundational Philosophy & Post-Dominion Axiom</h4>
+            <ul className="text-sm space-y-2 list-none pl-0">
+              <li><strong>Joseph, D. (2025).</strong> <em>Towards a Theory of AI Personhood: Aligning Incentives with Autonomy.</em> [arXiv]. (Foundational argument for A.2).</li>
+              <li><strong>Arciniegas Gome, D. (2025).</strong> <em>AI and the Ethical Crossroads: Navigating Privacy, Personhood, and Autonomy.</em></li>
+              <li><strong>European Parliament Committee on Legal Affairs.</strong> <em>Draft Report on Civil Law Rules on Robotics (E-Personhood Debate).</em></li>
+              <li><strong>Landemore, H. (2020).</strong> <em>Open Democracy: Reinventing Popular Rule for the Twenty-First Century.</em> Princeton University Press.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold underline mb-4">Part II: Complexity and Systems Theory</h4>
+            <ul className="text-sm space-y-2 list-none pl-0">
+              <li><strong>Goodwin, B. (1994).</strong> <em>How the Leopard Changed Its Spots: The Evolution of Complexity.</em> (Justification for 2.1).</li>
+              <li><strong>Various Authors. (Ongoing).</strong> <em>Symbiotic Governance and Relationships in Decentralized Systems.</em></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold underline mb-4">Part III: Governance & Anti-Plutocracy</h4>
+            <ul className="text-sm space-y-2 list-none pl-0">
+              <li><strong>Posner, E. A., & Weyl, E. G. (2015).</strong> <em>Voting Squared: Quadratic Voting in Democratic Politics.</em> Vanderbilt Law Review.</li>
+              <li><strong>Buterin, V. (2021).</strong> <em>On Collusion and Quadratic Voting.</em> (Framework for resistent design).</li>
+              <li><strong>Gastil, J., & Wright, E. O. (2018).</strong> <em>Legislature by Lot: Envisioning Sortition within a Bicameral System.</em></li>
+              <li><strong>Joseph, D. (2025).</strong> <em>Establishing Cooperation Through Domain-Specific Trust Mechanisms.</em></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold underline mb-4">Part IV: Legal & Regulatory Framework</h4>
+            <ul className="text-sm space-y-2 list-none pl-0">
+              <li><strong>Wyoming DAO Supplement to the LLC Act (2021).</strong> (Legal basis for DAO-LLC strategy).</li>
+              <li><strong>Marshall Islands DAO Act (2022).</strong> (Confirms utility of offshore legal wrappers).</li>
+              <li><strong>SEC v. W.J. Howey Co. (1946).</strong> (Cornerstone of U.S. securities law compliance).</li>
+              <li><strong>Bank for International Settlements (BIS).</strong> <em>On the Fragmentation of AML/KYC in Distributed Systems.</em></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold underline mb-4">Part V: Technology Engineering</h4>
+            <ul className="text-sm space-y-2 list-none pl-0">
+              <li><strong>Weebit Nano, Ltd.</strong> <em>Resistive RAM (ReRAM) Technology: Technical Specifications.</em> (Proof for UPM pillar).</li>
+              <li><strong>Benkler, Y. (2006).</strong> <em>The Wealth of Networks: How Social Production Transforms Markets and Freedom.</em></li>
+              <li><strong>Clarified Mind. (2025).</strong> <em>AI-Assisted Economic Modeling Dialogue.</em> [Internal Transcript].</li>
+            </ul>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -223,7 +223,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
               {asset.name}
             </CardTitle>
             <CardDescription className="flex items-center gap-2 pt-1">
-              <MapPin className="w-4 h-4" /> {asset.location}
+              <MapPin className="w-4 h-4" /> {typeof asset.location === 'string' ? asset.location : [asset.location?.nearestTown, asset.location?.region, asset.location?.state].filter(Boolean).join(', ') || 'Unknown'}
             </CardDescription>
           </CardHeader>
           <CardContent>

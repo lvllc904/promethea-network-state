@@ -261,7 +261,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex-1 space-y-1">
                       <p className="text-sm font-medium leading-none">{asset.name}</p>
-                      <p className="text-xs text-muted-foreground">{asset.location}</p>
+                      <p className="text-xs text-muted-foreground">{typeof asset.location === 'string' ? asset.location : [asset.location?.nearestTown, asset.location?.region, asset.location?.state].filter(Boolean).join(', ') || 'Unknown'}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-bold">${asset.value.toLocaleString()}</p>

@@ -46,7 +46,7 @@ export default function PhysicalAssetsPage() {
                                 </div>
                                 <CardDescription className="flex items-center gap-1.5 mt-1">
                                     <MapPin className="w-3 h-3 text-muted-foreground" />
-                                    {asset.location}
+                                    {typeof asset.location === 'string' ? asset.location : [asset.location?.nearestTown, asset.location?.region, asset.location?.state].filter(Boolean).join(', ') || 'Unknown'}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">

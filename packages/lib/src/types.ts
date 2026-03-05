@@ -62,7 +62,7 @@ export interface RealWorldAsset {
   name: string;
   description: string;
   assetType: 'Land' | 'Housing' | 'Manufacturing' | 'Utility';
-  location: string;
+  location: string | { region?: string; nearestTown?: string; state?: string; coordinates?: any;[key: string]: any };
   price: number;
   acreage?: number;
   resources?: string[]; // e.g. ["Water", "Sun", "Timber"]

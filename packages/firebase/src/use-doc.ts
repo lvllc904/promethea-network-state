@@ -18,7 +18,7 @@ export function useDoc<T>(ref: DocumentReference | null) {
             ref,
             (doc) => {
                 if (doc.exists()) {
-                    setData(doc.data() as T);
+                    setData({ ...doc.data() as any, id: doc.id } as T);
                 } else {
                     setData(null);
                 }
