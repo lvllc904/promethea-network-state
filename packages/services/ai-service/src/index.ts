@@ -55,6 +55,61 @@ app.get('/health', (req, res) => {
     res.status(200).send('OK');
 });
 
+app.post('/api/underwrite-rwa', async (req, res) => {
+    try {
+        const { invokeUnderwriteRWA } = await import('@promethea/ai');
+        const result = await invokeUnderwriteRWA(req.body);
+        res.json(result);
+    } catch (error: any) {
+        console.error('Error in /api/underwrite-rwa:', error);
+        res.status(500).json({ error: error.message || 'Underwrite failed' });
+    }
+});
+
+app.post('/api/auto-list-rwa', async (req, res) => {
+    try {
+        const { invokeAutoListRWA } = await import('@promethea/ai');
+        const result = await invokeAutoListRWA(req.body.documents);
+        res.json(result);
+    } catch (error: any) {
+        console.error('Error in /api/auto-list-rwa:', error);
+        res.status(500).json({ error: error.message || 'Auto list failed' });
+    }
+});
+
+app.post('/api/allocate-rwa-tasks', async (req, res) => {
+    try {
+        const { invokeAllocateRWATasks } = await import('@promethea/ai');
+        const result = await invokeAllocateRWATasks(req.body);
+        res.json(result);
+    } catch (error: any) {
+        console.error('Error in /api/allocate-rwa-tasks:', error);
+        res.status(500).json({ error: error.message || 'Task allocation failed' });
+    }
+});
+
+app.post('/api/text-to-speech', async (req, res) => {
+    try {
+        const { invokeTextToSpeech } = await import('@promethea/ai');
+        const result = await invokeTextToSpeech(req.body);
+        res.json(result);
+    } catch (error: any) {
+        console.error('Error in /api/text-to-speech:', error);
+        res.status(500).json({ error: error.message || 'Text to speech failed' });
+    }
+});
+
+app.post('/api/speech-to-text', async (req, res) => {
+    try {
+        const { invokeSpeechToText } = await import('@promethea/ai');
+        const result = await invokeSpeechToText(req.body);
+        res.json(result);
+    } catch (error: any) {
+        console.error('Error in /api/speech-to-text:', error);
+        res.status(500).json({ error: error.message || 'Speech to text failed' });
+    }
+});
+
 // Start the server
 app.listen(port, '0.0.0.0', () => {
     console.log(`AI service listening on http://0.0.0.0:${port}`);

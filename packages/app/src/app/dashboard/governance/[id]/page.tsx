@@ -58,8 +58,8 @@ import { Proposal, Vote, Citizen, Task, type CompensationChoice } from '@prometh
 import { Skeleton } from '@promethea/ui';
 import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@promethea/ui';
-import { applyForTask } from '../../assets/[id]/actions';
-import { pledgeCapital, castVote } from './actions';
+import { applyForTask } from '@/lib/client-actions'; // We will create this
+import { pledgeCapital, castVote } from '@/lib/client-actions';
 import { useToast } from '@promethea/hooks';
 import { Label } from '@promethea/ui';
 
@@ -271,7 +271,8 @@ export default function ProposalDetailPage({
     if (user && !user.isAnonymous && proposal) {
       setIsCastingVote(true);
       try {
-        const result = await castVote(proposal.id, user.uid, support, pathname, voteCredits);
+        if (!firestore) throw new Error("Firestore not initialized");
+        const result = await castVote(firestore, proposal.id, user.uid, support, voteCredits, Number(qvVoice));
         if (result.success) {
           toast({
             title: "Vote Recorded!",
@@ -298,7 +299,8 @@ export default function ProposalDetailPage({
     if (user && !user.isAnonymous && proposal) {
       setIsPledging(true);
       try {
-        const result = await pledgeCapital(proposal.id, user.uid, amount, pathname);
+        if (!firestore) throw new Error("Firestore not initialized");
+        const result = await pledgeCapital(firestore, proposal.id, user.uid, amount);
         if (result.success) {
           toast({
             title: 'Pledge Recorded!',
@@ -341,7 +343,8 @@ export default function ProposalDetailPage({
     if (user && !user.isAnonymous && currentTask && proposal) {
       setApplyingTaskId(currentTask.id);
       try {
-        const result = await applyForTask(currentTask.id, proposal.id, user.uid, compensationChoice, pathname);
+        if (!firestore) throw new Error("Firestore not initialized");
+        const result = await applyForTask(firestore, currentTask.id, proposal.id, user.uid, compensationChoice);
         if (result.success) {
           toast({
             title: 'Pledge Recorded!',
@@ -654,12 +657,16 @@ export default function ProposalDetailPage({
                     onClick={async () => {
                       if (!user || user.isAnonymous) return;
                       try {
-                        const { executeProposalAction } = await import('./actions');
-                        const res = await executeProposalAction(proposal.id, user.uid, pathname);
-                        if (res.success) {
+                        const res = await fetch(`${process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://localhost:4002'}/api/execute-proposal`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ proposalId: proposal.id, citizenId: user.uid })
+                        });
+                        const data = await res.json();
+                        if (res.ok && data.success) {
                           toast({ title: 'Success', description: 'Actionable Execution triggered on the Engine.' });
                         } else {
-                          toast({ variant: 'destructive', title: 'Execution Failed', description: res.error });
+                          toast({ variant: 'destructive', title: 'Execution Failed', description: data.error || 'Unknown error' });
                         }
                       } catch (e: any) {
                         toast({ variant: 'destructive', title: 'Execution Error', description: e.message });

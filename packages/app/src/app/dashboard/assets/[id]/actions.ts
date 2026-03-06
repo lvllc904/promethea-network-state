@@ -1,128 +1,20 @@
 'use server';
 
-import * as Ai from '@promethea/ai';
-import type { AllocateRWATasksInput, AllocateRWATasksOutput } from '@promethea/ai';
-import { getServerFirebase } from '@promethea/firebase/server-init';
-import { Pledge, type CompensationChoice } from '@promethea/lib';
-import { revalidatePath } from 'next/cache';
-
-export async function handleAllocate(data: AllocateRWATasksInput): Promise<AllocateRWATasksOutput | { error: string }> {
-  try {
-    const result = await Ai.invokeAllocateRWATasks(data);
-    if (!result || !result.suggestedMembers) {
-      return { error: 'Received an invalid response from the AI.' };
+export async function handleAllocate(taskData: any): Promise<any | { error: string }> {
+    try {
+        const aiServiceUrl = process.env.AI_SERVICE_URL || process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://localhost:4002';
+        const response = await fetch(`${aiServiceUrl}/api/allocate-rwa-tasks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(taskData)
+        });
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Failed to allocate task');
+        }
+        return await response.json();
+    } catch (error: any) {
+        console.error("Error in handleAllocate action: ", error);
+        return { error: error.message || "An unexpected error occurred." };
     }
-    return result;
-  } catch (error) {
-    console.error('Error in handleAllocate action:', error);
-    return { error: 'Failed to get AI suggestions.' };
-  }
-}
-
-
-export async function applyForTask(
-  taskId: string,
-  proposalId: string,
-  citizenId: string,
-  compensationChoice: CompensationChoice,
-  assetPath: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    const admin = await getServerFirebase();
-    const db = admin.firestore();
-
-    await db.runTransaction(async (transaction) => {
-      const taskRef = db.collection('tasks').doc(taskId);
-      const proposalRef = db.collection('proposals').doc(proposalId);
-
-      // 1. Create a new Pledge document
-      const pledgeRef = db.collection('pledges').doc();
-      transaction.set(pledgeRef, {
-        citizenId,
-        proposalId,
-        taskId,
-        type: 'SweatEquity',
-        compensationChoice,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
-
-      // 2. Update the Task document
-      transaction.update(taskRef, {
-        assigneeId: citizenId,
-        status: 'In Progress',
-        compensationChoice: compensationChoice,
-      });
-
-      // 3. Increment the pledgedSweatEquity count on the Proposal
-      const proposalDoc = await transaction.get(proposalRef);
-      if (!proposalDoc.exists) {
-        throw new Error("Proposal not found!");
-      }
-      const currentPledgedSweat = proposalDoc.data()?.pledgedSweatEquity || 0;
-      transaction.update(proposalRef, { pledgedSweatEquity: currentPledgedSweat + 1 });
-    });
-
-    // Revalidate the path to show the updated data
-    revalidatePath(assetPath);
-
-    return { success: true };
-
-  } catch (error) {
-    console.error(`Error applying for task ${taskId}:`, error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred while applying for the task.";
-    return { success: false, error: errorMessage };
-  }
-}
-
-export async function purchaseFractionalShare(
-  assetId: string,
-  citizenId: string,
-  amount: number,
-  tokenType: 'Capital' | 'Reputation',
-  assetPath: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    const admin = await getServerFirebase();
-    const db = admin.firestore();
-
-    await db.runTransaction(async (transaction) => {
-      const assetRef = db.collection('real_world_assets').doc(assetId);
-      const citizenRef = db.collection('citizens').doc(citizenId);
-      const uvtRef = db.collection('universal_value_tokens').doc();
-
-      const citizenDoc = await transaction.get(citizenRef);
-      if (!citizenDoc.exists) throw new Error("Citizen profile not found.");
-
-      const citizenData = citizenDoc.data();
-      const currentBalance = tokenType === 'Capital' ? (citizenData?.capital || 0) : (citizenData?.reputation || 0);
-
-      if (currentBalance < amount) {
-        throw new Error(`Insufficient ${tokenType} balance. Required: ${amount}, Available: ${currentBalance}`);
-      }
-
-      // 1. Deduct from citizen (simulated for capital, actual for reputation)
-      if (tokenType === 'Reputation') {
-        transaction.update(citizenRef, { reputation: currentBalance - amount });
-      }
-
-      // 2. Create the UVT certificate
-      transaction.set(uvtRef, {
-        ownerId: citizenId,
-        assetId: assetId,
-        tokenType: tokenType,
-        amount: amount,
-        status: 'Active',
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
-
-      // 3. Update asset value/pool (optional log)
-      console.log(`[Asset Swap] Citizen ${citizenId} acquired ${amount} fractional shares in ${assetId}`);
-    });
-
-    revalidatePath(assetPath);
-    return { success: true };
-  } catch (error: any) {
-    console.error('Fractional purchase error:', error);
-    return { success: false, error: error.message || "Failed to acquire fractional share." };
-  }
 }

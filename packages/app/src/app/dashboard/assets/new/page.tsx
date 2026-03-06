@@ -10,7 +10,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useUser } from "@promethea/firebase";
 import { useRouter } from "next/navigation";
 import { Loader2, CheckCircle, XCircle, PartyPopper } from "lucide-react";
-import { handleUnderwrite, handleProposeAsset, handleAutoList } from "./actions";
+import { handleUnderwrite, handleAutoList } from "./actions";
+import { handleProposeAsset } from "@/lib/client-actions";
+import { useFirestore } from "@promethea/firebase";
 import { type UnderwriteRWAInput, type UnderwriteRWAOutput, type AutoListRWAOutput } from "@promethea/lib";
 import { Alert, AlertDescription, AlertTitle } from "@promethea/ui";
 import { Badge } from "@promethea/ui";
@@ -27,14 +29,20 @@ function UnderwritingAnalysis({
     ownerId: string
 }) {
     const router = useRouter();
+    const firestore = useFirestore();
     const [isListing, setIsListing] = useState(false);
     const [listingResult, setListingResult] = useState<{ success: boolean, proposalId?: string, error?: string } | null>(null);
 
     const formatCurrency = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 
     const onPromote = async () => {
+        if (!firestore) {
+            setListingResult({ success: false, error: "Database not connected" });
+            return;
+        }
+
         setIsListing(true);
-        const result = await handleProposeAsset({
+        const result = await handleProposeAsset(firestore, {
             assetData: assetData,
             analysis: analysis,
             ownerId: ownerId

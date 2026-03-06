@@ -29,7 +29,9 @@ import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@
 import { doc, collection, query, where } from 'firebase/firestore';
 import { RealWorldAsset, Task, UniversalValueToken } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
-import { handleAllocate, applyForTask, purchaseFractionalShare } from './actions';
+import { handleAllocate } from './actions';
+import { applyForTask, purchaseFractionalShare } from '@/lib/client-actions';
+
 import { Pie, Cell, ResponsiveContainer, PieChart as RechartsPieChart } from 'recharts';
 import { type DocumentReference, type Query } from 'firebase/firestore';
 import { Avatar, AvatarFallback } from '@promethea/ui';
@@ -103,7 +105,8 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
       setApplyingTaskId(taskId);
       try {
         if (asset) {
-          const result = await applyForTask(taskId, params.id, user.uid, 'SweatEquity', pathname);
+          if (!firestore) throw new Error("Database not connected.");
+          const result = await applyForTask(firestore, taskId, params.id, user.uid, 'SweatEquity');
           if (result.success) {
             toast({
               title: "Task Assigned!",
@@ -444,7 +447,8 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                   const amountString = window.prompt("Enter amount of Reputation to swap for UVT (1:1):");
                   const amount = parseInt(amountString || "0");
                   if (amount > 0) {
-                    const res = await purchaseFractionalShare(params.id, user.uid, amount, 'Reputation', pathname);
+                    if (!firestore) return;
+                    const res = await purchaseFractionalShare(firestore, params.id, user.uid, amount, 'Reputation');
                     if (res.success) toast({ title: "Acquisition Successful", description: `You now own ${amount} more fractional shares.` });
                     else toast({ variant: 'destructive', title: "Acquisition Failed", description: res.error });
                   }

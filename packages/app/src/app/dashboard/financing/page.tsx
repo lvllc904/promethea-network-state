@@ -18,13 +18,14 @@ import { useCollection, useFirestore, useMemoFirebase, useUser } from '@promethe
 import { collection, query, type Query } from 'firebase/firestore';
 import type { GapLoan } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
-import { proposeGapLoan, fundGapLoan } from './actions';
+import { addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@promethea/hooks';
 import { AlertCircle, FileText, HandCoins, Loader2, PlusCircle } from 'lucide-react';
 import { Badge } from '@promethea/ui';
 
 function GapLoanCard({ loan }: { loan: GapLoan & { id: string } }) {
   const { user } = useUser();
+  const firestore = useFirestore();
   const { toast } = useToast();
   const [isFunding, setIsFunding] = useState(false);
 
@@ -37,18 +38,26 @@ function GapLoanCard({ loan }: { loan: GapLoan & { id: string } }) {
       });
       return;
     }
+    if (!firestore) return;
+
     setIsFunding(true);
-    const result = await fundGapLoan(loan.id, user.uid);
-    if (result.success) {
+    try {
+      const loanRef = doc(firestore, 'gap_loans', loan.id);
+      await updateDoc(loanRef, {
+        funderId: user.uid,
+        status: 'Funded',
+        amountFunded: loan.amountNeeded,
+        fundedAt: serverTimestamp(),
+      });
       toast({
         title: 'Loan Funded!',
         description: `You have successfully funded the loan: "${loan.title}".`,
       });
-    } else {
+    } catch (error: any) {
       toast({
         variant: 'destructive',
         title: 'Funding Failed',
-        description: result.error,
+        description: error.message || 'An error occurred',
       });
     }
     setIsFunding(false);
@@ -111,15 +120,32 @@ export default function FinancingPage() {
 
     setIsSubmitting(true);
     const formData = new FormData(event.currentTarget);
-    formData.append('proposerId', user.uid);
 
-    const result = await proposeGapLoan(formData);
+    try {
+      if (!firestore) throw new Error("Database not connected");
 
-    if (result.success) {
+      const newLoan = {
+        title: formData.get('title') as string,
+        description: formData.get('description') as string,
+        amountNeeded: parseFloat(formData.get('amountNeeded') as string),
+        repaymentTerms: formData.get('repaymentTerms') as string,
+        proposalId: formData.get('proposalId') as string,
+        proposerId: user.uid,
+        status: 'Funding',
+        amountFunded: 0,
+        createdAt: serverTimestamp()
+      };
+
+      if (!newLoan.title || !newLoan.amountNeeded || !newLoan.repaymentTerms) {
+        throw new Error('Title, Amount Needed, and Repayment Terms are required.');
+      }
+
+      await addDoc(collection(firestore, 'gap_loans'), newLoan);
+
       toast({ title: 'Loan Proposal Submitted!', description: 'Your gap loan is now open for funding by the community.' });
       (event.target as HTMLFormElement).reset();
-    } else {
-      toast({ variant: 'destructive', title: 'Proposal Failed', description: result.error });
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: 'Proposal Failed', description: error.message || "An error occurred" });
     }
 
     setIsSubmitting(false);
