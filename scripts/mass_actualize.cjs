@@ -1,12 +1,17 @@
 const admin = require('firebase-admin');
+require('dotenv').config({ path: './packages/app/.env' });
 
 async function massActualize() {
     console.log('--- Promethean State Actualization: Simulation -> Ledger (ADC) ---');
 
     try {
         if (!admin.apps.length) {
+            const saContent = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+            const serviceAccount = JSON.parse(saContent);
+            // Fix double-escaped newlines in private key
+            serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
             admin.initializeApp({
-                credential: admin.credential.applicationDefault(),
+                credential: admin.credential.cert(serviceAccount),
                 projectId: 'studio-9105849211-9ba48'
             });
         }
