@@ -10,7 +10,9 @@ const nextConfig = {
         '@promethea/pubsub'
     ],
     output: 'standalone',
-    experimental: {},
+    experimental: {
+        outputFileTracingRoot: new URL('../../', import.meta.url).pathname,
+    },
     images: {
         remotePatterns: [
             {
