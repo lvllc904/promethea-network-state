@@ -1,0 +1,15 @@
+kind: apphosting.yaml
+version: v1
+runConfig:
+  minInstances: 1
+  memory: 1Gi
+  cpu: 1
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: studio-9105849211-9ba48
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyAgGHbGW611F1MOWusBeiTFV0EN9QGrkHk
+  - variable: ECONOMIC_ENGINE_URL
+    value: https://economic-engine-385120524005.us-central1.run.app
+  - variable: AI_SERVICE_URL
+    value: https://ai-service-385120524005.us-central1.run.app
