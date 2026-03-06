@@ -9,7 +9,7 @@ const nextConfig = {
         '@promethea/ui',
         '@promethea/pubsub'
     ],
-    // Removed unsupported serverExternalPackages option (not valid in Next.js config).
+    output: 'standalone',
     experimental: {},
     images: {
         remotePatterns: [

@@ -1,0 +1,18 @@
+kind: apphosting.yaml
+version: v1
+runConfig:
+  minInstances: 1
+  memory: 1Gi
+  cpu: 1
+scripts:
+  build: npm run build --workspace=@promethea/app
+  start: npm start --workspace=@promethea/app
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: studio-9105849211-9ba48
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyAgGHbGW611F1MOWusBeiTFV0EN9QGrkHk
+  - variable: SOLANA_RPC_URL
+    value: https://mainnet.helius-rpc.com/?api-key=f8b67b54-f005-4858-89eb-da92335cf076
+  - variable: ECONOMIC_ENGINE_URL
+    value: https://economic-engine-385120524005.us-central1.run.app
