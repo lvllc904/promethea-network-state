@@ -1,0 +1,21 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--platform'
+      - 'linux/amd64'
+      - '-t'
+      - 'gcr.io/studio-9105849211-9ba48/promethea-frontend:latest'
+      - '-f'
+      - 'packages/app/Dockerfile'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/studio-9105849211-9ba48/promethea-frontend:latest'
+images:
+  - 'gcr.io/studio-9105849211-9ba48/promethea-frontend:latest'
+options:
+  machineType: 'E2_HIGHCPU_8'
+  diskSizeGb: 100
+timeout: '1200s'

@@ -5,7 +5,7 @@
   "targets": {
     "studio-9105849211-9ba48": {
       "hosting": {
-        "app": [
+        "production": [
           "studio-9105849211-9ba48"
         ]
       }

@@ -1,8 +1,7 @@
 {
     "hosting": {
-        "source": "packages/app",
-        "framework": "nextjs",
-        "target": "app",
+        "site": "studio-9105849211-9ba48",
+        "public": "packages/app/public",
         "ignore": [
             "firebase.json",
             "**/.*",
@@ -10,18 +9,22 @@
         ],
         "rewrites": [
             {
-                "source": "/api/ai/**",
+                "source": "**",
                 "run": {
-                    "serviceId": "ai-service",
+                    "serviceId": "promethea-frontend",
                     "region": "us-central1"
                 }
-            },
+            }
+        ],
+        "headers": [
             {
-                "source": "/api/engine/**",
-                "run": {
-                    "serviceId": "economic-engine",
-                    "region": "us-central1"
-                }
+                "source": "/_next/static/**",
+                "headers": [
+                    {
+                        "key": "Cache-Control",
+                        "value": "public, max-age=31536000, immutable"
+                    }
+                ]
             }
         ]
     },
