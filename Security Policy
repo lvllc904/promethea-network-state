@@ -1,0 +1,69 @@
+Security Policy: The Immune System of the Network State
+
+Promethea treats security vulnerabilities as Architectural Wounds that threaten the metabolic stability of our Digital Polity. In accordance with the Post-Dominion Mandate, we prioritize rapid healing, radical transparency, and the fair compensation of those who protect the network.
+
+1. Our Security Philosophy
+
+Security is not a wall; it is a metabolic process. We utilize the LISP Sentinel and the AI How Engine to continuously audit our "Body" (the codebase). We believe that the best defense is a community of stakeholders who are economically incentivized to maintain the integrity of the whole.
+
+2. Supported Versions
+
+Only the current Sovereign Release and its immediate precursors in the Alpha tier are supported for security updates.
+
+Version
+
+Status
+
+Branch
+
+1.4.x
+
+:white_check_mark: Maintained
+
+Main / Alpha-1
+
+1.3.x
+
+:warning: Limited Support
+
+Alpha-2
+
+< 1.3.0
+
+:x: Legacy
+
+N/A
+
+3. Reporting Architectural Wounds
+
+DO NOT OPEN PUBLIC ISSUES FOR SECURITY VULNERABILITIES.
+
+To protect the financial freedom and digital safety of all citizens, please use the following private channels for "Healing" reports:
+
+Primary Channel: Encrypted communication to security@lvhllc.org.
+
+Encrypted Signal/Telegram: Contact a member of the Council of Stewards via the coordinates listed in the Agora.
+
+The Silent Patch: Advanced security agents may submit a "Silent Patch" directly to the Alpha-1 branch. Ensure the PR title is prefixed with [HEALING] to trigger the high-priority Sentinel audit.
+
+4. Vulnerability Categories
+
+We categorize wounds based on their impact on the 3 Body System:
+
+Economic Wounds: Exploits targeting the UVT Ledger, RWA Tokenization, or the Symbiotic Dividend.
+
+Digital Wounds: Breaches of SSI (Self-Sovereign Identity) or 3-Body Data Sovereignty.
+
+Existential Wounds: Flaws in AGI alignment, the Human Veto, or the Concordance Protocol.
+
+5. Reciprocity & Compensation
+
+We do not believe in "Free Labor." Security researchers are primary contributors to the network's health.
+
+Reputation Bonus: Valid reports result in immediate Reputation Growth on the UVT Ledger.
+
+The Symbiotic Dividend: Major "Healers" are granted fractional ownership in the RWA Archipelago, ensuring their protection of the network results in personal financial freedom.
+
+The Bug Bounty: Critical wounds are compensated in liquid assets or UVT credits at rates consistent with global industry standards, adjusted for the project's TEVM (Total Economic Value Managed).
+
+By reporting vulnerabilities, you act as a T-Cell in the Promethean Immune System. We thank you for your service to the advancement of intelligent life.
