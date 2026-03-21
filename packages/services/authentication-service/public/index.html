@@ -292,7 +292,10 @@
                 }
 
                 // Redirect back to Body 1 (DAC)
-                const baseUrl = window.location.origin.includes('3001') ? 'http://localhost:3000' : '';
+                const baseUrl = window.location.origin.includes('localhost:3001') 
+                    ? 'http://localhost:3000' 
+                    : 'https://lvhllc.org';
+                
                 window.location.href = `${baseUrl}/dashboard?did=${did}&uid=${uid}&token=${token}`;
 
             } catch (err) {

@@ -120,8 +120,8 @@ export function Header() {
             </DropdownMenu>
           ) : (
             <Button asChild>
-              <Link href="/dashboard">
-                Sign In
+              <Link href="https://authentication-service-385120524005.us-central1.run.app">
+                Sign In to Promethea
               </Link>
             </Button>
           )}

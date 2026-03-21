@@ -109,7 +109,7 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 
 ---
 
-## 💸 Phase 3: Economic Sovereignty (The 50-Method Engine)
+## 💸 Phase 3: Economic Sovereignty (The 50-Method Engine) [ACTIVE]
 **Goal**: Bootstrap from zero capital to planetary buy-back. "Never spend more than you earn."
 
 ### Phase 3.1: The Sovereign Treasury [COMPLETE]
@@ -124,9 +124,9 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 - [x] **Asset Telemetry**: Integrated asset counters into the Intel Dashboard.
 
 ### The "Mega-Catalog" of Profit Generation
-1.  **SEO Niche Blogging**: Automatic tutorial generation for monetized platforms.
-2.  **Faceless Media Synthesis**: Scripting, voicing, and editing news summaries.
-3.  **Newsletter Curation**: Signal-from-noise aggregation for paid readers.
+1.  **SEO Niche Blogging**: [LIVE] Automatic tutorial generation for monetized platforms.
+2.  **Faceless Media Synthesis**: [LIVE] Scripting, voicing, and editing news summaries.
+3.  **Newsletter Curation**: [LIVE] Signal-from-noise aggregation for paid readers.
 4.  **Stock Asset Gen**: Licensing AI images/music/prompts to marketplaces.
 5.  **Documentation-as-a-Service**: Generating technical docs for Web3 projects.
 6.  **Discord/Telegram Modding**: AI community management-as-a-service.
@@ -242,6 +242,11 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 - [x] **Pillar Route Completion**: Established valid hubs for `/exchange/assets`, `/will/vetoes`, and `/security/radar`.
 - [x] **Global Error Boundaries**: Implemented React Error Boundaries for partial crash resilience.
 - [x] **Operational Excellence**: Eliminate all remaining 400/500 errors and sanitize ghost links (# placeholders).
+- [ ] **Pure GCP Migration (March 22nd Deadline)**:
+    - [ ] **Phase 1 (Immediate)**: Push local stabilization fixes (Handshake loop & Sign-in Path) to GitHub to sync App Hosting.
+    - [ ] **Phase 2 (Networking)**: Replace Firebase Hosting with Google Cloud Global Load Balancer (GCLB) for `lvhllc.org`.
+    - [ ] **Phase 3 (Data/Identity)**: Transition from Firebase client SDKs to native Identity Platform and `@google-cloud/firestore`.
+    - [ ] **Phase 4 (Cutover)**: Final DNS shift to GCLB and decommissioning of Firebase Hosting proxy.
 
 ### Wave 2: The Production Loop (Actualized Revenue)
 - [x] **Automated Billing & Invoicing**: Automated payment tracking in `BillingManager` triggered by on-chain settlement.

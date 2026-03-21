@@ -221,7 +221,7 @@ export default function LandingPage() {
               Assets
             </Link>
             <Button asChild variant="outline" size="sm" className="bg-transparent text-white border-white hover:bg-white hover:text-black">
-              <Link href="/dashboard">Sign In</Link>
+              <Link href="https://authentication-service-385120524005.us-central1.run.app">Sign In to Promethea</Link>
             </Button>
           </nav>
         </header>
@@ -240,8 +240,8 @@ export default function LandingPage() {
                 </p>
                 <div className="flex flex-col gap-4 sm:flex-row">
                   <Button asChild size="lg">
-                    <Link href="/dashboard">
-                      Explore the Platform
+                    <Link href="https://authentication-service-385120524005.us-central1.run.app">
+                      Sign In to Promethea
                       <ArrowRight className="ml-2" />
                     </Link>
                   </Button>

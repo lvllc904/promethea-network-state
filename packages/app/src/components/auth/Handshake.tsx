@@ -32,15 +32,22 @@ export function Handshake() {
             intentLogger.init().catch(err => console.error("IntentLogger failed to init", err));
             syncEngine.init(did).catch(err => console.error("SyncEngine failed to init", err));
 
-            // Clean up the URL by removing the did/token params
+            // Clean up the URL without triggering a full Next.js transition loop
             const newParams = new URLSearchParams(searchParams.toString());
             newParams.delete('did');
             newParams.delete('token');
+            newParams.delete('uid'); // Also clean up uid if present
 
-            const newUrl = pathname + (newParams.toString() ? '?' + newParams.toString() : '');
-            router.replace(newUrl);
+            const searchString = newParams.toString();
+            const newUrl = pathname + (searchString ? '?' + searchString : '');
+            
+            // Use native history to avoid Next.js routing overhead/loops during hydration
+            window.history.replaceState({}, '', newUrl);
+
+            // Force a one-time synchronization of the internal auth hook state
+            window.dispatchEvent(new Event('storage'));
         }
-    }, [searchParams, router, pathname]);
+    }, [searchParams, pathname]);
 
     return null;
 }
