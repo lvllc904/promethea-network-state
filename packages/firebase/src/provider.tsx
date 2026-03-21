@@ -82,27 +82,40 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
         const userDID = localStorage.getItem('userDID');
 
         if (authStatus === 'authenticated' && userUID) {
-          setUserAuthState({
-            user: {
-              uid: userUID,
-              isAnonymous: false,
-              displayName: userDID || 'Citizen'
-            },
-            isUserLoading: false,
-            userError: null
+          setUserAuthState(prev => {
+            if (prev.user?.uid === userUID && prev.user?.isAnonymous === false && prev.user?.displayName === (userDID || 'Citizen')) {
+              return prev;
+            }
+            return {
+              user: {
+                uid: userUID,
+                isAnonymous: false,
+                displayName: userDID || 'Citizen'
+              },
+              isUserLoading: false,
+              userError: null
+            };
           });
         } else if (authStatus === 'anonymous') {
-          setUserAuthState({
-            user: {
-              uid: 'anonymous',
-              isAnonymous: true,
-              displayName: 'Anonymous'
-            },
-            isUserLoading: false,
-            userError: null
+          setUserAuthState(prev => {
+            if (prev.user?.uid === 'anonymous' && prev.user?.isAnonymous === true) {
+              return prev;
+            }
+            return {
+              user: {
+                uid: 'anonymous',
+                isAnonymous: true,
+                displayName: 'Anonymous'
+              },
+              isUserLoading: false,
+              userError: null
+            };
           });
         } else {
-          setUserAuthState({ user: null, isUserLoading: false, userError: null });
+          setUserAuthState(prev => {
+            if (prev.user === null) return prev;
+            return { user: null, isUserLoading: false, userError: null };
+          });
         }
       }
     };
