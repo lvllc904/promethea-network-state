@@ -20,11 +20,16 @@ class SyncEngine {
     private connections: Map<string, DataConnection> = new Map();
     private enabled: boolean = false;
 
+    private sanitizePeerId(id: string): string {
+        return id.replace(/:/g, '-');
+    }
+
     async init(userId: string): Promise<void> {
         if (this.peer) return; // Already initialized
 
-        // Initialize PeerJS with user's DID as peer ID
-        this.peer = new Peer(userId, {
+        // Initialize PeerJS with sanitized DID (PeerJS forbids colons)
+        const safeId = this.sanitizePeerId(userId);
+        this.peer = new Peer(safeId, {
             // Use public STUN servers (Body 2 could provide custom TURN in future)
             config: {
                 iceServers: [
@@ -50,7 +55,8 @@ class SyncEngine {
     async connectToDevice(targetPeerId: string): Promise<void> {
         if (!this.peer) throw new Error('SyncEngine not initialized');
 
-        const conn = this.peer.connect(targetPeerId, {
+        const safeTargetId = this.sanitizePeerId(targetPeerId);
+        const conn = this.peer.connect(safeTargetId, {
             reliable: true, // Use reliable data channel
         });
 
