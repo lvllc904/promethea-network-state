@@ -20,7 +20,9 @@ import { type Query } from 'firebase/firestore';
 import { Skeleton } from '@promethea/ui';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@promethea/ui';
 import { Badge } from '@promethea/ui';
+import React from 'react';
 import { Progress } from '@promethea/ui';
+import { RealityBadge } from '@promethea/components';
 
 function formatLocation(location: any): string {
   if (!location) return 'Unknown';
@@ -51,9 +53,12 @@ function AssetCard({ asset }: { asset: RealWorldAsset }) {
         )}
       </CardHeader>
       <div className="p-6 flex flex-col flex-grow">
-        <CardTitle className="font-headline text-xl">
-          {asset.name}
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="font-headline text-xl">
+            {asset.name}
+          </CardTitle>
+          <RealityBadge state={asset.realityState || 'SIMULATED'} showLabel={false} />
+        </div>
         <CardDescription className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
           <MapPin className="w-4 h-4" />
           {formatLocation(asset.location)}
@@ -123,7 +128,10 @@ function ProposalCard({ proposal }: { proposal: Proposal & { votes?: Vote[] } })
     >
       <CardHeader>
         <div className="flex justify-between items-start">
-          <Badge variant="outline">{proposal.category}</Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline">{proposal.category}</Badge>
+            <RealityBadge state={proposal.realityState || 'SIMULATED'} showLabel={false} />
+          </div>
           {statusInfo && (
             <div
               className={`flex items-center gap-2 text-sm font-medium px-2 py-1 rounded-full ${statusInfo.color}`}
@@ -173,10 +181,15 @@ export default function AssetMarketplacePage() {
   const { data: assets, isLoading: areAssetsLoading } = useCollection<RealWorldAsset>(assetsQuery);
 
   const proposalsQuery = useMemoFirebase(
-    () => (firestore ? query(collection(firestore, 'proposals'), where('category', '==', 'RWA Acquisition'), where('status', '==', 'Active')) : null) as Query<Proposal> | null,
+    () => (firestore ? query(collection(firestore, 'proposals'), where('status', '==', 'Active')) : null) as Query<Proposal> | null,
     [firestore]
   );
-  const { data: proposals, isLoading: areProposalsLoading } = useCollection<Proposal>(proposalsQuery as any);
+  const { data: rawProposals, isLoading: areProposalsLoading } = useCollection<Proposal>(proposalsQuery as any);
+
+  const proposals = React.useMemo(() => {
+    if (!rawProposals) return [];
+    return rawProposals.filter(p => p.category === 'RWA Acquisition');
+  }, [rawProposals]);
 
 
   const isLoading = areAssetsLoading || areProposalsLoading;

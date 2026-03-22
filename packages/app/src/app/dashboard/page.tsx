@@ -2,6 +2,7 @@
 export const dynamic = 'force-dynamic';
 import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@promethea/firebase';
 import { doc, collection, query, where, type Query, type DocumentReference } from 'firebase/firestore';
+import { RealityBadge } from '@promethea/components';
 import {
   RealWorldAsset,
   Proposal,
@@ -164,10 +165,13 @@ export default function DashboardPage() {
           </p>
         </div>
         {!isGuest && (
-          <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 py-1.5 px-3 flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="font-mono text-[10px] font-bold tracking-widest uppercase">Solana Mainnet: ON-CHAIN</span>
-          </Badge>
+          <div className="flex items-center gap-3">
+            <RealityBadge state="SIMULATED" />
+            <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 py-1.5 px-3 flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="font-mono text-[10px] font-bold tracking-widest uppercase">Solana Mainnet: ON-CHAIN</span>
+            </Badge>
+          </div>
         )}
       </div>
 
@@ -286,7 +290,10 @@ export default function DashboardPage() {
                       <PieChart className="h-6 w-6" />
                     </div>
                     <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">{asset.name}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium leading-none">{asset.name}</p>
+                        <RealityBadge state={asset.realityState || 'SIMULATED'} showLabel={false} />
+                      </div>
                       <p className="text-xs text-muted-foreground">{typeof asset.location === 'string' ? asset.location : [asset.location?.nearestTown, asset.location?.region, asset.location?.state].filter(Boolean).join(', ') || 'Unknown'}</p>
                     </div>
                     <div className="text-right">
@@ -333,7 +340,10 @@ export default function DashboardPage() {
                   <Card key={proposal.id} className="bg-muted/30 border-none shadow-none">
                     <CardContent className="pt-6">
                       <div className="flex justify-between items-start mb-4">
-                        <Badge {...({ variant: "outline" } as any)} className="bg-background text-[10px]">{proposal.category}</Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge {...({ variant: "outline" } as any)} className="bg-background text-[10px]">{proposal.category}</Badge>
+                          <RealityBadge state={proposal.realityState || 'SIMULATED'} showLabel={false} />
+                        </div>
                         <span className="text-[10px] text-muted-foreground font-mono">ID: {proposal.id.slice(0, 8)}</span>
                       </div>
                       <h4 className="font-headline font-bold mb-2 truncate">{proposal.title}</h4>

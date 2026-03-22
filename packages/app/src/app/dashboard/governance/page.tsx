@@ -17,6 +17,7 @@ import { useCollection, useFirestore, useMemoFirebase, useUser } from '@promethe
 import { collection, query, where, getDocs, doc, getDoc, type Query, type DocumentReference } from 'firebase/firestore';
 import { Proposal, Vote, Citizen } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
+import { RealityBadge } from '@promethea/components';
 import { useEffect, useState } from 'react';
 
 type EnrichedProposal = Proposal & {
@@ -132,7 +133,10 @@ export default function GovernancePage() {
       >
         <CardHeader>
           <div className="flex justify-between items-start">
-            <Badge {...({ variant: proposal.status === 'Active' ? 'default' : 'secondary' } as any)}>{proposal.status}</Badge>
+            <div className="flex items-center gap-2">
+              <Badge {...({ variant: proposal.status === 'Active' ? 'default' : 'secondary' } as any)}>{proposal.status}</Badge>
+              <RealityBadge state={proposal.realityState || 'SIMULATED'} showLabel={false} />
+            </div>
             {statusInfo && (
               <div
                 className={`flex items-center gap-2 text-sm font-medium px-2 py-1 rounded-full ${statusInfo.color}`}

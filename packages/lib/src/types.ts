@@ -57,6 +57,8 @@ export interface UnderwriteRWAInput {
   verificationDocuments: string;
 }
 
+export type RealityState = 'SIMULATED' | 'TESTNET' | 'ACTUALIZED';
+
 export interface RealWorldAsset {
   id: string;
   name: string;
@@ -72,6 +74,7 @@ export interface RealWorldAsset {
   status: 'Draft' | 'Under Review' | 'Active' | 'Acquired';
   createdAt: string;
   modelDID?: string;
+  realityState?: RealityState;
 }
 
 export interface UnderwriteRWAOutput {
@@ -111,6 +114,7 @@ export interface UniversalValueToken {
   onChainStatus?: 'Pending' | 'Settled';
   onChainSignature?: string;
   timestamp?: any;
+  realityState?: RealityState;
 }
 
 export interface DetectNetworkThreatsInput {
@@ -152,6 +156,7 @@ export interface Proposal {
   pledgedCapital: number;
   pledgedSweatEquity: number;
   tasks: { description: string; priority: 'High' | 'Medium' | 'Low' }[];
+  realityState?: RealityState;
 }
 
 export interface Task {
