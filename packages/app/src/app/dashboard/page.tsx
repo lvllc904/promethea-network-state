@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic';
 import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@promethea/firebase';
 import { doc, collection, query, where, type Query, type DocumentReference } from 'firebase/firestore';
-import { RealityBadge } from '@promethea/components';
+import { RealityBadge, LedgerValue } from '@promethea/components';
 import {
   RealWorldAsset,
   Proposal,
@@ -41,7 +41,7 @@ import {
   PieChart as RechartsPieChart
 } from 'recharts';
 import { Skeleton } from '@promethea/ui';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 const COLORS = {
@@ -78,6 +78,23 @@ export default function DashboardPage() {
     [firestore, user]
   );
   const { data: myContributions, isLoading: areContributionsLoading } = useCollection<UniversalValueToken>(uvtsQuery as any) as any;
+
+  // Fetch live waterfall status from the engine
+  const [waterfall, setWaterfall] = useState<any>(null);
+  const [isWaterfallLoading, setIsWaterfallLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('https://economic-engine-385120524005.us-central1.run.app/api/treasury/waterfall')
+      .then(res => res.json())
+      .then(data => {
+        setWaterfall(data);
+        setIsWaterfallLoading(false);
+      })
+      .catch(err => {
+        console.error('Waterfall fetch error:', err);
+        setIsWaterfallLoading(false);
+      });
+  }, []);
 
   const isLoading = isCitizenLoading || areAssetsLoading || areProposalsLoading || (user && user.uid !== 'anonymous' && areContributionsLoading);
 
@@ -164,44 +181,44 @@ export default function DashboardPage() {
               : "Here's what's happening with your Sovereign assets today."}
           </p>
         </div>
-        {!isGuest && (
           <div className="flex items-center gap-3">
             <RealityBadge state="SIMULATED" />
-            <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 py-1.5 px-3 flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="font-mono text-[10px] font-bold tracking-widest uppercase">Solana Mainnet: ON-CHAIN</span>
-            </Badge>
+            <a 
+              href="https://explorer.solana.com/address/Fe9cYeJEHswbyeTfrHGLgJocYnTA1gpND6H2LNXXHHwb" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 py-1.5 px-3 flex items-center gap-2 cursor-pointer hover:bg-green-500/20 active:scale-95 transition-all">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="font-mono text-[10px] font-bold tracking-widest uppercase">Solana Mainnet: ON-CHAIN</span>
+              </Badge>
+            </a>
           </div>
-        )}
       </div>
 
-      {
-        !isGuest && (
-          <div className="bg-gradient-to-r from-green-500/5 to-primary/5 border border-green-500/20 rounded-lg p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Shield className="w-5 h-5 text-green-500" />
-              <div>
-                <p className="text-sm font-bold text-green-500 uppercase tracking-tight">Actualization Phase Active</p>
-                <p className="text-xs text-muted-foreground">Historical ledger data is being bridged to Solana Mainnet. Your profile is verified.</p>
-              </div>
+        <div className="bg-gradient-to-r from-green-500/5 to-primary/5 border border-green-500/20 rounded-lg p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Shield className="w-5 h-5 text-green-500" />
+            <div>
+              <p className="text-sm font-bold text-green-500 uppercase tracking-tight">Actualization Phase Active</p>
+              <p className="text-xs text-muted-foreground">Historical ledger data is being bridged to Solana Mainnet. System transparency is 24/7.</p>
             </div>
-            <Link href="/dashboard/ledger">
-              <Button size="sm" variant="outline" className="text-xs h-8">View Bridge Status</Button>
-            </Link>
           </div>
-        )
-      }
+          <Link href="/dashboard/ledger">
+            <Button size="sm" variant="outline" className="text-xs h-8">View Bridge Status</Button>
+          </Link>
+        </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="border-l-4 border-l-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Portfolio Value</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Net Portfolio Health</CardTitle>
+            <TrendingUp className={`h-4 w-4 ${waterfall?.totalTvlUsd > 0 ? 'text-green-500' : 'text-red-500'}`} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${portfolioStats.totalValue.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <TrendingUp className="h-3 w-3 text-green-500" /> +2.5% from last month
+            <LedgerValue value={waterfall?.totalTvlUsd || 0} isSimulated={true} className="text-2xl font-bold" />
+            <p className="text-[10px] text-muted-foreground">
+              Overhead: <LedgerValue value={waterfall?.infrastructureCostUsd || 0} isSimulated={true} /> / mo
             </p>
           </CardContent>
         </Card>
@@ -225,17 +242,65 @@ export default function DashboardPage() {
             <p className="text-xs text-muted-foreground">{activeProposals?.length || 0} Active Proposals</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Tasks</CardTitle>
-            <Wrench className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Active Rings</CardTitle>
+            <TrendingUp className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground">2 pending verification</p>
+            <div className="text-2xl font-bold">{waterfall?.activeRings || 0} / 10</div>
+            <p className="text-[10px] text-muted-foreground truncate" title={waterfall?.nextUnlock}>
+              Next: {waterfall?.nextUnlock || 'Warming up...'}
+            </p>
           </CardContent>
         </Card>
       </div>
+
+      {/* Waterfall Visualization */}
+      <Card className="overflow-hidden bg-black/40 border-primary/10">
+        <CardHeader className="border-b border-white/5 bg-white/5">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg font-headline flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                Sovereign Waterfall Protocol
+              </CardTitle>
+              <CardDescription>Concentric Ring Treasury Actualization</CardDescription>
+            </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="font-mono text-[10px] text-red-400 border-red-400/20">Overhead: <LedgerValue value={waterfall?.infrastructureCostUsd || 0} isSimulated={true} /></Badge>
+                <Badge variant="outline" className="font-mono text-[10px]">Net TVL: <LedgerValue value={waterfall?.totalTvlUsd || 0} isSimulated={true} /></Badge>
+              </div>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 divide-x divide-y divide-white/5">
+            {waterfall?.rings.slice(0, 10).map((ring: any, i: number) => (
+              <div key={ring.name} className={`p-4 group transition-colors hover:bg-white/5 ${ring.isActive ? 'bg-primary/5' : ''}`}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Ring {i}</span>
+                  <RealityBadge state={ring.isActive ? 'ACTUALIZED' : 'SIMULATED'} showLabel={false} />
+                </div>
+                <h4 className={`text-xs font-bold mb-1 ${ring.isActive ? 'text-primary' : 'text-foreground'}`}>{ring.name}</h4>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full ${ring.isActive ? 'bg-primary' : 'bg-white/20'}`} 
+                      style={{ width: `${Math.min(100, (ring.balanceSol / ring.thresholdSol) * 100)}%` }}
+                    />
+                  </div>
+                  <span className="text-[10px] font-mono text-muted-foreground">
+                    {ring.isActive ? '100%' : `${((ring.balanceSol / (ring.thresholdSol || 0.001)) * 100).toFixed(0)}%`}
+                  </span>
+                </div>
+                <p className="text-[9px] font-mono text-muted-foreground break-all opacity-40 group-hover:opacity-100 transition-opacity">
+                  {ring.address}
+                </p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <ErrorBoundary moduleName="Portfolio Distribution">
@@ -297,7 +362,7 @@ export default function DashboardPage() {
                       <p className="text-xs text-muted-foreground">{typeof asset.location === 'string' ? asset.location : [asset.location?.nearestTown, asset.location?.region, asset.location?.state].filter(Boolean).join(', ') || 'Unknown'}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold">${(asset.price || 0).toLocaleString()}</p>
+                      <LedgerValue value={asset.price || 0} isSimulated={asset.realityState !== 'ACTUALIZED'} className="text-sm" />
                       <Link href={`/dashboard/assets/${asset.id}`} className="text-[10px] text-primary hover:underline flex items-center justify-end gap-1">
                         View <ArrowRight className="h-2 w-2" />
                       </Link>
