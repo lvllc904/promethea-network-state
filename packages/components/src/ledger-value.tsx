@@ -1,6 +1,7 @@
 import React from 'react';
 import { Badge } from '@promethea/ui';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@promethea/ui';
+import { RealityBadge } from './layout/RealityBadge';
 
 interface LedgerValueProps {
     value: number | string;
@@ -23,9 +24,7 @@ export function LedgerValue({ value, isSimulated = false, currency = '$', classN
                             <span className="text-amber-500 font-mono opacity-80 decoration-dashed underline decoration-amber-500/50 cursor-help">
                                 {formattedValue}
                             </span>
-                            <Badge variant="outline" className="text-[8px] uppercase font-black px-1.5 py-0 text-amber-500 border-amber-500/30 bg-amber-500/5">
-                                SIMULATED
-                            </Badge>
+                            <RealityBadge state="SIMULATED" size="sm" />
                         </div>
                     </TooltipTrigger>
                     <TooltipContent className="bg-amber-950 border-amber-500/50 text-amber-200">
@@ -47,9 +46,7 @@ export function LedgerValue({ value, isSimulated = false, currency = '$', classN
                         <span className="text-emerald-400 font-mono font-bold tracking-tight">
                             {formattedValue}
                         </span>
-                        <Badge variant="outline" className="text-[8px] uppercase font-black px-1.5 py-0 text-emerald-400 border-emerald-400/30 bg-emerald-400/5">
-                            VERIFIED
-                        </Badge>
+                        <RealityBadge state="ACTUALIZED" size="sm" />
                     </div>
                 </TooltipTrigger>
                 <TooltipContent className="bg-emerald-950 border-emerald-400/50 text-emerald-200">

@@ -64,7 +64,7 @@ function GlobalDisclosureBanner({ mode }: { mode: SystemMode }) {
         <div className="w-full bg-amber-950/90 border-b border-amber-500/30 px-4 py-1.5 flex items-center justify-center gap-3 text-xs relative z-[999]">
             <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span className="text-amber-300 font-bold uppercase tracking-widest text-[10px]">
-                Financial metrics are architectural simulations. They do not reflect verified on-chain or CEX liquidity.
+                Financial metrics reflect architectural simulations. Simulated data points are marked with a flashing yellow dot.
             </span>
             <Badge variant="outline" className="text-[8px] font-black text-amber-500 border-amber-500/30 bg-amber-500/5 uppercase">
                 SIMULATED
