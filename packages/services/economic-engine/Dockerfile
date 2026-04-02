@@ -7,6 +7,10 @@ RUN apt-get update && apt-get install -y \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
+# Fix for older native modules like bs-platform on GCC 10+
+ENV CFLAGS="-fcommon"
+ENV CXXFLAGS="-fcommon"
+
 WORKDIR /app
 
 # Copy dependency manifests
