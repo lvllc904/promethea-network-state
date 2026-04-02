@@ -214,14 +214,14 @@ export default function LandingPage() {
             <Link href="/whitepaper" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
               Whitepaper
             </Link>
-            <Link href="/dashboard/governance" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
+            <Link href="/dashboard/will" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
               Governance
             </Link>
-            <Link href="/dashboard/assets" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
-              Assets
+            <Link href="/dashboard/treasury" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
+              Treasury
             </Link>
             <Button asChild variant="outline" size="sm" className="bg-transparent text-white border-white hover:bg-white hover:text-black">
-              <Link href="https://authentication-service-385120524005.us-central1.run.app">Sign In to Promethea</Link>
+              <Link href="/dashboard/pulse">View Sovereign Dashboard</Link>
             </Button>
           </nav>
         </header>
@@ -240,8 +240,8 @@ export default function LandingPage() {
                 </p>
                 <div className="flex flex-col gap-4 sm:flex-row">
                   <Button asChild size="lg">
-                    <Link href="https://authentication-service-385120524005.us-central1.run.app">
-                      Sign In to Promethea
+                    <Link href="/dashboard/pulse">
+                      View Sovereign Dashboard
                       <ArrowRight className="ml-2" />
                     </Link>
                   </Button>
