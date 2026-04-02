@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { TrendingUp, TrendingDown, Activity, Brain, Shield, Zap } from 'lucide-react';
-import { useFirestore, useDoc } from '@promethea/firebase';
-import { doc } from 'firebase/firestore';
+import { useSovereignData } from '@promethea/hooks';
 import { RealityBadge } from '@promethea/components';
 
 interface TickerData {
@@ -23,8 +22,7 @@ interface BrainPulse {
 }
 
 export function LiveTicker() {
-    const firestore = useFirestore();
-    const { data: brainPulse } = useDoc<BrainPulse>(firestore ? doc(firestore, 'security_telemetry', 'pulse') as any : null);
+    const { data: brainPulse } = useSovereignData<BrainPulse>('/api/security_telemetry/pulse');
 
     const [tickerData, setTickerData] = useState<TickerData[]>([
         { symbol: 'BTC', price: 95430.00, change24h: 1.2 },

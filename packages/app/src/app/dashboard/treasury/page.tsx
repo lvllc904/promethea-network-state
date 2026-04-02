@@ -68,6 +68,7 @@ export default function TreasuryPage() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto py-8">
+      <Tabs defaultValue="reserve" className="space-y-8">
       {/* Institutional Top Bar */}
       <div className="flex flex-row items-center justify-between border-b border-white/5 pb-4">
         <div className="flex flex-col">
@@ -76,16 +77,14 @@ export default function TreasuryPage() {
           </h1>
           <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Reserves, Marketplace & Waterfall Distribution</span>
         </div>
-        <Tabs defaultValue="reserve" className="w-[400px]">
-          <TabsList className="bg-white/5 border border-white/10 p-1">
-            <TabsTrigger value="reserve" className="text-[10px] uppercase font-bold tracking-widest data-[state=active]:bg-cyan-500 data-[state=active]:text-black">Reserve</TabsTrigger>
-            <TabsTrigger value="market" className="text-[10px] uppercase font-bold tracking-widest data-[state=active]:bg-cyan-500 data-[state=active]:text-black">Marketplace</TabsTrigger>
-            <TabsTrigger value="waterfall" className="text-[10px] uppercase font-bold tracking-widest data-[state=active]:bg-cyan-500 data-[state=active]:text-black">Waterfall</TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <TabsList className="bg-white/5 border border-white/10 p-1">
+          <TabsTrigger value="reserve" className="text-[10px] uppercase font-bold tracking-widest data-[state=active]:bg-cyan-500 data-[state=active]:text-black">Reserve</TabsTrigger>
+          <TabsTrigger value="market" className="text-[10px] uppercase font-bold tracking-widest data-[state=active]:bg-cyan-500 data-[state=active]:text-black">Marketplace</TabsTrigger>
+          <TabsTrigger value="waterfall" className="text-[10px] uppercase font-bold tracking-widest data-[state=active]:bg-cyan-500 data-[state=active]:text-black">Waterfall</TabsTrigger>
+        </TabsList>
       </div>
 
-      <Tabs defaultValue="reserve" className="space-y-8">
+
         <TabsContent value="reserve" className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="col-span-1 md:col-span-2 bg-[#050510]/80 border-white/5 backdrop-blur-3xl overflow-hidden group">
