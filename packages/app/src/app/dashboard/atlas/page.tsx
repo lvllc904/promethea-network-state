@@ -1,5 +1,4 @@
 'use client';
-
 import { motion } from 'framer-motion';
 import { 
   Map as MapIcon, 
@@ -17,9 +16,31 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, Button } from '@promethea/ui';
+import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
+import { RealityBadge } from '@promethea/components';
 
 export default function AtlasPage() {
-  const assets = [
+  const { data: liveAssets, refetch } = useSovereignData<any[]>('/api/assets');
+
+  const handleNewClaim = async () => {
+    try {
+      await executeSovereignMethod('create_claim', { type: 'survey' });
+      await refetch();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleActualizeClaim = async (assetId: string) => {
+    try {
+      await executeSovereignMethod('actualize_claim', { assetId });
+      await refetch();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const assets = liveAssets || [
     { 
       id: 'wy-node-001', 
       name: 'Wyoming Data Hub (Claim 44092-W)', 
@@ -54,16 +75,31 @@ export default function AtlasPage() {
         </div>
         <div className="flex items-center gap-4">
            <Button variant="ghost" className="text-xs text-gray-500 font-bold tracking-widest uppercase border border-white/5 hover:border-cyan-500/50"><LayoutGrid className="h-4 w-4 mr-2" /> Grid View</Button>
-           <Button className="text-xs bg-cyan-600 hover:bg-cyan-500 font-bold tracking-widest uppercase py-6 px-8 rounded-xl shadow-[0_0_20px_rgba(8,145,178,0.3)]">+ New Claim</Button>
+           <Button 
+             className="text-xs bg-cyan-600 hover:bg-cyan-500 font-bold tracking-widest uppercase py-6 px-8 rounded-xl shadow-[0_0_20px_rgba(8,145,178,0.3)]"
+             onClick={handleNewClaim}
+           >
+             + New Claim
+           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         {/* Left Section: Map & Prospect Discovery (Co-Star Format) */}
         <div className="col-span-1 md:col-span-8 space-y-6">
-           <Card className="bg-[#050510]/80 border-white/5 backdrop-blur-3xl overflow-hidden min-h-[500px] relative">
-              <div className="absolute inset-0 bg-map-placeholder bg-cover bg-center opacity-30 grayscale saturate-0 pointer-events-none" />
-              {/* Symbolic Map Representation */}
+            <Card className="bg-[#050510]/80 border-white/5 backdrop-blur-3xl overflow-hidden min-h-[500px] relative">
+              {/* Live Map Substrate */}
+              <iframe
+                title="Sovereign Viewport"
+                width="100%"
+                height="100%"
+                className="absolute inset-0 grayscale contrast-125 saturate-50 opacity-40 hover:opacity-80 transition-opacity"
+                frameBorder="0"
+                src={`https://www.google.com/maps/embed/v1/view?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}&center=42.8252,-108.7513&zoom=15&maptype=satellite`}
+                allowFullScreen
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-transparent pointer-events-none" />
+              {/* Symbolic Map Representation Overlay */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                  <div className="relative">
                     <div className="absolute -inset-4 bg-cyan-500/20 rounded-full blur-xl animate-pulse" />
@@ -147,7 +183,12 @@ export default function AtlasPage() {
                              </div>
                           </div>
                        </div>
-                       <Button className="w-full bg-cyan-600/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/20 mt-4 font-mono font-bold py-6">Actualize Claim (Sign Filing)</Button>
+                       <Button 
+                         className="w-full bg-cyan-600/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/20 mt-4 font-mono font-bold py-6"
+                         onClick={() => handleActualizeClaim('wy-node-001')}
+                       >
+                         Actualize Claim (Sign Filing)
+                       </Button>
                     </div>
                  </div>
               </div>

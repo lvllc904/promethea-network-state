@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
 # Fix for older native modules like bs-platform on GCC 10+
 ENV CFLAGS="-fcommon"
 ENV CXXFLAGS="-fcommon"
+ENV LDFLAGS="-Wl,--allow-multiple-definition"
 
 WORKDIR /app
 

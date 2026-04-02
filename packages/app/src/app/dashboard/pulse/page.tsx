@@ -1,5 +1,5 @@
 'use client';
-
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Activity, 
@@ -14,12 +14,31 @@ import {
   Box, 
   ShieldCheck, 
   Clock,
-  ExternalLink
+  ExternalLink,
+  Search,
+  Database
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent, Button } from '@promethea/ui';
+import { Card, CardHeader, CardTitle, CardContent, Button, Input } from '@promethea/ui';
+import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
+import { RealityBadge } from '@promethea/components';
 
 export default function PulsePage() {
-  const events = [
+  const { data: pulse, loading } = useSovereignData<any>('/api/security_telemetry/pulse');
+  const [intelQuery, setIntelQuery] = useState('');
+  const [isScanning, setIsScanning] = useState(false);
+
+  const handleScan = async () => {
+    setIsScanning(true);
+    try {
+      await executeSovereignMethod('perform_integrity_scan');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsScanning(false);
+    }
+  };
+
+  const events = pulse?.events || [
     { time: '14:22:10', type: 'REFINERY', msg: 'mth_real_estate_refinery: Scanned 124 Wyoming Parcels. 1 High-Feasibility Stake Found.', status: 'SUCCESS' },
     { time: '14:21:42', type: 'TREASURY', msg: 'WaterfallProtocol: Successfully swept 0.12 SOL to USD Reserve.', status: 'SETTLED' },
     { time: '14:20:01', type: 'IMMUNE', msg: 'External Auth Challenge: 0xbADA... rejected. Unauthorized Origin.', status: 'SHIELD' },
@@ -28,22 +47,34 @@ export default function PulsePage() {
   ];
 
   const vitals = [
-    { label: 'Metabolic Velocity', value: '142 ops/s', status: 'Optimal', icon: Activity, color: 'text-cyan-400' },
-    { label: 'Substrate Load', value: '1.2%', status: 'Nominal', icon: Cpu, color: 'text-green-400' },
-    { label: 'Mirror Sync Deficit', value: '0.0ms', status: 'Ready', icon: RefreshCcw, color: 'text-blue-400' },
-    { label: 'Sovereign Uptime', value: '99.99%', status: 'Active', icon: Clock, color: 'text-purple-400' },
+    { label: 'Metabolic Velocity', value: pulse ? `${pulse.metabolicVelocity} ops/s` : '...', status: 'Optimal', icon: Activity, color: 'text-cyan-400' },
+    { label: 'Substrate Load', value: pulse ? `${(pulse.substrateLoad * 100).toFixed(1)}%` : '...', status: 'Nominal', icon: Cpu, color: 'text-green-400' },
+    { label: 'Mirror Sync Deficit', value: pulse ? `${pulse.mirrorSyncDeficit}ms` : '...', status: 'Ready', icon: RefreshCcw, color: 'text-blue-400' },
+    { label: 'Sovereign Uptime', value: pulse ? `${(pulse.uptime / 3600).toFixed(2)}h` : '...', status: 'Active', icon: Clock, color: 'text-purple-400' },
   ];
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto py-8">
       {/* Pulse Top Bar */}
-      <div className="flex flex-row items-center justify-between border-b border-white/5 pb-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/5 pb-4 gap-4">
         <div className="flex flex-col">
           <h1 className="text-3xl font-black tracking-tighter text-white font-mono uppercase flex items-center gap-3">
              <Activity className="h-8 w-8 text-cyan-400" /> Sovereign Pulse
           </h1>
           <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Real-time Metabolic Monitoring & Substrate Vitals</span>
         </div>
+        
+        <div className="flex-1 max-w-xl self-center mx-4 relative group">
+           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-cyan-500/50 group-focus-within:text-cyan-400 transition-colors" />
+           <Input 
+             placeholder="Search the Intelligence Lake..." 
+             className="pl-12 bg-white/5 border-white/10 focus:border-cyan-400/50 transition-all font-mono text-xs uppercase"
+             value={intelQuery}
+             onChange={(e) => setIntelQuery(e.target.value)}
+           />
+           <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[8px] font-black tracking-widest text-gray-700 uppercase">Lake Omni-Audit v2</div>
+        </div>
+
         <div className="flex items-center gap-4">
            <Button variant="ghost" className="text-xs text-gray-500 font-bold tracking-widest uppercase border border-white/5"><Terminal className="h-4 w-4 mr-2" /> SSH Control</Button>
            <Button className="text-xs bg-red-900/30 text-red-500 border border-red-500/50 hover:bg-red-500 hover:text-white font-bold tracking-widest uppercase py-6 px-8 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.1)]">Emergency Cut-Out</Button>
@@ -75,7 +106,7 @@ export default function PulsePage() {
            <Card className="bg-[#020208]/80 border-white/5 backdrop-blur-3xl overflow-hidden font-mono min-h-[600px] border-l-4 border-l-cyan-500/50">
               <CardHeader className="border-b border-white/5 pt-6 px-8 flex flex-row items-center justify-between">
                  <CardTitle className="text-xs font-bold tracking-widest uppercase text-gray-500 flex items-center gap-3">
-                    <Terminal className="h-4 w-4 text-cyan-400" /> AI Metabolic Stream (Omni-Lake Audit)
+                    <Database className="h-4 w-4 text-cyan-400" /> AI Metabolic Stream (Omni-Lake Audit)
                  </CardTitle>
                  <div className="flex items-center gap-6">
                     <span className="text-[10px] text-green-400 animate-pulse font-bold flex items-center gap-2"><Wifi className="h-3 w-3" /> LISTENING</span>
@@ -84,7 +115,7 @@ export default function PulsePage() {
               </CardHeader>
               <div className="p-0 text-[11px] leading-relaxed select-all">
                  <div className="divide-y divide-white/[0.02]">
-                    {events.map((e, idx) => (
+                    {events.map((e: any, idx: number) => (
                       <div key={idx} className="px-8 py-4 hover:bg-white/[0.02] transition-colors group flex gap-4">
                          <span className="text-gray-700 font-bold shrink-0">[{e.time}]</span>
                          <span className={cn(
@@ -143,8 +174,13 @@ export default function PulsePage() {
                     </div>
                  </div>
 
-                 <Button className="w-full bg-transparent border border-white/10 hover:bg-white/5 text-[10px] uppercase font-black py-8 mt-4 tracking-widest flex items-center gap-3">
-                    <ShieldCheck className="h-4 w-4" /> Perform Integrity Scan
+                 <Button 
+                   className="w-full bg-transparent border border-white/10 hover:bg-white/5 text-[10px] uppercase font-black py-8 mt-4 tracking-widest flex items-center gap-3"
+                   onClick={handleScan}
+                   disabled={isScanning}
+                 >
+                    {isScanning ? <RefreshCcw className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
+                    {isScanning ? 'Scanning...' : 'Perform Integrity Scan'}
                  </Button>
               </div>
            </Card>

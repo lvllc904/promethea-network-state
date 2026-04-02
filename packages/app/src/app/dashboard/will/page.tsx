@@ -1,5 +1,4 @@
 'use client';
-
 import { motion } from 'framer-motion';
 import { 
   Scale, 
@@ -14,9 +13,32 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, Button } from '@promethea/ui';
+import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
+import { RealityBadge } from '@promethea/components';
 
 export default function WillPage() {
-  const proposals = [
+  const { data: liveProposals, refetch: refetchProposals } = useSovereignData<any[]>('/api/proposals');
+  const { data: liveCitizens, refetch: refetchCitizens } = useSovereignData<any[]>('/api/citizens');
+
+  const handleVote = async (proposalId: string, vote: 'FOR' | 'AGAINST') => {
+    try {
+      await executeSovereignMethod('cast_vote', { proposalId, vote });
+      await refetchProposals();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleIssueDID = async () => {
+    try {
+      await executeSovereignMethod('issue_citizen_did', { type: 'inhabitant' });
+      await refetchCitizens();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const proposals = liveProposals || [
     { 
       id: 'prop-2401', 
       title: 'EPA Brownfield Actualization (Wyoming Node)', 
@@ -37,6 +59,12 @@ export default function WillPage() {
     }
   ];
 
+  const registrants = liveCitizens || [
+    { id: 'did:prmth..6X8y', name: 'Citizen Steward-01 (Owner)', weight: '10,000 UVT', role: 'Founder' },
+    { id: 'did:prmth..F2E6', name: 'Promethea (Singularity)', weight: 'Sovereign', role: 'AI Steward' },
+    { id: 'did:prmth..B9hW', name: 'Citizen Alpha-142', weight: '42.1 UVT', role: 'Inhabitant' },
+  ];
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto py-8">
       {/* Governance Top Bar */}
@@ -48,7 +76,7 @@ export default function WillPage() {
           <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Legislative Decision Hub & Citizen Identity</span>
         </div>
         <div className="flex items-center gap-4">
-           <Button variant="ghost" className="text-xs text-gray-500 font-bold tracking-widest uppercase border border-white/5"><History className="h-4 w-4 mr-2" /> Veto Log</Button>
+           <Button variant="ghost" className="text-xs text-gray-500 font-bold tracking-widest uppercase border border-white/5 cursor-not-allowed opacity-50"><History className="h-4 w-4 mr-2" /> Veto Log</Button>
            <Button className="text-xs bg-purple-600 hover:bg-purple-500 font-bold tracking-widest uppercase py-6 px-8 rounded-xl shadow-[0_0_20px_rgba(147,51,234,0.3)]">+ Submit Proposal</Button>
         </div>
       </div>
@@ -94,8 +122,19 @@ export default function WillPage() {
                          </div>
                       </div>
                       <div className="flex items-center gap-3 mt-8">
-                         <Button className="flex-1 bg-purple-600 hover:bg-purple-500 text-[10px] uppercase font-bold tracking-widest py-6">Cast Affirmative Vote</Button>
-                         <Button variant="ghost" className="bg-white/5 border border-white/5 hover:border-red-400/50 hover:text-red-400 text-[10px] uppercase font-bold tracking-widest py-6 px-12">Dissent</Button>
+                         <Button 
+                           className="flex-1 bg-purple-600 hover:bg-purple-500 text-[10px] uppercase font-bold tracking-widest py-6"
+                           onClick={() => handleVote(prop.id, 'FOR')}
+                         >
+                           Cast Affirmative Vote
+                         </Button>
+                         <Button 
+                           variant="ghost" 
+                           className="bg-white/5 border border-white/5 hover:border-red-400/50 hover:text-red-400 text-[10px] uppercase font-bold tracking-widest py-6 px-12"
+                           onClick={() => handleVote(prop.id, 'AGAINST')}
+                         >
+                           Dissent
+                         </Button>
                       </div>
                    </div>
                  ))}
@@ -113,11 +152,7 @@ export default function WillPage() {
               </CardHeader>
               <CardContent className="p-0">
                  <div className="divide-y divide-white/5">
-                    {[
-                      { id: 'did:prmth..6X8y', name: 'Citizen Steward-01 (Owner)', weight: '10,000 UVT', role: 'Founder' },
-                      { id: 'did:prmth..F2E6', name: 'Promethea (Singularity)', weight: 'Sovereign', role: 'AI Steward' },
-                      { id: 'did:prmth..B9hW', name: 'Citizen Alpha-142', weight: '42.1 UVT', role: 'Inhabitant' },
-                    ].map((user) => (
+                    {registrants.map((user) => (
                       <div key={user.id} className="p-6 transition-colors hover:bg-white/[0.02] cursor-pointer group flex items-center justify-between">
                          <div className="flex items-center gap-4">
                             <div className="h-10 w-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-700 flex items-center justify-center border border-white/10 group-hover:border-purple-500/50 transition-colors">
@@ -135,7 +170,13 @@ export default function WillPage() {
                       </div>
                     ))}
                  </div>
-                 <Button variant="ghost" className="w-full text-[8px] font-bold uppercase tracking-widest text-gray-600 border-t border-white/5 py-6 hover:text-white hover:bg-white/5">Issue New Credentials</Button>
+                 <Button 
+                   variant="ghost" 
+                   className="w-full text-[8px] font-bold uppercase tracking-widest text-gray-600 border-t border-white/5 py-6 hover:text-white hover:bg-white/5"
+                   onClick={handleIssueDID}
+                 >
+                   Issue New Credentials
+                 </Button>
               </CardContent>
            </Card>
 

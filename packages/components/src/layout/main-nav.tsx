@@ -71,18 +71,6 @@ export function MainNav() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="p-2 flex-grow-0">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <Link href="/dashboard/security/settings">
-              <SidebarMenuButton tooltip={{ children: "Settings" }}>
-                <Settings />
-                <span>Settings</span>
-              </SidebarMenuButton>
-            </Link>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 }
