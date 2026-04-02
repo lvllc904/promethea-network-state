@@ -231,6 +231,13 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    if (url.pathname === '/api/security_telemetry/pulse') {
+        const stats = await immuneSystem.getStatus();
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(stats));
+        return;
+    }
+
     if (url.pathname === '/api/lake') {
         try {
             const rawRecords: any = await db.collection(COLLECTIONS.OMNI_INTEL_LAKE).get();

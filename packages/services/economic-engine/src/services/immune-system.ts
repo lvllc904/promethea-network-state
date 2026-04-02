@@ -126,6 +126,17 @@ export class ImmuneSystem {
             console.error('[ImmuneSystem] Rollback failed:', err);
         }
     }
+
+    async getStatus() {
+        const stats = {
+            status: 'Active',
+            uptime: process.uptime(),
+            recentFailures: this.recentFailures,
+            celestialThreat: this.astroOracle ? await this.astroOracle.scanCelestialEnvironment() : { threatLevel: 'Green', solarStormRisk: 5 },
+            lastPulse: new Date().toISOString()
+        };
+        return stats;
+    }
 }
 
 export const immuneSystem = new ImmuneSystem();
