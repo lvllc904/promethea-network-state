@@ -1,6 +1,5 @@
 import { BaseMethod, ExecutionResult } from './base-method';
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 import { HardwareRelay } from '../tools/hardware-relay';
 
 /**
@@ -72,7 +71,7 @@ export class BioNodeMethod extends BaseMethod {
                     pledgedSweatEquity: 0,
                     votesFor: 0,
                     votesAgainst: 0,
-                    timestamp: admin.firestore.FieldValue.serverTimestamp()
+                    timestamp: new Date().toISOString()
                 });
                 logs.push(`[Closed-Loop] Restoration proposal minted for ${alert.type} intervention.`);
             }
@@ -82,7 +81,7 @@ export class BioNodeMethod extends BaseMethod {
                 metrics,
                 location: 'Archipelago Node Alpha',
                 status: criticalAlerts.length > 0 ? 'Alert' : 'Stable',
-                timestamp: admin.firestore.FieldValue.serverTimestamp()
+                timestamp: new Date().toISOString()
             });
 
             return {

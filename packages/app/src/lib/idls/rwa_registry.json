@@ -1,0 +1,115 @@
+{
+  "version": "0.1.0",
+  "name": "rwa_registry",
+  "instructions": [
+    {
+      "name": "registerAsset",
+      "accounts": [
+        {
+          "name": "physicalNode",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "fractionalMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nodeType",
+          "type": "u8"
+        },
+        {
+          "name": "locationHash",
+          "type": "string"
+        },
+        {
+          "name": "acquisitionCostUsdc",
+          "type": "u64"
+        },
+        {
+          "name": "legalEntityWrapper",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "distributeNodeYield",
+      "accounts": [
+        {
+          "name": "physicalNode",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "engineAuthority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "engineUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "nodeYieldVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amountUsdc",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "PhysicalNode",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "nodeType",
+            "type": "u8"
+          },
+          {
+            "name": "locationHash",
+            "type": "string"
+          },
+          {
+            "name": "acquisitionCostUsdc",
+            "type": "u64"
+          },
+          {
+            "name": "fractionalMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "legalEntityWrapper",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}

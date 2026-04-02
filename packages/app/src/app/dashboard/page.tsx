@@ -84,10 +84,10 @@ export default function DashboardPage() {
   const [isWaterfallLoading, setIsWaterfallLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://economic-engine-385120524005.us-central1.run.app/api/treasury/waterfall')
+    fetch('/api/treasury/waterfall')
       .then(res => res.json())
       .then(data => {
-        setWaterfall(data);
+        setWaterfall(data || { rings: [] });
         setIsWaterfallLoading(false);
       })
       .catch(err => {
@@ -210,10 +210,13 @@ export default function DashboardPage() {
         </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-l-4 border-l-primary">
+        <Card className="border-l-4 border-l-amber-500 bg-amber-500/5">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Net Portfolio Health</CardTitle>
-            <TrendingUp className={`h-4 w-4 ${waterfall?.totalTvlUsd > 0 ? 'text-green-500' : 'text-red-500'}`} />
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              Net Portfolio Health
+              <RealityBadge state="SIMULATED" size="sm" />
+            </CardTitle>
+            <TrendingUp className={`h-4 w-4 ${waterfall?.totalTvlUsd > 0 ? 'text-amber-500' : 'text-red-500'}`} />
           </CardHeader>
           <CardContent>
             <LedgerValue value={waterfall?.totalTvlUsd || 0} isSimulated={true} className="text-2xl font-bold" />
@@ -222,23 +225,29 @@ export default function DashboardPage() {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-amber-500/5 border-amber-500/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Reputation Score</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              Reputation Score
+              <RealityBadge state="SIMULATED" size="sm" />
+            </CardTitle>
+            <Shield className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{citizen?.reputation || 0}</div>
+            <div className="text-2xl font-bold text-amber-500">{citizen?.reputation || 0}</div>
             <p className="text-xs text-muted-foreground">Certified Sovereign Node</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-amber-500/5 border-amber-500/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Voting Power</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              Voting Power
+              <RealityBadge state="SIMULATED" size="sm" />
+            </CardTitle>
+            <Users className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{citizen?.governanceTokens || 0} gPROM</div>
+            <div className="text-2xl font-bold text-amber-500">{citizen?.governanceTokens || 0} gPROM</div>
             <p className="text-xs text-muted-foreground">{activeProposals?.length || 0} Active Proposals</p>
           </CardContent>
         </Card>

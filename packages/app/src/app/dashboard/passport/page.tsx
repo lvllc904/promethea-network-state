@@ -21,6 +21,7 @@ import { useDoc, useFirestore, useUser, useMemoFirebase, useCollection } from '@
 import { doc, collection, query, where } from 'firebase/firestore';
 import { Citizen } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
+import { RealityBadge } from '@promethea/components';
 import { useToast } from '@promethea/hooks';
 import { useLocalProfile } from '@promethea/hooks/use-local-profile';
 
@@ -124,12 +125,15 @@ export default function PassportPage() {
               {displayName}
             </h2>
             <p className="text-muted-foreground">Founding Member</p>
-            <div className="flex items-center gap-2 mt-4">
-              <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-              <span className="text-xl font-bold">
-                {citizen.reputationScore}
-              </span>
-              <span className="text-sm text-muted-foreground">Reputation</span>
+            <div className="flex flex-col items-center gap-2 mt-4">
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                <span className="text-xl font-bold text-amber-500">
+                  {citizen.reputationScore}
+                </span>
+                <span className="text-sm text-muted-foreground">Reputation</span>
+              </div>
+              <RealityBadge state="SIMULATED" size="sm" />
             </div>
           </CardContent>
         </Card>
@@ -164,9 +168,7 @@ export default function PassportPage() {
                 <h3 className="text-sm font-medium text-muted-foreground">
                   Sovereign Assets (UVT)
                 </h3>
-                <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 font-mono">
-                  ⛓️ On-Chain
-                </Badge>
+                <RealityBadge state={uvtBalance !== null ? 'ACTUALIZED' : 'SIMULATED'} />
               </div>
               <div className="rounded-xl bg-primary/10 p-6 flex items-center justify-between">
                 <div>
@@ -177,10 +179,7 @@ export default function PassportPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-muted-foreground mb-1">Status</p>
-                  <div className="flex items-center gap-1 text-green-500 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                    ACTUALIZED
-                  </div>
+                  <RealityBadge state={uvtBalance !== null ? 'ACTUALIZED' : 'SIMULATED'} showLabel={true} />
                 </div>
               </div>
             </div>
@@ -278,18 +277,20 @@ export default function PassportPage() {
 
             <div className="grid grid-cols-2 gap-4 pt-4">
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">
+                <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                   Contribution Score
-                </h3>
-                <p className="text-2xl font-bold">
+                  <RealityBadge state="SIMULATED" size="sm" showLabel={false} />
+                </CardTitle>
+                <p className="text-2xl font-bold text-amber-500">
                   {citizen.contributionScore}
                 </p>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">
+                <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                   Personhood Score
-                </h3>
-                <p className="text-2xl font-bold">{citizen.personhoodScore}</p>
+                  <RealityBadge state="SIMULATED" size="sm" showLabel={false} />
+                </CardTitle>
+                <p className="text-2xl font-bold text-amber-500">{citizen.personhoodScore}</p>
               </div>
             </div>
           </CardContent>

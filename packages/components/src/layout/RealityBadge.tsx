@@ -1,61 +1,45 @@
 import React from 'react';
+import { cn, RealityState } from '@promethea/lib';
 import { Badge } from '@promethea/ui';
-import { RealityState } from '@promethea/lib';
-import { cn } from '@promethea/lib';
 
 interface RealityBadgeProps {
-  state?: RealityState;
-  className?: string;
+  state: RealityState;
   showLabel?: boolean;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-export function RealityBadge({ state = 'SIMULATED', className, showLabel = true }: RealityBadgeProps) {
-  const config = {
-    SIMULATED: {
-      color: 'bg-red-500',
-      textColor: 'text-red-500',
-      bgColor: 'bg-red-500/10',
-      borderColor: 'border-red-500/20',
-      label: 'SIMULATED',
-      tooltip: 'Database tracking only. No real money or legal weight.',
-    },
-    TESTNET: {
-      color: 'bg-yellow-500',
-      textColor: 'text-yellow-500',
-      bgColor: 'bg-yellow-500/10',
-      borderColor: 'border-yellow-500/20',
-      label: 'TEST NET',
-      tooltip: 'Executing on test networks (e.g., Solana Devnet).',
-    },
-    ACTUALIZED: {
-      color: 'bg-green-500',
-      textColor: 'text-green-500',
-      bgColor: 'bg-green-500/10',
-      borderColor: 'border-green-500/20',
-      label: 'ACTUALIZED',
-      tooltip: 'Hard fiat settled, Mainnet cryptographic truth, or legally binding.',
-    },
+export function RealityBadge({ state, showLabel = true, className = "", size = 'md' }: RealityBadgeProps) {
+  const isSimulated = state === 'SIMULATED' || state === 'TESTNET';
+  
+  const sizeClasses = {
+    sm: 'py-0 px-1 text-[8px]',
+    md: 'py-0.5 px-2 text-[9px]',
+    lg: 'py-1 px-3 text-[10px]'
   };
 
-  const currentConfig = config[state] || config.SIMULATED;
+  const label = state === 'ACTUALIZED' || state === 'SETTLED' ? 'VERIFIED' : state;
 
   return (
     <Badge 
       variant="outline" 
       className={cn(
-        currentConfig.bgColor, 
-        currentConfig.textColor, 
-        currentConfig.borderColor, 
-        'py-0.5 px-2 flex items-center gap-1.5 w-fit',
+        "font-mono font-bold uppercase tracking-widest border transition-all",
+        isSimulated 
+          ? "bg-amber-500/10 text-amber-500 border-amber-500/40 shadow-[0_0_8px_rgba(245,158,11,0.1)] hover:bg-amber-500/20" 
+          : "bg-emerald-500/10 text-emerald-500 border-emerald-500/40 shadow-[0_0_8px_rgba(16,185,129,0.1)] hover:bg-emerald-500/20",
+        isSimulated && "animate-pulse border-dashed",
+        sizeClasses[size],
         className
       )}
-      title={currentConfig.tooltip}
+      title={isSimulated ? "Database tracking only. Architectural simulation." : "Verified on-chain or CEX liquidity."}
     >
-      <div className={cn('w-1.5 h-1.5 rounded-full shadow-sm', currentConfig.color)} />
+      <div className={cn(
+        "w-1 h-1 rounded-full",
+        isSimulated ? "bg-amber-500 shadow-[0_0_4px_rgba(245,158,11,0.8)]" : "bg-emerald-500 shadow-[0_0_4px_rgba(16,185,129,0.8)]"
+      )} />
       {showLabel && (
-        <span className="font-mono text-[9px] font-bold tracking-widest uppercase">
-          {currentConfig.label}
-        </span>
+        <span className="ml-1.5">{label}</span>
       )}
     </Badge>
   );

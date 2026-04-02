@@ -20,9 +20,10 @@ import { type Query } from 'firebase/firestore';
 import { Skeleton } from '@promethea/ui';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@promethea/ui';
 import { Badge } from '@promethea/ui';
+import { Target, FileText, Landmark, ShieldAlert } from 'lucide-react';
 import React from 'react';
 import { Progress } from '@promethea/ui';
-import { RealityBadge } from '@promethea/components';
+import { RealityBadge, LedgerValue } from '@promethea/components';
 
 function formatLocation(location: any): string {
   if (!location) return 'Unknown';
@@ -70,10 +71,8 @@ function AssetCard({ asset }: { asset: RealWorldAsset }) {
 
         <div className="flex items-center gap-2 mt-4 pt-4 border-t">
           <DollarSign className="w-4 h-4 text-muted-foreground" />
-          <span className="font-semibold">
-            ${(asset.price || 0).toLocaleString()}
-          </span>
-          <span className="text-xs text-muted-foreground">VALUE</span>
+          <LedgerValue value={asset.price || 0} isSimulated={asset.realityState !== 'ACTUALIZED'} className="font-semibold text-white" />
+          <span className="text-xs text-muted-foreground uppercase opacity-60">Value</span>
         </div>
 
         <Button asChild className="w-full mt-4">
@@ -141,7 +140,12 @@ function ProposalCard({ proposal }: { proposal: Proposal & { votes?: Vote[] } })
             </div>
           )}
         </div>
-        <CardTitle className="font-headline pt-2">{proposal.title}</CardTitle>
+        <CardTitle className="font-headline pt-2 flex items-center justify-between">
+          {proposal.title}
+          <div className="text-xs font-mono text-muted-foreground">
+            Goal: <LedgerValue value={proposal.targetEquity || 0} isSimulated={true} />
+          </div>
+        </CardTitle>
       </CardHeader>
       <CardContent className="flex-grow">
         <p className="text-muted-foreground line-clamp-3">
@@ -172,6 +176,64 @@ function ProposalCard({ proposal }: { proposal: Proposal & { votes?: Vote[] } })
   )
 }
 
+function ReclamationCard({ target }: { target: any }) {
+  const iconMap = {
+    BLM_MINERAL: <Target className="w-5 h-5 text-amber-500" />,
+    ZOMBIE_ASSET: <ShieldAlert className="w-5 h-5 text-purple-500" />,
+    BROWNFIELD: <Landmark className="w-5 h-5 text-emerald-500" />
+  };
+
+  return (
+    <Card className="bg-muted/20 border-none flex flex-col">
+      <CardHeader>
+        <div className="flex justify-between items-center mb-2">
+          {iconMap[target.type as keyof typeof iconMap] || <Target className="w-5 h-5" />}
+          <RealityBadge state={target.realityState} size="sm" />
+        </div>
+        <CardTitle className="text-lg font-headline">{target.name}</CardTitle>
+        <CardDescription className="flex items-center gap-1">
+          <MapPin className="w-3 h-3" /> {target.location}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex-grow">
+        {target.type === 'ZOMBIE_ASSET' && (
+          <div className="text-xs text-muted-foreground mb-4">
+            Quietness Coefficient: <span className="text-purple-400 font-bold">{(target.quietnessCoefficient * 100).toFixed(0)}%</span>
+          </div>
+        )}
+        <div className="flex justify-between items-center text-xs">
+          <Badge variant="outline">{target.status}</Badge>
+          <span className="text-muted-foreground">Priority: {target.priority}</span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function GrantCard({ grant }: { grant: any }) {
+  return (
+    <Card className="border-l-2 border-l-emerald-500 bg-emerald-500/5 flex flex-col">
+      <CardHeader>
+        <div className="flex justify-between items-center mb-2">
+          <Badge className="bg-emerald-500 text-white border-none">{grant.agency}</Badge>
+          <RealityBadge state={grant.realityState} size="sm" />
+        </div>
+        <CardTitle className="text-lg font-headline font-bold">{grant.title}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex-grow">
+        <div className="text-xl font-bold mb-4">
+          <LedgerValue value={grant.amount || 0} isSimulated={true} />
+        </div>
+        <p className="text-xs text-muted-foreground line-clamp-2">{grant.description}</p>
+      </CardContent>
+      <CardFooter className="flex justify-between items-center pt-2">
+        <span className="text-[10px] text-muted-foreground uppercase opacity-60">Status: {grant.status}</span>
+        <Button size="sm" variant="ghost" className="h-7 text-xs">View RFP</Button>
+      </CardFooter>
+    </Card>
+  );
+}
+
 export default function AssetMarketplacePage() {
   const firestore = useFirestore();
   const assetsQuery = useMemoFirebase(
@@ -190,6 +252,18 @@ export default function AssetMarketplacePage() {
     if (!rawProposals) return [];
     return rawProposals.filter(p => p.category === 'RWA Acquisition');
   }, [rawProposals]);
+
+  const reclamationQuery = useMemoFirebase(
+    () => (firestore ? query(collection(firestore, 'reclamation_targets')) : null) as any,
+    [firestore]
+  );
+  const { data: targets, isLoading: isReclamationLoading } = useCollection(reclamationQuery as any);
+
+  const grantsQuery = useMemoFirebase(
+    () => (firestore ? query(collection(firestore, 'grant_opportunities')) : null) as any,
+    [firestore]
+  );
+  const { data: grants, isLoading: isGrantsLoading } = useCollection(grantsQuery as any);
 
 
   const isLoading = areAssetsLoading || areProposalsLoading;
@@ -212,9 +286,11 @@ export default function AssetMarketplacePage() {
       </div>
 
       <Tabs defaultValue="explore">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="explore">Explore Assets</TabsTrigger>
           <TabsTrigger value="funding">Funding Proposals</TabsTrigger>
+          <TabsTrigger value="reclamation">Reclamation Pipeline</TabsTrigger>
+          <TabsTrigger value="grants">Grant Pipeline</TabsTrigger>
         </TabsList>
         <TabsContent value="explore">
           {isLoading ? (
@@ -263,7 +339,28 @@ export default function AssetMarketplacePage() {
             </div>
           )}
         </TabsContent>
+        <TabsContent value="grants">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-4">
+            {isGrantsLoading ? (
+              [...Array(3)].map((_, i) => <Card key={i} className="h-48 animate-pulse bg-muted" />)
+            ) : (
+              grants?.map((grant: any) => <GrantCard key={grant.id} grant={grant} />)
+            )}
+            {grants?.length === 0 && <div className="col-span-full text-center py-12 text-muted-foreground italic">No grants identified in current cycle.</div>}
+          </div>
+        </TabsContent>
+        <TabsContent value="reclamation">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-4">
+            {isReclamationLoading ? (
+              [...Array(3)].map((_, i) => <Card key={i} className="h-48 animate-pulse bg-muted" />)
+            ) : (
+              targets?.map((target: any) => <ReclamationCard key={target.id} target={target} />)
+            )}
+            {targets?.length === 0 && <div className="col-span-full text-center py-12 text-muted-foreground italic">No physical anchor targets identified.</div>}
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );
 }
+

@@ -1,5 +1,4 @@
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 
 /**
  * Sovereign Mesh DTN Service (Phase 9.2)
@@ -48,7 +47,7 @@ export class MeshDTNService {
         // Persist to the Sovereign Ledger (Mesh Partition)
         await db.collection('mesh_bundles').doc(id).set({
             ...newBundle,
-            persistedAt: admin.firestore.FieldValue.serverTimestamp()
+            persistedAt: new Date().toISOString()
         });
 
         console.log(`[MeshDTN] 📦 Bundle Created: ${id} (${bundle.payloadType}) -> ${bundle.destNode}`);

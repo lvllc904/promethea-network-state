@@ -104,7 +104,7 @@ export class UnifiedIntelligence extends EventEmitter {
       this.checkNetworkResilience();
 
       this.emit('consciousness_pulse', this.consciousness);
-    }, 5000);
+    }, 60000); // Reduced to 60s from 5s to preserve Firestore quota
   }
 
   private async checkNetworkResilience(): Promise<void> {

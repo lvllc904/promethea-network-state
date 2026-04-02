@@ -57,7 +57,7 @@ export interface UnderwriteRWAInput {
   verificationDocuments: string;
 }
 
-export type RealityState = 'SIMULATED' | 'TESTNET' | 'ACTUALIZED';
+export type RealityState = 'SIMULATED' | 'TESTNET' | 'ACTUALIZED' | 'SETTLED';
 
 export interface RealWorldAsset {
   id: string;

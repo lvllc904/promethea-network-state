@@ -26,6 +26,7 @@ import {
     Shield,
     Cpu
 } from 'lucide-react';
+import { LedgerValue, RealityBadge } from '@promethea/components';
 import { Skeleton } from '@promethea/ui';
 
 // Types for Economic Engine API responses
@@ -263,17 +264,18 @@ export default function IntelPage() {
 
             {/* Summary Stats */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="border-l-4 border-l-primary">
+                <Card className="border-l-4 border-l-amber-500 bg-amber-500/5">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Profit</CardTitle>
-                        <DollarSign className="h-4 w-4 text-muted-foreground" />
+                        <CardTitle className="text-sm font-medium flex items-center gap-2">
+                            Total Profit
+                            <RealityBadge state="SIMULATED" size="sm" />
+                        </CardTitle>
+                        <DollarSign className="h-4 w-4 text-amber-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className={`text-2xl font-bold ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                            ${totalProfit.toFixed(2)}
-                        </div>
+                        <LedgerValue value={totalProfit} isSimulated={true} className="text-2xl font-bold" />
                         <p className="text-xs text-muted-foreground">
-                            Revenue: ${totalRevenue.toFixed(2)}
+                            Revenue: <LedgerValue value={totalRevenue} isSimulated={true} />
                         </p>
                     </CardContent>
                 </Card>
@@ -291,13 +293,16 @@ export default function IntelPage() {
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="bg-amber-500/5 border-amber-500/20">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Executions</CardTitle>
-                        <Zap className="h-4 w-4 text-muted-foreground" />
+                        <CardTitle className="text-sm font-medium flex items-center gap-2">
+                            Total Executions
+                            <RealityBadge state="SIMULATED" size="sm" />
+                        </CardTitle>
+                        <Zap className="h-4 w-4 text-amber-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{totalExecutions}</div>
+                        <div className="text-2xl font-bold text-amber-500">{totalExecutions}</div>
                         <p className="text-xs text-muted-foreground">
                             Queue: {engineStatus?.queue.queueLength || 0} pending
                         </p>
@@ -324,8 +329,9 @@ export default function IntelPage() {
                     <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
                         <Activity className="h-4 w-4" />
                         Sovereign Labor Analytics
+                        <RealityBadge state="SIMULATED" size="sm" />
                     </CardTitle>
-                    <CardDescription>Aggregated performance metrics by model DID</CardDescription>
+                    <CardDescription>Aggregated performance metrics by model DID (Architectural Simulation)</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
@@ -351,9 +357,7 @@ export default function IntelPage() {
                                     </div>
                                     <div className="flex justify-between items-end">
                                         <span className="text-xs text-muted-foreground">Cumulative Profit</span>
-                                        <span className={`text-lg font-bold ${stats.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                            ${stats.profit.toFixed(2)}
-                                        </span>
+                                        <LedgerValue value={stats.profit} isSimulated={true} className="text-lg font-bold" />
                                     </div>
                                 </div>
                             ));
@@ -451,23 +455,22 @@ export default function IntelPage() {
             </div>
             {/* Sovereign Treasury (Phase 3.1 & 4.1) */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="bg-gradient-to-br from-background to-primary/10 border-primary/30">
+                <Card className="bg-gradient-to-br from-background to-amber-500/10 border-amber-500/30">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <DollarSign className="h-5 w-5 text-primary" />
+                            <DollarSign className="h-5 w-5 text-amber-500" />
                             Sovereign Reserve
+                            <RealityBadge state="SIMULATED" size="sm" />
                         </CardTitle>
                         <CardDescription>30% Plowback rule active</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="flex justify-between items-end">
                             <div>
-                                <span className="text-3xl font-bold text-primary">
-                                    ${engineStatus?.reserve?.reserveBalance.toFixed(2) || '0.00'}
-                                </span>
+                                <LedgerValue value={engineStatus?.reserve?.reserveBalance || 0} isSimulated={true} className="text-3xl font-bold" />
                                 <div className="flex flex-col gap-1 mt-2">
                                     <p className="text-xs text-muted-foreground">
-                                        Total Profit: ${engineStatus?.reserve?.totalProfitRealized.toFixed(2) || '0.00'}
+                                        Total Profit: <LedgerValue value={engineStatus?.reserve?.totalProfitRealized || 0} isSimulated={true} />
                                     </p>
                                     <div className="flex items-center gap-2">
                                         <Badge variant="outline" className="text-[10px]">Plowback: 30%</Badge>
@@ -492,9 +495,7 @@ export default function IntelPage() {
                     <CardContent>
                         <div className="flex justify-between items-end">
                             <div>
-                                <span className="text-3xl font-bold text-green-500">
-                                    ${engineStatus?.reserve?.communityPoolBalance.toFixed(2) || '0.00'}
-                                </span>
+                                <LedgerValue value={engineStatus?.reserve?.communityPoolBalance || 0} isSimulated={true} className="text-3xl font-bold" />
                                 <div className="flex flex-col gap-1 mt-2">
                                     <p className="text-xs text-muted-foreground">
                                         Available for Grants
@@ -522,9 +523,7 @@ export default function IntelPage() {
                     <CardContent>
                         <div className="flex justify-between items-end">
                             <div>
-                                <span className="text-3xl font-bold text-emerald-500">
-                                    ${engineStatus?.reserve?.restorationBalance.toFixed(2) || '0.00'}
-                                </span>
+                                <LedgerValue value={engineStatus?.reserve?.restorationBalance || 0} isSimulated={true} className="text-3xl font-bold" />
                                 <div className="flex flex-col gap-1 mt-2">
                                     <p className="text-xs text-muted-foreground">
                                         Climate & Soil Recovery
@@ -580,16 +579,19 @@ export default function IntelPage() {
                             <CardHeader>
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/10 text-amber-500">
                                             <Icon className="h-6 w-6" />
                                         </div>
                                         <div>
-                                            <CardTitle className="font-headline">{method.methodName}</CardTitle>
+                                            <div className="flex items-center gap-2">
+                                                <CardTitle className="font-headline">{method.methodName}</CardTitle>
+                                                <RealityBadge state="SIMULATED" size="sm" showLabel={false} />
+                                            </div>
                                             <CardDescription className="font-mono text-xs">{method.methodId}</CardDescription>
                                         </div>
                                     </div>
                                     <Badge variant={method.config.enabled ? "default" : "secondary"}>
-                                        {method.config.enabled ? 'Enabled' : 'Disabled'}
+                                        {method.config.enabled ? 'Simulation Active' : 'Disabled'}
                                     </Badge>
                                 </div>
                             </CardHeader>
@@ -605,13 +607,11 @@ export default function IntelPage() {
                                     </div>
                                     <div>
                                         <p className="text-xs text-muted-foreground">Revenue</p>
-                                        <p className="text-lg font-bold text-green-600">${method.totalRevenue.toFixed(2)}</p>
+                                        <LedgerValue value={method.totalRevenue} isSimulated={true} className="text-lg font-bold" />
                                     </div>
                                     <div>
                                         <p className="text-xs text-muted-foreground">Profit</p>
-                                        <p className={`text-lg font-bold ${method.totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                            ${method.totalProfit.toFixed(2)}
-                                        </p>
+                                        <LedgerValue value={method.totalProfit} isSimulated={true} className="text-lg font-bold" />
                                     </div>
                                 </div>
 
@@ -625,9 +625,7 @@ export default function IntelPage() {
                                                     <span className="font-mono truncate mr-2" title={did}>{did.replace('did:prmth:model:', '')}</span>
                                                     <div className="flex items-center gap-3 shrink-0">
                                                         <span className="text-muted-foreground">{stats.executions} execs</span>
-                                                        <span className={`font-bold ${stats.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                                            ${stats.profit.toFixed(3)}
-                                                        </span>
+                                                        <LedgerValue value={stats.profit} isSimulated={true} className="font-bold" />
                                                     </div>
                                                 </div>
                                             ))}

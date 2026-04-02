@@ -35,6 +35,8 @@ function getPageTitle(pathname: string): string {
   return "Promethea";
 }
 
+import { RealityBadge } from "./RealityBadge";
+
 export function Header() {
   const pathname = usePathname();
   const title = getPageTitle(pathname);
@@ -62,7 +64,7 @@ export function Header() {
 
   if (isAuthStatusLoading) {
     return (
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+      <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
         <SidebarTrigger className="sm:hidden" />
         <div className="ml-auto flex items-center gap-4">
           <Skeleton className="h-8 w-8 rounded-full" />
@@ -82,13 +84,15 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
+    <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
       <SidebarTrigger className="sm:hidden" />
 
-      <div className="w-full flex items-center gap-4">
-        <h1 className="text-2xl font-headline font-semibold hidden md:block">{title}</h1>
+      <div className="w-full flex items-center justify-between gap-4">
+        <h1 className="text-xl font-headline font-semibold hidden lg:block min-w-[150px]">{title}</h1>
 
-        <div className="flex-grow flex justify-center">
+        <div className="flex items-center gap-4 bg-black/20 px-3 py-1 rounded-full border border-white/5">
+          <RealityBadge state="ACTUALIZED" />
+          <div className="w-px h-4 bg-white/10" />
           <AuthStatusIndicator />
         </div>
 
@@ -130,4 +134,5 @@ export function Header() {
     </header>
   );
 }
+
 

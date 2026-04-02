@@ -48,7 +48,7 @@ gcloud run deploy sbi-core \
   --platform managed \
   --region ${REGION} \
   --allow-unauthenticated \
-  --env-vars-file env.production.yaml \
+  --set-env-vars "GEMINI_API_KEY=${GEMINI_API_KEY},FIREBASE_PROJECT_ID=${PROJECT_ID},STORAGE_MODE=SOVEREIGN,CONSERVATION_MODE=true" \
   --memory 1Gi \
   --cpu 1 \
   --min-instances 1 \
@@ -65,10 +65,10 @@ gcloud run deploy economic-engine \
   --region ${REGION} \
   --allow-unauthenticated \
   --env-vars-file env.production.yaml \
-  --memory 1Gi \
+  --memory 2Gi \
   --cpu 1 \
   --min-instances 1 \
-  --timeout 300
+  --timeout 600
 
 # ─── 4. Authentication Service (Guardian Gateway) ────────────────────────────
 echo ""
@@ -101,16 +101,17 @@ echo "   Guardian Gateway:  ${GUARDIAN_URL}"
 
 # ─── 5. DAC Frontend (Next.js on Cloud Run → lvhllc.org) ────────────────────
 echo ""
-echo "🌐 [5/5] Building and deploying DAC Frontend..."
+echo "🌐 [5/5] Building and deploying DAC Frontend (SOVEREIGN MODE)..."
 
 # Inject backend URLs into the frontend build
 export NEXT_PUBLIC_AI_SERVICE_URL=${AI_URL}
 export NEXT_PUBLIC_GUARDIAN_URL=${GUARDIAN_URL}
-export ECONOMIC_ENGINE_URL=${ENGINE_URL}
+export NEXT_PUBLIC_ENGINE_URL=${ENGINE_URL}
+export NEXT_PUBLIC_DISABLE_FIREBASE=true
 
 # Build the frontend Docker image via Cloud Build
 gcloud builds submit --config cloudbuild-frontend.yaml \
-  --substitutions _AI_URL="${AI_URL}",_GUARDIAN_URL="${GUARDIAN_URL}",_ENGINE_URL="${ENGINE_URL}" .
+  --substitutions _AI_URL="${AI_URL}",_GUARDIAN_URL="${GUARDIAN_URL}",_ENGINE_URL="${ENGINE_URL}",_DISABLE_FIREBASE="true" .
 
 FRONTEND_IMAGE="gcr.io/${PROJECT_ID}/promethea-frontend:latest"
 gcloud run deploy promethea-frontend \
@@ -118,7 +119,7 @@ gcloud run deploy promethea-frontend \
   --platform managed \
   --region ${REGION} \
   --allow-unauthenticated \
-  --set-env-vars "NEXT_PUBLIC_AI_SERVICE_URL=${AI_URL},NEXT_PUBLIC_GUARDIAN_URL=${GUARDIAN_URL},NEXT_PUBLIC_FIREBASE_PROJECT_ID=${PROJECT_ID}" \
+  --set-env-vars "NEXT_PUBLIC_AI_SERVICE_URL=${AI_URL},NEXT_PUBLIC_GUARDIAN_URL=${GUARDIAN_URL},NEXT_PUBLIC_ENGINE_URL=${ENGINE_URL},NEXT_PUBLIC_FIREBASE_PROJECT_ID=${PROJECT_ID},NEXT_PUBLIC_DISABLE_FIREBASE=true,CONSERVATION_MODE=true,ECONOMIC_ENGINE_URL=${ENGINE_URL},AI_SERVICE_URL=${AI_URL},GUARDIAN_URL=${GUARDIAN_URL}" \
   --memory 1Gi \
   --cpu 1 \
   --min-instances 1 \
@@ -127,17 +128,19 @@ gcloud run deploy promethea-frontend \
 FRONTEND_URL=$(gcloud run services describe promethea-frontend --region ${REGION} --format 'value(status.url)')
 echo "   DAC Frontend:      ${FRONTEND_URL}"
 
-# ─── Deploy Firebase Hosting (routes lvhllc.org → Cloud Run frontend) ────────
-echo ""
-echo "🔗 Wiring lvhllc.org → Firebase Hosting → Cloud Run..."
-firebase deploy --only hosting --project ${PROJECT_ID}
+# ─── DEPRECATED: FIREBASE HOSTING (Cost 100% of accrued fees) ───────────────
+# echo ""
+# echo "🔗 DEPRECATED: Wiring lvhllc.org → Firebase Hosting..."
+# echo "⚠️ NOTICE: User instructed to get off Firebase 100%. Removing Hosting."
+# firebase deploy --only hosting --project ${PROJECT_ID}
+# ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
 echo "✅ All systems deployed!"
 echo ""
 echo "┌─────────────────────────────────────────────────────────────────────┐"
-echo "│  🌍 Promethean Network State — LIVE                                 │"
-echo "│  Domain:    https://lvhllc.org  (Firebase Hosting → Cloud Run)      │"
-echo "│  Staging:   ${FRONTEND_URL}     │"
-echo "│  AI Engine: ${AI_URL}           │"
+echo "│  🌍 Promethean Network State — LIVE (GCP NATIVE)                    │"
+echo "│  URL:       ${FRONTEND_URL}                                          │"
+echo "│  DOMAIN:    https://lvhllc.org (Requires Direct Cloud Run Mapping)   │"
+echo "│  AI Engine: ${AI_URL}                                                │"
 echo "└─────────────────────────────────────────────────────────────────────┘"

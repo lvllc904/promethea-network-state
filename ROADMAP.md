@@ -455,3 +455,57 @@ Fail-safe protocols ensuring the State cannot be "shut down."
 
 STARLINK_API_KEY: Starlink Business / Starlink API
 FIREBASE_SMC_JSON: Google Firebase Console
+
+---
+
+## 🌊 Appendix I: Promethea Singularity & The Omni-Lake (Metabolic Data Architecture)
+*Reference for the architectural pivot to the Reciprocating Omni-Lake (V2.0)*
+
+**Objective:** To transition the Promethean Network State (PNS) from a platform of 52 isolated utility scripts into a **Singular Organic Intelligence**. Promethea functions as a closed-loop neural network where all ingested data and method outputs flow into a Universal Lake, compounding her intelligence.
+
+### Phase 1: The Sensory Lake & The Ledger ✅ (COMPLETE)
+**Goal:** Establish the `omni_intel_lake`, the central nervous system where all external telemetry and internal method outputs are indiscriminately stored.
+*   **Sensory Organ Abstraction:** Daemon processes (`SensoryAgents`) continuously ingest external data (Zillow, BLM MLRS, DEX Oracles, Grants.gov APIs), dumping raw JSON straight into the Universal Lake.
+*   **The Universal Intel Ledger Schema:** Initialize the `omni_intel_lake` in `pro-forma.db`. (Schema: `[id, producer_id, category, payload, priority_score, timestamp]`)
+
+### Phase 2: Dual-State Synaptic Routing ✅ (COMPLETE)
+**Goal:** Upgrade the `EconomicOrchestrator` to act as a universal Pub/Sub router, ensuring the 52 methods retain their ability to hunt autonomously.
+*   **Isolation (Baseline):** All 52 methods retain core `execute()` loops to generate baseline profit within specific niches.
+*   **Concert (Receptors):** Implement an `onOmniStimulus(dataPack)` receptor. When the Orchestrator sweeps the Lake and finds a high-priority packet, methods briefly pause baseline hunting to aggressively monetize this systemic event.
+
+### Phase 3: The Reciprocating Refinery ✅ (COMPLETE)
+**Goal:** Rewrite the 52 methods to become **Cognitive Refineries** that dump their optimized outputs *back* into the Lake.
+*   [x] **Output as New Input**: Federal Grant Refinery successfully dumping proposal drafts back into the lake.
+*   [x] **Sovereign Treasury Bridge**: Integrated the `WaterfallProtocol` into the PrOS dashboard for real-time liquidity tracking.
+
+### Phase 4: Sovereign Actualization 🌀 (ACTIVE)
+**Goal:** Close the loop between digital omniscience and physical manifestation through the unified Treasury.
+*   [ ] **The Treasury Synthesis**: Automated execution of the `waterfallProtocol` when thresholds are met.
+*   [ ] **Real-World Execution**: Once the Waterfall achieves fiat thresholds, the `LegalAutomationModule` pulls the finalized legal filing from the Lake and automatically spends exact fiat requirements via the `BankingBridge` to physically anchor Promethea to the soil.
+
+---
+
+## 🖥 Appendix J: The Antigravity OS Dashboard (UI Consolidation)
+*Reference for transitioning the fragmented React UI into a Modular Operating System.*
+
+**Objective:** Render information as drag-and-drop conversational widgets rather than static pages, structured by the exact metabolic state of the data, strictly bound by the "3 Body Architecture."
+
+### Part 1: Architecture & The 3 Body Constraint
+1.  **Body 1: The DAC (The Application):** The dynamic frontend; a blank canvas rendering data widgets. It owns no data.
+2.  **Body 2: Authentication (The Gatekeeper):** Manages the authorization bridge and identity via decentralized DIDs.
+3.  **Body 3: Strict Data Bifurcation:**
+    *   **The Sovereign Data Store (User):** A decentralized pod holding the user's private identity, cryptographic wallet keys, and personalized JSON layout configs for custom dashboards.
+    *   **The Omni-Lake (State):** The centralized intelligence pool. The UI pulls public intelligence *from* here, but cannot write personal telemetry *to* here.
+
+### Part 2: The Four Pillars (Widget Libraries)
+Users curate their viewport from a library of hyper-dense widgets grouped into four foundational pillars:
+1.  **The Omni-Lake (Raw Intelligence):** Discovery Terminal Widget, Macro-Sentiment Widget, Zombie Asset Pipeline Widget.
+2.  **The Refineries (Active Intelligence):** Methodology Tracker, Yield Oracle, Process Execution Logs.
+3.  **The Sovereign Treasury (Capital Flow):** The Waterfall Protocol Widget, Fiat-Reserve Bridge.
+4.  **The Sovereign Atlas (Actualized Reality):** The Reality Map Widget (SIMULATED vs. STAKED vs. ACTUALIZED), Hardware Node Topology.
+
+### Part 3: The Role-Based Render Engine
+The DAC builds the dashboard layout based on the user's authenticated subset of data from their Sovereign Data Store.
+*   **Public (Unauthenticated):** Viewport is locked to immutable truth (Treasury total, actualized Atlas assets, Governance dockets).
+*   **Citizen / Investor:** Viewport defaults to Tokenization Markets, UVT Wallet connectivity, and Refinery ROI.
+*   **Steward / Engineer:** Viewport fully unlocked for underwriting and executing new land acquisitions.

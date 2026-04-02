@@ -1,5 +1,4 @@
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 
 /**
  * UVX Engine Core (Phase 11)
@@ -69,7 +68,7 @@ export class UVXEngine {
         if (!doc.exists) return;
 
         const asset = doc.data() as UVXAsset;
-        const now = admin.firestore.FieldValue.serverTimestamp();
+        const now = new Date().toISOString();
 
         // If expired and not redeemed: Slash Collateral to Backers
         console.log(`[UVX] Processing expiration for asset ${assetId}. Triggering collateral default...`);

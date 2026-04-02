@@ -1,5 +1,4 @@
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 
 /**
  * Hardware Relay Service (Phase 4.2)
@@ -49,7 +48,7 @@ export class HardwareRelay {
             await db.collection(COLLECTIONS.HARDWARE_JOBS).add({
                 ...job,
                 status: 'Relaying',
-                relayedAt: admin.firestore.FieldValue.serverTimestamp()
+                relayedAt: new Date().toISOString()
             });
 
             // Simulate hardware execution delay
@@ -76,7 +75,7 @@ export class HardwareRelay {
             // Phase 5: Trigger real-world asset confirmation
             await db.collection(COLLECTIONS.ASSETS).doc(jobId).update({
                 status: 'Manufactured',
-                manufacturedAt: admin.firestore.FieldValue.serverTimestamp()
+                manufacturedAt: new Date().toISOString()
             }).catch(() => { }); // Asset might not exist in this mock
         }, 30000);
     }

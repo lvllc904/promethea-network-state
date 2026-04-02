@@ -7,6 +7,7 @@ import { useCollection, useFirestore, useMemoFirebase } from '@promethea/firebas
 import { collection, query, orderBy, type Query } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Button, Badge, Skeleton } from '@promethea/ui';
 import { Newspaper, Send, ArrowRight, BrainCircuit, Globe, BookOpen } from 'lucide-react';
+import { RealityBadge } from '@promethea/components';
 import Link from 'next/link';
 
 interface BlogPost {
@@ -38,12 +39,15 @@ export default function NarrativePage() {
         <div className="p-8 max-w-7xl mx-auto space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-primary/10 pb-6">
                 <div>
-                    <h1 className="text-3xl font-headline flex items-center gap-2">
-                        <Newspaper className="w-8 h-8 text-primary" />
-                        Sovereign Narrative Engine
-                    </h1>
+                    <div className="flex items-center gap-3">
+                        <RealityBadge state="SIMULATED" />
+                        <h1 className="text-3xl font-headline flex items-center gap-2">
+                            <Newspaper className="w-8 h-8 text-primary" />
+                            Sovereign Narrative Engine
+                        </h1>
+                    </div>
                     <p className="text-muted-foreground mt-1">
-                        High-fidelity transmissions synthesized by the Promethean Mind.
+                        High-fidelity transmissions synthesized by the Promethean Mind (Architectural AI).
                     </p>
                 </div>
                 <div className="flex gap-2">
@@ -78,9 +82,12 @@ export default function NarrativePage() {
                         <Card key={post.id} className="group hover:border-primary/40 transition-all duration-300 border-primary/10 flex flex-col h-full bg-gradient-to-b from-background to-muted/20">
                             <CardHeader className="pb-2">
                                 <div className="flex justify-between items-start mb-2">
-                                    <Badge variant="outline" className="text-[10px] uppercase tracking-widest text-primary border-primary/20">
-                                        {post.platform}
-                                    </Badge>
+                                    <div className="flex items-center gap-2">
+                                        <Badge variant="outline" className="text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                            {post.platform}
+                                        </Badge>
+                                        <RealityBadge state="SIMULATED" size="sm" showLabel={false} />
+                                    </div>
                                     <span className="text-[10px] text-muted-foreground font-mono">
                                         {post.createdAt?.seconds ? new Date(post.createdAt.seconds * 1000).toLocaleDateString() : 'Just now'}
                                     </span>

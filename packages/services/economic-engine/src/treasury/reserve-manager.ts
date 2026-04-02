@@ -58,17 +58,35 @@ export class ReserveManager {
         try {
             const rpcUrl = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
             const mintAddress = process.env.UVT_MINT_ADDRESS || 'Bm2GRKS92odxL6P4grmYyDMNChWNhQPHrLgcJRab7vf1';
+            const { walletManager } = require('./wallet-manager');
 
             const { Connection, PublicKey } = require('@solana/web3.js');
             const { getMint } = require('@solana/spl-token');
 
             const connection = new Connection(rpcUrl, 'confirmed');
-            const mintInfo = await getMint(connection, new PublicKey(mintAddress));
 
-            const supply = Number(mintInfo.supply) / Math.pow(10, mintInfo.decimals);
-            this.uvtCirculatingSupply = supply;
+            // 1. Sync UVT live supply (SPL)
+            try {
+                const mintInfo = await getMint(connection, new PublicKey(mintAddress));
+                const supply = Number(mintInfo.supply) / Math.pow(10, mintInfo.decimals);
+                this.uvtCirculatingSupply = supply;
+                console.log(`[ReserveManager] ⛓️ Live supply synchronized: ${this.uvtCirculatingSupply.toLocaleString()} UVT`);
+            } catch (e) {
+                console.log('[ReserveManager] ⚠️ Mint info unavailable yet.');
+            }
 
-            console.log(`[ReserveManager] ⛓️ Live supply synchronized: ${this.uvtCirculatingSupply.toLocaleString()} UVT`);
+            // 2. Sync Native SOL context for Tier 1 actualization
+            // If our reserveBalance (USD proxy) is zero but we have SOL, bridge the gap.
+            const balSol = await walletManager.getPartitionBalance('OPERATIONAL');
+            const solPriceUsd = 145; // Rough price for bootstrap
+            const actualValueUsd = balSol * solPriceUsd;
+
+            if (this.reserveBalance < actualValueUsd && actualValueUsd > 0.01) {
+                console.log(`[ReserveManager] 💹 Synchronizing reserve USD with on-chain context: $${actualValueUsd.toFixed(2)}`);
+                this.reserveBalance = actualValueUsd;
+                await this.saveState();
+            }
+
         } catch (err) {
             console.warn('[ReserveManager] ⚠️ Failed to fetch live supply, using last known:', err instanceof Error ? err.message : 'Unknown error');
         }

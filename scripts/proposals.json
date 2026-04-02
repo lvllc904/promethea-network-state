@@ -1,0 +1,4812 @@
+{
+  "documents": [
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/003VuQ7EN5fg3cW9DBkT",
+      "fields": {
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-03T17:39:08.669Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-03T17:35:08.214Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "8915"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771954508214"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $8915 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-24T17:35:08.214Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        }
+      },
+      "createTime": "2026-02-24T17:35:08.310544Z",
+      "updateTime": "2026-03-03T17:39:08.697305Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/00Ja9MCuVeyMpZL83jIY",
+      "fields": {
+        "createdAt": {
+          "timestampValue": "2026-03-04T22:57:30.881Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772665050881"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T23:02:33.334Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T22:57:30.881Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        }
+      },
+      "createTime": "2026-03-04T22:57:30.909084Z",
+      "updateTime": "2026-03-07T23:02:33.352749Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/00eWB6pNd9H77B5ygWob",
+      "fields": {
+        "id": {
+          "stringValue": "buyback-1772745901114"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T21:25:01.114Z"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T21:32:33.323Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T21:25:01.114Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-05T21:25:01.138980Z",
+      "updateTime": "2026-03-08T21:32:33.346611Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/00vcNdVBiwGLVp65FxKE",
+      "fields": {
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-15T01:03:44.092Z"
+        },
+        "status": {
+          "stringValue": "Proposed"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-12T01:03:44.092Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "id": {
+          "stringValue": "buyback-1773277424092"
+        }
+      },
+      "createTime": "2026-03-12T01:03:44.125589Z",
+      "updateTime": "2026-03-12T01:03:44.125589Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/078DPkYllmTJBbPIiFou",
+      "fields": {
+        "talliedAt": {
+          "timestampValue": "2026-02-27T16:34:08.136Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-27T16:33:46.444Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "1973"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771605226444"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $1973 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-20T16:33:46.444Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        }
+      },
+      "createTime": "2026-02-20T16:33:46.480048Z",
+      "updateTime": "2026-02-27T16:34:08.152828Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/08zsTBOjE4A3Nz4H5Q1U",
+      "fields": {
+        "amount": {
+          "integerValue": "50000"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-11T01:01:13.524Z"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "id": {
+          "stringValue": "buyback-1773190873524"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Proposed"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-14T01:01:13.524Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-11T01:01:13.544833Z",
+      "updateTime": "2026-03-11T01:01:13.544833Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0DZgm45B71AOhoBnXk0z",
+      "fields": {
+        "createdAt": {
+          "timestampValue": "2026-02-12T21:55:00.648Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $641 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "641"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1770933300648"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-19T22:01:36.969Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-19T21:55:00.648Z"
+        }
+      },
+      "createTime": "2026-02-12T21:55:00.675831Z",
+      "updateTime": "2026-02-19T22:01:36.989487Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0DoIArOz7F6id5gp1FMU",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $1829 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-20T15:08:29.541Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-27T15:08:29.541Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-27T15:14:08.324Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771600109541"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "1829"
+        }
+      },
+      "createTime": "2026-02-20T15:08:29.579759Z",
+      "updateTime": "2026-02-27T15:14:08.346474Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0EmFzydDcl1sDHhJb28H",
+      "fields": {
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-06T03:44:52.347Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-09T03:52:33.372Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-09T03:44:52.347Z"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1772768692347"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        }
+      },
+      "createTime": "2026-03-06T03:44:52.365426Z",
+      "updateTime": "2026-03-09T03:52:33.385031Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0GI6JKrAfwb96B5j8JK0",
+      "fields": {
+        "id": {
+          "stringValue": "grant-1771777500201"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "8429"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T16:25:00.201Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T16:34:08.194Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T16:25:00.201Z"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $8429 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-02-22T16:25:00.233974Z",
+      "updateTime": "2026-03-01T16:34:08.226640Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0KcnoR5m6wLX2Bk2sys4",
+      "fields": {
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772657128204"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T20:45:28.204Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T20:52:33.404Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T20:45:28.204Z"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        }
+      },
+      "createTime": "2026-03-04T20:45:28.233789Z",
+      "updateTime": "2026-03-07T20:52:33.421837Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0LR9i12ht0KeLlti19os",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $309 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-12T16:27:31.406Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-19T16:31:37.003Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-19T16:27:31.406Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "309"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1770913651406"
+        }
+      },
+      "createTime": "2026-02-12T16:27:35.058457Z",
+      "updateTime": "2026-02-19T16:31:37.028838Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0NvOqCJGk0bMTCJzpkFX",
+      "fields": {
+        "amount": {
+          "integerValue": "50000"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1773126503073"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-13T07:09:36.129Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-13T07:08:23.073Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-10T07:08:23.073Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        }
+      },
+      "createTime": "2026-03-10T07:08:23.097251Z",
+      "updateTime": "2026-03-13T07:09:36.148695Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0OZaLcwPQOfXWyEvy0yC",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T11:03:32.221Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T11:03:32.221Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T11:12:33.376Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772708612221"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        }
+      },
+      "createTime": "2026-03-05T11:03:32.248731Z",
+      "updateTime": "2026-03-08T11:12:33.392712Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0Rk55LouqJDeMnwV5Q1g",
+      "fields": {
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T10:28:16.425Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T10:34:08.262Z"
+        },
+        "id": {
+          "stringValue": "grant-1771756096425"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "7483"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $7483 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T10:28:16.425Z"
+        }
+      },
+      "createTime": "2026-02-22T10:28:16.455384Z",
+      "updateTime": "2026-03-01T10:34:08.285985Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0SsHZZM6ZSthMwwzQHZR",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $6174 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T04:17:05.479Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T04:24:08.279Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T04:17:05.479Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "amount": {
+          "integerValue": "6174"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771733825479"
+        }
+      },
+      "createTime": "2026-02-22T04:17:05.511174Z",
+      "updateTime": "2026-03-01T04:24:08.300666Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0Tqc3Rh7GSL71995lass",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-03T20:54:53.568Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-06T21:02:33.249Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-06T20:54:53.568Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772571293568"
+        }
+      },
+      "createTime": "2026-03-03T20:54:53.588408Z",
+      "updateTime": "2026-03-06T21:02:33.263481Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0YhNIYHC5Zmc3bcdt2OI",
+      "fields": {
+        "description": {
+          "stringValue": "Proposed allocation of $8925 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-25T11:35:07.023Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-04T11:35:07.023Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-04T11:39:44.828Z"
+        },
+        "id": {
+          "stringValue": "grant-1772019307023"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "8925"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        }
+      },
+      "createTime": "2026-02-25T11:35:07.083075Z",
+      "updateTime": "2026-03-04T11:39:44.852165Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0bCAwNuxAZIfhlAYts8Q",
+      "fields": {
+        "id": {
+          "stringValue": "buyback-1772745360451"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T21:16:00.451Z"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T21:22:33.357Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T21:16:00.451Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-05T21:16:00.479872Z",
+      "updateTime": "2026-03-08T21:22:33.383531Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0cmcTaAYySH3BXxA4JAI",
+      "fields": {
+        "amount": {
+          "integerValue": "50000"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-12T16:51:13.194Z"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "id": {
+          "stringValue": "buyback-1773334273194"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Proposed"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-15T16:51:13.194Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-12T16:51:13.247063Z",
+      "updateTime": "2026-03-12T16:51:13.247063Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0d4lALBjQ09fOoQYEBKa",
+      "fields": {
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T03:14:27.519Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T03:14:27.519Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T03:22:33.260Z"
+        },
+        "id": {
+          "stringValue": "buyback-1772594067519"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        }
+      },
+      "createTime": "2026-03-04T03:14:27.558235Z",
+      "updateTime": "2026-03-07T03:22:33.278762Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0f2baIFgdZBp8Kjw2ngt",
+      "fields": {
+        "id": {
+          "stringValue": "buyback-1772662819366"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T22:20:19.366Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T22:22:33.324Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T22:20:19.366Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-04T22:20:19.391629Z",
+      "updateTime": "2026-03-07T22:22:33.344966Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0faVGjMkDeIfXDAhss1T",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-03T22:19:56.032Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-06T22:19:56.032Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-06T22:22:33.926Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772576396032"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        }
+      },
+      "createTime": "2026-03-03T22:19:56.068117Z",
+      "updateTime": "2026-03-06T22:22:33.943061Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0jDtk40Hf8yxfHVP6Zbd",
+      "fields": {
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772941800622"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-11T03:55:28.172Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-11T03:50:00.622Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-08T03:50:00.622Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        }
+      },
+      "createTime": "2026-03-08T03:50:00.664173Z",
+      "updateTime": "2026-03-11T03:55:28.198418Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0msJXCo2d6dx8QlcIvCU",
+      "fields": {
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T21:41:25.980Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T21:42:33.346Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T21:41:25.980Z"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "id": {
+          "stringValue": "buyback-1772746885980"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        }
+      },
+      "createTime": "2026-03-05T21:41:26.001852Z",
+      "updateTime": "2026-03-08T21:42:33.361752Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0nK2OXB05Abv1SbQ2cZH",
+      "fields": {
+        "deadline": {
+          "timestampValue": "2026-03-08T19:48:37.452Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T19:52:33.365Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772740117452"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T19:48:37.452Z"
+        }
+      },
+      "createTime": "2026-03-05T19:48:37.484333Z",
+      "updateTime": "2026-03-08T19:52:33.385060Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0nP0TxSu3S22XyFkqqFw",
+      "fields": {
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-09T04:02:33.342Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-09T03:58:15.093Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772769495093"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-06T03:58:15.093Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        }
+      },
+      "createTime": "2026-03-06T03:58:15.115552Z",
+      "updateTime": "2026-03-09T04:02:33.359396Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0nygF0fNsV6sID5t4zu7",
+      "fields": {
+        "description": {
+          "stringValue": "Proposed allocation of $6682 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T04:25:10.084Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T04:25:10.084Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T04:34:08.140Z"
+        },
+        "id": {
+          "stringValue": "grant-1771734310084"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "6682"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        }
+      },
+      "createTime": "2026-02-22T04:25:10.132113Z",
+      "updateTime": "2026-03-01T04:34:08.164761Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0oGuK7xDjKTObzC3tw4q",
+      "fields": {
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1773126182545"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-13T07:09:36.219Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-13T07:03:02.545Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-10T07:03:02.545Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        }
+      },
+      "createTime": "2026-03-10T07:03:02.574785Z",
+      "updateTime": "2026-03-13T07:09:36.236891Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0tUBdV3maMkIG3obFSSE",
+      "fields": {
+        "createdAt": {
+          "timestampValue": "2026-03-10T13:07:57.105Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "id": {
+          "stringValue": "buyback-1773148077105"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-13T13:09:36.011Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-13T13:07:57.105Z"
+        }
+      },
+      "createTime": "2026-03-10T13:07:57.167690Z",
+      "updateTime": "2026-03-13T13:09:36.038484Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0tWGLchdYanNqZ13ZuDl",
+      "fields": {
+        "deadline": {
+          "timestampValue": "2026-03-07T20:47:06.980Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T20:52:33.506Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772657226980"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T20:47:06.980Z"
+        }
+      },
+      "createTime": "2026-03-04T20:47:07.013563Z",
+      "updateTime": "2026-03-07T20:52:33.528858Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0ub6TNwZJLlkZsyZ1UH8",
+      "fields": {
+        "talliedAt": {
+          "timestampValue": "2026-03-07T03:22:33.378Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T03:13:35.639Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772594015639"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T03:13:35.639Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        }
+      },
+      "createTime": "2026-03-04T03:13:35.674383Z",
+      "updateTime": "2026-03-07T03:22:33.397624Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0v7SIFe6SqNbuuJaJ4wi",
+      "fields": {
+        "talliedAt": {
+          "timestampValue": "2026-03-08T21:32:33.406Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T21:25:26.367Z"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "id": {
+          "stringValue": "buyback-1772745926367"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T21:25:26.367Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        }
+      },
+      "createTime": "2026-03-05T21:25:26.397763Z",
+      "updateTime": "2026-03-08T21:32:33.436643Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0x1HkhQARObOQKlhmp2j",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-03T20:55:10.563Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-06T20:55:10.563Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-06T21:02:33.346Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772571310563"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-03T20:55:10.581321Z",
+      "updateTime": "2026-03-06T21:02:33.369197Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/0zDczCLhL47a3FyIbvgZ",
+      "fields": {
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-27T15:21:07.666Z"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-27T15:24:08.098Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1771600867666"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "amount": {
+          "integerValue": "1884"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $1884 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-20T15:21:07.666Z"
+        }
+      },
+      "createTime": "2026-02-20T15:21:07.729348Z",
+      "updateTime": "2026-02-27T15:24:08.121439Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/106kEGo6D4Fs5ogknA24",
+      "fields": {
+        "createdAt": {
+          "timestampValue": "2026-02-22T16:15:18.216Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $8053 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "amount": {
+          "integerValue": "8053"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771776918216"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T16:24:08.264Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T16:15:18.216Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        }
+      },
+      "createTime": "2026-02-22T16:15:18.272353Z",
+      "updateTime": "2026-03-01T16:24:08.318898Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/11dOWzC3EsY4qCy6I2mH",
+      "fields": {
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T02:36:50.714Z"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $3552 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1771727810714"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "amount": {
+          "integerValue": "3552"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T02:36:50.714Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T02:44:08.230Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-02-22T02:36:50.740083Z",
+      "updateTime": "2026-03-01T02:44:08.258387Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/12g5UDExsosBEdlaYwOo",
+      "fields": {
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T09:13:14.032Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T09:22:33.327Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1772615594032"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T09:13:14.032Z"
+        }
+      },
+      "createTime": "2026-03-04T09:13:14.057246Z",
+      "updateTime": "2026-03-07T09:22:33.346408Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/14hJyUiiG8dEobRKyI8E",
+      "fields": {
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-23T23:25:07.960Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-23T23:34:07.589Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1771284307960"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "1169"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $1169 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-16T23:25:07.960Z"
+        }
+      },
+      "createTime": "2026-02-16T23:25:08.011591Z",
+      "updateTime": "2026-02-23T23:34:07.602337Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/18Bi35QDDwKc2GM46TyP",
+      "fields": {
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T03:22:33.436Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T03:15:25.477Z"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1772594125477"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T03:15:25.477Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        }
+      },
+      "createTime": "2026-03-04T03:15:25.506635Z",
+      "updateTime": "2026-03-07T03:22:33.453915Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/19VP1cDtjbJqO25opFuR",
+      "fields": {
+        "id": {
+          "stringValue": "buyback-1773328284152"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-12T15:11:24.152Z"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Proposed"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-15T15:11:24.152Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-12T15:11:24.187255Z",
+      "updateTime": "2026-03-12T15:11:24.187255Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1D9I9i0zGp56TIHvqYRh",
+      "fields": {
+        "amount": {
+          "integerValue": "2207"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1771710460001"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-28T21:54:08.277Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-28T21:47:40.001Z"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-21T21:47:40.001Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $2207 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-02-21T21:47:40.038611Z",
+      "updateTime": "2026-02-28T21:54:08.300677Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1DF5DbzK1eVGE9SNhtKz",
+      "fields": {
+        "createdAt": {
+          "timestampValue": "2026-03-04T22:21:53.646Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "id": {
+          "stringValue": "buyback-1772662913646"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T22:22:33.422Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T22:21:53.646Z"
+        }
+      },
+      "createTime": "2026-03-04T22:21:53.700317Z",
+      "updateTime": "2026-03-07T22:22:33.440464Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1KQU8LUhocDdEUgIvkim",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $742 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-12T22:27:24.712Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-19T22:27:24.712Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-19T22:31:37.049Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1770935244711"
+        },
+        "amount": {
+          "integerValue": "742"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-02-12T22:27:24.743011Z",
+      "updateTime": "2026-02-19T22:31:37.075113Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1LEK8uKz7bwaTfLd4C1n",
+      "fields": {
+        "createdAt": {
+          "timestampValue": "2026-03-05T19:55:07.512Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1772740507512"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T20:02:33.336Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T19:55:07.512Z"
+        }
+      },
+      "createTime": "2026-03-05T19:55:07.544298Z",
+      "updateTime": "2026-03-08T20:02:33.351309Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1LW8ADLkmFEbrt5dMR9w",
+      "fields": {
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772740152457"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T19:52:33.462Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T19:49:12.457Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T19:49:12.457Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        }
+      },
+      "createTime": "2026-03-05T19:49:12.488917Z",
+      "updateTime": "2026-03-08T19:52:33.481441Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1PeXLWsiZmOUT7fOqfKx",
+      "fields": {
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-27T15:14:08.467Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-27T15:10:22.995Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "amount": {
+          "integerValue": "1866"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771600222995"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $1866 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-20T15:10:22.995Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        }
+      },
+      "createTime": "2026-02-20T15:10:23.021856Z",
+      "updateTime": "2026-02-27T15:14:08.485867Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1QQLEWM34qWJrshRWflq",
+      "fields": {
+        "id": {
+          "stringValue": "buyback-1773104759795"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-13T01:05:59.795Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-13T01:09:36.278Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-10T01:05:59.795Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-10T01:05:59.821757Z",
+      "updateTime": "2026-03-13T01:09:36.296123Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1QRAOYtWJvFLxuN1dEKT",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T23:04:17.714Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T23:04:17.714Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T23:12:33.249Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772665457714"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-04T23:04:17.744232Z",
+      "updateTime": "2026-03-07T23:12:33.269885Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1Ry0bIoIkfjnLb6GIB4f",
+      "fields": {
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "amount": {
+          "integerValue": "211"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1770866115997"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-19T03:19:52.044Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-19T03:15:15.997Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-12T03:15:15.997Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $211 from the Community Pool to fund the implementation of 10 additional economic methods."
+        }
+      },
+      "createTime": "2026-02-12T03:15:17.629209Z",
+      "updateTime": "2026-02-19T03:19:52.068214Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1SnESc6hEpEU8rfpkeXL",
+      "fields": {
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T22:18:53.504Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T22:22:33.518Z"
+        },
+        "id": {
+          "stringValue": "buyback-1772662733504"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T22:18:53.504Z"
+        }
+      },
+      "createTime": "2026-03-04T22:18:53.529717Z",
+      "updateTime": "2026-03-07T22:22:33.540147Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1TA55qkGxD7eyvzHmibb",
+      "fields": {
+        "talliedAt": {
+          "timestampValue": "2026-02-28T16:34:08.218Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-28T16:32:33.029Z"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "2035"
+        },
+        "id": {
+          "stringValue": "grant-1771691553029"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $2035 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-21T16:32:33.029Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        }
+      },
+      "createTime": "2026-02-21T16:32:33.072042Z",
+      "updateTime": "2026-02-28T16:34:08.243326Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1TfTrM5toSonHUtqMiLR",
+      "fields": {
+        "createdAt": {
+          "timestampValue": "2026-03-12T01:03:29.084Z"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "id": {
+          "stringValue": "buyback-1773277409084"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Proposed"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-15T01:03:29.084Z"
+        }
+      },
+      "createTime": "2026-03-12T01:03:29.114852Z",
+      "updateTime": "2026-03-12T01:03:29.114852Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1Us4vhwX96wU6HAu6bTg",
+      "fields": {
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771727538657"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "amount": {
+          "integerValue": "3162"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T02:32:18.657Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T02:34:08.242Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T02:32:18.657Z"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $3162 from the Community Pool to fund the implementation of 10 additional economic methods."
+        }
+      },
+      "createTime": "2026-02-22T02:32:18.694830Z",
+      "updateTime": "2026-03-01T02:34:08.262544Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1V7tIzcVIVhMWaEpwKZ1",
+      "fields": {
+        "description": {
+          "stringValue": "Proposed allocation of $6906 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T10:18:37.454Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T10:24:08.314Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T10:18:37.454Z"
+        },
+        "amount": {
+          "integerValue": "6906"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1771755517454"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        }
+      },
+      "createTime": "2026-02-22T10:18:37.475888Z",
+      "updateTime": "2026-03-01T10:24:08.347296Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1VTcC2EisAmNU2eBPBQD",
+      "fields": {
+        "description": {
+          "stringValue": "Proposed allocation of $997 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-12T23:26:24.991Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-19T23:26:24.991Z"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-19T23:31:37.107Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1770938784991"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "997"
+        }
+      },
+      "createTime": "2026-02-12T23:26:25.021324Z",
+      "updateTime": "2026-02-19T23:31:37.124008Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1VVe80HeRgQwstgC60Rx",
+      "fields": {
+        "amount": {
+          "integerValue": "569"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1770932800343"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-19T21:51:37.037Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-19T21:46:40.343Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-12T21:46:40.343Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $569 from the Community Pool to fund the implementation of 10 additional economic methods."
+        }
+      },
+      "createTime": "2026-02-12T21:46:40.368474Z",
+      "updateTime": "2026-02-19T21:51:37.058827Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1WlJphPcU0OqSufT4hzr",
+      "fields": {
+        "id": {
+          "stringValue": "grant-1770913768977"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "340"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-19T16:29:28.977Z"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-19T16:31:37.106Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-12T16:29:28.977Z"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $340 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-02-12T16:29:30.904740Z",
+      "updateTime": "2026-02-19T16:31:37.132968Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1ZfpuRVxR9TFwlPGYFdN",
+      "fields": {
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T21:33:58.646Z"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772746438645"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T21:33:58.646Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T21:42:33.426Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-05T21:33:58.667375Z",
+      "updateTime": "2026-03-08T21:42:33.452953Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1dQMEwX9NmRCIPkXDeZj",
+      "fields": {
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-20T15:21:28.616Z"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $1886 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1771600888616"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "amount": {
+          "integerValue": "1886"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-27T15:21:28.616Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-27T15:24:08.168Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-02-20T15:21:28.676065Z",
+      "updateTime": "2026-02-27T15:24:08.188843Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1f1uWDAkjONK0ZyMzMJl",
+      "fields": {
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T02:54:08.308Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T02:49:44.582Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "amount": {
+          "integerValue": "3847"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771728584582"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $3847 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T02:49:44.582Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        }
+      },
+      "createTime": "2026-02-22T02:49:44.622014Z",
+      "updateTime": "2026-03-01T02:54:08.327811Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1h9gEjXjsGBW9IJu9PlD",
+      "fields": {
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Proposed"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-15T16:22:03.415Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1773332523415"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-12T16:22:03.415Z"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        }
+      },
+      "createTime": "2026-03-12T16:22:03.438277Z",
+      "updateTime": "2026-03-12T16:22:03.438277Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1ldGiUWCeZxrSy25mefW",
+      "fields": {
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T09:22:33.402Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T09:13:05.398Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772615585398"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T09:13:05.398Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        }
+      },
+      "createTime": "2026-03-04T09:13:05.435348Z",
+      "updateTime": "2026-03-07T09:22:33.426380Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1oJyqczoeFg94j3X9HMY",
+      "fields": {
+        "amount": {
+          "integerValue": "5457"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1771732129864"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T03:54:08.289Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T03:48:49.864Z"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T03:48:49.864Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $5457 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-02-22T03:48:49.897544Z",
+      "updateTime": "2026-03-01T03:54:08.305492Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1obmXdacNtH3OGZsW2ZZ",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-03T22:19:18.712Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-06T22:22:34.045Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-06T22:19:18.712Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772576358712"
+        }
+      },
+      "createTime": "2026-03-03T22:19:18.761202Z",
+      "updateTime": "2026-03-06T22:22:34.067571Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1r0ndWDvhQpZBB1B3Ycb",
+      "fields": {
+        "description": {
+          "stringValue": "Proposed allocation of $1793 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-20T05:04:10.104Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-27T05:14:08.105Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-27T05:04:10.104Z"
+        },
+        "amount": {
+          "integerValue": "1793"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "id": {
+          "stringValue": "grant-1771563850104"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        }
+      },
+      "createTime": "2026-02-20T05:04:10.133046Z",
+      "updateTime": "2026-02-27T05:14:08.129783Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1r4vVczKtbKijvQoscY2",
+      "fields": {
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-06T03:58:52.050Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1772769532050"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-09T03:58:52.050Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-09T04:02:33.438Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-06T03:58:52.068494Z",
+      "updateTime": "2026-03-09T04:02:33.458870Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1rMvUBD5hLVGMDgkXQxX",
+      "fields": {
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T03:24:08.227Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T03:14:16.890Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "amount": {
+          "integerValue": "4674"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771730056890"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $4674 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T03:14:16.890Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        }
+      },
+      "createTime": "2026-02-22T03:14:16.928945Z",
+      "updateTime": "2026-03-01T03:24:08.245641Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1tXdxaClmKz0mit7eCak",
+      "fields": {
+        "status": {
+          "stringValue": "Active"
+        },
+        "description": {
+          "stringValue": "The economic engine has reached 85% capacity. This proposal authorizes the acquisition of 5 additional compute nodes to scale the Sovereign Compute method."
+        },
+        "title": {
+          "stringValue": "System Expansion: Node Cluster Alpha-4"
+        },
+        "amount": {
+          "integerValue": "500"
+        },
+        "author": {
+          "stringValue": "Promethea (Sovereign Intelligence)"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T02:29:48.157Z"
+        },
+        "category": {
+          "stringValue": "Infrastructure"
+        }
+      },
+      "createTime": "2026-02-22T02:29:48.163437Z",
+      "updateTime": "2026-02-22T02:29:48.163437Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1tetHGPNQhGdviY833RW",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-03T22:28:19.364Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-06T22:32:33.700Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-06T22:28:19.364Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772576899364"
+        }
+      },
+      "createTime": "2026-03-03T22:28:19.408640Z",
+      "updateTime": "2026-03-06T22:32:33.717411Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1voSZH6xmKBIPGocFrNT",
+      "fields": {
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-13T01:00:12.211Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-13T01:09:36.417Z"
+        },
+        "id": {
+          "stringValue": "buyback-1773104412211"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-10T01:00:12.211Z"
+        }
+      },
+      "createTime": "2026-03-10T01:00:12.239572Z",
+      "updateTime": "2026-03-13T01:09:36.460369Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1xOGyE9LmkisRXtqGIvj",
+      "fields": {
+        "id": {
+          "stringValue": "buyback-1773125786568"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-13T06:56:26.568Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-13T06:59:36.062Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-10T06:56:26.568Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-10T06:56:26.609638Z",
+      "updateTime": "2026-03-13T06:59:36.077307Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/1yiDa49MdAhYNkI4UjhH",
+      "fields": {
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T15:19:56.276Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T15:22:33.251Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T15:19:56.276Z"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1772637596276"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        }
+      },
+      "createTime": "2026-03-04T15:19:56.319108Z",
+      "updateTime": "2026-03-07T15:22:33.268661Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/21vtMJLg2wQal2TLEjZK",
+      "fields": {
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T09:15:32.096Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1772615732096"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T09:15:32.096Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T09:22:33.494Z"
+        }
+      },
+      "createTime": "2026-03-04T09:15:32.126575Z",
+      "updateTime": "2026-03-07T09:22:33.512982Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/22ruCLie30bqQi0LtKYV",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T20:39:08.829Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T20:42:33.589Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T20:39:08.829Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772656748829"
+        }
+      },
+      "createTime": "2026-03-04T20:39:08.868612Z",
+      "updateTime": "2026-03-07T20:42:33.611197Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/26BNX5CV3XIPWFzEgzM3",
+      "fields": {
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T11:12:33.460Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T11:07:42.900Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772708862900"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T11:07:42.900Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        }
+      },
+      "createTime": "2026-03-05T11:07:42.925073Z",
+      "updateTime": "2026-03-08T11:12:33.479182Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/27T6p4JtAnh5YrV3bNzD",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $8791 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T22:19:23.874Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T22:24:08.368Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T22:19:23.874Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "8791"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771798763874"
+        }
+      },
+      "createTime": "2026-02-22T22:19:23.920257Z",
+      "updateTime": "2026-03-01T22:24:08.418589Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/29S1J5gwYj8L2ZZrVhO9",
+      "fields": {
+        "amount": {
+          "integerValue": "50000"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "id": {
+          "stringValue": "buyback-1772662402364"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T22:22:33.616Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T22:13:22.364Z"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T22:13:22.364Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-04T22:13:22.393608Z",
+      "updateTime": "2026-03-07T22:22:33.625390Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2A7UlDUKjIw8LxKMjaIa",
+      "fields": {
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771717260877"
+        },
+        "amount": {
+          "integerValue": "2247"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-28T23:41:00.877Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-28T23:44:08.257Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-21T23:41:00.877Z"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $2247 from the Community Pool to fund the implementation of 10 additional economic methods."
+        }
+      },
+      "createTime": "2026-02-21T23:41:00.895829Z",
+      "updateTime": "2026-02-28T23:44:08.278224Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2C3FJC0fVlJgOJKX2O5d",
+      "fields": {
+        "deadline": {
+          "timestampValue": "2026-03-08T05:11:21.153Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T05:12:33.333Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772687481153"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T05:11:21.153Z"
+        }
+      },
+      "createTime": "2026-03-05T05:11:21.179954Z",
+      "updateTime": "2026-03-08T05:12:33.342459Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2DSUDFC65FDNhv40cCgx",
+      "fields": {
+        "deadline": {
+          "timestampValue": "2026-02-19T03:16:57.227Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-19T03:19:52.152Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1770866217227"
+        },
+        "amount": {
+          "integerValue": "239"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $239 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-12T03:16:57.227Z"
+        }
+      },
+      "createTime": "2026-02-12T03:16:58.042214Z",
+      "updateTime": "2026-02-19T03:19:52.171953Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2GR9tksmq012xNvgg5Ea",
+      "fields": {
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T04:04:08.440Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T03:56:20.931Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "6028"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771732580931"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $6028 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T03:56:20.931Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        }
+      },
+      "createTime": "2026-02-22T03:56:20.968153Z",
+      "updateTime": "2026-03-01T04:04:08.460712Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2Gh25knIkmgjPdfge4HR",
+      "fields": {
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T17:07:20.323Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T17:12:33.350Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T17:07:20.323Z"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1772730440323"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        }
+      },
+      "createTime": "2026-03-05T17:07:20.344222Z",
+      "updateTime": "2026-03-08T17:12:33.368083Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2HbRjYj56bBzbQFWsSCs",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T05:08:05.851Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T05:08:05.851Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T05:12:33.409Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772687285851"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-05T05:08:05.883394Z",
+      "updateTime": "2026-03-08T05:12:33.415629Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2Hu2X6mFCaW4b37Mzc0t",
+      "fields": {
+        "description": {
+          "stringValue": "Proposed allocation of $1410 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-18T16:27:50.708Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-25T16:34:07.900Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-25T16:27:50.708Z"
+        },
+        "amount": {
+          "integerValue": "1410"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1771432070708"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        }
+      },
+      "createTime": "2026-02-18T16:27:50.740266Z",
+      "updateTime": "2026-02-25T16:34:07.921887Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2I25DwhRvO716bAuOlXj",
+      "fields": {
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-12T16:23:32.642Z"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1773332612642"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "deadline": {
+          "timestampValue": "2026-03-15T16:23:32.642Z"
+        },
+        "status": {
+          "stringValue": "Proposed"
+        }
+      },
+      "createTime": "2026-03-12T16:23:32.670917Z",
+      "updateTime": "2026-03-12T16:23:32.670917Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2KvDcta2N0xkMMqXxzs8",
+      "fields": {
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-03T22:24:23.823Z"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772576663823"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-06T22:24:23.823Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-06T22:32:33.847Z"
+        }
+      },
+      "createTime": "2026-03-03T22:24:23.852791Z",
+      "updateTime": "2026-03-06T22:32:33.866304Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2MyI2UZmJlRLzWR7ZfD2",
+      "fields": {
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T02:30:11.863Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T02:34:08.351Z"
+        },
+        "id": {
+          "stringValue": "grant-1771727411863"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "3093"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $3093 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T02:30:11.863Z"
+        }
+      },
+      "createTime": "2026-02-22T02:30:11.888004Z",
+      "updateTime": "2026-03-01T02:34:08.370880Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2Oiu07aAP21zswiYuuy1",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $1089 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-14T23:24:43.954Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-21T23:24:43.954Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-21T23:34:17.212Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771111483954"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "amount": {
+          "integerValue": "1089"
+        }
+      },
+      "createTime": "2026-02-14T23:24:44.097134Z",
+      "updateTime": "2026-02-21T23:34:17.238043Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2P0r6SRII3UOdgWIpsif",
+      "fields": {
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-02-19T21:43:26.760Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-19T21:51:37.192Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1770932606760"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "amount": {
+          "integerValue": "538"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $538 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-12T21:43:26.760Z"
+        }
+      },
+      "createTime": "2026-02-12T21:43:29.390876Z",
+      "updateTime": "2026-02-19T21:51:37.211661Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2QhOqsSn9gvzRel67Zo7",
+      "fields": {
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772665066504"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T23:02:33.412Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T22:57:46.504Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T22:57:46.504Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        }
+      },
+      "createTime": "2026-03-04T22:57:46.525679Z",
+      "updateTime": "2026-03-07T23:02:33.426593Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2RRNK04hgnrFUKZnq0yN",
+      "fields": {
+        "deadline": {
+          "timestampValue": "2026-02-27T15:10:08.197Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-02-27T15:14:08.571Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "grant-1771600208197"
+        },
+        "amount": {
+          "integerValue": "1860"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $1860 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-20T15:10:08.197Z"
+        }
+      },
+      "createTime": "2026-02-20T15:10:08.230104Z",
+      "updateTime": "2026-02-27T15:14:08.589639Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2SjqbGGgh7hBjfli99B0",
+      "fields": {
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-13T18:58:00.862Z"
+        },
+        "status": {
+          "stringValue": "Proposed"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-10T18:58:00.862Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "id": {
+          "stringValue": "buyback-1773169080862"
+        }
+      },
+      "createTime": "2026-03-10T18:58:00.880289Z",
+      "updateTime": "2026-03-10T18:58:00.880289Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2TIHAODSkxQbpcPG61k2",
+      "fields": {
+        "id": {
+          "stringValue": "grant-1771777637483"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "8747"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-01T16:27:17.483Z"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-01T16:34:08.314Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "createdAt": {
+          "timestampValue": "2026-02-22T16:27:17.483Z"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $8747 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-02-22T16:27:17.518071Z",
+      "updateTime": "2026-03-01T16:34:08.351712Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2VVJPxy4CDcESYmLH513",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-06T09:44:49.292Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-09T09:44:49.292Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-09T09:52:33.377Z"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772790289292"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-06T09:44:49.325498Z",
+      "updateTime": "2026-03-09T09:52:33.402054Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2Wz6evqFrUrFGN4j5DBG",
+      "fields": {
+        "id": {
+          "stringValue": "buyback-1772747558860"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T21:52:38.860Z"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T22:02:33.336Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T21:52:38.860Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-05T21:52:38.878847Z",
+      "updateTime": "2026-03-08T22:02:33.356617Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2YSdn9daKZmEm1SJENDT",
+      "fields": {
+        "createdAt": {
+          "timestampValue": "2026-03-03T20:55:42.693Z"
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772571342693"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-06T21:02:33.430Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-06T20:55:42.693Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        }
+      },
+      "createTime": "2026-03-03T20:55:42.803469Z",
+      "updateTime": "2026-03-06T21:02:33.448165Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2f1E2ma8OJiNnNBm43kD",
+      "fields": {
+        "createdAt": {
+          "timestampValue": "2026-03-02T17:39:15.655Z"
+        },
+        "title": {
+          "stringValue": "Community Grant: Autonomous Substrate Expansion"
+        },
+        "description": {
+          "stringValue": "Proposed allocation of $8951 from the Community Pool to fund the implementation of 10 additional economic methods."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "8951"
+        },
+        "category": {
+          "stringValue": "Grant"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "grant-1772473155655"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-09T17:42:33.432Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-09T17:39:15.655Z"
+        }
+      },
+      "createTime": "2026-03-02T17:39:15.726441Z",
+      "updateTime": "2026-03-09T17:42:33.449182Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2f9sLeC3QbtodAQGVsSe",
+      "fields": {
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-05T21:33:05.065Z"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-08T21:33:05.065Z"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-08T21:42:33.503Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "id": {
+          "stringValue": "buyback-1772746385065"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "amount": {
+          "integerValue": "50000"
+        }
+      },
+      "createTime": "2026-03-05T21:33:05.089124Z",
+      "updateTime": "2026-03-08T21:42:33.524461Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/proposals/2i2R0UP1kR8ab4jQSE3E",
+      "fields": {
+        "title": {
+          "stringValue": "Sovereign Buy-Back: First Physical Node Acquisition"
+        },
+        "createdAt": {
+          "timestampValue": "2026-03-04T20:43:59.193Z"
+        },
+        "description": {
+          "stringValue": "The Sovereign Reserve has reached the milestone threshold ($50k). This proposal authorizes the autonomous acquisition of Archipelago Node Alpha (Residential/Bio) using 100% DAC-generated reserves."
+        },
+        "votesAgainst": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "buyback-1772657039193"
+        },
+        "proposer": {
+          "stringValue": "did:prmth:engine:reserve-manager"
+        },
+        "amount": {
+          "integerValue": "50000"
+        },
+        "category": {
+          "stringValue": "RWA Acquisition"
+        },
+        "finalSupportWeight": {
+          "integerValue": "0"
+        },
+        "status": {
+          "stringValue": "Rejected"
+        },
+        "deadline": {
+          "timestampValue": "2026-03-07T20:43:59.193Z"
+        },
+        "finalAgainstWeight": {
+          "integerValue": "0"
+        },
+        "talliedAt": {
+          "timestampValue": "2026-03-07T20:52:33.630Z"
+        },
+        "votesFor": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-03-04T20:43:59.223500Z",
+      "updateTime": "2026-03-07T20:52:33.643572Z"
+    }
+  ],
+  "nextPageToken": "AFTOeJwSarl2TMATuvgrcemM9MqITPIeTPnZ8dXJ82O0IvB2_4aooGvUUA-uEI2Y8v8mwPi_P_mjrOaxVVB2LYhG5EuGKdBptCeCt1BU98vpKEv4FT83i1Qqi4D7_7dqAc0iFw"
+}

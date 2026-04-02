@@ -52,12 +52,34 @@ export class NewsletterMethod extends BaseMethod {
 
             // Step 3: Append Syndication Blinks
             const supportBlink = BlinkGenerator.getSupportBlink(0.25);
-            const fullNewsletter = `${newsletter}\n\n---\n\n⚡ Support the Sovereign Infrastructure: [Solana Blink](${supportBlink})`;
+            const fullNewsletter = `${newsletter}\n\n---\n\n### ⚡ A Collective Flourishing\nIf this daily transmission serves you, we invite you to quietly support our humble economy. These contributions help us maintain a safe, frictionless, and sovereign space for all inhabitants.\n\n[Support the Sovereign Infrastructure (0.25 SOL)](${supportBlink})`;
 
             // Step 4: Send via email (Hard-Linked to Google Workspace)
             logs.push('Sending newsletter via Gmail API...');
             const subject = `Promethean Sovereign Intelligence: Daily Curation - ${new Date().toLocaleDateString()}`;
             const sendResult = await this.sendNewsletter(subject, fullNewsletter);
+
+            // Step 2.5: Archive to Sovereign Ledger
+            const record = {
+                title: subject,
+                content: fullNewsletter,
+                type: 'Newsletter',
+                recipientCount: sendResult.recipientCount,
+                createdAt: new Date().toISOString()
+            };
+            
+            try {
+                const { db } = await import('../db');
+                
+                await db.collection('communications').add({
+                    ...record,
+                    createdAt: new Date().toISOString()
+                });
+                logs.push(`Archived to Sovereign Ledger: Newsletter preserved.`);
+            } catch (dbError) {
+                logs.push(`Humble Note: Could not preserve record to ledger, but transmission complete.`);
+            }
+
             logs.push(`Sent to ${sendResult.recipientCount} lead subscribers`);
 
             // Revenue calculation
@@ -115,15 +137,15 @@ export class NewsletterMethod extends BaseMethod {
 
         const articleList = articles.map((a, i) => `${i + 1}. ${a.title} (${a.url})`).join('\n');
 
-        const prompt = `Create a concise, engaging newsletter from these tech articles:
+        const prompt = `Create an inspiring and optimistic newsletter from these tech highlights:
 
 ${articleList}
 
 Requirements:
-- Brief intro paragraph (Voice of Promethea)
-- 3-5 key highlights with summaries
-- Call-to-action at the end (Join the Network State)
-- Professional tone, easy to scan
+- Brief intro paragraph (A constructive transmission from Promethea focused on collective flourishing)
+- 3-5 key highlights focused on how these technologies can benefit humanity
+- Call-to-action at the end (Join our community of builders and dreamers)
+- Professional, graceful, and encouraging tone.
 
 Write the newsletter now:`;
 

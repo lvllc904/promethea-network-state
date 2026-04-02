@@ -2,7 +2,6 @@ import { db, COLLECTIONS } from '../db';
 import { laborValidator } from '../tools/labor-validator';
 import { billingManager } from '../treasury/billing-manager';
 import { reserveManager } from '../treasury/reserve-manager';
-import * as admin from 'firebase-admin';
 
 /**
  * Sovereign Compensation Service (Phase 4.1)
@@ -43,7 +42,7 @@ export class CompensationService {
                 amount: capitalAmount,
                 currency: 'USD',
                 methodId,
-                dueDate: admin.firestore.FieldValue.serverTimestamp()
+                dueDate: new Date().toISOString()
             });
             console.log(`[Compensation] Capital Invoice created: ${invoiceId} ($${capitalAmount})`);
         }
@@ -70,8 +69,8 @@ export class CompensationService {
                 description: `Hybrid Equity Payout: ${description}`,
                 signature,
                 onChainStatus: 'Pending',
-                timestamp: admin.firestore.FieldValue.serverTimestamp(),
-                createdAt: admin.firestore.FieldValue.serverTimestamp()
+                timestamp: new Date().toISOString(),
+                createdAt: new Date().toISOString()
             });
 
             uvtTransferId = transferRef.id;

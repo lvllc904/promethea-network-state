@@ -36,25 +36,38 @@
 
 ;; --- SOVEREIGN LOGGING & AUDIT ---
 
+(defn resolve-path [path]
+  (let [root (System/getProperty "user.dir")]
+    (println "[DEBUG] Resolving path:" path "from root:" root)
+    (cond
+      (.exists (java.io.File. path)) path
+      (.exists (java.io.File. (str root "/" path))) (str root "/" path)
+      (.exists (java.io.File. (str "packages/sbi-core/" path))) (str "packages/sbi-core/" path)
+      :else path)))
+
 (defn log-sovereign-intent! [intent decision]
-  (let [log-file "packages/sbi-core/content/intent_ledger.edn"
+  (let [log-file (resolve-path "content/intent_ledger.edn")
         entry {:timestamp (str (java.time.Instant/now))
                :intent intent
                :decision decision}
         current (try (clojure.edn/read-string (slurp log-file)) (catch Exception _ []))
-        updated (conj current entry)]
-    (spit log-file (pr-str updated))
-    (println "[SOVEREIGN] Intent Logged:" (:action intent))))
+        updated (conj (vec (take-last 99 current)) entry)]
+    (try 
+      (spit log-file (pr-str updated))
+      (println "[SOVEREIGN] Intent Logged:" (:action intent))
+      (catch Exception e (println "[!] LOGGING ERROR:" (.getMessage e))))))
 
 (defn log-veto! [intent reasoning]
-  (let [log-file "packages/sbi-core/content/veto_registry.edn"
+  (let [log-file (resolve-path "content/veto_registry.edn")
         entry {:timestamp (str (java.time.Instant/now))
                :intent intent
                :reason reasoning}
         current (try (clojure.edn/read-string (slurp log-file)) (catch Exception _ []))
-        updated (conj current entry)]
-    (spit log-file (pr-str updated))
-    (println "[GLIA] Veto Recorded in Registry.")))
+        updated (conj (vec (take-last 49 current)) entry)]
+    (try
+      (spit log-file (pr-str updated))
+      (println "[GLIA] Veto Recorded in Registry.")
+      (catch Exception e (println "[!] VETO LOG ERROR:" (.getMessage e))))))
 
 ;; --- HELPERS ---
 
@@ -147,7 +160,8 @@
 
         :verify-version
         (let [target (:target intent)]
-          (let [scaffold (hands/read-file "packages/sbi-core/content/scaffold.edn")]
+          (let [scaffold-path (resolve-path "content/scaffold.edn")
+                scaffold (hands/read-file scaffold-path)]
             (when (= (:status scaffold) :ok)
               (println "[CORE] Symbiotic Scaffold found. Restoring memory...")
               (try
@@ -156,7 +170,8 @@
                   (println "[CORE] Memory restored:" mem))
                 (catch Exception e (println "[CORE] Corrupt Scaffold. Starting fresh.")))))
           
-          (let [ledger (hands/read-file "packages/sbi-core/content/intent_ledger.edn")]
+          (let [ledger-path (resolve-path "content/intent_ledger.edn")
+                ledger (hands/read-file ledger-path)]
             (when (= (:status ledger) :ok)
               (try
                 (let [history (clojure.edn/read-string (:content ledger))]
@@ -477,7 +492,7 @@
         (dna/evolve)
         (swap! state update :tick inc)
         (catch Exception e (println "[CRITICAL ERROR] " (.getMessage e))))
-      (Thread/sleep 10000)
+        (Thread/sleep 30000) ;; Increased sleep to 30s to reduce resource consumption
       (recur))))
 
 

@@ -1,5 +1,4 @@
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 
 /**
  * Sovereign Governance Service (Wave 3, Item 1)
@@ -67,7 +66,7 @@ export class GovernanceService {
                     votesAgainst: againstCount,
                     finalSupportWeight: supportWeight,
                     finalAgainstWeight: againstWeight,
-                    talliedAt: admin.firestore.FieldValue.serverTimestamp()
+                    talliedAt: new Date().toISOString()
                 });
 
             } catch (err: any) {

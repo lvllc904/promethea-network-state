@@ -1,0 +1,210 @@
+{
+  "documents": [
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/citizens/50yJx7Dy2KXmNTz5AOAD4gZpVwI2",
+      "fields": {
+        "decentralizedId": {
+          "stringValue": "did:prmth:0xA701330e2a4FE0b533b572bFc3A6a4a3F3c52B96"
+        },
+        "skills": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "Founding Member"
+              }
+            ]
+          }
+        },
+        "id": {
+          "stringValue": "50yJx7Dy2KXmNTz5AOAD4gZpVwI2"
+        },
+        "contributionScore": {
+          "integerValue": "0"
+        },
+        "personhoodScore": {
+          "integerValue": "1"
+        },
+        "proofOfUniqueness": {
+          "mapValue": {
+            "fields": {
+              "issuer": {
+                "stringValue": "did:prmth:identity-oracle.promethea.network"
+              },
+              "issuanceDate": {
+                "stringValue": "2025-11-02T07:28:20.459Z"
+              }
+            }
+          }
+        },
+        "reputationScore": {
+          "integerValue": "100"
+        },
+        "isGovIdVerified": {
+          "booleanValue": false
+        }
+      },
+      "createTime": "2025-11-02T07:28:21.321313Z",
+      "updateTime": "2025-11-02T07:28:21.321313Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/citizens/citizen-alpha",
+      "fields": {
+        "governanceTokens": {
+          "integerValue": "200"
+        },
+        "uvtBalance": {
+          "integerValue": "200"
+        },
+        "reputation": {
+          "integerValue": "50"
+        },
+        "displayName": {
+          "stringValue": "Alpha Citizen"
+        }
+      },
+      "createTime": "2026-01-23T22:41:03.990049Z",
+      "updateTime": "2026-01-23T22:41:05.396116Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/citizens/founding-citizen-alpha",
+      "fields": {
+        "governanceTokens": {
+          "integerValue": "1000"
+        },
+        "decentralizedId": {
+          "stringValue": "did:prmth:sol:ec27a963-7b5e-4581-9663-6594a9be969e"
+        },
+        "createdAt": {
+          "timestampValue": "2026-01-21T17:08:50.087Z"
+        },
+        "contributionScore": {
+          "integerValue": "500"
+        },
+        "personhoodScore": {
+          "integerValue": "100"
+        },
+        "email": {
+          "stringValue": "steward@promethea.network"
+        },
+        "isGovIdVerified": {
+          "booleanValue": true
+        },
+        "proofOfUniqueness": {
+          "mapValue": {
+            "fields": {
+              "issuanceDate": {
+                "stringValue": "2026-01-21T17:08:48.976Z"
+              },
+              "issuer": {
+                "stringValue": "Promethea Root Authority"
+              }
+            }
+          }
+        },
+        "reputation": {
+          "integerValue": "100"
+        },
+        "reputationScore": {
+          "integerValue": "95"
+        },
+        "uid": {
+          "stringValue": "founding-citizen-alpha"
+        },
+        "displayName": {
+          "stringValue": "Founding Steward"
+        },
+        "skills": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "Sovereign Governance"
+              },
+              {
+                "stringValue": "Economic Architecture"
+              },
+              {
+                "stringValue": "AI Symbiosis"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-01-21T17:08:50.145210Z",
+      "updateTime": "2026-01-21T17:08:50.145210Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/citizens/gYAE2cTeclceelLebltcwaaQjur1",
+      "fields": {
+        "decentralizedId": {
+          "stringValue": "did:prmth:gYAE2cTeclceelLebltcwaaQjur1"
+        },
+        "skills": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "Founding Member"
+              }
+            ]
+          }
+        },
+        "id": {
+          "stringValue": "gYAE2cTeclceelLebltcwaaQjur1"
+        },
+        "contributionScore": {
+          "integerValue": "0"
+        },
+        "personhoodScore": {
+          "integerValue": "1"
+        },
+        "reputationScore": {
+          "integerValue": "100"
+        }
+      },
+      "createTime": "2025-10-09T20:03:35.644614Z",
+      "updateTime": "2025-10-09T20:03:35.644614Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/citizens/gkhTgAtoMGY5yRwO0LECX6Rb6Ws1",
+      "fields": {
+        "decentralizedId": {
+          "stringValue": "did:prmth:0x175Fa220F257093F15168711551761a488018A56"
+        },
+        "skills": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "Founding Member"
+              }
+            ]
+          }
+        },
+        "contributionScore": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "gkhTgAtoMGY5yRwO0LECX6Rb6Ws1"
+        },
+        "personhoodScore": {
+          "integerValue": "1"
+        },
+        "reputationScore": {
+          "integerValue": "100"
+        },
+        "proofOfUniqueness": {
+          "mapValue": {
+            "fields": {
+              "issuer": {
+                "stringValue": "Promethea Identity Oracle"
+              },
+              "issuanceDate": {
+                "stringValue": "2025-10-16T19:27:51.599Z"
+              }
+            }
+          }
+        }
+      },
+      "createTime": "2025-10-16T19:27:53.382582Z",
+      "updateTime": "2025-10-16T19:27:53.382582Z"
+    }
+  ]
+}

@@ -2,7 +2,6 @@ import 'dotenv/config';
 import { db, COLLECTIONS } from '../db';
 import { governanceService } from '../services/governance-service';
 import { proposalExecutor } from '../services/proposal-executor';
-import * as admin from 'firebase-admin';
 
 async function testGovernanceLoop() {
     console.log('--- Governance Loop Verification ---');

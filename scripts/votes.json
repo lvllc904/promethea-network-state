@@ -1,0 +1,80 @@
+{
+  "documents": [
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/votes/test-gov-1771467324632_citizenA",
+      "fields": {
+        "support": {
+          "booleanValue": true
+        },
+        "proposalId": {
+          "stringValue": "test-gov-1771467324632"
+        },
+        "weight": {
+          "doubleValue": 10.04987562112089
+        },
+        "voter": {
+          "stringValue": "citizenA"
+        }
+      },
+      "createTime": "2026-02-19T02:15:26.797314Z",
+      "updateTime": "2026-02-19T02:15:26.797314Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/votes/test-gov-1771467324632_citizenB",
+      "fields": {
+        "support": {
+          "booleanValue": false
+        },
+        "voter": {
+          "stringValue": "citizenB"
+        },
+        "proposalId": {
+          "stringValue": "test-gov-1771467324632"
+        },
+        "weight": {
+          "integerValue": "1"
+        }
+      },
+      "createTime": "2026-02-19T02:15:27.060711Z",
+      "updateTime": "2026-02-19T02:15:27.060711Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/votes/test-gov-1771467346529_citizenA",
+      "fields": {
+        "support": {
+          "booleanValue": true
+        },
+        "proposalId": {
+          "stringValue": "test-gov-1771467346529"
+        },
+        "weight": {
+          "doubleValue": 10.04987562112089
+        },
+        "voter": {
+          "stringValue": "citizenA"
+        }
+      },
+      "createTime": "2026-02-19T02:15:48.624739Z",
+      "updateTime": "2026-02-19T02:15:48.624739Z"
+    },
+    {
+      "name": "projects/studio-9105849211-9ba48/databases/(default)/documents/votes/test-gov-1771467346529_citizenB",
+      "fields": {
+        "voter": {
+          "stringValue": "citizenB"
+        },
+        "weight": {
+          "integerValue": "1"
+        },
+        "proposalId": {
+          "stringValue": "test-gov-1771467346529"
+        },
+        "support": {
+          "booleanValue": false
+        }
+      },
+      "createTime": "2026-02-19T02:15:48.855125Z",
+      "updateTime": "2026-02-19T02:15:48.855125Z"
+    }
+  ]
+}

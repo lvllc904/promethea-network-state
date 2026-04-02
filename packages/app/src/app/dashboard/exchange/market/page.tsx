@@ -13,6 +13,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@promethea/ui';
+import { LedgerValue, RealityBadge } from '@promethea/components';
 import { Badge } from '@promethea/ui';
 import { Button } from '@promethea/ui';
 import { Skeleton } from '@promethea/ui';
@@ -61,13 +62,17 @@ export default function MarketplacePage() {
     const marketQuery = useMemoFirebase(
         () => (firestore ? query(
             collection(firestore, 'marketplace'),
-            where('status', '==', 'Available'),
             orderBy('createdAt', 'desc')
         ) : null) as unknown as Query<MarketplaceItem> | null,
         [firestore]
     );
 
-    const { data: items, isLoading } = useCollection<MarketplaceItem>(marketQuery as any);
+    const { data: rawItems, isLoading } = useCollection<MarketplaceItem>(marketQuery as any);
+
+    const items = React.useMemo(() => {
+        if (!rawItems) return [];
+        return rawItems.filter(item => item.status === 'Available');
+    }, [rawItems]);
 
     const [searchQuery, setSearchQuery] = React.useState('');
     const [isInvestorMode, setIsInvestorMode] = React.useState(false);
@@ -275,7 +280,10 @@ export default function MarketplacePage() {
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <span className="opacity-60">TYPE:</span>
-                                                    <Badge variant="outline" className="text-[10px] border-green-900 text-green-400">{item.uvxType || 'STANDARD'}</Badge>
+                                                    <div className="flex items-center gap-2">
+                                                        <Badge variant="outline" className="text-[10px] border-green-900 text-green-400">{item.uvxType || 'STANDARD'}</Badge>
+                                                        <RealityBadge state="SIMULATED" size="sm" showLabel={false} />
+                                                    </div>
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <span className="opacity-60">TIER:</span>
@@ -283,7 +291,7 @@ export default function MarketplacePage() {
                                                 </div>
                                                 <div className="flex justify-between py-2 bg-green-900/10 px-1">
                                                     <span className="text-white font-bold">VALUATION:</span>
-                                                    <span className="text-green-400">${item.price.toFixed(2)}</span>
+                                                    <LedgerValue value={item.price} isSimulated={true} className="text-green-400" />
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <span className="opacity-60">RISK_PREMIUM:</span>
@@ -326,7 +334,10 @@ export default function MarketplacePage() {
                                                 )}
                                                 <CardHeader className="pb-2">
                                                     <div className="flex justify-between items-start">
-                                                        <CardTitle className="text-lg font-headline group-hover:text-primary transition-colors">{item.title}</CardTitle>
+                                                        <div className="flex items-center gap-2">
+                                                            <CardTitle className="text-lg font-headline group-hover:text-primary transition-colors">{item.title}</CardTitle>
+                                                            <RealityBadge state="SIMULATED" size="sm" showLabel={false} />
+                                                        </div>
                                                     </div>
                                                     <CardDescription className="line-clamp-2 mt-1">{item.description}</CardDescription>
                                                 </CardHeader>
@@ -334,15 +345,11 @@ export default function MarketplacePage() {
                                                     <div className="flex justify-between items-center mb-6">
                                                         <div className="flex flex-col">
                                                             <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Sovereign Price</span>
-                                                            <span className="text-xl font-mono font-bold text-primary">
-                                                                ${item.price.toFixed(2)}
-                                                            </span>
+                                                            <LedgerValue value={item.price} isSimulated={true} className="text-xl font-mono font-bold text-primary" />
                                                         </div>
-                                                        <div className="text-right flex flex-col">
-                                                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground text-right">Settlement</span>
-                                                            <span className="text-xs font-mono font-medium flex items-center gap-1">
-                                                                <ShieldCheck className="w-3 h-3 text-green-500" /> {item.status === 'Available' ? 'ACTIVE SIGNAL' : item.status.toUpperCase()}
-                                                            </span>
+                                                        <div className="text-right flex flex-col items-end gap-1">
+                                                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Settlement</span>
+                                                            <RealityBadge state="SIMULATED" showLabel={true} />
                                                         </div>
                                                     </div>
                                                     {item.barterAllowed && (

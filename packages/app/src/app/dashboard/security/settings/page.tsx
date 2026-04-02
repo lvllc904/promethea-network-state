@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Button, Badge, Skeleton } from '@promethea/ui';
 import { Settings, Shield, User, Globe, Bell, Zap, Copy, Key, UserCheck, EyeOff, ShieldAlert, Cpu } from 'lucide-react';
 import { useFirestore, useUser, useDoc } from '@promethea/firebase';
@@ -10,9 +10,12 @@ import { Citizen } from '@promethea/lib';
 export default function SecuritySettingsPage() {
     const firestore = useFirestore();
     const { user } = useUser();
-    const { data: citizen, isLoading } = useDoc<Citizen>(
-        firestore && user?.uid && !user.isAnonymous ? doc(firestore, 'citizens', user.uid) as any : null
-    );
+    
+    const docRef = useMemo(() => {
+        return firestore && user?.uid && !user.isAnonymous ? doc(firestore, 'citizens', user.uid) as any : null;
+    }, [firestore, user?.uid, user?.isAnonymous]);
+
+    const { data: citizen, isLoading } = useDoc<Citizen>(docRef);
 
     const [isUpdating, setIsUpdating] = React.useState(false);
 

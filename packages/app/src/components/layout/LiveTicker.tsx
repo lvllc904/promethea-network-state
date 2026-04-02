@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { TrendingUp, TrendingDown, Activity, Brain, Shield, Zap } from 'lucide-react';
 import { useFirestore, useDoc } from '@promethea/firebase';
 import { doc } from 'firebase/firestore';
+import { RealityBadge } from '@promethea/components';
 
 interface TickerData {
     symbol: string;
@@ -118,17 +119,24 @@ export function LiveTicker() {
                         )}
 
                         {/* Financial Ticker */}
-                        {[...tickerData, ...tickerData].map((item, idx) => (
-                            <div key={idx} className="flex flex-row items-center gap-1.5 font-mono text-xs hover:bg-muted/50 px-2 py-0.5 rounded transition-colors cursor-default">
-                                <span className="font-semibold text-muted-foreground">{item.symbol}</span>
-                                <span className="font-bold">${item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                                <span className={`flex items-center text-[10px] ${item.change24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                    {item.change24h >= 0 ? <TrendingUp className="w-2.5 h-2.5 mr-0.5" /> : <TrendingDown className="w-2.5 h-2.5 mr-0.5" />}
-                                    {Math.abs(item.change24h).toFixed(2)}%
-                                </span>
-                                <span className="text-muted-foreground/30 mx-2">|</span>
-                            </div>
-                        ))}
+                        {[...tickerData, ...tickerData].map((item, idx) => {
+                            const isSimulated = item.symbol === 'UVT';
+                            return (
+                                <div key={idx} className={`flex flex-row items-center gap-1.5 font-mono text-xs hover:bg-muted/50 px-2 py-0.5 rounded transition-colors cursor-default ${isSimulated ? 'bg-amber-500/5' : ''}`}>
+                                    <span className={`font-semibold ${isSimulated ? 'text-amber-500' : 'text-muted-foreground'}`}>{item.symbol}</span>
+                                    <span className={`font-bold ${isSimulated ? 'text-amber-500' : ''}`}>${item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                    {isSimulated ? (
+                                        <RealityBadge state="SIMULATED" size="sm" showLabel={false} className="ml-1" />
+                                    ) : (
+                                        <span className={`flex items-center text-[10px] ${item.change24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                            {item.change24h >= 0 ? <TrendingUp className="w-2.5 h-2.5 mr-0.5" /> : <TrendingDown className="w-2.5 h-2.5 mr-0.5" />}
+                                            {Math.abs(item.change24h).toFixed(2)}%
+                                        </span>
+                                    )}
+                                    <span className="text-muted-foreground/30 mx-2">|</span>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

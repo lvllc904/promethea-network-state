@@ -1,6 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { DocumentReference, onSnapshot, getDoc } from 'firebase/firestore';
+import { DocumentReference, onSnapshot } from 'firebase/firestore';
+
+const ENGINE_URL = process.env.NEXT_PUBLIC_ENGINE_URL || process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://localhost:8080';
+const IS_SOVEREIGN = process.env.NEXT_PUBLIC_DISABLE_FIREBASE === 'true';
 
 export function useDoc<T>(ref: DocumentReference | null) {
     const [data, setData] = useState<T | null>(null);
@@ -14,6 +17,26 @@ export function useDoc<T>(ref: DocumentReference | null) {
         }
 
         setIsLoading(true);
+
+        if (IS_SOVEREIGN) {
+            const collectionPath = (ref as any)._path?.segments?.[0] || 'unknown';
+            const docId = (ref as any)._path?.segments?.[1] || 'unknown';
+            console.log(`[Sovereign] Redirecting doc ${collectionPath}/${docId} to Engine API...`);
+            
+            fetch(`${ENGINE_URL}/api/${collectionPath}/${docId}`)
+                .then(res => res.json())
+                .then(docData => {
+                    setData(docData ? { ...docData, id: docId } as T : null);
+                    setIsLoading(false);
+                })
+                .catch(err => {
+                    console.error('Sovereign Doc Fetch Error:', err);
+                    setError(err);
+                    setIsLoading(false);
+                });
+            return;
+        }
+
         const unsubscribe = onSnapshot(
             ref,
             (doc) => {
@@ -31,7 +54,9 @@ export function useDoc<T>(ref: DocumentReference | null) {
             }
         );
 
-        return () => unsubscribe();
+        return () => {
+            if (unsubscribe) unsubscribe();
+        };
     }, [ref]);
 
     return { data, isLoading, error };

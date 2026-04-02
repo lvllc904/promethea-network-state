@@ -1,5 +1,4 @@
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 
 /**
  * Sovereign Intelligence Service (Phase 10)
@@ -23,7 +22,7 @@ export class SovereignIntelligenceService {
     async ingest(insight: Omit<IntelligenceInsight, 'timestamp'>): Promise<void> {
         await db.collection('sovereign_intelligence').add({
             ...insight,
-            timestamp: admin.firestore.FieldValue.serverTimestamp()
+            timestamp: new Date().toISOString()
         });
 
         console.log(`[Intelligence] New ${insight.category} insight ingested: ${insight.summary.substring(0, 50)}...`);

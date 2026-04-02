@@ -1,5 +1,4 @@
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 
 /**
  * Sovereign Marketplace Service (Phase 3.5)
@@ -38,7 +37,7 @@ export class MarketplaceService {
         const itemRef = await db.collection('marketplace').add({
             ...item,
             status: 'Available',
-            createdAt: admin.firestore.FieldValue.serverTimestamp()
+            createdAt: new Date().toISOString()
         });
 
         console.log(`[Marketplace] New item listed: ${item.title} ($${item.price})`);
@@ -51,7 +50,7 @@ export class MarketplaceService {
     async markAsSold(itemId: string): Promise<void> {
         await db.collection('marketplace').doc(itemId).update({
             status: 'Sold',
-            soldAt: admin.firestore.FieldValue.serverTimestamp()
+            soldAt: new Date().toISOString()
         });
     }
 
@@ -63,7 +62,7 @@ export class MarketplaceService {
             proposerId,
             offer,
             status: 'Pending',
-            createdAt: admin.firestore.FieldValue.serverTimestamp()
+            createdAt: new Date().toISOString()
         });
 
         await db.collection('marketplace').doc(itemId).update({

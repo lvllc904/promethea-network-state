@@ -1,6 +1,5 @@
 
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 import { reserveManager } from './reserve-manager';
 
 /**
@@ -31,7 +30,7 @@ export class BillingManager {
         const invoiceRef = await db.collection('invoices').add({
             ...data,
             status: 'Pending',
-            createdAt: admin.firestore.FieldValue.serverTimestamp()
+            createdAt: new Date().toISOString()
         });
 
         console.log(`[BillingManager] Invoice created: ${invoiceRef.id} for $${data.amount}`);
@@ -50,7 +49,7 @@ export class BillingManager {
         const data = doc.data() as Invoice;
         await invoiceRef.update({
             status: 'Paid',
-            paidAt: admin.firestore.FieldValue.serverTimestamp()
+            paidAt: new Date().toISOString()
         });
 
         console.log(`[BillingManager] Invoice ${invoiceId} marked as PAID. Amount: $${data.amount}`);

@@ -1,0 +1,82 @@
+{
+  "version": "0.1.0",
+  "name": "sovereign_treasury",
+  "instructions": [
+    {
+      "name": "depositRevenue",
+      "accounts": [
+        {
+          "name": "depositor",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "depositorUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "treasuryUsdcVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amountUsdc",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "mintLaborUvt",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "receiverUvtAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "uvtMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amountUvt",
+          "type": "u64"
+        },
+        {
+          "name": "proofHash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

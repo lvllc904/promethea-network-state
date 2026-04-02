@@ -81,14 +81,14 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
         const userUID = localStorage.getItem('userUID');
         const userDID = localStorage.getItem('userDID');
 
-        if (authStatus === 'authenticated' && userUID) {
+        if (authStatus === 'authenticated') {
           setUserAuthState(prev => {
-            if (prev.user?.uid === userUID && prev.user?.isAnonymous === false && prev.user?.displayName === (userDID || 'Citizen')) {
+            if (prev.user?.uid === (userUID || 'sovereign-citizen') && prev.user?.isAnonymous === false && prev.user?.displayName === (userDID || 'Citizen')) {
               return prev;
             }
             return {
               user: {
-                uid: userUID,
+                uid: userUID || 'sovereign-citizen',
                 isAnonymous: false,
                 displayName: userDID || 'Citizen'
               },

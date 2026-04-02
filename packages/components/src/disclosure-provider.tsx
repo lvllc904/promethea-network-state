@@ -48,7 +48,7 @@ export function DisclosureProvider({ children, mode = 'SIMULATED' }: DisclosureP
 function GlobalDisclosureBanner({ mode }: { mode: SystemMode }) {
     if (mode === 'VERIFIED') {
         return (
-            <div className="w-full bg-emerald-950/80 border-b border-emerald-500/30 px-4 py-1.5 flex items-center justify-center gap-3 text-xs sticky top-0 z-[999]">
+            <div className="w-full bg-emerald-950/80 border-b border-emerald-500/30 px-4 py-1.5 flex items-center justify-center gap-3 text-xs relative z-[999]">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span className="text-emerald-300 font-bold uppercase tracking-widest text-[10px]">
                     All financial metrics are verified against live on-chain and CEX data.
@@ -61,7 +61,7 @@ function GlobalDisclosureBanner({ mode }: { mode: SystemMode }) {
     }
 
     return (
-        <div className="w-full bg-amber-950/90 border-b border-amber-500/30 px-4 py-1.5 flex items-center justify-center gap-3 text-xs sticky top-0 z-[999]">
+        <div className="w-full bg-amber-950/90 border-b border-amber-500/30 px-4 py-1.5 flex items-center justify-center gap-3 text-xs relative z-[999]">
             <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span className="text-amber-300 font-bold uppercase tracking-widest text-[10px]">
                 Financial metrics are architectural simulations. They do not reflect verified on-chain or CEX liquidity.

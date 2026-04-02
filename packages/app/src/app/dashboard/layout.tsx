@@ -34,22 +34,22 @@ export default function DashboardLayout({
   const { isAuthStatusLoading } = useAuthStatus();
 
   return (
-    <DisclosureProvider mode="SIMULATED">
-      <SidebarProvider>
-        <Suspense fallback={null}>
-          <Handshake />
-        </Suspense>
-        <div className="flex min-h-screen w-full bg-muted/40">
-          <MainNav />
-          <div className="flex flex-col sm:pl-14 w-full">
+    <SidebarProvider>
+      <Suspense fallback={null}>
+        <Handshake />
+      </Suspense>
+      <div className="flex min-h-screen w-full bg-muted/40">
+        <MainNav />
+        <div className="flex flex-col sm:pl-14 w-full">
+          <DisclosureProvider mode="SIMULATED">
             <Header />
             <LiveTicker />
             <main className="flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-8 overflow-y-auto">
               {isAuthStatusLoading ? <DashboardSkeleton /> : children}
             </main>
-          </div>
+          </DisclosureProvider>
         </div>
-      </SidebarProvider>
-    </DisclosureProvider>
+      </div>
+    </SidebarProvider>
   );
 }

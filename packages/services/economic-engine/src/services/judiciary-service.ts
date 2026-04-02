@@ -1,5 +1,4 @@
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 /**
@@ -78,7 +77,7 @@ export class JudiciaryService {
                 vetoId,
                 actionDescription: action.description,
                 impact: action.impact,
-                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                createdAt: new Date().toISOString(),
             });
 
             // Also log to a dedicated vetoes collection if needed for the UI specifically
@@ -89,7 +88,7 @@ export class JudiciaryService {
                 reason: evaluation.reasoning,
                 status: 'Halted',
                 impact: action.impact,
-                timestamp: admin.firestore.FieldValue.serverTimestamp()
+                timestamp: new Date().toISOString()
             });
         } catch (err) {
             console.error('[Judiciary] Failed to log veto:', err);

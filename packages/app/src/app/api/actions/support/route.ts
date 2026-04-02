@@ -76,7 +76,7 @@ export async function POST(req: Request) {
         }
 
         const connection = new Connection(clusterApiUrl("mainnet-beta"));
-        const destination = new PublicKey("960903D1E4FBA49284C325d27249e166496F3535"); // Reserve Authority
+        const destination = new PublicKey(process.env.SOLANA_PUBLIC_KEY || "Fe9cYeJEHswbyeTfrHGLgJocYnTA1gpND6H2LNXXHHwb"); // Reserve Authority
 
         const transaction = new Transaction().add(
             SystemProgram.transfer({

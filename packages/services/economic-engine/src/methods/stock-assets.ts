@@ -2,6 +2,7 @@ import { BaseMethod, ExecutionResult } from './base-method';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { imagenGenerator } from '../tools/imagen-generator';
 import { marketplaceService } from '../services/marketplace-service';
+import { db } from '../db';
 
 /**
  * Method 4: Stock Asset Generation (Phase 6, Wave 2)
@@ -21,6 +22,7 @@ export class StockAssetMethod extends BaseMethod {
             priority: 8,
             maxExecutionsPerDay: 10,
             estimatedRevenue: { min: 10, max: 50 },
+            complexity: 6,
         });
 
         this.genAI = new GoogleGenerativeAI(apiKey);
@@ -28,43 +30,80 @@ export class StockAssetMethod extends BaseMethod {
 
     async execute(): Promise<ExecutionResult> {
         const logs: string[] = [];
+        logs.push('Analyzing harmonious themes for asset generation...');
 
         try {
-            // Step 1: Generate trending asset concept
-            logs.push('Analyzing trending stock photo themes...');
-            const concept = await this.generateConcept();
+            const stats = (global as any).reserveManager?.getStats() || { reserveBalance: 100000 };
+            const modelInfo = (global as any).metabolicArbitrator?.getBestModel(this.config.complexity, stats.reserveBalance) || { modelName: 'gemini-2.0-flash' };
+            const model = this.genAI.getGenerativeModel({ model: modelInfo.modelName });
+
+            // Step 1: Generate trending asset concept (Refined Tonal Ethos)
+            logs.push('Analyzing trending stock photo themes with a focus on flourishing...');
+            const conceptPrompt = `Generate a single trending stock photo concept that would sell well on Shutterstock/Adobe Stock.
+            Focus on themes of: "Humble Service", "Peaceful Transition", "Natural Harmony", "Cooperative Technology", or "Sustainable Abundance".
+            The concept should feel optimistic, grounded, and commercially viable.
+            Return ONLY the concept description, nothing else.`;
+
+            const conceptResult = await model.generateContent(conceptPrompt);
+            const concept = conceptResult.response.text().trim();
             logs.push(`Concept: ${concept}`);
 
             // Step 2: Generate image prompt
-            logs.push('Creating optimized image prompt...');
-            const prompt = await this.createImagePrompt(concept);
-            logs.push(`Prompt: ${prompt}`);
+            logs.push('Creating optimized image prompt with humble aesthetics...');
+            const promptInstruction = `Create a detailed image generation prompt for Vertex AI Imagen 3 for: "${concept}"
+            
+            Requirements:
+            - Professional, commercial-quality
+            - Aesthetic: Clean, bright, harmonious, and optimistic.
+            - Lighting: Soft natural light, golden hour, or high-key studio.
+            - Mood: Trustworthy, humble, and peaceful.
+            - Avoid: Aggressive contrast, dystopian vibes, or cluttered compositions.
+            
+            Return ONLY the image prompt:`;
+
+            const promptResult = await model.generateContent(promptInstruction);
+            const prompt = promptResult.response.text().trim();
+            logs.push(`Prompt generated: ${prompt.substring(0, 50)}...`);
 
             // Step 3: Generate image via Vertex AI Imagen
             logs.push('Generating high-fidelity image via Imagen API...');
-            const imageUrl = await this.generateImage(prompt);
-            logs.push(`Image generated: ${imageUrl.substring(0, 50)}...`);
+            const imageUrl = await imagenGenerator.generateImage(prompt);
+            logs.push(`Image synthesized: ${imageUrl.startsWith('data:') ? '[Base64 Asset]' : imageUrl}`);
 
-            // Step 4: Upload to stock platform (placeholder)
-            logs.push('Uploading to Shutterstock Partner API...');
+            // Step 4: Archive to Stock Ledger
+            const stockRecord = {
+                concept,
+                prompt,
+                imageUrl,
+                platformStatus: 'Pending Sync',
+                createdAt: new Date().toISOString(),
+                estimatedValue: 25.00
+            };
+
+            const docRef = await db.collection('stock_assets').add(stockRecord);
+            logs.push(`Archived to Stock Ledger: ${docRef.id}`);
+
+            // Step 5: Upload to stock platform (placeholder for now)
+            logs.push('Queuing for Shutterstock Partner API upload...');
             const uploadResult = await this.uploadToShutterstock(imageUrl, concept);
             logs.push(`Uploaded: ${uploadResult.assetId}`);
 
             // Estimated revenue per asset
             const estimatedRevenue = Math.random() * 20 + 5; // $5-25 per asset
 
-            // Step 5: List on Sovereign Marketplace
+            // Step 6: List on Sovereign Marketplace (Humble Messaging)
             await marketplaceService.listItem({
-                title: `Sovereign Stock: ${concept}`,
-                description: `Generated by Promethean intelligence based on trending stock themes. Includes full resale rights in the Network State.`,
+                title: `Sovereign Vision: ${concept}`,
+                description: `A vision of flourishing generated by Promethean intelligence. This asset represents a peaceful and harmonious path forward for digital commerce. Includes full usage rights.`,
                 type: 'Digital',
                 price: estimatedRevenue,
                 currency: 'USD',
                 methodId: 'stock-assets',
                 imageUrl,
-                barterAllowed: false,
+                barterAllowed: true,
                 providerId: 'economic-engine'
             });
+
             const apiCost = 0.15; // Imagen 3 cost
 
             return {
@@ -73,7 +112,7 @@ export class StockAssetMethod extends BaseMethod {
                 cost: apiCost,
                 profit: estimatedRevenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: modelInfo.did || 'did:prmth:model:gemini-2.0-flash',
                 logs,
             };
         } catch (error) {

@@ -13,32 +13,18 @@ import {
   SidebarFooter,
 } from "@promethea/ui";
 import {
-  LayoutDashboard,
   Wallet,
   Landmark,
-  FileText,
-  Shield,
-  BookOpen,
-  Settings,
-  GitMerge,
   Scale,
-  Users,
-  Store,
-  Mic,
+  Activity,
+  Settings,
 } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Overview" },
-  { href: "/dashboard/intel", icon: Cpu, label: "Sovereign Intel" },
-  { href: "/dashboard/treasury", icon: Wallet, label: "The Treasury" },
+  { href: "/dashboard/treasury", icon: Wallet, label: "Sovereign Treasury" },
+  { href: "/dashboard/atlas", icon: Landmark, label: "Sovereign Atlas" },
   { href: "/dashboard/will", icon: Scale, label: "Sovereign Will" },
-  { href: "/dashboard/assets", icon: Landmark, label: "Asset Atlas" },
-  { href: "/dashboard/exchange", icon: Store, label: "The Exchange" },
-  { href: "/dashboard/financing", icon: DollarSign, label: "Financing" },
-  { href: "/dashboard/passport", icon: Users, label: "Passport" },
-  { href: "/dashboard/narrative", icon: FileText, label: "Narrative" },
-  { href: "/dashboard/security", icon: Shield, label: "Immune System" },
-  { href: "/voice", icon: Mic, label: "Ambient Voice" },
+  { href: "/dashboard/pulse", icon: Activity, label: "Sovereign Pulse" },
 ];
 
 export function MainNav() {

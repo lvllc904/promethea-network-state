@@ -54,3 +54,6 @@ processes_tree.txt
 tmp/
 *.vsix
 *.production.yaml
+sa.json
+sa_new.json
+tmp_json.txt

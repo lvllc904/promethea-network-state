@@ -1,11 +1,8 @@
-FROM node:20-alpine AS base
-
-# Install dependencies only when needed
-FROM base AS deps
+FROM node:20-alpine AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy workspace manifests
+# Copy manifests
 COPY package.json package-lock.json ./
 COPY packages/app/package.json ./packages/app/
 COPY packages/lib/package.json ./packages/lib/
@@ -15,41 +12,54 @@ COPY packages/firebase/package.json ./packages/firebase/
 COPY packages/hooks/package.json ./packages/hooks/
 COPY packages/sovereign-store/package.json ./packages/sovereign-store/
 
-RUN npm ci --legacy-peer-deps
+# Install dependencies
+RUN npm install --legacy-peer-deps
 
-# Build the app
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/packages ./packages_deps
-
-# Copy all source
+# Copy source
 COPY . .
 
-# Rebuild any native deps for the target platform
-RUN npm ci --legacy-peer-deps
+# Environment variables
+ARG NEXT_PUBLIC_AI_SERVICE_URL
+ARG NEXT_PUBLIC_GUARDIAN_URL
+ARG NEXT_PUBLIC_ENGINE_URL
+ARG NEXT_PUBLIC_DISABLE_FIREBASE
 
-# Build Next.js standalone output
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NEXT_PUBLIC_AI_SERVICE_URL=$NEXT_PUBLIC_AI_SERVICE_URL
+ENV NEXT_PUBLIC_GUARDIAN_URL=$NEXT_PUBLIC_GUARDIAN_URL
+ENV NEXT_PUBLIC_ENGINE_URL=$NEXT_PUBLIC_ENGINE_URL
+ENV NEXT_PUBLIC_DISABLE_FIREBASE=$NEXT_PUBLIC_DISABLE_FIREBASE
+ENV NEXT_PUBLIC_FIREBASE_PROJECT_ID=studio-9105849211-9ba48
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Build dependencies in CORRECT order
+RUN npx tsc --build packages/lib/tsconfig.json
+RUN npx tsc --build packages/sovereign-store/tsconfig.json
+RUN npx tsc --build packages/hooks/tsconfig.json
+RUN npx tsc --build packages/firebase/tsconfig.json
+RUN npx tsc --build packages/ui/tsconfig.json
+RUN npx tsc --build packages/components/tsconfig.json
+
+# Build the main app
 RUN npm run build --workspace=@promethea/app
 
-# Production image - copy only standalone output
-FROM base AS runner
+# Runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=8080
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copy standalone server output
+# Copy standalone output
 COPY --from=builder --chown=nextjs:nodejs /app/packages/app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/packages/app/.next/static ./packages/app/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/packages/app/public ./packages/app/public
 
 USER nextjs
-
 EXPOSE 8080
 
 CMD ["node", "packages/app/server.js"]

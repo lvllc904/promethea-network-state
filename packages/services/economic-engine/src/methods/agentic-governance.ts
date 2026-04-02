@@ -1,6 +1,5 @@
 import { BaseMethod, ExecutionResult } from './base-method';
 import { db, COLLECTIONS } from '../db';
-import * as admin from 'firebase-admin';
 
 /**
  * Method 26: Agentic Governance (Phase 4)
@@ -41,7 +40,7 @@ export class AgenticGovernanceMethod extends BaseMethod {
                     category: 'Infrastructure',
                     status: 'Active', // Active means it's now open for voting
                     author: 'Promethea (Sovereign Intelligence)',
-                    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                    createdAt: new Date().toISOString(),
                 });
 
                 logs.push('Proposal authored and broadcast to the Sovereign Will.');

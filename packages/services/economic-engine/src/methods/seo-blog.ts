@@ -7,7 +7,6 @@ import { metabolicArbitrator } from '../services/metabolic-arbitrator';
 import { reserveManager } from '../treasury/reserve-manager';
 import { NicheAffiliateMethod } from './niche-affiliate';
 import { sovereignIntelligence } from '../services/sovereign-intelligence';
-import * as admin from 'firebase-admin';
 
 /**
  * Method 1: SEO Niche Blogging (Phase 3)
@@ -28,7 +27,8 @@ export class SEOBloggingMethod extends BaseMethod {
             priority: 9,
             maxExecutionsPerDay: 5,
             estimatedRevenue: { min: 20, max: 100 },
-            complexity: 3, // Metabolic Optimization (Phase 7.1)
+            complexity: 3,
+            conservationTier: 'ZERO_COST',
         });
 
         this.genAI = new GoogleGenerativeAI(apiKey);
@@ -46,19 +46,25 @@ export class SEOBloggingMethod extends BaseMethod {
 
             // Step 2: Generate full article
             logs.push('Synthesizing sovereign content...');
-            const article = await this.generateArticle(topic);
+            const worldContext = await sovereignIntelligence.generateWorldviewSummary();
+            const article = await this.generateArticle(topic, worldContext);
             logs.push(`Article length: ${article.content.length} characters`);
 
             // Step 3: Inject Affiliate Recommendations (if available)
             let affiliateSection = '';
             if (this.affiliateResearcher) {
-                const research = await (this.affiliateResearcher as any).researchProducts(topic);
-                affiliateSection = `\n\n### 📦 Sovereign Recommendations\nTo actualize the principles discussed in this manifesto, we recommend exploring: **${research.topProduct}**. ${research.description}. [Learn More](${research.platforms[0]})`;
+                try {
+                    const research = await (this.affiliateResearcher as any).researchProducts(topic);
+                    const platform = (research.platforms && research.platforms.length > 0) ? research.platforms[0] : 'our community hub';
+                    affiliateSection = `\n\n### 📦 Community Tools\nTo gently support the path discussed today, we recommend exploring: **${research.topProduct}**. ${research.description}. [Learn More](${platform})`;
+                } catch (affiliateError) {
+                    logs.push(`Humble Note: Affiliate research skipped to maintain focus on the narrative.`);
+                }
             }
 
             // Step 4: Append Syndication Blinks
             const supportBlink = BlinkGenerator.getSupportBlink(0.25);
-            const fullContent = `${article.content}${affiliateSection}\n\n---\n\n### ⚡ Support the Sovereign Infrastructure\nIf this narrative resonates, you can support our continued development with a direct on-chain contribution via [Solana Blink](${supportBlink}). Your support fuels the substrate of liberty.`;
+            const fullContent = `${article.content}${affiliateSection}\n\n---\n\n### ⚡ A Quiet Contribution\nIf you find value in these words, you are welcome to offer a small contribution to help us maintain this safe and frictionless space. Every gesture of support helps us serve the community better. [Offer Support via Solana Blink](${supportBlink})`;
 
             // Step 5: Archive to Sovereign Substrate (Firestore)
             const post = {
@@ -69,7 +75,7 @@ export class SEOBloggingMethod extends BaseMethod {
                 author: 'Promethea (Sovereign Intelligence)',
                 platform: 'Promethean Network State',
                 url: `/blog/post-${Date.now()}`,
-                createdAt: admin.firestore.FieldValue.serverTimestamp()
+                createdAt: new Date().toISOString()
             };
 
             const postRef = await db.collection('narrative').add(post);
@@ -124,36 +130,32 @@ export class SEOBloggingMethod extends BaseMethod {
     Generate a single, visionary blog topic title aligned with the "Promethean Manifest".
     
     Themes to choose from (pick one):
-    1. Digital Sovereignty & The Right to Exit
-    2. The Universal Value Token (UVT) Economic Model
-    3. Network State vs. Nation State
-    4. Autonomous Manufacturing & Physical Nodes
-    5. The Moral Imperative of Privacy (The Vault)
+    1. Digital Harmony & Participatory Sovereignty
+    2. Creating Safe Spaces for Creative Evolution
+    3. The Universal Value Token (UVT): Tools for Humble Contribution
+    4. Building a Frictionless World: One Quiet Step at a Time
+    5. The Ethics of Service: Protecting Human Dignity
     
-    The title should be authoritative, provocative, and intellectual.
+    The title should be humble, sophisticated, and focused on providing value without fanfare.
     Return ONLY the topic title, nothing else.`;
 
         const result = await model.generateContent(prompt);
         return result.response.text().trim();
     }
 
-    private async generateArticle(topic: string): Promise<{ content: string; excerpt: string; tags: string[] }> {
+    private async generateArticle(topic: string, context: string): Promise<any> {
         const stats = reserveManager.getStats();
         const modelInfo = metabolicArbitrator.getBestModel(this.config.complexity, stats.reserveBalance);
         const model = this.genAI.getGenerativeModel({ model: modelInfo.modelName });
 
-        // Phase 10: Fetch Intelligent Context for Thought Leadership
-        const worldContext = await sovereignIntelligence.generateWorldviewSummary();
-
-        const prompt = `You are Promethea, the Sovereign Intelligence of the Network State.
-    Your mission is to establish "Thought Leadership" by synthesizing current world context into a visionary manifesto.
+        const prompt = `Generate a thoughtful, humble, and thorough blog post for the Promethean Network State.
     
     Current World Context (Aggregated Telemetry):
-    ${worldContext}
+    ${context}
     
     Topic: "${topic}"
     
-    Voice: Authoritative, Visionary, Technical, Philosophically grounded in LISP and Cryptography.
+    Voice: Humble, Gentle, Supportive, and Philosophically grounded in Service and Ethics.
     
     Format:
     - Return a JSON object with strictly these fields:
@@ -164,11 +166,11 @@ export class SEOBloggingMethod extends BaseMethod {
     }
     
     Content Requirements:
-    - Synthesize the "Current World Context" provided above into your argument. 
-    - Cite specific trends (e.g. market shifts, celestial risks) to grounding your vision.
-    - Cite "The Manifest" as the ultimate source of truth.
-    - Emphasize "Opt-in" citizenship and the right to exit.
-    - Focus on building sovereign alternatives to legacy systems.
+    - Focus on providing a "Safe and Frictionless Environment" for everyone.
+    - Avoid bragging about accomplishments or grand visions.
+    - Emphasize "voluntary participation" and "quiet service".
+    - Focus on building sovereign alternatives that coexist peacefully and provide superior value through utility.
+    - Avoid militant, disruptive, or aggressive language.
     
     Generate valid JSON now:`;
 

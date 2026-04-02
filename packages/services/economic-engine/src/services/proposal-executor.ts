@@ -2,7 +2,6 @@ import { db, COLLECTIONS } from '../db';
 import { taskQueue } from '../scheduler/task-queue';
 import { walletManager } from '../treasury/wallet-manager';
 import { priceOracle } from '../tools/price-oracle';
-import * as admin from 'firebase-admin';
 
 /**
  * Sovereign Proposal Executor (Wave 3, Item 2)
@@ -39,7 +38,7 @@ export class ProposalExecutor {
 
                 // Mark as successfully triggered
                 await doc.ref.update({
-                    executedAt: admin.firestore.FieldValue.serverTimestamp(),
+                    executedAt: new Date().toISOString(),
                     status: 'Draft' // Status 'Draft' in ROADMAP context often means "In Operation" or "Executing"
                 });
 
@@ -76,7 +75,7 @@ export class ProposalExecutor {
             await this.handleExecution(proposalId, proposal);
 
             await docRef.update({
-                executedAt: admin.firestore.FieldValue.serverTimestamp(),
+                executedAt: new Date().toISOString(),
                 status: 'Draft' // Sets to 'Executing' or 'Operational'
             });
 

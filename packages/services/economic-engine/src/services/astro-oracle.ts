@@ -95,8 +95,11 @@ export class AstroOracleService {
     }
 
     start() {
-        // Scan environment every 12 hours
-        setInterval(() => this.scanCelestialEnvironment(), 12 * 60 * 60 * 1000);
+        const isConservation = process.env.CONSERVATION_MODE === 'true';
+        // Scan environment every 24 hours (Conservation) or 12 hours (Dynamic)
+        const interval = isConservation ? 24 * 60 * 60 * 1000 : 12 * 60 * 60 * 1000;
+        
+        setInterval(() => this.scanCelestialEnvironment(), interval);
         // Initial scan
         setTimeout(() => this.scanCelestialEnvironment(), 30000);
     }

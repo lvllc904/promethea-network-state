@@ -26,25 +26,38 @@ export class WalletManager {
     private solConn: Connection | null = null;
     private solKeypair: Keypair | null = null;
 
+    private partitionedWallets: Map<string, Keypair> = new Map();
+
     /**
      * Initialize wallet for a specific chain
      */
-    async initWallet(chain: string, privateKey: string, rpcUrl: string): Promise<void> {
+    async initWallet(chain: string, privateKey?: string, rpcUrl?: string): Promise<void> {
+        const { vaultService } = require('../services/vault-service');
+        
         if (chain === 'solana') {
-            this.solConn = new Connection(rpcUrl, 'confirmed');
+            this.solConn = new Connection(rpcUrl || 'https://api.mainnet-beta.solana.com', 'confirmed');
 
-            if (privateKey) {
+            // If no private key provided, try to fetch from Vault
+            let secretHex = privateKey;
+            if (!secretHex) {
+                secretHex = await vaultService.getSecret('SOLANA_PRIVATE_KEY');
+            }
+
+            if (secretHex) {
                 // Assume base58 private key for Solana
-                const secretKey = bs58.decode(privateKey);
+                const secretKey = bs58.decode(secretHex);
                 this.solKeypair = Keypair.fromSecretKey(secretKey);
-                console.log(`[WalletManager] ✅ Initialized Solana wallet: ${this.solKeypair.publicKey.toBase58()}`);
+                console.log(`[WalletManager] ✅ Initialized Solana Master Root: ${this.solKeypair.publicKey.toBase58()} (Vault-Backed)`);
             } else {
                 // Auto-generate a Sovereign Root if no key provided
                 this.solKeypair = Keypair.generate();
                 const encoded = bs58.encode(this.solKeypair.secretKey);
-                console.warn(`[WalletManager] ⚠️ NO PRIVATE KEY PROVIDED. Generated Sovereign Root: ${this.solKeypair.publicKey.toBase58()}`);
+                console.warn(`[WalletManager] ⚠️ NO PRIVATE KEY PROVIDED. Generated Sovereign Master Root: ${this.solKeypair.publicKey.toBase58()}`);
                 console.warn(`[WalletManager] 🔒 STORAGE REQUIRED: Secure this key for persistence: ${encoded}`);
             }
+            
+            // Map the root as 'OPERATIONAL' by default
+            this.partitionedWallets.set('OPERATIONAL', this.solKeypair);
             return;
         }
 
@@ -245,6 +258,86 @@ export class WalletManager {
     getSolanaAddress(): string | null {
         return this.solKeypair?.publicKey.toBase58() || null;
     }
+
+    /**
+     * Spawn a named sovereign sub-wallet (partition).
+     * e.g. 'COLD_VAULT', 'YIELD_ORCA', 'YIELD_RAYDIUM', 'YIELD_UNISWAP', 'RING0_LAUNCH', 'RESTORATION'
+     * These wallets are freshly generated Solana keypairs and stored in-memory.
+     * Promethea can call this at any time to create isolated treasury buckets.
+     */
+    spawnPartition(name: string): { address: string; secretKey: string } {
+        const existing = this.partitionedWallets.get(name);
+        if (existing) {
+            const address = existing.publicKey.toBase58();
+            console.log(`[WalletManager] Partition '${name}' already exists: ${address}`);
+            return { address, secretKey: bs58.encode(existing.secretKey) };
+        }
+
+        const keypair = Keypair.generate();
+        this.partitionedWallets.set(name, keypair);
+        const address = keypair.publicKey.toBase58();
+        const secretKey = bs58.encode(keypair.secretKey);
+
+        console.log(`[WalletManager] 🆕 Spawned Sovereign Partition '${name}': ${address}`);
+        console.warn(`[WalletManager] 🔒 BACKUP REQUIRED for '${name}': ${secretKey}`);
+
+        return { address, secretKey };
+    }
+
+    /**
+     * Get a named partition keypair (for signing transactions).
+     */
+    getPartition(name: string): Keypair | undefined {
+        return this.partitionedWallets.get(name);
+    }
+
+    /**
+     * List all spawned sovereign partitions and their addresses.
+     */
+    listPartitions(): { name: string; address: string }[] {
+        return Array.from(this.partitionedWallets.entries()).map(([name, kp]) => ({
+            name,
+            address: kp.publicKey.toBase58(),
+        }));
+    }
+
+    /**
+     * Get the on-chain SOL balance for a named partition.
+     */
+    async getPartitionBalance(name: string): Promise<number> {
+        if (!this.solConn) return 0;
+        const kp = this.partitionedWallets.get(name);
+        if (!kp) return 0;
+
+        const lamports = await this.solConn.getBalance(kp.publicKey);
+        return lamports / LAMPORTS_PER_SOL;
+    }
+
+    /**
+     * Transfer SOL from one partition to another (for the Waterfall Sweep).
+     */
+    async sweepToPartition(fromPartition: string, toPartition: string, amountSol: number): Promise<string> {
+        if (!this.solConn) throw new Error('Solana connection not initialized');
+
+        const fromKp = this.partitionedWallets.get(fromPartition);
+        const toKp = this.partitionedWallets.get(toPartition);
+        if (!fromKp || !toKp) throw new Error(`Partition not found: ${fromPartition} or ${toPartition}`);
+
+        const { SystemProgram } = require('@solana/web3.js');
+        const lamports = Math.floor(amountSol * LAMPORTS_PER_SOL);
+        const tx = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: fromKp.publicKey,
+                toPubkey: toKp.publicKey,
+                lamports,
+            })
+        );
+
+        const sig = await sendAndConfirmTransaction(this.solConn, tx, [fromKp]);
+        console.log(`[WalletManager] 🌊 Waterfall Sweep: ${amountSol} SOL from '${fromPartition}' → '${toPartition}' | TX: ${sig}`);
+        return sig;
+    }
 }
 
 export const walletManager = new WalletManager();
+

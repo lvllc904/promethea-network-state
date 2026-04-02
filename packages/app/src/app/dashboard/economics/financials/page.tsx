@@ -4,29 +4,11 @@ import { useMemo } from 'react';
 import { useCollection, useFirestore } from '@promethea/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '@promethea/ui';
-import { LedgerValue } from '@promethea/components';
+import { LedgerValue, RealityBadge } from '@promethea/components';
 import { Landmark, TrendingUp, BarChart3, Clock, DollarSign, Wallet, ShieldCheck, Zap, Activity, Cpu, Printer, Search } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 
-function RealityStateBadge({ state }: { state: 'ACTUALIZED' | 'SETTLED' | 'SIMULATED' }) {
-    const colors = {
-        ACTUALIZED: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-        SETTLED: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-        SIMULATED: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-    };
-    const icons = {
-        ACTUALIZED: <Activity className="w-2.5 h-2.5 mr-1" />,
-        SETTLED: <ShieldCheck className="w-2.5 h-2.5 mr-1" />,
-        SIMULATED: <Cpu className="w-2.5 h-2.5 mr-1" />,
-    };
-
-    return (
-        <Badge variant="outline" className={`${colors[state]} border text-[8px] uppercase font-black px-2 py-0.5 tracking-tighter flex items-center`}>
-            {icons[state]}
-            {state}
-        </Badge>
-    );
-}
+// Local badge removed in favor of global @promethea/components/RealityBadge
 
 export default function FinancialsPage() {
     const db = useFirestore();
@@ -98,7 +80,7 @@ export default function FinancialsPage() {
                     </div>
                     <CardHeader className="flex flex-row justify-between items-center bg-white/[0.02] border-b border-white/5">
                         <CardTitle className="text-sm uppercase tracking-widest font-bold text-zinc-400">Consolidated Balance Sheet</CardTitle>
-                        <RealityStateBadge state="SETTLED" />
+                        <RealityBadge state="SETTLED" />
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end pt-8">
                         <div className="space-y-6">
@@ -112,7 +94,7 @@ export default function FinancialsPage() {
                                 <div className="p-4 rounded-xl bg-white/5 border border-white/5 relative overflow-hidden group">
                                     <div className="flex justify-between items-start mb-2">
                                         <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5"><Wallet className="w-3 h-3 text-blue-400" /> Solana Cash</p>
-                                        <RealityStateBadge state="ACTUALIZED" />
+                                        <RealityBadge state="ACTUALIZED" />
                                     </div>
                                     <LedgerValue value={72450.00} isSimulated={false} className="text-sm font-mono" />
                                     <div className="absolute bottom-0 left-0 h-1 w-full bg-blue-500/20" />
@@ -120,7 +102,7 @@ export default function FinancialsPage() {
                                 <div className="p-4 rounded-xl bg-white/5 border border-white/5 relative overflow-hidden group">
                                     <div className="flex justify-between items-start mb-2">
                                         <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5"><Zap className="w-3 h-3 text-emerald-400" /> Intellectual Capital</p>
-                                        <RealityStateBadge state="SETTLED" />
+                                        <RealityBadge state="SETTLED" />
                                     </div>
                                     <LedgerValue value={totalMarketCap - 72450} isSimulated={true} className="text-sm font-mono" />
                                     <div className="absolute bottom-0 left-0 h-1 w-full bg-emerald-500/20" />
@@ -157,14 +139,14 @@ export default function FinancialsPage() {
                             <div className="space-y-1">
                                 <div className="flex justify-between items-center">
                                     <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Founder (Sweat Equity)</p>
-                                    <RealityStateBadge state="SETTLED" />
+                                    <RealityBadge state="SETTLED" />
                                 </div>
                                 <p className="text-sm font-mono font-bold text-white uppercase">{founderUVT.toLocaleString()} <span className="text-xs text-secondary opacity-50 ml-1">UVT</span></p>
                             </div>
                             <div className="space-y-1">
                                 <div className="flex justify-between items-center">
                                     <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Synthetic Stake (S.I.P.S)</p>
-                                    <RealityStateBadge state="SIMULATED" />
+                                    <RealityBadge state="SIMULATED" />
                                 </div>
                                 <p className="text-sm font-mono font-bold text-white uppercase">{ (totalUVT - founderUVT).toLocaleString() } <span className="text-xs text-secondary opacity-50 ml-1">UVT</span></p>
                             </div>

@@ -1,22 +1,15 @@
-# .gcloudignore - include only source packages needed for authentication-service
-# Ignore everything by default
-*
-# Unignore essential root files
-!package.json
-!package-lock.json
-!pnpm-workspace.yaml
-!*.env
-!tsconfig*.json
-!ROADMAP.md
-# Unignore all source packages (authentication-service and its dependencies)
-!packages/**
-# Exclude heavy directories within packages
-packages/**/node_modules/
-packages/**/dist/
-packages/**/.next/
-packages/**/.firebase/
-packages/**/.gemini/
-**/tsconfig.tsbuildinfo
-# Exclude common large files
+# Bulletproof .gcloudignore
+.git/
+.firebase/
+.venv/
+.node_modules_hidden/
+node_modules/
+**/node_modules/
+**/.next/
+**/dist/
+**/target/
+**/.cpcache/
+**/.m2/
 *.log
-*.pdf
+*.vsix
+tmp/

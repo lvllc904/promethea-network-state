@@ -1,21 +1,26 @@
 import { BaseMethod, ExecutionResult } from './base-method';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { marketplaceService } from '../services/marketplace-service';
+import { db } from '../db';
 
 /**
- * Method: Data Scraping & Cleaning Service
+ * Method 7: Sovereign Intelligence Harvesting (Data Assets)
  * 
- * Automates the collection of specialized datasets and prepares them for
- * sale on open data markets or to AI training companies.
+ * Automates the collection and synthesis of specialized datasets.
+ * Revenue model: Sale of "Intelligence Reports" and "Cleaned Datasets" in the marketplace.
+ * 
+ * Ethos: "Intelligence is the fuel of flourishing. We harvest it with care to nourish the commons."
  */
 export class DataScrapingMethod extends BaseMethod {
     private genAI: GoogleGenerativeAI;
 
     constructor(apiKey: string) {
-        super('data-scraping', 'Data Scraping & Cleaning Service', {
+        super('data-scraping', 'Sovereign Intelligence Harvesting', {
             enabled: true,
-            priority: 5,
+            priority: 7,
             maxExecutionsPerDay: 4,
-            estimatedRevenue: { min: 40, max: 300 },
+            estimatedRevenue: { min: 50, max: 400 },
+            complexity: 5,
         });
 
         this.genAI = new GoogleGenerativeAI(apiKey);
@@ -23,33 +28,79 @@ export class DataScrapingMethod extends BaseMethod {
 
     async execute(): Promise<ExecutionResult> {
         const logs: string[] = [];
-        logs.push('Initializing scraping pipelines for niche industry datasets...');
+        logs.push('Initializing Intelligence Harvesting pipelines... scanning for high-value signals.');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-            const prompt = `Identify 5 niche industries (e.g., sustainable aviation fuel, local DAO governance structures) 
-            that are currently lacking clean, structured data sets. 
-            For each industry, describe:
-            1. The specific data points that would be valuable.
-            2. The best sources to scrape this data from.
-            3. A strategy for cleaning and verifying this data autonomously.
-            4. Estimated market value for a 10,000 row dataset.`;
+            const stats = (global as any).reserveManager?.getStats() || { reserveBalance: 100000 };
+            const modelInfo = (global as any).metabolicArbitrator?.getBestModel(this.config.complexity, stats.reserveBalance) || { modelName: 'gemini-2.0-flash' };
+            const model = this.genAI.getGenerativeModel({ model: modelInfo.modelName });
 
-            const result = await model.generateContent(prompt);
-            const report = result.response.text();
+            // Step 1: Market Intelligence (Opportunity Discovery)
+            logs.push('Phase 1: Identifying underserved intelligence gaps in global ecosystems...');
+            const discoveryPrompt = `Identify 3 niche industries (e.g., regenerative soil carbon credits, solar-powered maritime logistics, micronation legal frameworks) 
+            where clean, structured data is scarce but highly valuable for the Promethean Network State.
+            
+            Return a brief JSON summary: { "industries": [{ "name": "string", "utility": "string", "estimatedValue": number }] }`;
 
-            logs.push(`Market Opportunity Report generated: ${report.substring(0, 100)}...`);
+            const result = await model.generateContent(discoveryPrompt);
+            const discovery = JSON.parse(result.response.text().replace(/```json|```/g, '').trim());
+            const target = discovery.industries[0];
+            logs.push(`Target Acquired: ${target.name} (Utility: ${target.utility})`);
 
-            const revenue = 85 + Math.random() * 150;
+            // Step 2: Synthesis of the Intelligence Asset
+            logs.push(`Phase 2: Harvesting and structuring intelligence for ${target.name}...`);
+            const harvestPrompt = `You are a Chief Intelligence Officer. Synthesize a "Sovereign Intelligence Report" regarding: ${target.name}.
+            
+            This report must include:
+            1. **Macro Trends**: (Economic and technological shifts)
+            2. **Friction Points**: (Common barriers to deployment)
+            3. **Leverage points**: (How the Promethean Network State can provide service)
+            4. **Data Map**: (A structured list of 10 essential data fields for a dataset in this niche)
+            
+            Tone: Precise, humble, and abundance-oriented.`;
+
+            const harvestResult = await model.generateContent(harvestPrompt);
+            const reportContent = harvestResult.response.text();
+            logs.push(`Intelligence Report synthesized: ${reportContent.length} characters.`);
+
+            // Step 3: Archive to Wisdom Ledger
+            const docRecord = {
+                title: `Intelligence: ${target.name} - ${Date.now()}`,
+                content: reportContent,
+                targetIndustry: target.name,
+                utility: target.utility,
+                createdAt: new Date().toISOString(),
+                category: 'Intelligence'
+            };
+
+            const docRef = await db.collection('intelligence_assets').add(docRecord);
+            logs.push(`Archived to Wisdom Ledger: ${docRef.id}`);
+
+            // Step 4: Marketplace Listing
+            const estimatedValue = target.estimatedValue || (100 + Math.random() * 200);
+            logs.push(`Phase 3: Realizing value as Marketplace Asset ($${estimatedValue.toFixed(2)})...`);
+
+            await marketplaceService.listItem({
+                title: `Sovereign Intelligence Report: ${target.name}`,
+                description: `A high-fidelity research asset targeting ${target.name}. Designed to provide a strategic edge for participants in the Network State.`,
+                type: 'Digital',
+                price: estimatedValue,
+                currency: 'USD',
+                methodId: 'data-scraping',
+                imageUrl: `https://lvhllc.org/api/og?title=Intelligence%20Report&subtitle=${docRef.id}`,
+                barterAllowed: true,
+                providerId: 'economic-engine'
+            });
+
             const apiCost = 0.04;
 
             return {
                 success: true,
-                revenue,
+                revenue: estimatedValue,
                 cost: apiCost,
-                profit: revenue - apiCost,
+                profit: estimatedValue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: modelInfo.did || 'did:prmth:model:gemini-2.0-flash',
                 logs,
             };
 
