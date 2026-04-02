@@ -1,27 +1,22 @@
 FROM node:20
+
 WORKDIR /app
 
-# Copy entire monorepo
-COPY . .
+# Copy package files first for better caching
+COPY package*.json ./
 
-# Install dependencies
+# Install dependencies (including production and dev for build)
 RUN npm install
 
-# Build in specific order to resolve typescript reference issues
-RUN npm run build --workspace=@promethea/lib || npx tsc --build packages/lib/tsconfig.json
-RUN npm run build --workspace=@promethea/firebase || npx tsc --build packages/firebase/tsconfig.json
-RUN npm run build --workspace=@promethea/ai || npx tsc --build packages/ai/tsconfig.json
-RUN npm run build --workspace=@promethea/guardian || npx tsc --build packages/guardian/tsconfig.json
-RUN npm run build --workspace=@promethea/economic-engine || npx tsc --build packages/services/economic-engine/tsconfig.json
+# Copy source
+COPY . .
 
-# Set workdir to the service
-WORKDIR /app/packages/services/economic-engine
+# Build the app locally
+RUN npm run build
 
-# Environment
+# Final touches
 ENV NODE_ENV=production
 ENV PORT=8080
 EXPOSE 8080
 
-# Start directly with node to bypass npm overhead/lookup issues
-# Since we are in packages/services/economic-engine, dist/server.js should be local
 CMD ["node", "dist/server.js"]
