@@ -56,7 +56,7 @@ export class LinkedInService {
         await db.collection('integrations').doc('linkedin').set({
             accessToken: token,
             ownerDid: did,
-            expiresAt: new Date(Date.now().toISOString() + expiresIn * 1000),
+            expiresAt: new Date(Date.now() + expiresIn * 1000).toISOString(),
             updatedAt: new Date().toISOString()
         });
 
