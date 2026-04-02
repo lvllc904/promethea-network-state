@@ -14,11 +14,21 @@ ENV LDFLAGS="-Wl,--allow-multiple-definition"
 
 WORKDIR /app
 
-# Copy dependency manifests
+# Copy manifests
 COPY package*.json ./
+COPY packages/app/package.json ./packages/app/
+COPY packages/lib/package.json ./packages/lib/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/components/package.json ./packages/components/
+COPY packages/firebase/package.json ./packages/firebase/
+COPY packages/hooks/package.json ./packages/hooks/
+COPY packages/sovereign-store/package.json ./packages/sovereign-store/
+COPY packages/services/ai-service/package.json ./packages/services/ai-service/
+COPY packages/services/authentication-service/package.json ./packages/services/authentication-service/
+COPY packages/services/economic-engine/package.json ./packages/services/economic-engine/
 
 # Install all dependencies (including devDependencies for build)
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
