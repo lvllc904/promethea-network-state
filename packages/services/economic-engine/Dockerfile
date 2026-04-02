@@ -1,25 +1,30 @@
-FROM node:20
+FROM node:20-slim
+
+# Install system dependencies including build tools for native modules (sqlite3)
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Install native build tools
-RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
-
-# Copy package files first for better caching
+# Copy dependency manifests
 COPY package*.json ./
 
-# Install dependencies (including production and dev for build)
+# Install all dependencies (including devDependencies for build)
 RUN npm install
 
-# Copy source
+# Copy source code
 COPY . .
 
-# Build the app locally
+# Build the TypeScript project
 RUN npm run build
 
-# Final touches
+# Final environment configuration
 ENV NODE_ENV=production
 ENV PORT=8080
 EXPOSE 8080
 
+# Start the sovereign engine
 CMD ["node", "dist/server.js"]
