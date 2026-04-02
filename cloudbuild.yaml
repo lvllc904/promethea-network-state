@@ -1,7 +1,7 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/studio-9105849211-9ba48/authentication-service:latest', '-f', 'packages/services/authentication-service/Dockerfile', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/studio-9105849211-9ba48/authentication-service:latest']
-images:
-- 'gcr.io/studio-9105849211-9ba48/authentication-service:latest'
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - --destination=gcr.io/studio-9105849211-9ba48/authentication-service:latest
+      - --cache=true
+      - --cache-ttl=168h
+      - --dockerfile=packages/services/authentication-service/Dockerfile

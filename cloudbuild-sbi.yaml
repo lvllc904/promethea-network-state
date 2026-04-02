@@ -1,7 +1,7 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/studio-9105849211-9ba48/sbi-core:latest', '-f', 'packages/sbi-core/Dockerfile', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/studio-9105849211-9ba48/sbi-core:latest']
-images:
-- 'gcr.io/studio-9105849211-9ba48/sbi-core:latest'
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - --destination=gcr.io/studio-9105849211-9ba48/sbi-core:latest
+      - --cache=true
+      - --cache-ttl=168h
+      - --dockerfile=packages/sbi-core/Dockerfile

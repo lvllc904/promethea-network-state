@@ -42,4 +42,4 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Start the sovereign engine
-CMD ["node", "dist/server.js"]
+CMD ["node", "packages/services/economic-engine/dist/server.js"]

@@ -1,5 +1,7 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/studio-9105849211-9ba48/ai-service', '-f', 'packages/services/ai-service/Dockerfile', '.']
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/studio-9105849211-9ba48/ai-service']
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - --destination=gcr.io/studio-9105849211-9ba48/ai-service:latest
+      - --cache=true
+      - --cache-ttl=168h
+      - --dockerfile=packages/services/ai-service/Dockerfile
