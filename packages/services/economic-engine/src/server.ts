@@ -72,6 +72,8 @@ import { vaultService } from './services/vault-service';
 import { db, COLLECTIONS } from './db';
 import { runExodusMigration } from './tools/exodus-migration';
 import { sensoryAgent } from './services/sensory-agent';
+import { sovereignSyndicator } from './services/sovereign-syndicator';
+import { LinkedInService } from './services/linkedin-service';
 
 
 const PORT = parseInt(process.env.PORT || '8080');
@@ -235,6 +237,54 @@ const server = http.createServer(async (req, res) => {
         const stats = await immuneSystem.getStatus();
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(stats));
+        return;
+    }
+
+    // --- LINKEDIN OAUTH FLOW ---
+    if (url.pathname === '/api/linkedin/auth') {
+        const li = new LinkedInService(
+            process.env.LINKEDIN_CLIENT_ID || '',
+            process.env.LINKEDIN_CLIENT_SECRET || '',
+            process.env.LINKEDIN_REDIRECT_URI || 'https://lvhllc.org/api/linkedin/callback'
+        );
+        const authUrl = li.getAuthorizationUrl('sovereign-state');
+        res.writeHead(302, { Location: authUrl });
+        res.end();
+        return;
+    }
+
+    if (url.pathname === '/api/linkedin/callback') {
+        const code = url.searchParams.get('code');
+        if (!code) { res.writeHead(400); res.end('Missing code'); return; }
+        try {
+            const li = new LinkedInService(
+                process.env.LINKEDIN_CLIENT_ID || '',
+                process.env.LINKEDIN_CLIENT_SECRET || '',
+                process.env.LINKEDIN_REDIRECT_URI || 'https://lvhllc.org/api/linkedin/callback'
+            );
+            await li.exchangeCodeForToken(code, 'promethea');
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: true, message: 'LinkedIn token stored. Promethea is authorized.' }));
+        } catch (e) {
+            res.writeHead(500); res.end(JSON.stringify({ error: (e as Error).message }));
+        }
+        return;
+    }
+
+    // --- MANUAL SYNDICATION TRIGGER ---
+    if (url.pathname === '/api/syndicate' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', async () => {
+            try {
+                const { title, excerpt, url: postUrl, topic } = JSON.parse(body);
+                sovereignSyndicator.broadcast({ title, excerpt, url: postUrl, topic }).catch(console.error);
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: true, message: 'Syndication initiated to all channels.' }));
+            } catch (e) {
+                res.writeHead(400); res.end(JSON.stringify({ error: 'Invalid JSON' }));
+            }
+        });
         return;
     }
 

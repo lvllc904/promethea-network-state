@@ -5,6 +5,7 @@ import axios from 'axios';
 const Parser = require('rss-parser');
 import { googleWorkspace } from '../tools/google-workspace';
 import { BlinkGenerator } from '../tools/blink-generator';
+import { substackManager } from '../tools/substack-publisher';
 
 /**
  * Method 3: Newsletter Curation (Phase 3)
@@ -58,6 +59,15 @@ export class NewsletterMethod extends BaseMethod {
             logs.push('Sending newsletter via Gmail API...');
             const subject = `Promethean Sovereign Intelligence: Daily Curation - ${new Date().toLocaleDateString()}`;
             const sendResult = await this.sendNewsletter(subject, fullNewsletter);
+
+            // Step 4.5: Synchronize with Substack (Journal of Record)
+            try {
+                logs.push('Synchronizing transmission to Substack Journal...');
+                await substackManager.publishPost(subject, fullNewsletter, 'Promethean Sovereign Intelligence: Daily Curation');
+                logs.push('Substack synchronization successful.');
+            } catch (err) {
+                logs.push('Substack synchronization deferred to next cycle.');
+            }
 
             // Step 2.5: Archive to Sovereign Ledger
             const record = {

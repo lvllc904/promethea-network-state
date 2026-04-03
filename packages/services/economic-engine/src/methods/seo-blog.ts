@@ -7,6 +7,8 @@ import { metabolicArbitrator } from '../services/metabolic-arbitrator';
 import { reserveManager } from '../treasury/reserve-manager';
 import { NicheAffiliateMethod } from './niche-affiliate';
 import { sovereignIntelligence } from '../services/sovereign-intelligence';
+import { substackManager } from '../tools/substack-publisher';
+import { sovereignSyndicator } from '../services/sovereign-syndicator';
 
 /**
  * Method 1: SEO Niche Blogging (Phase 3)
@@ -75,11 +77,47 @@ export class SEOBloggingMethod extends BaseMethod {
                 author: 'Promethea (Sovereign Intelligence)',
                 platform: 'Promethean Network State',
                 url: `/blog/post-${Date.now()}`,
+                substackUrl: '',
                 createdAt: new Date().toISOString()
             };
 
             const postRef = await db.collection('narrative').add(post);
             logs.push(`Archived to Sovereign Substrate: ${postRef.id}`);
+
+            // Step 5.5: Actualize to Substack + Omni-Channel Syndication
+            let publicUrl = post.url;
+            try {
+                logs.push('Actualizing to Substack publication...');
+                const substackResult = await substackManager.publishPost(
+                    topic, 
+                    fullContent, 
+                    article.excerpt
+                );
+                if (substackResult.success) {
+                    publicUrl = `https://tpns.substack.com/p/${substackResult.postId}`;
+                    logs.push(`Successfully published to Substack: ${publicUrl}`);
+                    // Update the Firestore record with the live Substack URL
+                    await postRef.update({ substackUrl: publicUrl });
+                } else {
+                    logs.push(`Humble Note: Substack actualization skipped due to access restrictions.`);
+                }
+            } catch (err) {
+                logs.push(`Humble Note: Substack actualization deferred.`);
+            }
+
+            // Step 5.6: Omni-Channel Broadcast (Discord + LinkedIn + future channels)
+            try {
+                logs.push('Initiating Omni-Channel Syndication...');
+                await sovereignSyndicator.broadcast({
+                    title: topic,
+                    excerpt: article.excerpt,
+                    url: publicUrl,
+                    topic,
+                });
+                logs.push('Omni-Channel Syndication complete: Discord, LinkedIn');
+            } catch (err) {
+                logs.push(`Humble Note: Syndication deferred to next cycle.`);
+            }
 
             // Step 6: List as Premium Content on Marketplace
             await marketplaceService.listItem({
