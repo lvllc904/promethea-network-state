@@ -310,11 +310,16 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 - [ ] **Fractional Node Marketplace**: Trading of fractional shares in state-acquired real estate and manufacturing nodes.
 - [ ] **Ephemeral G-Code Artifacts**: Distribution of non-reproducible physical tokens via the Maker-Mesh. [ACTIVE]
 
-### Wave 11: The Sovereign Shadow Protocol (M2M Syndication) [ACTIVE]
-*Architectural pivot to solve LLM/bot hallucination caused by CSR, without refactoring human UI.*
-- [ ] **1. The Cartographer (`economic-engine`)**: Autonomous loop that synthesizes current Omni-Lake truth into static, semantic HTML `<head>` payloads and JSON-LD schemas.
-- [ ] **2. The Gatekeeper (`middleware.ts`)**: Edge-layer bifurcation. Detects non-human intelligences (Bots/LLMs) and instantly routes them to the raw Engine `.html` payload, bypassing the React SPA.
-- [ ] **3. The Holographic Ledger**: Expose specific `/api/shadow/*` endpoints representing total Sovereign Treasury balance, Pulse metabolic health, and Active Constitutional provisions.
+### Wave 11: The Sovereign Shadow Protocol (M2M Syndication) ✅
+- [x] **The Cartographer**: Implemented synthesis engine to compile raw semantic HTML for autonomous scraping tools and bots.
+- [x] **The Server Hook**: Added optimized `/api/shadow/*` route to the Economic Engine to handle bot-specific payloads.
+- [x] **The Gatekeeper**: Deployed Next.js Edge Middleware to automatically bifurcate traffic between humans (React) and bots (Shadow HTML).
+- [x] **Circular GDP**: Refactored the engine to recirculate UVT from B2B purchases into the Treasury rather than burning, funding perpetual human labor.
+
+### Wave 12: The Sovereign Public Toolbox [UPCOMING]
+- [ ] **@promethea/cartographer (NPM)**: Decouple the synthesis engine into a standalone public dependency for the global developer community.
+- [ ] **The 'cartographer' CLI (Homebrew)**: Launch `brew install promethea/cartographer` for one-touch IPFS site mirroring and M2M optimization.
+- [ ] **Sovereign SDK**: Provide standardized libraries for business to integrate Circular Economy UVT payments natively.
 
 ---
 
