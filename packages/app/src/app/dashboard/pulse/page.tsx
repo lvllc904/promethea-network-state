@@ -178,8 +178,6 @@ export default function PulsePage() {
     </div>
   );
 }
-  );
-}
 
 function cn(...classes: any[]) {
   return classes.filter(Boolean).join(' ');

@@ -134,9 +134,6 @@ export default function AtlasPage() {
     </div>
   );
 }
->
-  );
-}
 
 function cn(...classes: any[]) {
   return classes.filter(Boolean).join(' ');

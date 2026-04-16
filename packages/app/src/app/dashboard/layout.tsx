@@ -1,5 +1,5 @@
 'use client';
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 
 import { Header, MainNav, DisclosureProvider } from '@promethea/components';
 import { SidebarProvider } from '@promethea/ui';
@@ -25,13 +25,20 @@ function DashboardSkeleton() {
   )
 }
 
-
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [mounted, setMounted] = useState(false);
   const { isAuthStatusLoading } = useAuthStatus();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent SSG/SSR from executing client-only sovereign hooks found in children
+  if (!mounted) return <DashboardSkeleton />;
 
   return (
     <SidebarProvider>

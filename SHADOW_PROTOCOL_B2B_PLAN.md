@@ -38,10 +38,10 @@ Because a 30% network tax was applied, the citizen practically sold 1 UVT but on
 - A smart contract instantly mints and distributes an **"Atlas Note"** (Par value: $0.30) to the citizen's wallet.
 - *Result:* The citizen mathematically receives $1.00 in total value ($0.70 liquid + $0.30 state-backed security).
 
-### Step 4: The Dividend Waterfall
+### Step 4: The Sovereign Treasury Sink (Velocity of Money)
 The $0.28 that the State routed to the Sovereign Atlas (Step 1) generates physical and digital profit (leasing, yield farming). 
 - As that profit flows back into the Treasury, the **Waterfall Protocol** disperses it as a recurring USDC dividend to the citizens holding the Atlas Notes. 
-- Finally, the UVT that the Engine purchased in Step 2 is cryptographically burned, permanently reducing the total supply of UVT and driving deflationary value.
+- **The Circular Loop:** The UVT that the Engine purchased in Step 2 is NOT burned. It is routed directly into the `Sovereign Allocation Vault`. This ensures Promethea perpetually possesses a localized treasury of UVT to fund all future human labor (grants, public works, validators) without ever needing to synthetically mint new tokens, operating as a perfectly balanced Circular Economy.
 
 ## 4. Growth & Adoption Strategy
 1. **Solve Immediate Pain:** "Your site is invisible to ChatGPT and Gemini. Drop in this line of code, and it's fixed in 5 minutes." 
