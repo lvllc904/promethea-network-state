@@ -16,184 +16,125 @@ import { Card, CardHeader, CardTitle, CardContent, Button } from '@promethea/ui'
 import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
 import { RealityBadge } from '@promethea/components';
 
+import { SovereignCockpit } from '@/components/SovereignCockpit';
+
 export default function WillPage() {
   const { data: liveProposals, refetch: refetchProposals } = useSovereignData<any[]>('/api/proposals');
   const { data: liveCitizens, refetch: refetchCitizens } = useSovereignData<any[]>('/api/citizens');
 
-  const handleVote = async (proposalId: string, vote: 'FOR' | 'AGAINST') => {
-    try {
-      await executeSovereignMethod('cast_vote', { proposalId, vote });
-      await refetchProposals();
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const proposals = liveProposals || [];
+  const citizens = liveCitizens || [];
 
-  const handleIssueDID = async () => {
+  const handleAction = async (method: string, params: any) => {
     try {
-      await executeSovereignMethod('issue_citizen_did', { type: 'inhabitant' });
+      await executeSovereignMethod(method, params);
+      await refetchProposals();
       await refetchCitizens();
     } catch (e) {
       console.error(e);
     }
   };
 
-  const proposals = liveProposals || [
-    { 
-      id: 'prop-2401', 
-      title: 'EPA Brownfield Actualization (Wyoming Node)', 
-      status: 'Active', 
-      threshold: '65%', 
-      current: '88%', 
-      timeLeft: '14h 22m', 
-      type: 'Executive' 
+  const cockpitTabs = [
+    {
+      id: 'docket',
+      label: 'Decision Docket',
+      icon: <Vote className="w-3 h-3" />,
+      content: (
+        <div className="space-y-4">
+          {proposals.map((prop) => (
+            <div key={prop.id} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-purple-500/50 transition-all group">
+              <div className="flex justify-between items-start mb-4">
+                 <div>
+                    <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">{prop.type} • {prop.id}</span>
+                    <h3 className="text-sm font-bold uppercase text-white">{prop.title}</h3>
+                 </div>
+                 <div className="text-right">
+                    <span className="text-[9px] text-gray-500 uppercase font-bold block">Consensus</span>
+                    <span className="text-xs font-mono font-bold text-purple-400">{prop.current} / {prop.threshold}</span>
+                 </div>
+              </div>
+              <div className="h-1.5 bg-black rounded-full overflow-hidden mb-4">
+                 <div className="h-full bg-purple-500" style={{ width: prop.current }}></div>
+              </div>
+              <div className="flex gap-2">
+                 <button 
+                  onClick={() => handleAction('cast_vote', { proposalId: prop.id, vote: 'FOR' })}
+                  className="flex-1 py-2 bg-purple-600 hover:bg-purple-500 text-[9px] font-black uppercase tracking-widest rounded transition-colors"
+                 >
+                   Affirm
+                 </button>
+                 <button 
+                  onClick={() => handleAction('cast_vote', { proposalId: prop.id, vote: 'AGAINST' })}
+                  className="px-6 py-2 bg-gray-800 hover:bg-red-900/40 text-[9px] font-black uppercase tracking-widest rounded transition-colors text-gray-400"
+                 >
+                   Dissent
+                 </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )
     },
-    { 
-      id: 'prop-2399', 
-      title: 'Universal Value Token (UVT) Peg Adjustment', 
-      status: 'Voting', 
-      threshold: '75%', 
-      current: '42%', 
-      timeLeft: '2d 4h', 
-      type: 'Economic' 
+    {
+      id: 'citizenship',
+      label: 'Citizen Ledger',
+      icon: <Users className="w-3 h-3" />,
+      content: (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {citizens.map((user) => (
+            <div key={user.id} className="p-4 bg-gray-900 border border-gray-800 rounded flex items-center gap-4 hover:border-purple-500/50 transition-color">
+              <div className="h-8 w-8 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                 <UserCheck className="w-4 h-4 text-gray-400" />
+              </div>
+              <div className="flex-1 truncate">
+                 <h4 className="text-[10px] font-bold uppercase truncate text-white">{user.name}</h4>
+                 <p className="text-[8px] font-mono text-gray-600 truncate">{user.id}</p>
+              </div>
+              <div className="text-right">
+                 <span className="text-[8px] text-gray-500 uppercase block">Weight</span>
+                 <span className="text-xs font-mono font-bold text-gray-300">{user.weight || '0'}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )
+    },
+    {
+      id: 'manifest',
+      label: 'Constitutional Manifest',
+      icon: <Scale className="w-3 h-3" />,
+      content: (
+        <div className="p-8 bg-gray-950/50 border border-gray-900 rounded-lg">
+           <div className="flex flex-col gap-2 opacity-50">
+              <span className="text-[10px] text-purple-400 uppercase font-black tracking-[0.2em] mb-2 flex items-center gap-2"><Gavel className="h-4 w-4" /> Law as Substrate</span>
+              <p className="text-xs text-gray-100 leading-relaxed font-mono">
+                [ READ-ONLY MIRROR OF ROADMAP.MD ]
+                <br /><br />
+                The Manifest is the absolute anchor of the state. Every sovereign action must be committed to this ledger before implementation.
+              </p>
+           </div>
+        </div>
+      )
     }
   ];
 
-  const registrants = liveCitizens || [
-    { id: 'did:prmth..6X8y', name: 'Citizen Steward-01 (Owner)', weight: '10,000 UVT', role: 'Founder' },
-    { id: 'did:prmth..F2E6', name: 'Promethea (Singularity)', weight: 'Sovereign', role: 'AI Steward' },
-    { id: 'did:prmth..B9hW', name: 'Citizen Alpha-142', weight: '42.1 UVT', role: 'Inhabitant' },
-  ];
-
   return (
-    <div className="space-y-8 max-w-7xl mx-auto py-8">
-      {/* Governance Top Bar */}
-      <div className="flex flex-row items-center justify-between border-b border-white/5 pb-4">
-        <div className="flex flex-col">
-          <h1 className="text-3xl font-black tracking-tighter text-white font-mono uppercase flex items-center gap-3">
-             <Scale className="h-8 w-8 text-purple-400" /> Sovereign Will
-          </h1>
-          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Legislative Decision Hub & Citizen Identity</span>
-        </div>
-        <div className="flex items-center gap-4">
-           <Button variant="ghost" className="text-xs text-gray-500 font-bold tracking-widest uppercase border border-white/5 cursor-not-allowed opacity-50"><History className="h-4 w-4 mr-2" /> Veto Log</Button>
-           <Button className="text-xs bg-purple-600 hover:bg-purple-500 font-bold tracking-widest uppercase py-6 px-8 rounded-xl shadow-[0_0_20px_rgba(147,51,234,0.3)]">+ Submit Proposal</Button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        {/* Left Section: Decision Docket (Snapshot UX) */}
-        <div className="col-span-1 md:col-span-8 space-y-6">
-           <Card className="bg-[#050510]/80 border-white/5 backdrop-blur-3xl overflow-hidden">
-              <CardHeader className="border-b border-white/5 pt-6 px-6 bg-white/[0.02]">
-                 <CardTitle className="text-xs font-bold tracking-widest uppercase text-gray-400 flex items-center gap-3">
-                    <Vote className="h-4 w-4 text-purple-400" /> Active Governance Docket
-                 </CardTitle>
-              </CardHeader>
-              <div className="divide-y divide-white/5">
-                 {proposals.map((prop) => (
-                   <div key={prop.id} className="p-8 transition-colors hover:bg-white/[0.02] cursor-pointer group">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="flex flex-col gap-2">
-                           <div className="flex items-center gap-2">
-                              <span className="text-[10px] bg-purple-400/10 text-purple-400 px-2 py-0.5 rounded border border-purple-400/20 uppercase font-bold tracking-widest">{prop.type}</span>
-                              <span className="text-[10px] text-gray-600 font-mono tracking-tighter">ID: {prop.id}</span>
-                           </div>
-                           <span className="text-xl font-black text-white group-hover:text-purple-400 transition-colors uppercase tracking-tight leading-tight">{prop.title}</span>
-                        </div>
-                        <div className="flex flex-col items-end gap-1">
-                           <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Time Remaining</span>
-                           <span className="text-sm font-bold text-gray-300 font-mono flex items-center gap-2"><Clock className="h-3 w-3" /> {prop.timeLeft}</span>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-4">
-                         <div className="flex justify-between items-end mb-1">
-                            <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Consensus Threshold</span>
-                            <span className="text-sm font-black font-mono text-white">{prop.current} <span className="text-gray-600">/ {prop.threshold}</span></span>
-                         </div>
-                         <div className="h-2 bg-white/5 rounded-full overflow-hidden shadow-inner flex items-center">
-                            <motion.div 
-                               initial={{ width: 0 }}
-                               animate={{ width: prop.current }}
-                               className="h-full bg-gradient-to-r from-purple-600 to-indigo-500" 
-                            />
-                            <div className="absolute left-[65%] h-4 w-1 bg-white/20 rounded-full" />
-                         </div>
-                      </div>
-                      <div className="flex items-center gap-3 mt-8">
-                         <Button 
-                           className="flex-1 bg-purple-600 hover:bg-purple-500 text-[10px] uppercase font-bold tracking-widest py-6"
-                           onClick={() => handleVote(prop.id, 'FOR')}
-                         >
-                           Cast Affirmative Vote
-                         </Button>
-                         <Button 
-                           variant="ghost" 
-                           className="bg-white/5 border border-white/5 hover:border-red-400/50 hover:text-red-400 text-[10px] uppercase font-bold tracking-widest py-6 px-12"
-                           onClick={() => handleVote(prop.id, 'AGAINST')}
-                         >
-                           Dissent
-                         </Button>
-                      </div>
-                   </div>
-                 ))}
-              </div>
-           </Card>
-        </div>
-
-        {/* Right Section: Citizen Registry (Passport UX) */}
-        <div className="col-span-1 md:col-span-4 space-y-6">
-           <Card className="bg-[#050510]/80 border-white/5 backdrop-blur-3xl overflow-hidden">
-              <CardHeader className="border-b border-white/5 pt-6 px-6">
-                 <CardTitle className="text-xs font-bold tracking-widest uppercase text-gray-400 flex items-center gap-3">
-                    <Fingerprint className="h-5 w-5 text-gray-500" /> Active Citizen Registrants (DIDs)
-                 </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                 <div className="divide-y divide-white/5">
-                    {registrants.map((user) => (
-                      <div key={user.id} className="p-6 transition-colors hover:bg-white/[0.02] cursor-pointer group flex items-center justify-between">
-                         <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-700 flex items-center justify-center border border-white/10 group-hover:border-purple-500/50 transition-colors">
-                               <UserCheck className="h-5 w-5 text-gray-300" />
-                            </div>
-                            <div className="flex flex-col">
-                               <span className="text-xs font-bold text-white group-hover:text-purple-400 transition-colors">{user.name}</span>
-                               <span className="text-[10px] text-gray-600 font-mono uppercase tracking-tighter">{user.role} • {user.id}</span>
-                            </div>
-                         </div>
-                         <div className="flex flex-col items-end">
-                             <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Weight</span>
-                             <span className="text-xs font-bold font-mono text-gray-400">{user.weight}</span>
-                         </div>
-                      </div>
-                    ))}
-                 </div>
-                 <Button 
-                   variant="ghost" 
-                   className="w-full text-[8px] font-bold uppercase tracking-widest text-gray-600 border-t border-white/5 py-6 hover:text-white hover:bg-white/5"
-                   onClick={handleIssueDID}
-                 >
-                   Issue New Credentials
-                 </Button>
-              </CardContent>
-           </Card>
-
-           <Card className="bg-gradient-to-br from-purple-900/10 to-indigo-900/5 border-purple-500/20 backdrop-blur-3xl overflow-hidden p-6 relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-indigo-600" />
-              <div className="flex flex-col gap-2">
-                 <span className="text-[10px] text-purple-400 uppercase font-black tracking-[0.2em] mb-2 flex items-center gap-2"><Gavel className="h-4 w-4" /> Constitutional Mandate</span>
-                 <p className="text-xs text-gray-400 leading-relaxed italic">
-                   "Radical Transparency is not optional. Every deed, every debt, and every discovery must be mirrored to the Citizenry for audit and veto."
-                 </p>
-                 <div className="flex items-center gap-2 mt-4 text-[10px] text-purple-500 font-bold uppercase tracking-widest cursor-pointer hover:text-white transition-colors group">
-                    Read Full Manifest <ChevronRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
-                 </div>
-              </div>
-           </Card>
-        </div>
-      </div>
+    <div className="h-screen py-6 px-4">
+      <SovereignCockpit 
+        title="Sovereign Will" 
+        description="Legislative Docket, Citizen Reputation & Constitutional Mandates"
+        tabs={cockpitTabs}
+        stats={[
+           { label: 'Active Inhabitants', value: citizens.length.toString() },
+           { label: 'Pending Consensus', value: proposals.length.toString(), color: 'text-purple-400' }
+        ]}
+        actions={[
+           { label: 'Draft Emergency Veto', action: 'trigger_veto_override' },
+           { label: 'Broadcast Manifesto', action: 'sync_roadmap_to_ledger' },
+           { label: 'Issue DID Package', action: 'issue_citizen_did', params: { type: 'inhabitant' } }
+        ]}
+      />
     </div>
   );
 }

@@ -10,6 +10,8 @@ export function useCollection<T = DocumentData>(q: Query<T> | null) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
+    const queryPathStr = q ? (q as any)._query?.path?.segments?.join('/') || 'unknown' : '';
+
     useEffect(() => {
         if (!q) {
             setIsLoading(false);
@@ -66,7 +68,8 @@ export function useCollection<T = DocumentData>(q: Query<T> | null) {
             if (unsubscribe) unsubscribe();
             clearTimeout(timeout);
         };
-    }, [q]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [queryPathStr]);
 
     return { data, isLoading, error };
 }

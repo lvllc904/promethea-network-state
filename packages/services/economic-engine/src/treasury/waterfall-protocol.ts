@@ -3,6 +3,8 @@ import { reserveManager } from './reserve-manager';
 import { db, COLLECTIONS } from '../db';
 import { ExecutionService } from '../services/execution-service';
 import { gcpBilling } from '../services/gcp-billing-service';
+import { legalAutomation } from '../services/legal-automation-service';
+import { personaSubstrate } from '../tools/persona-substrate';
 
 /**
  * ============================================================
@@ -64,6 +66,31 @@ export class WaterfallProtocol {
     private initialized: boolean = false;
     private lastSwept: Date = new Date(0);
     private sweepIntervalMs: number = 60 * 60 * 1000; // Sweep every hour
+
+    // Treasury Synthesis thresholds (USD) — Appendix I Phase 4
+    private static readonly SYNTHESIS_THRESHOLDS = [
+        {
+            usd: 1_000,
+            label: 'BLM_MINERAL_CLAIM',
+            description: 'BLM Mineral Claim Filing ($165 statutory fee offset)',
+            cooldownKey: 'synthesis_blm_last_triggered',
+            cooldownMs: 7 * 24 * 60 * 60 * 1000, // 1 week
+        },
+        {
+            usd: 10_000,
+            label: 'QUIET_TITLE_FILING',
+            description: 'Quiet Title Petition — Doctrine of Abandonment',
+            cooldownKey: 'synthesis_quiet_title_last_triggered',
+            cooldownMs: 14 * 24 * 60 * 60 * 1000, // 2 weeks
+        },
+        {
+            usd: 50_000,
+            label: 'FIRST_NODE_ACQUISITION',
+            description: 'First Sovereign Physical Node — DAC Buy-Back Proposal',
+            cooldownKey: 'synthesis_buyback_last_triggered',
+            cooldownMs: 30 * 24 * 60 * 60 * 1000, // 30 days
+        },
+    ];
 
     /**
      * Bootstrap all sovereign partitions on engine start.
@@ -187,6 +214,115 @@ export class WaterfallProtocol {
                 await walletManager.sweepToPartition('OPERATIONAL', 'RESTORATION', restorationAmount);
             } else {
                 console.log(`[Waterfall SIMULATED] Would tithe ${restorationAmount.toFixed(4)} SOL to RESTORATION`);
+            }
+        }
+
+        // == TREASURY SYNTHESIS (Appendix I Phase 4) ==
+        // Check fiat-denominated reserve thresholds and auto-trigger physical anchoring.
+        await this.runTreasurySynthesis();
+    }
+
+    /**
+     * Treasury Synthesis — the closed-loop bridge from digital revenue to physical reality.
+     *
+     * Checks the sovereign reserve balance (USD) against graduated thresholds and
+     * fires the appropriate LegalAutomationModule action. Each trigger is:
+     *   1. Logged to Firestore (treasury_synthesis_events)
+     *   2. Deduplicated with a per-action cooldown
+     *   3. Announced to all citizens via the persona substrate
+     */
+    private async runTreasurySynthesis(): Promise<void> {
+        const stats = reserveManager.getStats();
+        const reserveUsd = stats.reserveBalance;
+
+        console.log(`[Waterfall:Synthesis] Reserve check: $${reserveUsd.toFixed(2)} USD`);
+
+        // Load cooldown timestamps from Firestore
+        let cooldowns: Record<string, number> = {};
+        try {
+            const cooldownDoc = await db.collection(COLLECTIONS.TREASURY).doc('synthesis_cooldowns').get();
+            if (cooldownDoc.exists) cooldowns = cooldownDoc.data() as Record<string, number>;
+        } catch (_) { /* non-blocking */ }
+
+        for (const threshold of WaterfallProtocol.SYNTHESIS_THRESHOLDS) {
+            if (reserveUsd < threshold.usd) continue;
+
+            const lastTriggeredAt = cooldowns[threshold.cooldownKey] || 0;
+            const now = Date.now();
+            if (now - lastTriggeredAt < threshold.cooldownMs) {
+                console.log(`[Waterfall:Synthesis] ${threshold.label} threshold met but still in cooldown. Skipping.`);
+                continue;
+            }
+
+            console.log(`[Waterfall:Synthesis] 🏛️  THRESHOLD MET: ${threshold.label} at $${reserveUsd.toFixed(2)} USD`);
+
+            try {
+                await this.executeSynthesisAction(threshold.label, reserveUsd);
+
+                // Update cooldown
+                cooldowns[threshold.cooldownKey] = now;
+                await db.collection(COLLECTIONS.TREASURY).doc('synthesis_cooldowns').set(cooldowns, { merge: true });
+
+                // Log to sovereign ledger
+                await db.collection('treasury_synthesis_events').add({
+                    action: threshold.label,
+                    description: threshold.description,
+                    reserveUsdAtTrigger: reserveUsd,
+                    conservationMode: ExecutionService.isConservationModeActive(),
+                    triggeredAt: new Date().toISOString(),
+                });
+
+                // Broadcast to citizens
+                await personaSubstrate.broadcastUpdate(
+                    `Treasury Synthesis: ${threshold.label.replace(/_/g, ' ')}`,
+                    threshold.description,
+                    `$${reserveUsd.toFixed(2)} USD Reserve`
+                );
+
+            } catch (err) {
+                console.error(`[Waterfall:Synthesis] ❌ Action ${threshold.label} failed:`, err instanceof Error ? err.message : err);
+            }
+        }
+    }
+
+    /**
+     * Dispatch the correct LegalAutomationModule action for each synthesis tier.
+     */
+    private async executeSynthesisAction(label: string, reserveUsd: number): Promise<void> {
+        if (ExecutionService.isConservationModeActive()) {
+            console.log(`[Waterfall:Synthesis SIMULATED] Would execute: ${label}`);
+            return;
+        }
+
+        switch (label) {
+            case 'BLM_MINERAL_CLAIM': {
+                // File a Notice of Location for the flagship Promethean mineral claim
+                await legalAutomation.draftBLMNotice(
+                    'Promethean Node Alpha — Elko County, Nevada',
+                    { lat: 41.0, lng: -115.5 }
+                );
+                break;
+            }
+            case 'QUIET_TITLE_FILING': {
+                // Initiate Quiet Title for the highest-priority zombie asset
+                const zombieDoc = await db.collection('reclamation_assets')
+                    .orderBy('quietnessCoefficient', 'desc')
+                    .limit(1)
+                    .get();
+                const asset = zombieDoc.docs[0];
+                if (asset) {
+                    await legalAutomation.initiateQuietTitle(asset.id);
+                } else {
+                    console.log('[Waterfall:Synthesis] No zombie assets catalogued yet. Quiet Title deferred.');
+                }
+                break;
+            }
+            case 'FIRST_NODE_ACQUISITION': {
+                // The Reserve Manager already handles the $50k buy-back proposal.
+                // Here we additionally draft the legal filing and notify.
+                // (ReserveManager's proposeSovereignBuyBack fires the governance proposal.)
+                console.log('[Waterfall:Synthesis] 🏛️  FIRST NODE ACQUISITION threshold reached. Governance proposal queued by ReserveManager.');
+                break;
             }
         }
     }

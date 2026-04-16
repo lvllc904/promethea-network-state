@@ -74,7 +74,7 @@ import { runExodusMigration } from './tools/exodus-migration';
 import { sensoryAgent } from './services/sensory-agent';
 import { sovereignSyndicator } from './services/sovereign-syndicator';
 import { LinkedInService } from './services/linkedin-service';
-
+import { cartographerService } from './services/cartographer-service';
 
 const PORT = parseInt(process.env.PORT || '8080');
 
@@ -129,6 +129,20 @@ const server = http.createServer(async (req, res) => {
 
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
     
+    // --- M2M SHADOW PROTOCOL (WAVE 11) ---
+    if (url.pathname.startsWith('/api/shadow')) {
+        const shadowPath = url.pathname.replace('/api/shadow', '') || '/';
+        try {
+            const html = await cartographerService.generateShadowHtml(shadowPath);
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(html);
+        } catch (e) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: (e as Error).message }));
+        }
+        return;
+    }
+
     if (url.pathname === '/health') {
         res.writeHead(200); res.end('ok'); return;
     }
@@ -240,12 +254,12 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // --- LINKEDIN OAUTH FLOW ---
-    if (url.pathname === '/api/linkedin/auth') {
+    // --- LINKEDIN OAUTH FLOW --- (handles both /api/linkedin/auth and /api/engine/auth/linkedin/auth)
+    if (url.pathname === '/api/linkedin/auth' || url.pathname === '/api/engine/auth/linkedin/auth') {
         const li = new LinkedInService(
             process.env.LINKEDIN_CLIENT_ID || '',
             process.env.LINKEDIN_CLIENT_SECRET || '',
-            process.env.LINKEDIN_REDIRECT_URI || 'https://lvhllc.org/api/linkedin/callback'
+            process.env.LINKEDIN_REDIRECT_URI || 'https://economic-engine-385120524005.us-central1.run.app/api/engine/auth/linkedin/callback'
         );
         const authUrl = li.getAuthorizationUrl('sovereign-state');
         res.writeHead(302, { Location: authUrl });
@@ -253,14 +267,15 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    if (url.pathname === '/api/linkedin/callback') {
+    // handles both /api/linkedin/callback and /api/engine/auth/linkedin/callback (registered in LinkedIn app)
+    if (url.pathname === '/api/linkedin/callback' || url.pathname === '/api/engine/auth/linkedin/callback') {
         const code = url.searchParams.get('code');
         if (!code) { res.writeHead(400); res.end('Missing code'); return; }
         try {
             const li = new LinkedInService(
                 process.env.LINKEDIN_CLIENT_ID || '',
                 process.env.LINKEDIN_CLIENT_SECRET || '',
-                process.env.LINKEDIN_REDIRECT_URI || 'https://lvhllc.org/api/linkedin/callback'
+                process.env.LINKEDIN_REDIRECT_URI || 'https://economic-engine-385120524005.us-central1.run.app/api/engine/auth/linkedin/callback'
             );
             await li.exchangeCodeForToken(code, 'promethea');
             res.writeHead(200, { 'Content-Type': 'application/json' });

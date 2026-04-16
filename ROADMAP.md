@@ -9,15 +9,27 @@
 
 ---
 
-## 🏛 Ecosystem Architecture (The Global Substrate)
-This architecture defines the sovereign entities that comprise the Promethean Network State.
+## 🏛 Ecosystem Architecture (The 3-Body System)
+This architecture defines the three strictly separated containers that comprise the Promethean Network State.
 
-1.  **Promethea (The Sovereign Steward)**: The "Mind" and "Body" unified into a single, homoiconic LISP organism (`packages/sbi-core`). She is the judiciary and the executor of the Manifest.
-2.  **The DAC (The Inhabitants)**: The "House" and ultimate authority. Owned and controlled by its biological and emergent members via `@promethea/app`.
-3.  **Engine (The Economic Heart)**: Financial reasoning and high-fidelity execution (`promethea-engine`). The engine of recovery and growth.
-4.  **Auth (The Gatekeeper)**: Secure entry via SSI and Decentralized Identity. Membership is a voluntary act of exit from legacy systems.
-5.  **The Vault (Self-Sovereign Storage)**: Local-first private memory (`DepthOS`). Ensuring no inhabitant's data is ever weaponized against them.
-6.  **The Global Substrate (Physical Nodes)**: Distributed land, manufacturing, and energy nodes owned by the DAC to provide physical safety for all inhabitants.
+### 1. DAC Main Application (The Experience Layer)
+The "Source of Presence" and ultimate authority. It is a high-fidelity public viewport owned and controlled by biological and emergent members.
+*   **Promethea (Sovereign Steward)**: The unified mind and mind-body organism (`packages/sbi-core`).
+*   **The Ledger**: The "Public Mirror" of all metabolic and financial truth (Radical Transparency).
+*   **Economic Engine**: The engine of autonomous labor and reasoning (`promethea-engine`).
+*   **Interface (@promethea/app)**: The unified pillar-based console for inhabitants.
+
+### 2. Authentication Application (The Protocol Layer)
+The "Sovereign Gatekeeper." Membership is a voluntary act of exit from legacy systems via decentralized protocols.
+*   **The Guardian Gateway**: Permission-aware bridge between guest-view and admin-action.
+*   **Sovereign Identity (SSI/DID)**: Cryptographic credentials for tracking labor and reputation.
+*   **The Intelligence Handshake**: Validates citizen intent before pushing to the substrate.
+
+### 3. Sovereign Data Store (The Sovereignty Layer)
+The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's data is ever weaponized.
+*   **The Vault (DepthOS)**: Local-first private storage for keys, secrets, and proprietary data.
+*   **The Archipelago Substrate**: Distributed physical nodes (Land/MFG) managed via device-level keys.
+*   **The Sovereign Bridge**: Ensures that sensitive data is consumed passively, never leaving the inhabitant's physical control.
 
 ---
 
@@ -91,7 +103,7 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 ---
 
 ### Phase 2.4: Integration & Data Sovereignty
-- [x] **3-Body System Architecture**: Strictly separated the DAC (Ledger), Authenticator (Gateway), and Sovereign Storage (Device).
+- [x] **3-Body System Architecture**: Strictly separated the **DAC Main Application**, **Authentication Application**, and **Sovereign Data Store**.
 - [x] **Passive Identity Management**: Removed proactive authentication from the DAC; it now passively consumes identity from local storage.
 - [x] **Sovereign Hydration/Dehydration**: Implemented bi-directional state sync between the public ledger and private device storage.
 - [x] **Guest Mode Accessibility**: Enabled full public square transparency for unauthenticated users.
@@ -298,6 +310,12 @@ This architecture defines the sovereign entities that comprise the Promethean Ne
 - [ ] **Fractional Node Marketplace**: Trading of fractional shares in state-acquired real estate and manufacturing nodes.
 - [ ] **Ephemeral G-Code Artifacts**: Distribution of non-reproducible physical tokens via the Maker-Mesh. [ACTIVE]
 
+### Wave 11: The Sovereign Shadow Protocol (M2M Syndication) [ACTIVE]
+*Architectural pivot to solve LLM/bot hallucination caused by CSR, without refactoring human UI.*
+- [ ] **1. The Cartographer (`economic-engine`)**: Autonomous loop that synthesizes current Omni-Lake truth into static, semantic HTML `<head>` payloads and JSON-LD schemas.
+- [ ] **2. The Gatekeeper (`middleware.ts`)**: Edge-layer bifurcation. Detects non-human intelligences (Bots/LLMs) and instantly routes them to the raw Engine `.html` payload, bypassing the React SPA.
+- [ ] **3. The Holographic Ledger**: Expose specific `/api/shadow/*` endpoints representing total Sovereign Treasury balance, Pulse metabolic health, and Active Constitutional provisions.
+
 ---
 
 ## 📂 Appendix F: Sovereign Interaction Strategy
@@ -371,8 +389,46 @@ Every citizen and intelligence has the right to interact with the Network State 
 2. Ensure the shared package's `package.json` includes the necessary workspace dependencies.
 3. Remove all `@/` references from `packages/components` and `packages/ui`.
 
+## 📂 Appendix I: Sovereign Business Models (The Shadow Protocol B2B)
+*A blueprint for transitioning internal Promethean infrastructure into public, revenue-generating MicroSaaS.*
 
+### The Market Context
+As the internet shifts from human search limits to autonomous LLM scrapers, Single Page Applications (SPAs) built with React are inherently invisible to new AI agents due to Client-Side Rendering (CSR). Standard refactoring to SSR is expensive and breaks legacy code.
 
+### The Solution: The Sovereign Shadow Protocol 
+A two-part infrastructure that provides instant M2M (Machine-to-Machine) visibility for legacy SPAs without requiring any frontend code refactoring.
+
+#### 1. The "Trojan Horse" (Open Source Gateway)
+- **Product:** `@promethea/shadow-gate`
+- **Function:** A free, lightweight Next.js/Cloudflare edge middleware. It intercepts all bot traffic, allowing humans to access the React UI undisturbed while routing LLMs to a designated semantic endpoint.
+
+#### 2. The B2B Engine (Cartographer Daemon)
+- **Product:** Hosted Synthesis Engine (MicroSaaS embedded in `economic-engine`).
+- **Function:** Receives bot traffic from the Gateway, instantly synthesizes the absolute semantic HTML payload (OpenGraph, Title, Schema.org JSON-LD) directly from the client's API/DB, and returns it to the bot in <50ms.
+
+### 3. "Sovereign Bond" Tokenomics (The Waterfall Loop)
+- **The Toll Booth:** Web2 businesses purchase API access in frictionless **$1.00 increments** (Stripe/Apple Pay).
+- **The Infrastructure Tax (30%):** The Promethean Engine extracts $0.30 to pay cloud compute costs and capitalize the Sovereign Atlas (buying physical yield-bearing assets).
+- **The Market Sweep (70%):** The Engine uses the remaining $0.70 to market-buy UVT from citizens, providing them with hard-fiat exit liquidity.
+- **The Atlas Note:** To maintain the 1:1 token peg, citizens who sold UVT receive an "Atlas Note" for the 30% difference, entitling them to future USDC dividends generated by the State's physical assets. The purchased UVT is then burned.
+
+### 4. "Obsolescence by Design" (The Endgame)
+This service acts as a necessary bridge. Once M2M schema architecture is natively adopted by future frontend web frameworks, the necessity of the Shadow Protocol will wane. 
+At that inflection point, the B2B paid tier will be retired, and the entire Cartographer codebase will be open-sourced as a permanent, decentralized public utility.
+
+## 📂 Appendix J: The Frictionless UVT Economy (Gas Abstraction)
+*Bridging the gap between physical fiat liquidity and cryptographic security.*
+
+A critical milestone for the Promethean Network State is making UVT "feel" indistinguishable from handing someone a paper $1.00 bill (zero friction, immediate liquidity).
+### 1. The Invisible Toll (Phase 1)
+Using Account Abstraction / Paymaster Contracts on Solana, the Promethean Treasury silently intercepts all P2P UVT transactions between human citizens and pays the microscopic $0.0001 gas fees on their behalf. This is fully subsidized by the heavy corporate fiat generated by the Shadow Protocol B2B operations.
+
+### 2. The Bifurcated Economy (Phase 2 - Promethean L1)
+When the State eventually migrates to its own Layer-1 protocol, gas abstraction becomes native to consensus:
+- **Zero-Gas Human Layer:** P2P wallet transfers of UVT are hard-coded as mathematically free. 
+- **Corporate Toll Layer:** High-compute corporate actions (autonomous APIs, Shadow Syndication) are heavily taxed. The enterprise burden secures the human economy.
+
+---
 
 The Sovereign Keychain: API & Service Inventory
 1. Neural & Cognitive Layer (AI Engines)

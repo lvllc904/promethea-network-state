@@ -22,15 +22,17 @@ import { Card, CardHeader, CardTitle, CardContent, Button, Input } from '@promet
 import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
 import { RealityBadge } from '@promethea/components';
 
+import { SovereignCockpit } from '@/components/SovereignCockpit';
+
 export default function PulsePage() {
-  const { data: pulse, loading } = useSovereignData<any>('/api/security_telemetry/pulse');
-  const [intelQuery, setIntelQuery] = useState('');
+  const { data: pulse, refetch: refetchPulse } = useSovereignData<any>('/api/security_telemetry/pulse');
   const [isScanning, setIsScanning] = useState(false);
 
-  const handleScan = async () => {
-    setIsScanning(true);
+  const handleAction = async (method: string, params?: any) => {
+    if (method === 'perform_integrity_scan') setIsScanning(true);
     try {
-      await executeSovereignMethod('perform_integrity_scan');
+      await executeSovereignMethod(method, params);
+      await refetchPulse();
     } catch (e) {
       console.error(e);
     } finally {
@@ -38,171 +40,144 @@ export default function PulsePage() {
     }
   };
 
-  const events = pulse?.events || [
-    { time: '14:22:10', type: 'REFINERY', msg: 'mth_real_estate_refinery: Scanned 124 Wyoming Parcels. 1 High-Feasibility Stake Found.', status: 'SUCCESS' },
-    { time: '14:21:42', type: 'TREASURY', msg: 'WaterfallProtocol: Successfully swept 0.12 SOL to USD Reserve.', status: 'SETTLED' },
-    { time: '14:20:01', type: 'IMMUNE', msg: 'External Auth Challenge: 0xbADA... rejected. Unauthorized Origin.', status: 'SHIELD' },
-    { time: '14:18:22', type: 'SENSORY', msg: 'SensoryAgent: Connected to grants.gov. Opportunity FY25-MARC identified.', status: 'SYNC' },
-    { time: '14:15:05', type: 'SUBSTRATE', msg: 'Local SQLite: Performing routine atomic vacuum. DB optimized.', status: 'NOMINAL' }
-  ];
-
-  const vitals = [
-    { label: 'Metabolic Velocity', value: pulse ? `${pulse.metabolicVelocity} ops/s` : '...', status: 'Optimal', icon: Activity, color: 'text-cyan-400' },
-    { label: 'Substrate Load', value: pulse ? `${(pulse.substrateLoad * 100).toFixed(1)}%` : '...', status: 'Nominal', icon: Cpu, color: 'text-green-400' },
-    { label: 'Mirror Sync Deficit', value: pulse ? `${pulse.mirrorSyncDeficit}ms` : '...', status: 'Ready', icon: RefreshCcw, color: 'text-blue-400' },
-    { label: 'Sovereign Uptime', value: pulse ? `${(pulse.uptime / 3600).toFixed(2)}h` : '...', status: 'Active', icon: Clock, color: 'text-purple-400' },
+  const cockpitTabs = [
+    {
+      id: 'intel',
+      label: 'Intelligence Feed',
+      icon: <Database className="w-3 h-3" />,
+      content: (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           {/* High-density Intel Cards */}
+           {[
+             { title: 'Wyoming Ground Truth Established', body: 'Refinery #124 has confirmed soil pH and zoning symmetry...', time: '2m ago', level: 'VISIONARY' },
+             { title: 'Consensus Achieved: UVT-24', body: 'The Sovereign Will has actualized the new minting threshold...', time: '14m ago', level: 'LEGISLATIVE' }
+           ].map((post, i) => (
+              <div key={i} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-cyan-500/50 transition-all group relative">
+                 <div className="flex justify-between items-start mb-2">
+                    <span className="text-[7px] text-gray-600 font-black uppercase tracking-widest">{post.time} • {post.level}</span>
+                    <button className="text-gray-700 hover:text-cyan-400"><ExternalLink className="w-3 h-3" /></button>
+                 </div>
+                 <h4 className="text-[11px] font-black uppercase text-white mb-2 leading-tight">{post.title}</h4>
+                 <p className="text-[9px] text-gray-500 line-clamp-2 mb-4 leading-relaxed font-mono">{post.body}</p>
+                 <div className="flex gap-2">
+                    <button 
+                      onClick={() => handleAction('trigger_narrative_blast', { post })}
+                      className="flex-1 py-2 bg-cyan-600/10 hover:bg-cyan-600 text-cyan-400 hover:text-black text-[8px] font-black uppercase tracking-widest rounded transition-all border border-cyan-500/20"
+                    >
+                      Syndicate
+                    </button>
+                    <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-[8px] font-black uppercase tracking-widest rounded transition-all text-gray-500">
+                      Audit
+                    </button>
+                 </div>
+              </div>
+           ))}
+        </div>
+      )
+    },
+    {
+      id: 'vitality',
+      label: 'Metabolic Vitality',
+      icon: <Activity className="w-3 h-3" />,
+      content: (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+             {[
+               { label: 'Metabolic Velocity', val: `${pulse?.metabolicVelocity || '0'} ops/s`, col: 'text-cyan-400' },
+               { label: 'Substrate Load', val: `${((pulse?.substrateLoad || 0) * 100).toFixed(1)}%`, col: 'text-emerald-400' },
+               { label: 'Sync Deficit', val: `${pulse?.mirrorSyncDeficit || 0}ms`, col: 'text-blue-400' },
+               { label: 'Sovereign Uptime', val: `${((pulse?.uptime || 0) / 3600).toFixed(1)}h`, col: 'text-purple-400' }
+             ].map(v => (
+               <div key={v.label} className="p-3 bg-gray-900 border border-gray-800 rounded hover:bg-black/40 cursor-help transition-colors">
+                  <span className="text-[9px] text-gray-600 uppercase font-bold">{v.label}</span>
+                  <p className={`text-xl font-mono font-bold ${v.col}`}>{v.val}</p>
+               </div>
+             ))}
+          </div>
+          
+          <div className="bg-gray-950 p-4 border border-gray-900 rounded font-mono text-[10px] h-64 overflow-y-auto no-scrollbar">
+             <div className="text-gray-600 mb-2 underline decoration-gray-800 underline-offset-4 uppercase font-bold tracking-widest flex items-center gap-2">
+                <Database className="w-3 h-3" /> Metabolic Stream (Omni-Lake Audit)
+             </div>
+             {(pulse?.events || []).map((e: any, i: number) => (
+                <div key={i} className="py-1 flex gap-4 hover:bg-gray-900/40 cursor-pointer group">
+                   <span className="text-gray-800">[{e.time}]</span>
+                   <span className={e.type === 'IMMUNE' ? 'text-red-500' : 'text-cyan-700'}>{e.type}</span>
+                   <span className="text-gray-500 truncate group-hover:text-white transition-colors">{e.msg}</span>
+                </div>
+             ))}
+             <div className="text-gray-800 animate-pulse mt-1">... LISTENING ...</div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'security',
+      label: 'Security Radar',
+      icon: <ShieldCheck className="w-3 h-3" />,
+      content: (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           <div className="p-6 bg-gray-900 border border-gray-800 rounded">
+              <h3 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                 <ShieldAlert className="w-4 h-4 text-red-500" /> IP Quarantine Log
+              </h3>
+              <div className="space-y-2 opacity-40">
+                 {[1, 2, 3].map(i => (
+                   <div key={i} className="p-2 bg-black border border-gray-800 rounded flex justify-between">
+                      <span className="text-[10px] font-mono">192.168.1.{i * 14}</span>
+                      <span className="text-[10px] text-red-500 uppercase font-bold">Blocked</span>
+                   </div>
+                 ))}
+              </div>
+           </div>
+           <div className="p-6 bg-gray-900 border border-gray-800 rounded flex flex-col items-center justify-center text-center">
+              <span className="text-[10px] text-emerald-500 uppercase font-black tracking-widest mb-2 animate-pulse">Defense Level 4</span>
+              <h4 className="text-xl font-black font-mono text-white mb-4">Immune Integrity</h4>
+              <div className="w-full h-1 bg-gray-800 rounded-full mb-6">
+                 <div className="h-full bg-emerald-500" style={{ width: '94%' }}></div>
+              </div>
+              <button 
+                onClick={() => handleAction('perform_integrity_scan')}
+                disabled={isScanning}
+                className="w-full py-3 bg-gray-800 hover:bg-emerald-600 text-[10px] font-black uppercase tracking-widest rounded transition-all"
+              >
+                {isScanning ? 'Scanning Substrate...' : 'Run Integrity Scan'}
+              </button>
+           </div>
+        </div>
+      )
+    },
+    {
+      id: 'syndication',
+      label: 'Syndication Matrix',
+      icon: <RefreshCcw className="w-3 h-3" />,
+      content: (
+        <div className="p-8 text-center text-gray-600 uppercase font-bold tracking-[0.3em] opacity-40">
+           [ Narrative Broadcast Substrate Linked ]
+        </div>
+      )
+    }
   ];
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto py-8">
-      {/* Pulse Top Bar */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/5 pb-4 gap-4">
-        <div className="flex flex-col">
-          <h1 className="text-3xl font-black tracking-tighter text-white font-mono uppercase flex items-center gap-3">
-             <Activity className="h-8 w-8 text-cyan-400" /> Sovereign Pulse
-          </h1>
-          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Real-time Metabolic Monitoring & Substrate Vitals</span>
-        </div>
-        
-        <div className="flex-1 max-w-xl self-center mx-4 relative group">
-           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-cyan-500/50 group-focus-within:text-cyan-400 transition-colors" />
-           <Input 
-             placeholder="Search the Intelligence Lake..." 
-             className="pl-12 bg-white/5 border-white/10 focus:border-cyan-400/50 transition-all font-mono text-xs uppercase"
-             value={intelQuery}
-             onChange={(e) => setIntelQuery(e.target.value)}
-           />
-           <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[8px] font-black tracking-widest text-gray-700 uppercase">Lake Omni-Audit v2</div>
-        </div>
-
-        <div className="flex items-center gap-4">
-           <Button variant="ghost" className="text-xs text-gray-500 font-bold tracking-widest uppercase border border-white/5"><Terminal className="h-4 w-4 mr-2" /> SSH Control</Button>
-           <Button className="text-xs bg-red-900/30 text-red-500 border border-red-500/50 hover:bg-red-500 hover:text-white font-bold tracking-widest uppercase py-6 px-8 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.1)]">Emergency Cut-Out</Button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-         {vitals.map((v) => (
-           <Card key={v.label} className="bg-[#050510]/80 border-white/5 backdrop-blur-3xl overflow-hidden group hover:border-white/20 transition-all cursor-pointer">
-              <CardContent className="p-6">
-                 <div className="flex justify-between items-start mb-4">
-                    <div className={cn("p-2 rounded-lg bg-white/5", v.color)}>
-                       <v.icon className="h-5 w-5" />
-                    </div>
-                    <span className="text-[8px] uppercase tracking-widest font-black text-gray-600">{v.status}</span>
-                 </div>
-                 <div className="flex flex-col gap-1">
-                    <span className="text-[10px] text-gray-500 font-bold tracking-widest uppercase">{v.label}</span>
-                    <span className="text-2xl font-black font-mono text-white group-hover:text-cyan-400 transition-colors uppercase tracking-tight leading-tight">{v.value}</span>
-                 </div>
-              </CardContent>
-           </Card>
-         ))}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        {/* Left Section: Metabolic Audit Log (Netstat UX) */}
-        <div className="col-span-1 md:col-span-8 space-y-6">
-           <Card className="bg-[#020208]/80 border-white/5 backdrop-blur-3xl overflow-hidden font-mono min-h-[600px] border-l-4 border-l-cyan-500/50">
-              <CardHeader className="border-b border-white/5 pt-6 px-8 flex flex-row items-center justify-between">
-                 <CardTitle className="text-xs font-bold tracking-widest uppercase text-gray-500 flex items-center gap-3">
-                    <Database className="h-4 w-4 text-cyan-400" /> AI Metabolic Stream (Omni-Lake Audit)
-                 </CardTitle>
-                 <div className="flex items-center gap-6">
-                    <span className="text-[10px] text-green-400 animate-pulse font-bold flex items-center gap-2"><Wifi className="h-3 w-3" /> LISTENING</span>
-                    <Button variant="ghost" className="text-[10px] text-gray-600 uppercase font-black tracking-widest border border-white/5 py-4 hover:text-white">Clean Logs</Button>
-                 </div>
-              </CardHeader>
-              <div className="p-0 text-[11px] leading-relaxed select-all">
-                 <div className="divide-y divide-white/[0.02]">
-                    {events.map((e: any, idx: number) => (
-                      <div key={idx} className="px-8 py-4 hover:bg-white/[0.02] transition-colors group flex gap-4">
-                         <span className="text-gray-700 font-bold shrink-0">[{e.time}]</span>
-                         <span className={cn(
-                            "w-24 shrink-0 font-bold tracking-widest uppercase text-[10px]",
-                            e.type === 'IMMUNE' ? 'text-red-500' : 
-                            e.type === 'TREASURY' ? 'text-yellow-500' : 'text-cyan-600'
-                         )}>{e.type}</span>
-                         <span className="text-gray-400 group-hover:text-gray-200 transition-colors">{e.msg}</span>
-                         <span className={cn(
-                            "ml-auto text-[9px] font-black tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity",
-                            e.status === 'SHIELD' ? 'text-red-500' : 'text-green-500'
-                         )}>{e.status}</span>
-                      </div>
-                    ))}
-                    {/* Simulated Continuous Stream */}
-                    <div className="px-8 py-4 text-gray-700 animate-pulse font-bold tracking-widest">
-                       ... LISTENING FOR METABOLIC PULSE ...
-                    </div>
-                 </div>
-              </div>
-           </Card>
-        </div>
-
-        {/* Right Section: Immune Status (Visual Defense) */}
-        <div className="col-span-1 md:col-span-4 space-y-6">
-           <Card className="bg-[#050510]/80 border-white/5 backdrop-blur-3xl overflow-hidden p-8 border-t-4 border-t-green-500/50">
-              <div className="flex flex-col gap-6">
-                 <div className="flex justify-between items-start">
-                    <div className="flex flex-col gap-1">
-                       <span className="text-[10px] text-green-500 uppercase font-black font-mono tracking-widest flex items-center gap-2 animate-pulse"><ShieldCheck className="h-4 w-4" /> Defense Level 4</span>
-                       <h2 className="text-2xl font-black text-white font-mono uppercase tracking-tighter">Immune Integrity</h2>
-                    </div>
-                    <div className="p-4 bg-green-500/10 rounded-2xl border border-green-500/20">
-                       <Zap className="h-6 w-6 text-green-500" />
-                    </div>
-                 </div>
-                 
-                 <div className="space-y-4 pt-6 border-t border-white/5">
-                    <div className="flex flex-col gap-2">
-                       <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-600 mb-2">
-                          <span>Substrate Health</span>
-                          <span className="text-white">SYMMETRIC</span>
-                       </div>
-                       <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <motion.div initial={{ width: 0 }} animate={{ width: "94%" }} className="h-full bg-green-500" />
-                       </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                       <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-600 mb-2">
-                          <span>Identity Integrity</span>
-                          <span className="text-white">ENCRYPTED</span>
-                       </div>
-                       <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <motion.div initial={{ width: 0 }} animate={{ width: "100%" }} className="h-full bg-cyan-500" />
-                       </div>
-                    </div>
-                 </div>
-
-                 <Button 
-                   className="w-full bg-transparent border border-white/10 hover:bg-white/5 text-[10px] uppercase font-black py-8 mt-4 tracking-widest flex items-center gap-3"
-                   onClick={handleScan}
-                   disabled={isScanning}
-                 >
-                    {isScanning ? <RefreshCcw className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-                    {isScanning ? 'Scanning...' : 'Perform Integrity Scan'}
-                 </Button>
-              </div>
-           </Card>
-
-           <Card className="bg-white/5 border-white/10 backdrop-blur-3xl p-8 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full translate-x-12 -translate-y-12" />
-              <div className="flex flex-col gap-4">
-                 <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-yellow-500 uppercase font-black tracking-widest flex items-center gap-2"><Mic className="h-4 w-4" /> Ambient Voice Feed</span>
-                    <div className="w-8 h-8 rounded-lg bg-yellow-400/10 flex items-center justify-center border border-yellow-400/20 group-hover:scale-110 transition-transform">
-                       <Box className="h-4 w-4 text-yellow-400" />
-                    </div>
-                 </div>
-                 <p className="text-xs text-gray-500 font-mono leading-relaxed italic border-l-2 border-white/10 pl-4 py-2">
-                   "PNS is now processing the 42.8252, -108.7513 ground truth... Standing by for Stage 3 actualization command."
-                 </p>
-                 <Button variant="ghost" className="text-[10px] text-gray-600 font-bold uppercase tracking-widest py-2 hover:text-white justify-start pl-4 underline decoration-white/10 underline-offset-8">Open Voice Matrix <ExternalLink className="h-3 w-3 ml-2" /></Button>
-              </div>
-           </Card>
-        </div>
-      </div>
+    <div className="h-screen py-6 px-4">
+      <SovereignCockpit 
+        title="Sovereign Pulse" 
+        description="Metabolic Vitals, Security Radar & Substrate Integrity"
+        tabs={cockpitTabs}
+        stats={[
+           { label: 'System Health', value: '98%', color: 'text-emerald-400' },
+           { label: 'Omni-Sync', value: 'Live' }
+        ]}
+        actions={[
+           { label: 'Emergency Cut-Out', action: 'trigger_state_freeze' },
+           { label: 'Re-sync Substrate', action: 'force_substrate_sync' },
+           { label: 'Broadcast Narrative', action: 'trigger_narrative_blast' }
+        ]}
+      />
     </div>
+  );
+}
   );
 }
 

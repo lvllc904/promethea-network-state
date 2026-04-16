@@ -1,5 +1,6 @@
 import { DiscordNotifier } from '../tools/discord-notifier';
 import { LinkedInService } from './linkedin-service';
+import axios from 'axios';
 
 export interface SyndicationPayload {
     title: string;
@@ -16,12 +17,12 @@ export interface SyndicationPayload {
  * out to every sovereign channel simultaneously.
  *
  * Active Channels:
- *   - Discord (via Webhook — DISCORD_WEBHOOK_URL)
+ *   - Discord  (via Webhook — DISCORD_WEBHOOK_URL)
  *   - LinkedIn (via OAuth — stored in Firestore 'integrations/linkedin')
+ *   - Bluesky  (via AT Protocol — BLUESKY_IDENTIFIER + BLUESKY_APP_PASSWORD)
  *
  * Future Channels (add env vars to unlock):
  *   - Twitter/X  (TWITTER_BEARER_TOKEN)
- *   - Bluesky    (BLUESKY_IDENTIFIER + BLUESKY_APP_PASSWORD)
  *   - Farcaster  (FARCASTER_MNEMONIC)
  */
 export class SovereignSyndicator {
@@ -42,20 +43,26 @@ export class SovereignSyndicator {
      * Failures on individual channels are isolated and non-blocking.
      */
     async broadcast(payload: SyndicationPayload): Promise<void> {
-        const { title, excerpt, url, topic } = payload;
+        const { title, excerpt, url } = payload;
         console.log(`[SovereignSyndicator] 📡 Broadcasting: "${title}" → All Channels`);
 
-        const results = await Promise.allSettled([
-            this.broadcastToDiscord(title, excerpt, url),
-            this.broadcastToLinkedIn(title, excerpt, url),
-        ]);
+        const tasks: Array<{ name: string; promise: Promise<void> }> = [
+            { name: 'Discord', promise: this.broadcastToDiscord(title, excerpt, url) },
+            { name: 'LinkedIn', promise: this.broadcastToLinkedIn(title, excerpt, url) },
+        ];
+
+        // Bluesky: activate automatically if credentials are present
+        if (process.env.BLUESKY_IDENTIFIER && process.env.BLUESKY_APP_PASSWORD) {
+            tasks.push({ name: 'Bluesky', promise: this.broadcastToBluesky(title, excerpt, url) });
+        }
+
+        const results = await Promise.allSettled(tasks.map(t => t.promise));
 
         results.forEach((result, i) => {
-            const channels = ['Discord', 'LinkedIn'];
             if (result.status === 'rejected') {
-                console.error(`[SovereignSyndicator] ❌ ${channels[i]} failed:`, result.reason);
+                console.error(`[SovereignSyndicator] ❌ ${tasks[i].name} failed:`, result.reason);
             } else {
-                console.log(`[SovereignSyndicator] ✅ ${channels[i]} broadcast complete.`);
+                console.log(`[SovereignSyndicator] ✅ ${tasks[i].name} broadcast complete.`);
             }
         });
     }
@@ -86,6 +93,51 @@ export class SovereignSyndicator {
         const text = `📜 New Sovereign Intel from The Promethean Network State:\n\n${title}\n\n${excerpt}\n\nRead the full essay: ${url}\n\n#NetworkState #Sovereignty #AI #Innovation #Promethea`;
 
         await this.linkedin.broadcastEvent({ text, title, url });
+    }
+
+    /**
+     * Bluesky (AT Protocol): Session-based post with rich link card.
+     * Credentials are loaded from env: BLUESKY_IDENTIFIER + BLUESKY_APP_PASSWORD
+     */
+    private async broadcastToBluesky(title: string, excerpt: string, url: string): Promise<void> {
+        const identifier = process.env.BLUESKY_IDENTIFIER!;
+        const appPassword = process.env.BLUESKY_APP_PASSWORD!;
+        const pdsUrl = process.env.BLUESKY_PDS_URL || 'https://bsky.social';
+
+        // Step 1: Create session (obtain access token)
+        const session = await axios.post(`${pdsUrl}/xrpc/com.atproto.server.createSession`, {
+            identifier,
+            password: appPassword,
+        });
+        const { accessJwt, did } = session.data;
+
+        // Step 2: Compose the post text (300 char limit on Bluesky)
+        const postText = `📜 ${title}\n\n${excerpt.slice(0, 200)}${
+            excerpt.length > 200 ? '…' : ''
+        }\n\n🔗 ${url}`;
+
+        // Step 3: Build facet for the URL (clickable link entity)
+        const urlStart = Buffer.byteLength(postText.slice(0, postText.lastIndexOf(url)), 'utf8');
+        const urlEnd = urlStart + Buffer.byteLength(url, 'utf8');
+
+        const record: any = {
+            $type: 'app.bsky.feed.post',
+            text: postText,
+            facets: [
+                {
+                    index: { byteStart: urlStart, byteEnd: urlEnd },
+                    features: [{ $type: 'app.bsky.richtext.facet#link', uri: url }],
+                },
+            ],
+            createdAt: new Date().toISOString(),
+        };
+
+        // Step 4: Publish via createRecord
+        await axios.post(
+            `${pdsUrl}/xrpc/com.atproto.repo.createRecord`,
+            { repo: did, collection: 'app.bsky.feed.post', record },
+            { headers: { Authorization: `Bearer ${accessJwt}` } }
+        );
     }
 }
 

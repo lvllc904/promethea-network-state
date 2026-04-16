@@ -35,7 +35,7 @@ gcloud run deploy ai-service \
   --env-vars-file env.production.yaml \
   --memory 1Gi \
   --cpu 1 \
-  --min-instances 1 \
+  --min-instances 0 \
   --timeout 300
 
 # ─── 2. SBI Core (Promethea's Brain) ────────────────────────────────────────
@@ -51,7 +51,7 @@ gcloud run deploy sbi-core \
   --set-env-vars "GEMINI_API_KEY=${GEMINI_API_KEY},FIREBASE_PROJECT_ID=${PROJECT_ID},STORAGE_MODE=SOVEREIGN,CONSERVATION_MODE=true" \
   --memory 1Gi \
   --cpu 1 \
-  --min-instances 1 \
+  --min-instances 0 \
   --timeout 600
 
 # ─── 3. Economic Engine ──────────────────────────────────────────────────────
@@ -67,7 +67,7 @@ gcloud run deploy economic-engine \
   --env-vars-file env.production.yaml \
   --memory 2Gi \
   --cpu 1 \
-  --min-instances 1 \
+  --min-instances 0 \
   --timeout 600
 
 # ─── 4. Authentication Service (Guardian Gateway) ────────────────────────────
@@ -83,7 +83,7 @@ gcloud run deploy authentication-service \
   --env-vars-file env.production.yaml \
   --memory 512Mi \
   --cpu 1 \
-  --min-instances 1 \
+  --min-instances 0 \
   --timeout 300
 
 # ─── Gather Service URLs ─────────────────────────────────────────────────────
@@ -122,7 +122,7 @@ gcloud run deploy promethea-frontend \
   --set-env-vars "NEXT_PUBLIC_AI_SERVICE_URL=${AI_URL},NEXT_PUBLIC_GUARDIAN_URL=${GUARDIAN_URL},NEXT_PUBLIC_ENGINE_URL=${ENGINE_URL},NEXT_PUBLIC_FIREBASE_PROJECT_ID=${PROJECT_ID},NEXT_PUBLIC_DISABLE_FIREBASE=true,CONSERVATION_MODE=true,ECONOMIC_ENGINE_URL=${ENGINE_URL},AI_SERVICE_URL=${AI_URL},GUARDIAN_URL=${GUARDIAN_URL}" \
   --memory 1Gi \
   --cpu 1 \
-  --min-instances 1 \
+  --min-instances 0 \
   --timeout 300
 
 FRONTEND_URL=$(gcloud run services describe promethea-frontend --region ${REGION} --format 'value(status.url)')

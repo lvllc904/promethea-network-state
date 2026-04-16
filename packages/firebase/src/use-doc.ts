@@ -10,6 +10,8 @@ export function useDoc<T>(ref: DocumentReference | null) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
+    const docPathStr = ref ? (ref as any)._path?.segments?.join('/') || (ref as any).path || 'unknown' : '';
+
     useEffect(() => {
         if (!ref) {
             setIsLoading(false);
@@ -57,7 +59,8 @@ export function useDoc<T>(ref: DocumentReference | null) {
         return () => {
             if (unsubscribe) unsubscribe();
         };
-    }, [ref]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [docPathStr]);
 
     return { data, isLoading, error };
 }

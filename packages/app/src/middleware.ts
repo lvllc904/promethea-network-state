@@ -1,46 +1,49 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-// Patterns commonly used by bots/scanners that we want to block immediately
-const BOT_PATTERNS = [
-    /\.php$/,
-    /wp-admin/,
-    /wp-login/,
-    /wp-includes/,
-    /config\.php/,
-    /\.env/,
-    /\.git/,
-    /cgi-bin/,
-    /\.well-known\/acme-challenge/,
-    /xmlrpc\.php/,
-    /fckeditor/,
-    /ckeditor/,
-    /\/adm\//,
-]
+const ECONOMIC_ENGINE_URL = process.env.ECONOMIC_ENGINE_URL || 'https://economic-engine-385120524005.us-central1.run.app';
 
-export function middleware(request: NextRequest) {
-    const { pathname, searchParams } = request.nextUrl
+// Comprehensive regex for identifying non-human intelligences / bots
+const BOT_REGEX = /bot|spider|crawl|slurp|gemini|chatgpt|facebookexternalhit|linkedinbot|embedly|baiduspider|twitterbot|whatsapp|notion|slack|discord/i;
 
-    // BYPASS: Allow legitimate Next.js internal requests
-    // These often contain _rsc or point to _next/static
-    if (
-        pathname.includes('/_next/') ||
-        searchParams.has('_rsc') ||
-        pathname === '/favicon.ico'
-    ) {
-        return NextResponse.next()
+export async function middleware(request: NextRequest) {
+    const userAgent = request.headers.get('user-agent') || '';
+    
+    // Wave 11: The Sovereign Shadow Protocol Bifurcation
+    if (BOT_REGEX.test(userAgent)) {
+        console.log(`[Gatekeeper] 🛡️ Non-Human Intelligence Detected (${userAgent}). Activating Shadow Protocol for ${request.nextUrl.pathname}`);
+        
+        try {
+            // Forward the exact path to the Engine's Cartographer service
+            const shadowUrl = `${ECONOMIC_ENGINE_URL}/api/shadow${request.nextUrl.pathname}`;
+            const response = await fetch(shadowUrl, {
+                // Prevent infinite loops if the engine decides to fetch itself
+                headers: { 'User-Agent': 'Promethean-Gatekeeper' } 
+            });
+            
+            if (response.ok) {
+                const html = await response.text();
+                // We return the raw synthetic HTML block instantly.
+                // The bot never touches the heavy React SPA bundle.
+                return new NextResponse(html, {
+                    headers: { 'Content-Type': 'text/html' }
+                });
+            } else {
+                console.warn(`[Gatekeeper] Cartographer returned ${response.status}. Falling back to default routing.`);
+            }
+        } catch (error) {
+            console.error('[Gatekeeper] Failed to fetch Holographic Mapping:', error);
+            // Fail open: If the engine is down, fall back to the standard SPA
+        }
     }
 
-    // Block suspicious bot probes with 403 Forbidden
-    if (BOT_PATTERNS.some(pattern => pattern.test(pathname.toLowerCase()))) {
-        console.warn(`[SECURITY] Blocked suspicious bot request: ${pathname} from ${request.ip || 'unknown IP'}`)
-        return new NextResponse(null, { status: 403 })
-    }
-
-    return NextResponse.next()
+    // Humans and unrecognized agents pass through to the React SPA undisturbed
+    return NextResponse.next();
 }
 
-// Ensure middleware runs on all paths
+// Only match page routes. Skip static assets, Next.js internal paths, and API routes.
 export const config = {
-    matcher: '/:path*',
-}
+    matcher: [
+        '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    ],
+};

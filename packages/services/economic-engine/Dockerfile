@@ -33,8 +33,11 @@ RUN npm install --legacy-peer-deps
 # Copy source code
 COPY . .
 
-# Build the TypeScript project
-RUN npm run build
+# Step 1: Build @promethea/lib first (engine imports from it — tsc needs its type declarations)
+RUN cd packages/lib && npm run build || true
+
+# Step 2: Build the engine TypeScript
+RUN cd packages/services/economic-engine && npm run build
 
 # Final environment configuration
 ENV NODE_ENV=production
