@@ -16,8 +16,8 @@ import {
   Search,
   Tag,
   PlusCircle,
-  Filter,
-  ExternalLink
+  ExternalLink,
+  LayoutGrid
 } from 'lucide-react';
 import { 
   Card, 

@@ -9,8 +9,7 @@ import {
   Wind, 
   Droplet, 
   ShieldCheck, 
-  Building2, 
-  LayoutGrid,
+  Building2,
   ArrowUpRight,
   Database,
   ExternalLink
