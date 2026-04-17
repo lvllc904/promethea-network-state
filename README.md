@@ -23,9 +23,14 @@ The **Cartographer** is the M2M (Machine-to-Machine) synthesis engine of the Sha
 
 ### Install via Homebrew:
 ```bash
+# Step 1 — Register the Sovereign Tap (one-time setup)
 brew tap The-Promethean-Society/tpns
+
+# Step 2 — Install the Cartographer engine
 brew install cartographer
 ```
+
+> ⚠️ **You must run `brew tap` first.** `brew install cartographer` alone will not work.
 
 ### Quick Usage:
 ```bash
