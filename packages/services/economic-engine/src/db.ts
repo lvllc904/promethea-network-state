@@ -59,6 +59,8 @@ class SQLiteAdapter implements StorageAdapter {
             CREATE TABLE IF NOT EXISTS acquisitions (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS content_archive (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS billing_records (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS market (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS marketplace (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
         `);
         this.initialized = true;
     }
@@ -207,5 +209,7 @@ export const COLLECTIONS = {
     ACQUISITIONS: 'acquisitions',
     OMNI_INTEL_LAKE: 'omni_intel_lake',
     TREASURY: 'treasury',
-    TREASURY_EVENTS: 'treasury_events'
+    TREASURY_EVENTS: 'treasury_events',
+    MARKET: 'market',
+    MARKETPLACE: 'marketplace'
 };

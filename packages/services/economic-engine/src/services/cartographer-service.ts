@@ -1,4 +1,4 @@
-import { cartographer } from '@promethea/cartographer';
+import { cartographer } from 'promethea-cartographer';
 import { reserveManager } from '../treasury/reserve-manager';
 import { immuneSystem } from './immune-system';
 

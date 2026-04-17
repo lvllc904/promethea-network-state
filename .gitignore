@@ -19,6 +19,7 @@ pubsub-debug.log*
 ui-debug.log*
 
 # Secrets & Env
+.npmrc
 .env
 .env.local
 .env.development.local

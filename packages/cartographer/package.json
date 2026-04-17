@@ -1,9 +1,12 @@
 {
-  "name": "@promethea/cartographer",
+  "name": "promethea-cartographer",
   "version": "1.0.0",
   "description": "Sovereign Machine-to-Machine (M2M) synthesis engine for AI-readable web architecture.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "cartographer": "dist/cli.js"
+  },
   "files": [
     "dist",
     "README.md"
@@ -21,6 +24,7 @@
   ],
   "author": "Promethean Network State",
   "license": "MIT",
+  "dependencies": {},
   "devDependencies": {
     "typescript": "^5.3.3"
   }

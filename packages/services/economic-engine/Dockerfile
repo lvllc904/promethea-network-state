@@ -26,6 +26,7 @@ COPY packages/sovereign-store/package.json ./packages/sovereign-store/
 COPY packages/services/ai-service/package.json ./packages/services/ai-service/
 COPY packages/services/authentication-service/package.json ./packages/services/authentication-service/
 COPY packages/services/economic-engine/package.json ./packages/services/economic-engine/
+COPY packages/cartographer/package.json ./packages/cartographer/
 
 # Install all dependencies (including devDependencies for build)
 RUN npm install --legacy-peer-deps
@@ -35,6 +36,7 @@ COPY . .
 
 # Step 1: Build @promethea/lib first (engine imports from it — tsc needs its type declarations)
 RUN cd packages/lib && npm run build || true
+RUN cd packages/cartographer && npm run build
 
 # Step 2: Build the engine TypeScript
 RUN cd packages/services/economic-engine && npm run build
