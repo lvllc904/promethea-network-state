@@ -60,3 +60,4 @@ sa_new.json
 tmp_json.txt
 service-account.json
 tmp_sa.json
+packages/**/.env
