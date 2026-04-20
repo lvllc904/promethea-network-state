@@ -13,7 +13,7 @@ import {
 } from '@promethea/ui';
 import { Button } from '@promethea/ui';
 import { DollarSign, MapPin, ArrowUpRight, Clock, CheckCircle, XCircle, User, PlusCircle } from 'lucide-react';
-import { useCollection, useFirestore, useMemoFirebase } from '@promethea/firebase';
+import { useCollection, useFirestore, useMemoFirebase } from '@promethea/identity';
 import { collection, query, where } from 'firebase/firestore';
 import { RealWorldAsset, Proposal, Vote } from '@promethea/lib';
 import { type Query } from 'firebase/firestore';

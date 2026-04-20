@@ -1,10 +1,10 @@
 
-import { GEMINI_API_KEY, GENKIT_ENV } from './config';
+import { GEMINI_API_KEY, GENKIT_ENV } from './config.js';
 import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 
 // Import the new self-healing flow
-import { selfHealingFlow } from './flows/self-healing';
+import { selfHealingFlow } from './flows/self-healing.js';
 
 export const ai = genkit({
   plugins: [

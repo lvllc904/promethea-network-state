@@ -27,8 +27,8 @@
       "@/components/*": [
         "packages/components/src/*"
       ],
-      "@/firebase/*": [
-        "packages/firebase/src/*"
+      "@/identity/*": [
+        "packages/identity/src/*"
       ],
       "@/hooks/*": [
         "packages/hooks/src/*"
@@ -57,11 +57,11 @@
       "@promethea/components/*": [
         "packages/components/src/*"
       ],
-      "@promethea/firebase": [
-        "packages/firebase/src"
+      "@promethea/identity": [
+        "packages/identity/src"
       ],
-      "@promethea/firebase/*": [
-        "packages/firebase/src/*"
+      "@promethea/identity/*": [
+        "packages/identity/src/*"
       ],
       "@promethea/hooks": [
         "packages/hooks/src"
@@ -84,9 +84,7 @@
       "@promethea/pubsub": [
         "packages/services/pubsub/src"
       ],
-      "@promethea/firebase-admin": [
-        "packages/firebase/src/admin"
-      ],
+
       "@promethea/guardian": [
         "packages/guardian/src"
       ]

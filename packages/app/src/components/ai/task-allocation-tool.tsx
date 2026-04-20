@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { AllocateRWATasksInput, AllocateRWATasksOutput } from "@promethea/ai";
-import { useCollection, useFirestore, useMemoFirebase } from '@promethea/firebase';
+import { useCollection, useFirestore, useMemoFirebase } from '@promethea/identity';
 import { collection } from 'firebase/firestore';
 import { Citizen } from '@promethea/lib';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@promethea/ui";

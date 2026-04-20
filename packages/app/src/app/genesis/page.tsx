@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from '@promethea/ui';
-import { useUser, useFirestore, useDoc } from '@promethea/firebase';
+import { useUser, useFirestore, useDoc } from '@promethea/identity';
 import { doc, setDoc, serverTimestamp, collection, addDoc } from 'firebase/firestore';
 import { ShieldCheck, Zap, Sparkles, Loader2, Landmark } from 'lucide-react';
 import { useRouter } from 'next/navigation';

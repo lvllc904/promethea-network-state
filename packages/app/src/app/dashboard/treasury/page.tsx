@@ -34,6 +34,7 @@ import {
 } from '@promethea/ui';
 import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
 import { RealityBadge, LedgerValue } from '@promethea/components';
+import Link from 'next/link';
 
 import { SovereignCockpit } from '@/components/SovereignCockpit';
 
@@ -68,7 +69,7 @@ export default function TreasuryPage() {
              <div className="col-span-2 p-6 bg-gray-900 rounded border border-gray-800 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 opacity-10"><BarChart3 className="w-24 h-24" /></div>
                 <p className="text-[10px] uppercase text-gray-500 font-bold tracking-widest mb-2">Total Capital Account</p>
-                <h2 className="text-4xl font-black font-mono text-white">${intel?.totalValue?.toLocaleString() || '20,054.52'}</h2>
+                <h2 className="text-4xl font-black font-mono text-white">${Number(intel?.totalValue || 0).toLocaleString() || '20,054.52'}</h2>
                 <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
                    {['SOL', 'ETH', 'USD', 'USDC'].map(s => (
                       <div key={s} className="p-2 bg-black rounded border border-gray-800">
@@ -151,23 +152,33 @@ export default function TreasuryPage() {
     },
     {
       id: 'marketplace',
-      label: 'Marketplace',
+      label: 'Sovereign Marketplace',
       icon: <LayoutGrid className="w-3 h-3" />,
       content: (
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-           {/* High-density Asset Grid */}
-           {[1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="p-3 bg-gray-900 border border-gray-800 rounded hover:border-cyan-500/50 transition-all group">
-                 <div className="aspect-square bg-black/40 rounded mb-2 flex items-center justify-center border border-gray-800 group-hover:border-cyan-500/30 transition-all">
-                    <RealityBadge state="SIMULATED" size="sm" />
-                 </div>
-                 <h4 className="text-[10px] font-bold uppercase truncate mb-1 text-white">Sovereign Asset #{i}</h4>
-                 <div className="flex justify-between items-end">
-                    <span className="text-[9px] font-mono text-cyan-400 font-bold">$12,400</span>
-                    <button className="bg-white/5 border border-white/10 hover:bg-cyan-600 text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded transition-all">Buy</button>
-                 </div>
-              </div>
-           ))}
+        <div className="space-y-4">
+          <div className="flex justify-between items-center mb-2">
+             <h2 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Available Investments</h2>
+             <Link href="/dashboard/assets/new">
+                <Button size="sm" className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 text-[9px] h-7 uppercase font-black">
+                   <PlusCircle className="w-3 h-3 mr-1" /> Propose New Investment
+                </Button>
+             </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+             {/* High-density Asset Grid */}
+             {[1, 2, 3, 4, 5].map(i => (
+                <div key={i} className="p-3 bg-gray-900 border border-gray-800 rounded hover:border-cyan-500/50 transition-all group">
+                   <div className="aspect-square bg-black/40 rounded mb-2 flex items-center justify-center border border-gray-800 group-hover:border-cyan-500/30 transition-all">
+                      <RealityBadge state="SIMULATED" size="sm" />
+                   </div>
+                   <h4 className="text-[10px] font-bold uppercase truncate mb-1 text-white">Sovereign Asset #{i}</h4>
+                   <div className="flex justify-between items-end">
+                      <span className="text-[9px] font-mono text-cyan-400 font-bold">$12,400</span>
+                      <button className="bg-white/5 border border-white/10 hover:bg-cyan-600 text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded transition-all">Buy</button>
+                   </div>
+                </div>
+             ))}
+          </div>
         </div>
       )
     },
@@ -184,10 +195,10 @@ export default function TreasuryPage() {
               </h3>
               <div className="space-y-4">
                  {[
-                   { label: 'Plowback Reserve', val: '30%', target: '$1,000' },
-                   { label: 'Labor Allocation', val: '40%', target: 'UVT/SOL' },
-                   { label: 'Proprietary R&D', val: '20%', target: 'Body-2' },
-                   { label: 'Sustainability', val: '10%', target: 'Cleanup' }
+                   { label: 'Micro-Toll Protocol', val: '0.15%', target: 'METABOLIC' },
+                   { label: 'Investor Yield Hurdle', val: '8.0%', target: 'SENIOR' },
+                   { label: 'Sovereign Plowback', val: '30%', target: 'RESERVE' },
+                   { label: 'Labor Allocation', val: '40%', target: 'UVT/SOL' }
                  ].map(p => (
                    <div key={p.label} className="flex items-center justify-between p-2 bg-black rounded border border-gray-800">
                       <span className="text-[10px] text-gray-400 uppercase font-bold">{p.label}</span>

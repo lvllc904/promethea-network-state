@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useCollection, useFirestore } from '@promethea/firebase';
+import { useCollection, useFirestore } from '@promethea/identity';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '@promethea/ui';
 import { LedgerValue, RealityBadge } from '@promethea/components';

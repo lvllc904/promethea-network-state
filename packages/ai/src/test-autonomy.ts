@@ -1,5 +1,5 @@
 
-import { autonomyCore } from './flows/autonomy-core';
+import { autonomyCore } from './flows/autonomy-core.js';
 import { z } from 'zod';
 import { spawn } from 'child_process';
 

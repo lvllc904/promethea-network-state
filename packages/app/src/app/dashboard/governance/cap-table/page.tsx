@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useCollection, useFirestore } from '@promethea/firebase';
+import { useCollection, useFirestore } from '@promethea/identity';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '@promethea/ui';
 import { Landmark, Users, Briefcase, Info, ShieldCheck, Zap, TrendingUp, BarChart3, PieChart as PieChartIcon, ExternalLink, Activity, Cpu } from 'lucide-react';

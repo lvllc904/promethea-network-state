@@ -7,7 +7,7 @@
  * - DetectNetworkThreatsOutput - The return type for the detectNetworkThreats function.
  */
 
-import ai from '../genkit';
+import ai from '../genkit.js';
 import { z } from 'zod';
 
 const DetectNetworkThreatsInputSchema = z.object({
@@ -44,6 +44,7 @@ const initiateCommunityVote = ai.defineTool({
 
 const detectNetworkThreatsPrompt = ai.definePrompt({
   name: 'detectNetworkThreatsPrompt',
+  model: 'googleAI/gemini-1.5-flash',
   input: { schema: DetectNetworkThreatsInputSchema },
   output: { schema: DetectNetworkThreatsOutputSchema },
   tools: [initiateCommunityVote],

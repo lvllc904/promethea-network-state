@@ -43,7 +43,7 @@ import {
   useMemoFirebase,
   useUser,
   useCollection,
-} from '@promethea/firebase';
+} from '@promethea/identity';
 import {
   doc,
   collection,

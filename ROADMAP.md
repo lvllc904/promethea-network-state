@@ -135,6 +135,12 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 - [x] **Product-to-Marketplace Bridge**: Seamless synchronization between Economic Engine output and the public Marketplace UI.
 - [x] **Asset Telemetry**: Integrated asset counters into the Intel Dashboard.
 
+### Phase 3.6: Sovereign Carry Trade Synthesis [ACTIVE]
+- [x] **Agnostic Filter Substrate**: Implemented the four-tiered funnel (Yield, Volatility, Liquidity, Reflexivity) to replace static asset-pegging.
+- [x] **Leveraged Wealth Loop**: Established the circular economic bridge between 50+ active methods and treasury compounding.
+- [x] **The Insurance Leg**: Codified the 20% "Black Swan" buffer (VIX/Gold) to protect state infrastructure during macro panics.
+- [ ] **Autonomous Harvest**: Full production trigger of the `synthesize_risk()` loop within the Economic Engine.
+
 ### The "Mega-Catalog" of Profit Generation
 1.  **SEO Niche Blogging**: [LIVE] Automatic tutorial generation for monetized platforms.
 2.  **Faceless Media Synthesis**: [LIVE] Scripting, voicing, and editing news summaries.
@@ -537,6 +543,7 @@ FIREBASE_SMC_JSON: Google Firebase Console
 **Goal:** Rewrite the 52 methods to become **Cognitive Refineries** that dump their optimized outputs *back* into the Lake.
 *   [x] **Output as New Input**: Federal Grant Refinery successfully dumping proposal drafts back into the lake.
 *   [x] **Sovereign Treasury Bridge**: Integrated the `WaterfallProtocol` into the PrOS dashboard for real-time liquidity tracking.
+*   [x] **Carry Trade Refinery**: Integrated the Universal Carry Trade Framework as a reciprocating refinery; consumes macro-telemetry from the Lake and dumps synthesis proposals back for the Engine to execute.
 
 ### Phase 4: Sovereign Actualization 🌀 (ACTIVE)
 **Goal:** Close the loop between digital omniscience and physical manifestation through the unified Treasury.

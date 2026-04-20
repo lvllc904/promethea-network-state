@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useUser } from '@promethea/firebase';
+import { useUser } from '@promethea/identity';
 import { useAuthStatus } from './use-auth-status';
 import type { LocalCitizenProfile } from '@promethea/lib';
 

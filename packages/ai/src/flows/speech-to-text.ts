@@ -7,7 +7,7 @@
  * - SpeechToTextOutput - The output type for the speechToText function.
  */
 
-import ai from '../genkit';
+import ai from '../genkit.js';
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/google-genai';
 

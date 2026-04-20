@@ -1,8 +1,8 @@
 
-import { ai } from '../genkit';
+import { ai } from '../genkit.js';
 import { z } from 'zod';
-import { readFile, writeFile } from '../tools/file-system';
-import { runTerminalCommand } from '../tools/terminal';
+import { readFile, writeFile } from '../tools/file-system.js';
+import { runTerminalCommand } from '../tools/terminal.js';
 
 // Final schema for reporting the result of an autonomous action
 const HealingResultSchema = z.object({

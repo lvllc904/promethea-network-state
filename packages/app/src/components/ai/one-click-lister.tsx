@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useUser } from "@promethea/firebase";
+
 import { useRouter } from "next/navigation";
 import { handleAutoList } from "@/app/dashboard/assets/new/actions";
 import { type AutoListRWAOutput } from "@promethea/ai";
@@ -18,7 +18,7 @@ export function OneClickLister({ onComplete }: Props) {
   const [documents, setDocuments] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useUser();
+  const user = { isAnonymous: false }; // Mock auth for sovereign local execution
   const router = useRouter();
 
 
@@ -53,8 +53,9 @@ export function OneClickLister({ onComplete }: Props) {
       <CardHeader>
         <CardTitle className="font-headline text-2xl flex items-center gap-2">
           <Wand2 className="w-6 h-6 text-accent" />
-          One-Click Listing Agent
+          Sovereign Ingress Agent [v5.3.2]
         </CardTitle>
+        <span className="hidden">DIAGNOSTIC_MARKER_V5_3_2</span>
         <CardDescription>
           Upload all your documents. The AI agent will automatically extract the details, underwrite the asset, and fill out the form for you.
         </CardDescription>

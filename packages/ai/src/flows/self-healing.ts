@@ -1,8 +1,8 @@
 
-import { ai } from '../genkit';
+import { ai } from '../genkit.js';
 import { z } from 'zod';
-import { listFiles, readFile } from '../tools/file-system';
-import { cognitiveHealingFlow } from './cognitive-healing';
+import { listFiles, readFile } from '../tools/file-system.js';
+import { cognitiveHealingFlow } from './cognitive-healing.js';
 
 const ErrorLogSchema = z.object({ errorLog: z.string() });
 const HealingPlanSchema = z.object({

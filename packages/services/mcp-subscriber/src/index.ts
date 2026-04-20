@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { getServerFirebase } from "@promethea/firebase/server-init";
+import { getServerFirebase } from "@promethea/identity/server-init";
 import { processEvent } from './event-processor.js';
 import { fetch } from 'undici';
 

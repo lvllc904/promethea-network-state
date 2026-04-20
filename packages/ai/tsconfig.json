@@ -5,7 +5,8 @@
     "rootDir": "./src",
     "composite": true,
     "declaration": true,
-    "moduleResolution": "node"
+    "moduleResolution": "nodenext",
+    "module": "nodenext"
   },
   "include": [
     "src/**/*"

@@ -10,7 +10,7 @@ const nextConfig = {
         '@promethea/lib',
         '@promethea/components',
         '@promethea/ai',
-        '@promethea/firebase',
+        '@promethea/identity',
         '@promethea/hooks',
         '@promethea/ui',
         '@promethea/pubsub'

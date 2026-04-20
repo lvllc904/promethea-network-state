@@ -7,12 +7,12 @@ import { Input } from "@promethea/ui";
 import { Label } from "@promethea/ui";
 import { Button } from "@promethea/ui";
 import { Textarea } from "@promethea/ui";
-import { useUser } from "@promethea/firebase";
+
 import { useRouter } from "next/navigation";
 import { handleRefine } from "./actions";
 
 export default function NewProposalPage() {
-  const { user } = useUser();
+  const user = { isAnonymous: false }; // Sovereign Auth Placeholder
   const router = useRouter();
   const [description, setDescription] = useState('');
 

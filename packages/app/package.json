@@ -16,7 +16,7 @@
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1",
     "@promethea/components": "file:../components",
-    "@promethea/firebase": "file:../firebase",
+    "@promethea/identity": "file:../firebase",
     "@promethea/hooks": "file:../hooks",
     "@promethea/lib": "file:../lib",
     "@promethea/sovereign-store": "file:../sovereign-store",

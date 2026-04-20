@@ -25,7 +25,7 @@ import { Badge } from '@promethea/ui';
 import { Button } from '@promethea/ui';
 import { DollarSign, MapPin, Wrench, PieChart, Briefcase, Star, Users, Loader2, Key } from 'lucide-react';
 import { TaskAllocationTool } from '@promethea/components';
-import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@promethea/firebase';
+import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@promethea/identity';
 import { doc, collection, query, where } from 'firebase/firestore';
 import { RealWorldAsset, Task, UniversalValueToken } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';

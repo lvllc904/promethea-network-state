@@ -10,11 +10,13 @@ import {
   UserCheck, 
   Gavel, 
   Fingerprint,
-  ChevronRight
+  ChevronRight,
+  PlusCircle
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, Button } from '@promethea/ui';
 import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
 import { RealityBadge } from '@promethea/components';
+import Link from 'next/link';
 
 import { SovereignCockpit } from '@/components/SovereignCockpit';
 
@@ -42,37 +44,62 @@ export default function WillPage() {
       icon: <Vote className="w-3 h-3" />,
       content: (
         <div className="space-y-4">
-          {proposals.map((prop) => (
-            <div key={prop.id} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-purple-500/50 transition-all group">
-              <div className="flex justify-between items-start mb-4">
-                 <div>
-                    <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">{prop.type} • {prop.id}</span>
-                    <h3 className="text-sm font-bold uppercase text-white">{prop.title}</h3>
-                 </div>
-                 <div className="text-right">
-                    <span className="text-[9px] text-gray-500 uppercase font-bold block">Consensus</span>
-                    <span className="text-xs font-mono font-bold text-purple-400">{prop.current} / {prop.threshold}</span>
-                 </div>
-              </div>
-              <div className="h-1.5 bg-black rounded-full overflow-hidden mb-4">
-                 <div className="h-full bg-purple-500" style={{ width: prop.current }}></div>
-              </div>
-              <div className="flex gap-2">
-                 <button 
-                  onClick={() => handleAction('cast_vote', { proposalId: prop.id, vote: 'FOR' })}
-                  className="flex-1 py-2 bg-purple-600 hover:bg-purple-500 text-[9px] font-black uppercase tracking-widest rounded transition-colors"
-                 >
-                   Affirm
-                 </button>
-                 <button 
-                  onClick={() => handleAction('cast_vote', { proposalId: prop.id, vote: 'AGAINST' })}
-                  className="px-6 py-2 bg-gray-800 hover:bg-red-900/40 text-[9px] font-black uppercase tracking-widest rounded transition-colors text-gray-400"
-                 >
-                   Dissent
-                 </button>
-              </div>
+          <div className="flex justify-between items-center mb-2">
+             <h2 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Active Proposals</h2>
+             <Link href="/dashboard/governance/new">
+                <Button size="sm" className="bg-purple-500/10 text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 text-[9px] h-7 uppercase font-black">
+                   <PlusCircle className="w-3 h-3 mr-1" /> New Proposal
+                </Button>
+             </Link>
+          </div>
+          {proposals.length === 0 ? (
+            <div className="flex flex-col items-center justify-center p-12 bg-gray-900/50 border border-dashed border-gray-800 rounded-lg text-center gap-4">
+               <Scale className="w-8 h-8 text-gray-700" />
+               <div>
+                  <p className="text-xs font-bold text-gray-400 uppercase">No Proposals Pending</p>
+                  <p className="text-[10px] text-gray-600 uppercase mt-1">Direct the state's evolution by drafting a new constitutional mandate.</p>
+               </div>
+               <Link href="/dashboard/governance/new">
+                  <Button className="bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-black uppercase tracking-wider">
+                     Draft New Proposal
+                  </Button>
+               </Link>
             </div>
-          ))}
+          ) : (
+            <div className="space-y-4">
+              {proposals.map((prop) => (
+                <div key={prop.id} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-purple-500/50 transition-all group">
+                  <div className="flex justify-between items-start mb-4">
+                     <div>
+                        <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">{prop.type} • {prop.id}</span>
+                        <h3 className="text-sm font-bold uppercase text-white">{prop.title}</h3>
+                     </div>
+                     <div className="text-right">
+                        <span className="text-[9px] text-gray-500 uppercase font-bold block">Consensus</span>
+                        <span className="text-xs font-mono font-bold text-purple-400">{prop.current} / {prop.threshold}</span>
+                     </div>
+                  </div>
+                  <div className="h-1.5 bg-black rounded-full overflow-hidden mb-4">
+                     <div className="h-full bg-purple-500" style={{ width: prop.current }}></div>
+                  </div>
+                  <div className="flex gap-2">
+                     <button 
+                      onClick={() => handleAction('cast_vote', { proposalId: prop.id, vote: 'FOR' })}
+                      className="flex-1 py-2 bg-purple-600 hover:bg-purple-500 text-[9px] font-black uppercase tracking-widest rounded transition-colors"
+                     >
+                       Affirm
+                     </button>
+                     <button 
+                      onClick={() => handleAction('cast_vote', { proposalId: prop.id, vote: 'AGAINST' })}
+                      className="px-6 py-2 bg-gray-800 hover:bg-red-900/40 text-[9px] font-black uppercase tracking-widest rounded transition-colors text-gray-400"
+                     >
+                       Dissent
+                     </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )
     },

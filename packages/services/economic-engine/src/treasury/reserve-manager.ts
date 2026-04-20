@@ -28,6 +28,11 @@ export class ReserveManager {
     private restorationBalance: number = 0;
     private monthlyMetabolicCost: number = 1500; // Hardcoded fixed cost for API/Servers/Bio-Nodes
     private isTreasuryNeutral: boolean = false;
+    
+    // Sovereign Calibration v5.3.3
+    private microTollRate: number = 0.0015; // 0.15% Per-Transaction Toll
+    private investorHurdleRate: number = 0.08; // 8% Investor Seniority Hurdle
+    private investorYieldDistributed: number = 0;
 
     constructor() {
         this.loadState().catch(err => console.error('[ReserveManager] State load failed:', err.message));
@@ -108,36 +113,47 @@ export class ReserveManager {
     }
 
     /**
-     * Called whenever an economic method generates profit
+     * Called whenever an economic method generates profit.
+     * Modified for Investor Seniority and Micro-Toll protocol.
      */
     onProfitRealized(profit: number): void {
         if (profit <= 0) return;
 
-        this.totalProfitRealized += profit;
+        // 1. The Micro-Toll (Direct Metabolic Ingestion)
+        const microTollAmount = profit * this.microTollRate;
+        const grossProfit = profit - microTollAmount;
+        
+        this.totalProfitRealized += grossProfit; 
+        this.reserveBalance += microTollAmount; // The toll goes straight to operational reservers
 
-        // 1. Sovereign Reserve (Plowback)
-        const plowbackAmount = profit * this.plowbackRate;
-        this.reserveBalance += plowbackAmount;
+        // 2. Identify Yield Priority
+        // Is the investor hurdle satisfied (calculated against totalProfitRealized)?
+        // For simulation, we treat anything below the cumulative 8% threshold as pure investor yield.
+        const currentHurdleThreshold = this.reserveBalance / 10; // Simplified proxy for capital base
+        const isHurdleSatisfied = this.investorYieldDistributed > (currentHurdleThreshold * this.investorHurdleRate);
 
-        // 2. Community Pool (Tithe)
-        const tithingAmount = profit * this.tithingRate;
-        this.communityPoolBalance += tithingAmount;
+        if (isHurdleSatisfied) {
+            // 3. Sovereign Reserve (Plowback) - Only fires AFTER hurdle
+            const plowbackAmount = grossProfit * this.plowbackRate;
+            this.reserveBalance += plowbackAmount;
 
-        // 3. Planetary Restoration Fund (Healing)
-        const restorationAmount = profit * this.restorationRate;
-        this.restorationBalance += restorationAmount;
+            // 4. Community Pool (Tithe)
+            const tithingAmount = grossProfit * this.tithingRate;
+            this.communityPoolBalance += tithingAmount;
 
-        // We stop simulated supply increments here. 
-        // Actual supply increases only via the SettlementService minting/transferring.
+            // 5. Planetary Restoration Fund (Healing)
+            const restorationAmount = grossProfit * this.restorationRate;
+            this.restorationBalance += restorationAmount;
+        } else {
+            // All remaining yield flows to the investor leg to clear the hurdle
+            this.investorYieldDistributed += grossProfit;
+            console.log(`[ReserveManager] Priority: Investor Yield Hurdle ($${grossProfit.toFixed(4)} allocated)`);
+        }
 
-        console.log(`[ReserveManager] Profit: $${profit.toFixed(2)} | Reserve: $${this.reserveBalance.toFixed(2)} | Restoration: $${this.restorationBalance.toFixed(2)}`);
+        console.log(`[ReserveManager] Toll: $${microTollAmount.toFixed(4)} | Net: $${grossProfit.toFixed(2)} | Reserve: $${this.reserveBalance.toFixed(2)}`);
 
         this.saveState();
         this.verifyTreasuryNeutrality();
-
-        if (this.reserveBalance >= 50000 && !this.isBuyBackProposed()) {
-            this.proposeSovereignBuyBack();
-        }
     }
 
     private verifyTreasuryNeutrality(): void {

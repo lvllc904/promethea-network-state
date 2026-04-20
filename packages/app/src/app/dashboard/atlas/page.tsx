@@ -12,11 +12,13 @@ import {
   Building2,
   ArrowUpRight,
   Database,
-  ExternalLink
+  ExternalLink,
+  PlusCircle
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, Button } from '@promethea/ui';
 import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
 import { RealityBadge } from '@promethea/components';
+import Link from 'next/link';
 
 import { SovereignCockpit } from '@/components/SovereignCockpit';
 
@@ -71,34 +73,59 @@ export default function AtlasPage() {
       label: 'RWA Registry',
       icon: <Layers className="w-3 h-3" />,
       content: (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {assets.map((asset) => (
-            <div key={asset.id} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-cyan-500/50 transition-all group">
-              <div className="flex justify-between items-start mb-4">
-                 <div>
-                    <span className="text-[8px] font-bold text-gray-600 uppercase">{asset.type}</span>
-                    <h3 className="text-xs font-bold uppercase truncate text-white">{asset.name}</h3>
-                 </div>
-                 <RealityBadge state="SIMULATED" size="sm" />
-              </div>
-              <div className="space-y-2 mb-4">
-                 <div className="flex justify-between text-[9px]">
-                    <span className="text-gray-500 underline decoration-gray-800 decoration-dotted">Status</span>
-                    <span className="text-cyan-400 font-bold uppercase">{asset.status}</span>
-                 </div>
-                 <div className="flex justify-between text-[9px]">
-                    <span className="text-gray-500">Valuation</span>
-                    <span className="text-white font-mono">${asset.value || '500,000'}</span>
-                 </div>
-              </div>
-              <button 
-                onClick={() => handleAction('actualize_claim', { assetId: asset.id })}
-                className="w-full py-2 bg-gray-800 hover:bg-cyan-600 text-[9px] font-black uppercase tracking-widest rounded transition-colors"
-              >
-                Actualize Claim
-              </button>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center mb-2">
+             <h2 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Asset Registry</h2>
+             <Link href="/dashboard/assets/new">
+                <Button size="sm" className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/20 text-[9px] h-7 uppercase font-black">
+                   <PlusCircle className="w-3 h-3 mr-1" /> Propose New Asset
+                </Button>
+             </Link>
+          </div>
+          {assets.length === 0 ? (
+            <div className="flex flex-col items-center justify-center p-12 bg-gray-900/50 border border-dashed border-gray-800 rounded-lg text-center gap-4">
+               <Database className="w-8 h-8 text-gray-700" />
+               <div>
+                  <p className="text-xs font-bold text-gray-400 uppercase">No Sovereign Assets Claimed</p>
+                  <p className="text-[10px] text-gray-600 uppercase mt-1">Initiate a Zero-to-One test by underwriting a real-world proposal.</p>
+               </div>
+               <Link href="/dashboard/assets/new">
+                  <Button className="bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-black uppercase tracking-wider">
+                     Begin Asset Underwriting
+                  </Button>
+               </Link>
             </div>
-          ))}
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {assets.map((asset) => (
+                <div key={asset.id} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-cyan-500/50 transition-all group">
+                  <div className="flex justify-between items-start mb-4">
+                     <div>
+                        <span className="text-[8px] font-bold text-gray-600 uppercase">{asset.type}</span>
+                        <h3 className="text-xs font-bold uppercase truncate text-white">{asset.name}</h3>
+                     </div>
+                     <RealityBadge state="SIMULATED" size="sm" />
+                  </div>
+                  <div className="space-y-2 mb-4">
+                     <div className="flex justify-between text-[9px]">
+                        <span className="text-gray-500 underline decoration-gray-800 decoration-dotted">Status</span>
+                        <span className="text-cyan-400 font-bold uppercase">{asset.status}</span>
+                     </div>
+                     <div className="flex justify-between text-[9px]">
+                        <span className="text-gray-500">Valuation</span>
+                        <span className="text-white font-mono">${asset.value || '500,000'}</span>
+                     </div>
+                  </div>
+                  <button 
+                    onClick={() => handleAction('actualize_claim', { assetId: asset.id })}
+                    className="w-full py-2 bg-gray-800 hover:bg-cyan-600 text-[9px] font-black uppercase tracking-widest rounded transition-colors"
+                  >
+                    Actualize Claim
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )
     },

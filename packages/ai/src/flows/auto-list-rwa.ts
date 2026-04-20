@@ -1,6 +1,6 @@
 
 
-import ai from '../genkit';
+import ai from '../genkit.js';
 import { z } from 'zod';
 
 const ExtractedAssetDataSchema = z.object({
@@ -32,6 +32,7 @@ export type AutoListRWAInput = z.infer<typeof AutoListRWAInputSchema>;
 
 const autoListRWAPrompt = ai.definePrompt({
     name: 'autoListRWAPrompt',
+    model: 'googleAI/gemini-1.5-flash',
     input: { schema: AutoListRWAInputSchema },
     output: { schema: AutoListRWAOutputSchema },
     prompt: `You are a sophisticated AI agent for the Promethean Network State.

@@ -4,7 +4,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Badge } from '@promethea/ui';
 import { ShieldAlert, Scale, Clock, AlertTriangle } from 'lucide-react';
 
-import { useCollection, useFirestore } from '@promethea/firebase';
+import { useCollection, useFirestore } from '@promethea/identity';
 import { collection, query, orderBy } from 'firebase/firestore';
 
 export default function VetoLogPage() {

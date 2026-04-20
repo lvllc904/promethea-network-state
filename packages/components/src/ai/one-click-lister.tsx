@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useUser } from "@promethea/firebase";
+import { useUser } from "@promethea/identity";
 import { useRouter } from "next/navigation";
 import { type AutoListRWAOutput } from "@promethea/lib";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@promethea/ui";
@@ -39,7 +39,8 @@ export function OneClickLister({ onComplete, onAutoList }: Props) {
         setIsLoading(false);
       }
     } else {
-      router.push(`/login?redirect=/dashboard/assets/new`);
+      const authUrl = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'https://passport.lvhllc.org';
+      window.location.href = `${authUrl}/login?redirect=${encodeURIComponent(window.location.href)}`;
     }
   };
 
@@ -48,8 +49,9 @@ export function OneClickLister({ onComplete, onAutoList }: Props) {
       <CardHeader>
         <CardTitle className="font-headline text-2xl flex items-center gap-2">
           <Wand2 className="w-6 h-6 text-accent" />
-          One-Click Listing Agent
+          Sovereign Ingress Agent [v5.3.3]
         </CardTitle>
+        <span className="hidden">DIAGNOSTIC_MARKER_V5_3_3</span>
         <CardDescription>
           Upload all your documents. The AI agent will automatically extract the details, underwrite the asset, and fill out the form for you.
         </CardDescription>

@@ -1,6 +1,6 @@
 'use client';
 export const dynamic = 'force-dynamic';
-import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@promethea/firebase';
+import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@promethea/identity';
 import { doc, collection, query, where, type Query, type DocumentReference } from 'firebase/firestore';
 import { RealityBadge, LedgerValue } from '@promethea/components';
 import {

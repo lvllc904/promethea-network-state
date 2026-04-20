@@ -7,6 +7,9 @@ COPY . .
 # Install dependencies (workspaces handle the rest)
 RUN npm install
 
+ARG CACHE_BUSTER=1
+RUN echo "Inverting AI Cache: $CACHE_BUSTER"
+
 # Build in specific order to resolve typescript reference issues
 RUN npm run build --workspace=@promethea/lib || npx tsc --build packages/lib/tsconfig.json
 RUN npm run build --workspace=@promethea/firebase || npx tsc --build packages/firebase/tsconfig.json

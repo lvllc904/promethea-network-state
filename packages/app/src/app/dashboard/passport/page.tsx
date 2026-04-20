@@ -17,7 +17,7 @@ import { Copy, Star, ShieldCheck, ShieldAlert, RefreshCcw, CheckCircle2 } from '
 import { Button } from '@promethea/ui';
 import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { useDoc, useFirestore, useUser, useMemoFirebase, useCollection } from '@promethea/firebase';
+import { useDoc, useFirestore, useUser, useMemoFirebase, useCollection } from '@promethea/identity';
 import { doc, collection, query, where } from 'firebase/firestore';
 import { Citizen } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';

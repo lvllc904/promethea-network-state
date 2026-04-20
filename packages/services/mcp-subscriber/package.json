@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@google-cloud/pubsub": "^4.5.0",
-    "@promethea/firebase": "file:../../firebase",
+    "@promethea/identity": "file:../../firebase",
     "@promethea/lib": "file:../../lib",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

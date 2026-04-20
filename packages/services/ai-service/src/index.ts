@@ -70,7 +70,7 @@ app.post('/api/market/ingest', async (req, res) => {
         const { proposalText, providerId, files } = req.body;
         console.log(`[INGEST] Received proposal from ${providerId}. Files: ${files?.length || 0}`);
 
-        const { getServerFirebase } = await import('@promethea/firebase/server-init' as any);
+        const { getServerFirebase } = await import('@promethea/identity/server-init' as any);
         const { invokeAutoListRWA } = await import('@promethea/ai');
 
         const admin = await getServerFirebase();
@@ -228,7 +228,7 @@ app.post('/api/execute-proposal', async (req, res) => {
             return res.status(400).json({ error: 'proposalId and citizenId are required' });
         }
 
-        const { getServerFirebase } = await import('@promethea/firebase/server-init' as any);
+        const { getServerFirebase } = await import('@promethea/identity/server-init' as any);
         const admin = await getServerFirebase();
         const db = admin.firestore();
 

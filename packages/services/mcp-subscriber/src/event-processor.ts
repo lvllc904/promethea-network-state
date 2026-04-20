@@ -1,4 +1,4 @@
-import { getServerFirebase } from "@promethea/firebase/server-init";
+import { getServerFirebase } from "@promethea/identity/server-init";
 import type { RealWorldAsset, UniversalValueToken } from '@promethea/lib';
 
 /**

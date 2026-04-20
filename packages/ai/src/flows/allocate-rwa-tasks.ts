@@ -7,9 +7,9 @@
  * - AllocateRWATasksOutput - The output type for the allocateRWATasks function.
  */
 
-import { ai } from '../genkit';
+import { ai } from '../genkit.js';
 import { z } from 'zod';
-import { getServerFirebase } from '@promethea/firebase/server-init';
+import { getServerFirebase } from '@promethea/identity/server-init';
 import { Citizen } from '@promethea/lib';
 
 const AllocateRWATasksInputSchema = z.object({

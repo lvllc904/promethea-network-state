@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
-import { useDoc, useFirestore, useMemoFirebase } from '@promethea/firebase';
+import { useDoc, useFirestore, useMemoFirebase } from '@promethea/identity';
 import { doc, type DocumentReference } from 'firebase/firestore';
 import { Card, CardContent, Button, Badge, Separator } from '@promethea/ui';
 import { Newspaper, ArrowLeft, Calendar, User, Share2, ShieldCheck, Lock } from 'lucide-react';

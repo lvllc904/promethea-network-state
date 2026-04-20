@@ -7,7 +7,7 @@
  * - UnderwriteRWAOutput - The output schema for the underwriting flow.
  */
 
-import ai from '../genkit';
+import ai from '../genkit.js';
 import { z } from 'zod';
 
 const UnderwriteRWAInputSchema = z.object({
@@ -38,6 +38,7 @@ export type UnderwriteRWAOutput = z.infer<typeof UnderwriteRWAOutputSchema>;
 
 const underwritePrompt = ai.definePrompt({
     name: 'underwriteRWAPrompt',
+    model: 'googleAI/gemini-1.5-flash',
     input: { schema: UnderwriteRWAInputSchema },
     output: { schema: UnderwriteRWAOutputSchema },
     prompt: `You are an expert RWA (Real-World Asset) underwriter for the Promethean Network State. Your entire methodology is based on two core documents: 'The Free Cash Flow Valuation Course' for financial analysis and 'The Promethean Way' for strategic and ethical alignment. You MUST use the Free Cash Flow to the Firm (FCFF) model to determine the asset's Enterprise Value.

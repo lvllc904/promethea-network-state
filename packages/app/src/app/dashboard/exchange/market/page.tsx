@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useCallback } from 'react';
-import { useCollection, useFirestore, useMemoFirebase } from '@promethea/firebase';
+import { useCollection, useFirestore, useMemoFirebase } from '@promethea/identity';
 import { collection, query, where, orderBy, type Query } from 'firebase/firestore';
 import {
     Card,

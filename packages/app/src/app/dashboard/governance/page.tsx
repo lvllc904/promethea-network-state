@@ -13,7 +13,7 @@ import { Progress } from '@promethea/ui';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@promethea/ui';
 import { User, CheckCircle, XCircle, Clock, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
-import { useCollection, useFirestore, useMemoFirebase, useUser } from '@promethea/firebase';
+import { useCollection, useFirestore, useMemoFirebase, useUser } from '@promethea/identity';
 import { collection, query, where, getDocs, doc, getDoc, type Query, type DocumentReference } from 'firebase/firestore';
 import { Proposal, Vote, Citizen } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';

@@ -8,9 +8,8 @@ pub mod sovereign_treasury {
     use super::*;
 
     pub fn deposit_revenue(ctx: Context<DepositRevenue>, amount_usdc: u64) -> Result<()> {
-        let reserve_split = (amount_usdc * 30) / 100; // 30% Plowback Rule
-        let community_split = (amount_usdc * 10) / 100; // 10% Citizen Tithe
-        let restoration_split = (amount_usdc * 5) / 100; // 5% Planetary Healing
+        let micro_toll = (amount_usdc * 15) / 10000; // 0.15% Micro-Toll Protocol (Frictionless Growth)
+        // High-fidelity yield flows to vault; 8% Hurdle managed by Sovereign Reserve Manager
         
         let cpi_accounts = Transfer {
             from: ctx.accounts.depositor_usdc_account.to_account_info(),

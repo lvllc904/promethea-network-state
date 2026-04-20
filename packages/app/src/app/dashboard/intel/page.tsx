@@ -456,13 +456,13 @@ export default function IntelPage() {
             {/* Sovereign Treasury (Phase 3.1 & 4.1) */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="bg-gradient-to-br from-background to-amber-500/10 border-amber-500/30">
-                    <CardHeader>
+                        <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <DollarSign className="h-5 w-5 text-amber-500" />
                             Sovereign Reserve
                             <RealityBadge state="SIMULATED" size="sm" />
                         </CardTitle>
-                        <CardDescription>30% Plowback rule active</CardDescription>
+                        <CardDescription>Hurdle: 8% [Senior] · Micro-Toll: 0.15%</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="flex justify-between items-end">
@@ -473,7 +473,8 @@ export default function IntelPage() {
                                         Total Profit: <LedgerValue value={engineStatus?.reserve?.totalProfitRealized || 0} isSimulated={true} />
                                     </p>
                                     <div className="flex items-center gap-2">
-                                        <Badge variant="outline" className="text-[10px]">Plowback: 30%</Badge>
+                                        <Badge variant="outline" className="text-[10px]">Micro-Toll: 0.15%</Badge>
+                                        <Badge variant="secondary" className="text-[10px] bg-cyan-500/10 text-cyan-500 border-cyan-500/20">Hurdle: 8%</Badge>
                                     </div>
                                 </div>
                             </div>

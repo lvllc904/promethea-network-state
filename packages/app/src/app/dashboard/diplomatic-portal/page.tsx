@@ -1,7 +1,7 @@
 'use client';
 export const dynamic = 'force-dynamic';
 import { useState } from 'react';
-import { useFirestore, useUser } from '@promethea/firebase';
+import { useFirestore, useUser } from '@promethea/identity';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Input } from '@promethea/ui';
 import { Button } from '@promethea/ui';
