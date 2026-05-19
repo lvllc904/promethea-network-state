@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import { createChart, IChartApi, ISeriesApi, LineData, AreaSeries, LineSeries } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi, LineData, AreaSeries, LineSeries, ColorType } from 'lightweight-charts';
 import { Button } from '@promethea/ui';
 import { Activity, TrendingUp, Layers } from 'lucide-react';
 
@@ -45,7 +45,7 @@ export const SovereignChart: React.FC<SovereignChartProps> = ({ primaryData, btc
 
         const chart = createChart(chartContainerRef.current, {
             layout: {
-                background: { type: 'solid', color: 'transparent' },
+                background: { type: ColorType.Solid, color: 'transparent' },
                 textColor: '#9ca3af',
             },
             grid: {

@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
-import { createChart, IChartApi, AreaSeries, LineData } from 'lightweight-charts';
+import { createChart, IChartApi, AreaSeries, LineData, ColorType } from 'lightweight-charts';
 import { Activity, ShieldAlert } from 'lucide-react';
 
 interface SovereignPulseChartProps {
@@ -17,7 +17,7 @@ export const SovereignPulseChart: React.FC<SovereignPulseChartProps> = ({ veloci
 
         const chart = createChart(chartContainerRef.current, {
             layout: {
-                background: { type: 'solid', color: 'transparent' },
+                background: { type: ColorType.Solid, color: 'transparent' },
                 textColor: '#9ca3af',
             },
             grid: {

@@ -9,6 +9,7 @@ import {
     BrainCircuit, Cpu, Server, Layers, Loader2, Zap
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { createChart, IChartApi, ISeriesApi, ColorType, CandlestickSeries } from 'lightweight-charts';
 
 // --- SUB-PANEL: RWA EXCHANGE ---
 function ExchangePanel() {
@@ -1369,7 +1370,7 @@ const AssetCanvasPanel = () => {
             },
         });
 
-        const series = chart.addCandlestickSeries({
+        const series = chart.addSeries(CandlestickSeries, {
             upColor: '#10b981', // emerald-500
             downColor: '#ef4444', // red-500
             borderVisible: false,
