@@ -12,7 +12,7 @@ import { open, Database } from 'sqlite';
  * - SOVEREIGN (Local SQLite + GCS Sync, $0 incremental cost)
  */
 export interface StorageAdapter {
-    collection(name: string): any;
+    collection(name: string, orgId?: string): any;
     runTransaction<T>(updateFunction: (transaction: any) => Promise<T>): Promise<T>;
 }
 
@@ -31,52 +31,91 @@ class SQLiteAdapter implements StorageAdapter {
         console.log(`[STORAGE] 🏰 Sovereign SQLite substrate initialized: ${dbPath}`);
         
         await this.db.exec(`
-            CREATE TABLE IF NOT EXISTS real_world_assets (id TEXT PRIMARY KEY, data TEXT, realityState TEXT);
-            CREATE TABLE IF NOT EXISTS universal_value_tokens (id TEXT PRIMARY KEY, data TEXT);
-            CREATE TABLE IF NOT EXISTS proposals (id TEXT PRIMARY KEY, data TEXT);
-            CREATE TABLE IF NOT EXISTS revenue_events (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS real_world_assets (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, realityState TEXT);
+            CREATE TABLE IF NOT EXISTS universal_value_tokens (id TEXT PRIMARY KEY, orgId TEXT, data TEXT);
+            CREATE TABLE IF NOT EXISTS proposals (id TEXT PRIMARY KEY, orgId TEXT, data TEXT);
+            CREATE TABLE IF NOT EXISTS revenue_events (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS exodus_logs (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS omni_intel_lake (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS treasury (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS treasury_events (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS uvt_ledger (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS uvt_transactions (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS infrastructure (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS grant_opportunities (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS api_metrics (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS omni_intel_lake (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS treasury (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS treasury_events (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS uvt_ledger (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS uvt_transactions (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS infrastructure (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS grant_opportunities (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS api_metrics (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS celestial_events (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS sovereign_intelligence (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS labor_records (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS sovereign_intelligence (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS labor_records (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS security_telemetry (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS quests (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS citizens (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS quests (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS citizens (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS pledges (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS sessions (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS diplomatic_sessions (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS hardware_jobs (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS diplomatic_sessions (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS hardware_jobs (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS planetary_healing (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS bio_events (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS acquisitions (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS content_archive (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS acquisitions (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS content_archive (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS billing_records (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS market (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
-            CREATE TABLE IF NOT EXISTS marketplace (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS marketplace (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS broker (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS omni_vectors (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS organizations (id TEXT PRIMARY KEY, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS ledger (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS waterfall (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS wallet (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS narrative (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS votes (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
         `);
+
+        // Schema Migration: Ensure all tables have the orgId column to prevent seeding/query failures
+        const tables = [
+            'real_world_assets', 'universal_value_tokens', 'proposals', 'revenue_events',
+            'exodus_logs', 'omni_intel_lake', 'treasury', 'treasury_events', 'uvt_ledger',
+            'uvt_transactions', 'infrastructure', 'grant_opportunities', 'api_metrics',
+            'sovereign_intelligence', 'labor_records', 'quests', 'citizens', 'diplomatic_sessions',
+            'hardware_jobs', 'acquisitions', 'content_archive', 'marketplace', 'ledger',
+            'waterfall', 'wallet', 'narrative', 'votes'
+        ];
+        for (const table of tables) {
+            try {
+                if (this.db) {
+                    await this.db.get(`SELECT orgId FROM ${table} LIMIT 1`);
+                }
+            } catch (err: any) {
+                if (err.message && err.message.includes('no such column: orgId')) {
+                    console.log(`[STORAGE] 🛠️ Migration: Adding orgId column to ${table}...`);
+                    try {
+                        if (this.db) {
+                            await this.db.exec(`ALTER TABLE ${table} ADD COLUMN orgId TEXT DEFAULT 'global'`);
+                        }
+                    } catch (alterErr) {
+                        console.error(`[STORAGE] ❌ Migration failed for ${table}:`, alterErr);
+                    }
+                }
+            }
+        }
+
         this.initialized = true;
     }
 
-    collection(name: string) {
+    collection(name: string, orgId?: string) {
         return {
             doc: (id: string) => ({
                 set: async (data: any) => {
                     await this.init();
-                    return this.db?.run(`INSERT OR REPLACE INTO ${name} (id, data) VALUES (?, ?)`, [id, JSON.stringify(data)]);
+                    // Ensure the data object contains the orgId if we are in a scoped context
+                    const finalData = orgId ? { ...data, orgId } : data;
+                    return this.db?.run(`INSERT OR REPLACE INTO ${name} (id, orgId, data) VALUES (?, ?, ?)`, [id, orgId || 'global', JSON.stringify(finalData)]);
                 },
                 update: async (data: any) => {
                     await this.init();
                     const existing = await this.db?.get(`SELECT data FROM ${name} WHERE id = ?`, [id]);
                     const merged = { ...(existing ? JSON.parse(existing.data) : {}), ...data };
-                    return this.db?.run(`INSERT OR REPLACE INTO ${name} (id, data) VALUES (?, ?)`, [id, JSON.stringify(merged)]);
+                    return this.db?.run(`INSERT OR REPLACE INTO ${name} (id, orgId, data) VALUES (?, ?, ?)`, [id, orgId || 'global', JSON.stringify(merged)]);
                 },
                 get: async () => {
                     await this.init();
@@ -87,13 +126,19 @@ class SQLiteAdapter implements StorageAdapter {
             add: async (data: any) => {
                 await this.init();
                 const id = Math.random().toString(36).substr(2, 9);
-                const res = await this.db?.run(`INSERT INTO ${name} (id, data, timestamp) VALUES (?, ?, ?)`, [id, JSON.stringify(data), new Date().toISOString()]);
+                const finalData = orgId ? { ...data, orgId } : data;
+                const res = await this.db?.run(`INSERT INTO ${name} (id, orgId, data, timestamp) VALUES (?, ?, ?, ?)`, [id, orgId || 'global', JSON.stringify(finalData), new Date().toISOString()]);
                 return { ...res, lastID: id };
             },
             get: async () => {
                 await this.init();
-                const rows = await this.db?.all(`SELECT data FROM ${name}`);
-                return rows ? rows.map(r => ({ data: () => JSON.parse(r.data) })) : [];
+                const queryStr = orgId 
+                    ? `SELECT id, data FROM ${name} WHERE orgId = ?` 
+                    : `SELECT id, data FROM ${name}`;
+                const rows = await this.db?.all(queryStr, orgId ? [orgId] : []);
+                return {
+                    docs: rows ? rows.map(r => ({ id: r.id, data: () => JSON.parse(r.data) })) : []
+                };
             }
         };
     }
@@ -119,14 +164,92 @@ class SQLiteAdapter implements StorageAdapter {
 class BridgedAdapter implements StorageAdapter {
     private sqlite = new SQLiteAdapter();
     private gcs = new Storage();
-    private bucketName = process.env.PUBLIC_METABOLIC_BUCKET || 'promethea-omni-lake';
+    private bucketName = process.env.PUBLIC_METABOLIC_BUCKET || 'promethea-omni-lake-385120524005';
+
+    private isRestoring = false;
+    private memoryRestored = false;
 
     constructor() {
         console.log(`[Storage Bridge] 🌊 Revelation Bridge active. Sink: GCS://${this.bucketName} + IPFS`);
     }
 
-    collection(name: string): any {
-        const sqlColl = this.sqlite.collection(name);
+    private redactPII(data: any): any {
+        if (!data) return data;
+        if (typeof data !== 'object') return data;
+        
+        const redacted = { ...data };
+        const sensitiveKeys = ['email', 'phoneNumber', 'ssn', 'privateKey', 'socialSecurity', 'taxId', 'dob', 'walletSecret'];
+        
+        for (const key of Object.keys(redacted)) {
+            // General PII masking
+            if (sensitiveKeys.includes(key) && typeof redacted[key] === 'string') {
+                redacted[key] = '[REDACTED - SOVEREIGN PRIVACY PROTOCOL]';
+            } else if (typeof redacted[key] === 'object' && redacted[key] !== null) {
+                redacted[key] = this.redactPII(redacted[key]);
+            }
+            
+            // Fuzzing explicit residential addresses (keeping city/state level context for macroeconomic tracking)
+            if ((key === 'address' || key === 'location') && typeof redacted[key] === 'string') {
+                // Heuristic: If there are street numbers, scrub them. Otherwise, assume it's just "City, State"
+                if (/^\d+\s/.test(redacted[key])) {
+                    const parts = redacted[key].split(',');
+                    redacted[key] = (parts.length > 1 ? parts.slice(1).join(',').trim() : '[ADDRESS FUZZED]');
+                }
+            }
+        }
+        return redacted;
+    }
+
+    async restoreMemory() {
+        if (this.memoryRestored || this.isRestoring) return;
+        this.isRestoring = true;
+        console.log(`[Storage Bridge] 🧠 Initiating Memory Rehydration from GCS://${this.bucketName}...`);
+        
+        try {
+            // Rehydrate the core tables to restore object permanence
+            const collectionsToRestore = ['real_world_assets', 'proposals', 'omni_intel_lake', 'narrative', 'vetoes'];
+            const bucket = this.gcs.bucket(this.bucketName);
+            
+            const [exists] = await bucket.exists();
+            if (!exists) {
+                console.warn(`[Storage Bridge] ⚠️ Bucket ${this.bucketName} not found. Skipping rehydration.`);
+                this.isRestoring = false;
+                this.memoryRestored = true;
+                return;
+            }
+
+            for (const collectionName of collectionsToRestore) {
+                const [files] = await bucket.getFiles({ prefix: `${collectionName}/` });
+                const sqlColl = this.sqlite.collection(collectionName);
+                
+                let restoredCount = 0;
+                for (const file of files) {
+                    if (!file.name.endsWith('.json')) continue;
+                    try {
+                        const [contents] = await file.download();
+                        const data = JSON.parse(contents.toString('utf-8'));
+                        const id = path.basename(file.name, '.json');
+                        await sqlColl.doc(id).set(data);
+                        restoredCount++;
+                    } catch (err) {
+                        console.error(`[Storage Bridge] Failed to restore memory fragment ${file.name}:`, err);
+                    }
+                }
+                if (restoredCount > 0) {
+                    console.log(`[Storage Bridge] 🧠 Restored ${restoredCount} fragments to ${collectionName}.`);
+                }
+            }
+            console.log(`[Storage Bridge] ✅ Memory Rehydration complete. Object permanence restored.`);
+        } catch (e) {
+            console.error('[Storage Bridge] 🛑 CRITICAL: Memory Rehydration Failed:', e);
+        } finally {
+            this.isRestoring = false;
+            this.memoryRestored = true;
+        }
+    }
+
+    collection(name: string, orgId?: string): any {
+        const sqlColl = this.sqlite.collection(name, orgId);
 
         const queryProxy = {
             orderBy: () => queryProxy,
@@ -140,7 +263,8 @@ class BridgedAdapter implements StorageAdapter {
                     // We save as a JSON artifact so lvhllc.org can consume it directly
                     try {
                         const file = this.gcs.bucket(this.bucketName).file(`${name}/${id}.json`);
-                        await file.save(JSON.stringify(data), {
+                        const safeData = this.redactPII(data);
+                        await file.save(JSON.stringify(safeData), {
                             contentType: 'application/json',
                             metadata: { cacheControl: 'public, max-age=30' }
                         });
@@ -157,7 +281,8 @@ class BridgedAdapter implements StorageAdapter {
                     const updated = await sqlColl.doc(id).get();
                     if (updated.exists) {
                         const file = this.gcs.bucket(this.bucketName).file(`${name}/${id}.json`);
-                        await file.save(JSON.stringify(updated.data()), { contentType: 'application/json' });
+                        const safeData = this.redactPII(updated.data());
+                        await file.save(JSON.stringify(safeData), { contentType: 'application/json' });
                     }
                     return { id };
                 },
@@ -171,16 +296,17 @@ class BridgedAdapter implements StorageAdapter {
                 const id = res?.lastID?.toString() || Math.random().toString(36).substr(2, 9);
                 
                 const file = this.gcs.bucket(this.bucketName).file(`${name}/${id}.json`);
-                await file.save(JSON.stringify({ ...data, id }), { contentType: 'application/json' });
+                const safeData = this.redactPII({ ...data, id });
+                await file.save(JSON.stringify(safeData), { contentType: 'application/json' });
 
                 return { id };
             },
             get: async () => {
-                const rows = await sqlColl.get();
+                const res = await sqlColl.get();
                 return {
-                    docs: rows.map((r: any) => ({
+                    docs: res.docs.map((r: any) => ({
                         id: r.id || 'unknown',
-                        data: () => r.data ? r.data() : r
+                        data: () => typeof r.data === 'function' ? r.data() : r
                     }))
                 };
             }
@@ -211,5 +337,10 @@ export const COLLECTIONS = {
     TREASURY: 'treasury',
     TREASURY_EVENTS: 'treasury_events',
     MARKET: 'market',
-    MARKETPLACE: 'marketplace'
+    MARKETPLACE: 'marketplace',
+    ORGANIZATIONS: 'organizations',
+    SECURITY_TELEMETRY: 'security_telemetry',
+    OMNI_VECTORS: 'omni_vectors',
+    VOTES: 'votes',
+    NARRATIVE: 'narrative'
 };

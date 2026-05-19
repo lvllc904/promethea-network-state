@@ -13,10 +13,8 @@ import {
 } from '@promethea/ui';
 import { Button } from '@promethea/ui';
 import { DollarSign, MapPin, ArrowUpRight, Clock, CheckCircle, XCircle, User, PlusCircle } from 'lucide-react';
-import { useCollection, useFirestore, useMemoFirebase } from '@promethea/identity';
-import { collection, query, where } from 'firebase/firestore';
+import { useCollection, useFirestore, useSovereignMemo, collection, query, where, type Query } from '@promethea/identity';
 import { RealWorldAsset, Proposal, Vote } from '@promethea/lib';
-import { type Query } from 'firebase/firestore';
 import { Skeleton } from '@promethea/ui';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@promethea/ui';
 import { Badge } from '@promethea/ui';
@@ -177,33 +175,53 @@ function ProposalCard({ proposal }: { proposal: Proposal & { votes?: Vote[] } })
 }
 
 function ReclamationCard({ target }: { target: any }) {
+  const payload = target.payload || {};
+  const name = target.name || payload.name || payload.observation || target.source || 'Unnamed Target';
+  const location = target.location || payload.location || 'Unknown Location';
+  const priority = target.priority || payload.priority || 'Medium';
+  const status = target.status || payload.status || 'IDENTIFIED';
+  const realityState = target.realityState || payload.realityState || 'SIMULATED';
+  const type = target.type || payload.type || 'BLM_MINERAL';
+  const quietnessCoefficient = target.quietnessCoefficient || payload.quietnessCoefficient || 0.8;
+
   const iconMap = {
     BLM_MINERAL: <Target className="w-5 h-5 text-amber-500" />,
     ZOMBIE_ASSET: <ShieldAlert className="w-5 h-5 text-purple-500" />,
-    BROWNFIELD: <Landmark className="w-5 h-5 text-emerald-500" />
+    BROWNFIELD: <Landmark className="w-5 h-5 text-emerald-500" />,
+    PHYSICAL_ANCHOR_SIGNAL: <Target className="w-5 h-5 text-amber-500" />
   };
 
   return (
     <Card className="bg-muted/20 border-none flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-center mb-2">
-          {iconMap[target.type as keyof typeof iconMap] || <Target className="w-5 h-5" />}
-          <RealityBadge state={target.realityState} size="sm" />
+          {iconMap[type as keyof typeof iconMap] || <Target className="w-5 h-5" />}
+          <RealityBadge state={realityState} size="sm" />
         </div>
-        <CardTitle className="text-lg font-headline">{target.name}</CardTitle>
+        <CardTitle className="text-lg font-headline">{name}</CardTitle>
         <CardDescription className="flex items-center gap-1">
-          <MapPin className="w-3 h-3" /> {target.location}
+          <MapPin className="w-3 h-3" /> {location}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
-        {target.type === 'ZOMBIE_ASSET' && (
+        {type === 'ZOMBIE_ASSET' && (
           <div className="text-xs text-muted-foreground mb-4">
-            Quietness Coefficient: <span className="text-purple-400 font-bold">{(target.quietnessCoefficient * 100).toFixed(0)}%</span>
+            Quietness Coefficient: <span className="text-purple-400 font-bold">{(quietnessCoefficient * 100).toFixed(0)}%</span>
+          </div>
+        )}
+        {payload.strategy && (
+          <p className="text-xs text-muted-foreground mb-4 line-clamp-3">
+            <strong>Strategy:</strong> {payload.strategy}
+          </p>
+        )}
+        {payload.estimatedValuation && (
+          <div className="text-xs text-muted-foreground mb-4">
+            Estimated Valuation: <span className="text-emerald-400 font-bold">{payload.estimatedValuation}</span>
           </div>
         )}
         <div className="flex justify-between items-center text-xs">
-          <Badge variant="outline">{target.status}</Badge>
-          <span className="text-muted-foreground">Priority: {target.priority}</span>
+          <Badge variant="outline">{status}</Badge>
+          <span className="text-muted-foreground">Priority: {priority}</span>
         </div>
       </CardContent>
     </Card>
@@ -236,31 +254,26 @@ function GrantCard({ grant }: { grant: any }) {
 
 export default function AssetMarketplacePage() {
   const firestore = useFirestore();
-  const assetsQuery = useMemoFirebase(
-    () => (firestore ? query(collection(firestore, 'real_world_assets')) : null) as Query<RealWorldAsset> | null,
+  const assetsQuery = useSovereignMemo(
+    () => (firestore ? query(collection(firestore, 'real_world_assets'), where('status', '==', 'Active')) : null) as unknown as Query<RealWorldAsset> | null,
     [firestore]
   );
-  const { data: assets, isLoading: areAssetsLoading } = useCollection<RealWorldAsset>(assetsQuery);
+  const { data: assets, isLoading: areAssetsLoading } = useCollection<RealWorldAsset>(assetsQuery as any) as any;
 
-  const proposalsQuery = useMemoFirebase(
-    () => (firestore ? query(collection(firestore, 'proposals'), where('status', '==', 'Active')) : null) as Query<Proposal> | null,
+  const proposalsQuery = useSovereignMemo(
+    () => (firestore ? query(collection(firestore, 'proposals'), where('status', 'in', ['Proposed', 'Active'])) : null) as unknown as Query<Proposal> | null,
     [firestore]
   );
-  const { data: rawProposals, isLoading: areProposalsLoading } = useCollection<Proposal>(proposalsQuery as any);
+  const { data: proposals, isLoading: areProposalsLoading } = useCollection<Proposal>(proposalsQuery as any) as any;
 
-  const proposals = React.useMemo(() => {
-    if (!rawProposals) return [];
-    return rawProposals.filter(p => p.category === 'RWA Acquisition');
-  }, [rawProposals]);
-
-  const reclamationQuery = useMemoFirebase(
-    () => (firestore ? query(collection(firestore, 'reclamation_targets')) : null) as any,
+  const reclamationQuery = useSovereignMemo(
+    () => (firestore ? query(collection(firestore, 'omni_intel_lake'), where('type', '==', 'PHYSICAL_ANCHOR_SIGNAL')) : null) as unknown as Query<any> | null,
     [firestore]
   );
-  const { data: targets, isLoading: isReclamationLoading } = useCollection(reclamationQuery as any);
+  const { data: reclamationAssets, isLoading: isReclamationLoading } = useCollection<any>(reclamationQuery as any) as any;
 
-  const grantsQuery = useMemoFirebase(
-    () => (firestore ? query(collection(firestore, 'grant_opportunities')) : null) as any,
+  const grantsQuery = useSovereignMemo(
+    () => (firestore ? query(collection(firestore, 'grants'), where('status', '==', 'Open')) : null) as unknown as Query<any> | null,
     [firestore]
   );
   const { data: grants, isLoading: isGrantsLoading } = useCollection(grantsQuery as any);
@@ -316,7 +329,14 @@ export default function AssetMarketplacePage() {
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4">
-              {assets?.map((asset) => <AssetCard key={asset.id} asset={asset} />)}
+              {(!assets || assets.length === 0) ? (
+                <div className="col-span-full text-center py-12">
+                  <h3 className="font-headline text-xl">No Sovereign Assets Listed</h3>
+                  <p className="text-muted-foreground">The state has not listed any real-world assets for acquisition in this epoch yet.</p>
+                </div>
+              ) : (
+                assets.map((asset) => <AssetCard key={asset.id} asset={asset} />)
+              )}
             </div>
           )}
         </TabsContent>
@@ -354,9 +374,9 @@ export default function AssetMarketplacePage() {
             {isReclamationLoading ? (
               [...Array(3)].map((_, i) => <Card key={i} className="h-48 animate-pulse bg-muted" />)
             ) : (
-              targets?.map((target: any) => <ReclamationCard key={target.id} target={target} />)
+              reclamationAssets?.map((target: any) => <ReclamationCard key={target.id} target={target} />)
             )}
-            {targets?.length === 0 && <div className="col-span-full text-center py-12 text-muted-foreground italic">No physical anchor targets identified.</div>}
+            {reclamationAssets?.length === 0 && <div className="col-span-full text-center py-12 text-muted-foreground italic">No physical anchor targets identified.</div>}
           </div>
         </TabsContent>
       </Tabs>

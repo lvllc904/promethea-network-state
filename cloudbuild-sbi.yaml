@@ -5,3 +5,19 @@ steps:
       - --cache=true
       - --cache-ttl=168h
       - --dockerfile=packages/sbi-core/Dockerfile
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'sbi-core'
+      - '--image=gcr.io/studio-9105849211-9ba48/sbi-core:latest'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=1Gi'
+      - '--cpu=1'
+      - '--min-instances=0'
+      - '--timeout=600'
+

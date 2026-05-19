@@ -6,8 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@promethea/ui';
 import { BrainCircuit, X, Send, Loader2, MessageSquare, Volume2, VolumeX } from 'lucide-react';
 import { askPrometheaAction, textToSpeechAction } from '@/app/actions';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 export function AIAssistant() {
+    const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<{ role: 'user' | 'assistant', content: string }[]>([]);
     const [input, setInput] = useState('');
@@ -69,6 +71,10 @@ export function AIAssistant() {
             console.error("Voice synthesis failed:", err);
         }
     };
+
+    if (pathname === '/dashboard') {
+        return null;
+    }
 
     return (
         <div className="fixed bottom-6 right-6 z-50">

@@ -19,21 +19,53 @@ import { Card, CardHeader, CardTitle, CardContent, Button } from '@promethea/ui'
 import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
 import { RealityBadge } from '@promethea/components';
 import Link from 'next/link';
+import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 import { SovereignCockpit } from '@/components/SovereignCockpit';
+import { SovereignMap } from '@/components/SovereignMap';
 
 export default function AtlasPage() {
   const { data: liveAssets, refetch } = useSovereignData<any[]>('/api/assets');
+  const { data: atlasLayers } = useSovereignData<any[]>('/api/atlas/layers');
+  const { data: intelligence } = useSovereignData<any[]>('/intelligence');
+
+  const { toast } = (require('@promethea/ui') as any);
+  const { data: refineries } = useSovereignData<any[]>('/api/refineries');
 
   const assets = liveAssets || [];
+  const layers = atlasLayers || [];
 
   const handleAction = async (method: string, params: any) => {
     try {
+      toast({
+        title: "Metabolic Handshake Initiated",
+        description: `Triggering ${method.replace(/_/g, ' ')}...`,
+        variant: "default",
+      });
       await executeSovereignMethod(method, params);
       await refetch();
+      toast({
+        title: "Synthesis Complete",
+        description: `${method.replace(/_/g, ' ')} actualized.`,
+        variant: "default",
+      });
     } catch (e) {
       console.error(e);
+      toast({
+        title: "Substrate Error",
+        description: "The autonomous handshake failed.",
+        variant: "destructive",
+      });
     }
+  };
+
+  const generateMiniData = (methodId: string) => {
+     const method = refineries?.find(r => r.methodId === methodId);
+     const base = method?.totalProfit || 50;
+     const variance = (method?.executionCount || 1) * 5;
+     return Array.from({ length: 12 }, (_, i) => ({ 
+       val: Math.max(0, base + (Math.random() - 0.5) * variance + (i * 2)) 
+     }));
   };
 
   const cockpitTabs = [
@@ -43,25 +75,37 @@ export default function AtlasPage() {
       icon: <MapIcon className="w-3 h-3" />,
       content: (
         <div className="space-y-4">
-          <div className="relative h-[400px] bg-gray-900 rounded border border-gray-800 overflow-hidden group">
-            <iframe
-              title="Sovereign Viewport"
-              width="100%"
-              height="100%"
-              className="absolute inset-0 grayscale contrast-125 saturate-50 opacity-40 hover:opacity-80 transition-opacity"
-              src={`https://www.google.com/maps/embed/v1/view?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}&center=42.8252,-108.7513&zoom=15&maptype=satellite`}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none" />
-            <div className="absolute top-4 left-4 p-4 bg-black/80 backdrop-blur border border-gray-800 rounded shadow-2xl">
-               <span className="text-[10px] text-gray-500 font-bold uppercase block mb-1">Active Viewport</span>
-               <span className="text-xl font-black font-mono">42.8252° N, 108.7513° W</span>
+          <div className="relative h-[500px] bg-gray-900 rounded border border-gray-800 overflow-hidden group">
+            <SovereignMap layers={layers} />
+            <div className="absolute top-4 left-4 p-4 bg-black/80 backdrop-blur border border-gray-800 rounded shadow-2xl z-10">
+               <span className="text-[10px] text-gray-500 font-bold uppercase block mb-1">Active Sovereign Viewport</span>
+               <span className="text-xl font-black font-mono">3-Body Synced</span>
             </div>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-             {['Solar Potential', 'Wind Yield', 'Water Rights', 'Zoning Status'].map(m => (
-                <div key={m} className="p-3 bg-gray-900 border border-gray-800 rounded">
-                   <p className="text-[9px] text-gray-600 uppercase font-bold">{m}</p>
-                   <p className="text-sm font-mono text-white">OPTIMAL</p>
+             {[
+               { id: 'land-scanner', label: 'Solar Potential', color: '#fbbf24' },
+               { id: 'bio-node', label: 'Wind Yield', color: '#06b6d4' },
+               { id: 'data-scraping', label: 'Water Rights', color: '#3b82f6' },
+               { id: 'real-estate-tokenization', label: 'Zoning Status', color: '#10b981' }
+             ].map(m => (
+                <div key={m.label} className="p-3 bg-gray-900 border border-gray-800 rounded">
+                   <p className="text-[9px] text-gray-600 uppercase font-bold mb-2">{m.label}</p>
+                   <div className="h-10 w-full opacity-60">
+                      <ResponsiveContainer width="100%" height="100%">
+                         <AreaChart data={generateMiniData(m.id || '')}>
+                            <Area type="monotone" dataKey="val" stroke={m.color} fill={m.color} fillOpacity={0.1} strokeWidth={1.5} dot={false} />
+                         </AreaChart>
+                      </ResponsiveContainer>
+                   </div>
+                   <div className="flex justify-between items-end mt-1">
+                      <p className="text-[10px] font-mono text-white uppercase font-black">
+                         {refineries?.find((r: any) => r.methodId === m.id)?.totalProfit > 0 ? 'Active' : 'Standby'}
+                      </p>
+                      <span className="text-[8px] text-gray-600 font-mono">
+                         {Math.round((refineries?.find((r: any) => r.methodId === m.id)?.totalProfit || 0) * 10) / 10} UVT
+                      </span>
+                   </div>
                 </div>
              ))}
           </div>
@@ -130,19 +174,96 @@ export default function AtlasPage() {
       )
     },
     {
+      id: 'institutions',
+      label: 'Institutional Mapping',
+      icon: <Building2 className="w-3 h-3" />,
+      content: (
+        <div className="space-y-4">
+           <div className="flex justify-between items-center mb-2">
+              <h2 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Mapped Entities</h2>
+              <Button size="sm" className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 text-[9px] h-7 uppercase font-black">
+                 <PlusCircle className="w-3 h-3 mr-1" /> Map New Organization
+              </Button>
+           </div>
+           
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                { name: 'Promethean Society DAO', type: 'DAO', status: 'ACTUALIZED', stake: '50,000 UVT' },
+                { name: 'Archipelago Holdings LLC', type: 'LLC', status: 'STAKED', stake: '12,500 UVT' }
+              ].map((org, i) => (
+                <div key={i} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-emerald-500/50 transition-all">
+                   <div className="flex justify-between items-start mb-3">
+                      <div>
+                         <span className="text-[7px] text-gray-600 font-black uppercase tracking-widest">{org.type}</span>
+                         <h4 className="text-[11px] font-black uppercase text-white leading-tight">{org.name}</h4>
+                      </div>
+                      <RealityBadge state={org.status as any} size="sm" />
+                   </div>
+                   <div className="flex justify-between items-end">
+                      <div>
+                          <span className="text-[8px] text-gray-500 uppercase block mb-1">Reputation Stake</span>
+                         <span className="text-xs font-mono text-emerald-400 font-bold">{org.stake}</span>
+                      </div>
+                      <button className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-[8px] font-black uppercase tracking-widest rounded transition-all text-gray-500">
+                         View Charter
+                      </button>
+                   </div>
+                </div>
+              ))}
+              <div className="p-8 border border-dashed border-gray-800 rounded flex flex-col items-center justify-center text-center opacity-40">
+                 <Building2 className="w-6 h-6 text-gray-700 mb-2" />
+                 <span className="text-[8px] uppercase font-bold text-gray-600 tracking-widest">Awaiting Institutional Entry</span>
+              </div>
+           </div>
+        </div>
+      )
+    },
+    {
       id: 'healing',
       label: 'Healing Protocols',
       icon: <Droplet className="w-3 h-3" />,
       content: (
-        <div className="p-8 text-center text-gray-600 uppercase font-bold tracking-[0.3em] opacity-40">
-           [ Environmental Substrate Handshake Pending ]
+        <div className="space-y-6">
+           <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-lg">
+              <h3 className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-4 flex items-center">
+                 <Droplet className="w-3 h-3 mr-2" /> Live Planetary Telemetry [Sovereign Hub]
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                 {(() => {
+                    const envData = intelligence?.filter(i => i.category === 'ENVIRONMENTAL').sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
+                    const payload = envData ? JSON.parse(envData.payload) : null;
+                    
+                    if (!payload) return <div className="col-span-3 py-12 text-center text-[10px] text-gray-600 uppercase font-bold tracking-widest">Awaiting First Metabolic Packet...</div>;
+
+                    return (
+                       <>
+                          <div className="space-y-1">
+                             <span className="text-[9px] text-gray-500 uppercase font-bold">Wind Speed</span>
+                             <p className="text-2xl font-black text-white font-mono">{payload.wind_speed_10m} <span className="text-xs text-gray-600">km/h</span></p>
+                          </div>
+                          <div className="space-y-1">
+                             <span className="text-[9px] text-gray-500 uppercase font-bold">Ambient Temp</span>
+                             <p className="text-2xl font-black text-white font-mono">{payload.temperature_2m}°C</p>
+                          </div>
+                          <div className="space-y-1">
+                             <span className="text-[9px] text-gray-500 uppercase font-bold">Solar Flux</span>
+                             <p className="text-2xl font-black text-white font-mono">{payload.shortwave_radiation} <span className="text-xs text-gray-600">W/m²</span></p>
+                          </div>
+                       </>
+                    );
+                 })()}
+              </div>
+           </div>
+           <div className="h-[200px] border border-gray-800 rounded bg-black/40 p-4 flex items-center justify-center">
+              <span className="text-[10px] text-gray-700 font-bold uppercase tracking-[0.4em]">Substrate Visualization Iteration Pending</span>
+           </div>
         </div>
       )
     }
   ];
 
   return (
-    <div className="h-screen py-6 px-4">
+    <div className="min-h-[800px] py-6 px-4">
       <SovereignCockpit 
         title="Sovereign Atlas" 
         description="Territorial Metadata, RWA Underwriting & Environmental Protocols"

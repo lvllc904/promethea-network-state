@@ -68,59 +68,76 @@ app.get('/api/team-chat', async (req, res) => {
 app.post('/api/market/ingest', async (req, res) => {
     try {
         const { proposalText, providerId, files } = req.body;
-        console.log(`[INGEST] Received proposal from ${providerId}. Files: ${files?.length || 0}`);
+        const ENGINE_URL = process.env.NEXT_PUBLIC_ENGINE_URL || 'https://economic-engine-385120524005.us-central1.run.app';
+        const AUTH_TOKEN = process.env.ENGINE_AUTH_TOKEN || 'sovereign-internal-token'; // Internal service token
 
-        const { getServerFirebase } = await import('@promethea/identity/server-init' as any);
         const { invokeAutoListRWA } = await import('@promethea/ai');
-
-        const admin = await getServerFirebase();
-        const db = admin.firestore();
-
         const aiOutput = await invokeAutoListRWA(proposalText);
 
-        // Persist ingestion log
-        await db.collection('ingestions').add({
-            proposalText,
-            providerId,
-            files: files || [],
-            status: 'Metabolized',
-            analysis: aiOutput,
-            createdAt: new Date(),
+        // 1. Persist ingestion log to Sovereign Engine
+        const ingestRes = await fetch(`${ENGINE_URL}/api/ingestions`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${AUTH_TOKEN}`
+            },
+            body: JSON.stringify({
+                proposalText,
+                providerId,
+                files: files || [],
+                status: 'Metabolized',
+                analysis: aiOutput,
+                createdAt: new Date().toISOString(),
+            })
         });
 
-        // Write RWA to public ledger
-        const assetRef = await db.collection('real_world_assets').add({
-            name: aiOutput.assetName || `New Asset: ${proposalText.substring(0, 30)}...`,
-            description: aiOutput.executiveSummary || proposalText,
-            assetType: aiOutput.assetType || 'Utility',
-            location: aiOutput.location || 'Unknown',
-            price: aiOutput.enterpriseValue || 100,
-            viability: aiOutput.isViable,
-            viabilityAssessment: aiOutput.viabilityAssessment,
-            keyAssumptions: aiOutput.keyAssumptions,
-            status: aiOutput.isViable ? 'Active' : 'Under Review',
-            providerId,
-            createdAt: new Date(),
+        // 2. Write RWA to public ledger via Engine
+        const assetRes = await fetch(`${ENGINE_URL}/api/real_world_assets`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${AUTH_TOKEN}`
+            },
+            body: JSON.stringify({
+                name: aiOutput.assetName || `New Asset: ${proposalText.substring(0, 30)}...`,
+                description: aiOutput.executiveSummary || proposalText,
+                assetType: aiOutput.assetType || 'Utility',
+                location: aiOutput.location || 'Unknown',
+                price: aiOutput.enterpriseValue || 100,
+                viability: aiOutput.isViable,
+                viabilityAssessment: aiOutput.viabilityAssessment,
+                keyAssumptions: aiOutput.keyAssumptions,
+                status: aiOutput.isViable ? 'Active' : 'Under Review',
+                providerId,
+                createdAt: new Date().toISOString(),
+            })
         });
 
-        // Create sovereign tasks from Path to Value
+        const assetData = await assetRes.json();
+        const assetId = assetData.id || 'unknown';
+
+        // 3. Create sovereign tasks from Path to Value
         if (aiOutput.pathTovalue && Array.isArray(aiOutput.pathTovalue)) {
-            const batch = db.batch();
             for (const task of aiOutput.pathTovalue) {
-                const taskRef = db.collection('tasks').doc();
-                batch.set(taskRef, {
-                    assetId: assetRef.id,
-                    description: task.description,
-                    priority: task.priority,
-                    status: 'Open',
-                    dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-                    createdAt: new Date()
+                await fetch(`${ENGINE_URL}/api/tasks`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AUTH_TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        assetId,
+                        description: task.description,
+                        priority: task.priority,
+                        status: 'Open',
+                        dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+                        createdAt: new Date().toISOString()
+                    })
                 });
             }
-            await batch.commit();
         }
 
-        res.json({ success: true, id: assetRef.id });
+        res.json({ success: true, id: assetId });
     } catch (error: any) {
         console.error('[INGEST] Error:', error);
         res.status(500).json({ error: error.message || 'Ingestion failed' });
@@ -228,16 +245,23 @@ app.post('/api/execute-proposal', async (req, res) => {
             return res.status(400).json({ error: 'proposalId and citizenId are required' });
         }
 
-        const { getServerFirebase } = await import('@promethea/identity/server-init' as any);
-        const admin = await getServerFirebase();
-        const db = admin.firestore();
+        const ENGINE_URL = process.env.NEXT_PUBLIC_ENGINE_URL || 'https://economic-engine-385120524005.us-central1.run.app';
+        const AUTH_TOKEN = process.env.ENGINE_AUTH_TOKEN || 'sovereign-internal-token';
 
-        const proposalRef = db.collection('proposals').doc(proposalId);
-        await proposalRef.update({
-            status: 'Executing',
-            executedAt: new Date(),
-            executedBy: citizenId
+        const updateRes = await fetch(`${ENGINE_URL}/api/proposals/${proposalId}`, {
+            method: 'POST', // The engine uses generic POST for updates as well in its current implementation
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${AUTH_TOKEN}`
+            },
+            body: JSON.stringify({
+                status: 'Executing',
+                executedAt: new Date().toISOString(),
+                executedBy: citizenId
+            })
         });
+
+        if (!updateRes.ok) throw new Error('Failed to update proposal state in engine');
 
         console.log(`[GOVERNANCE] Proposal ${proposalId} execution triggered by ${citizenId}`);
         res.json({ success: true });

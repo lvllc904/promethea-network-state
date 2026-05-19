@@ -1,5 +1,5 @@
 // Body 1 Lobotomy: Transition to Solana Smart Contracts
-import { type Firestore, writeBatch, doc, collection, increment, updateDoc } from "firebase/firestore";
+import { type Firestore, writeBatch, doc, collection, increment, updateDoc } from "@promethea/identity";
 import { Connection, PublicKey, Keypair } from "@solana/web3.js";
 import { Program, AnchorProvider, Wallet } from "@coral-xyz/anchor";
 import { SovereignGovernanceIDL } from "./idls/sovereign-governance";

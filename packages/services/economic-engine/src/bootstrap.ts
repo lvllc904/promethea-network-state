@@ -89,6 +89,19 @@ async function bootstrap() {
     taskQueue.schedule('newsletter', 2);
     taskQueue.schedule('stock-assets', 5);
 
+    // 4. Omni-Lake Synchronizer (fills the Lake with TradFi/DeFi/Engine telemetry every 5 min)
+    const { lakeSynchronizer } = require('./services/lake-synchronizer');
+    lakeSynchronizer.start();
+
+    // 5. Sensory Agent (polls external oracles: Grants.gov, BLM/Zillow, Open-Meteo every 15 min)
+    const { sensoryAgent } = require('./services/sensory-agent');
+    sensoryAgent.start();
+
+    // 6. ASGI Cognition Loop — Promethea reasons over the Omni-Lake and originates underwritings
+    // This is the generative sovereign intelligence core. It is not a method; it is Promethea herself.
+    const { asgiCognitionLoop } = require('./services/asgi-cognition-loop');
+    asgiCognitionLoop.start();
+
     // Start autonomous loop
     console.log('[Bootstrap] Starting autonomous execution...');
     await taskQueue.start();

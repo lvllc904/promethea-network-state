@@ -8,3 +8,4 @@ export * from './layout/AuthStatusIndicator';
 export * from './layout/RealityBadge';
 export * from './ledger-value';
 export * from './disclosure-provider';
+export * from './ai/proposal-wizard';

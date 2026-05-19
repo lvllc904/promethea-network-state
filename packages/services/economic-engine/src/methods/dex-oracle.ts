@@ -1,5 +1,5 @@
 import { BaseMethod, ExecutionResult } from './base-method';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { sovereignAI } from '../services/sovereign-ai';
 
 /**
  * Method 18: DEX Price Oracle
@@ -7,7 +7,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
  * Provides real-time price feeds and liquidity analysis for LLM trading bots.
  */
 export class DEXOracleMethod extends BaseMethod {
-    private genAI: GoogleGenerativeAI;
 
     constructor(apiKey: string) {
         super('dex-oracle', 'DEX Price Oracle', {
@@ -16,8 +15,6 @@ export class DEXOracleMethod extends BaseMethod {
             maxExecutionsPerDay: 20,
             estimatedRevenue: { min: 5, max: 15 },
         });
-
-        this.genAI = new GoogleGenerativeAI(apiKey);
     }
 
     async execute(pair: string = "SOL/USDC"): Promise<ExecutionResult> {
@@ -56,7 +53,6 @@ export class DEXOracleMethod extends BaseMethod {
     }
 
     private async fetchPrice(pair: string) {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
         const prompt = `Simulate DEX price and liquidity data for: "${pair}".
         Provide JSON with:
         - price: current price (string)
@@ -66,8 +62,7 @@ export class DEXOracleMethod extends BaseMethod {
         
         Ensure output is valid JSON.`;
 
-        const result = await model.generateContent(prompt);
-        const text = result.response.text();
+        const text = await sovereignAI.generateContent('gemini-1.5-flash', prompt, true);
         const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(jsonStr);
     }

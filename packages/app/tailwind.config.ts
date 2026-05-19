@@ -75,6 +75,11 @@ const config = {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
+        // Sovereign HUD Semantic Pillars
+        economics: { DEFAULT: '#10b981' }, // Emerald
+        governance: { DEFAULT: '#06b6d4' }, // Cyan
+        narrative: { DEFAULT: '#a855f7' }, // Amethyst
+        diplomatic: { DEFAULT: '#f59e0b' }, // Amber
       },
       borderRadius: {
         lg: 'var(--radius)',

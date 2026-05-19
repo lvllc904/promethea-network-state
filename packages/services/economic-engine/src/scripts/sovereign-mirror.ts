@@ -2,12 +2,29 @@ import axios from 'axios';
 import PinataClient from '@pinata/sdk';
 import fs from 'fs';
 import path from 'path';
+import yaml from 'js-yaml';
+
+// Manually load production environment if available
+const envPath = path.join(process.cwd(), 'env.production.yaml');
+let productionEnv: any = {};
+if (fs.existsSync(envPath)) {
+    try {
+        productionEnv = yaml.load(fs.readFileSync(envPath, 'utf8'));
+    } catch (e) {
+        console.warn("[Mirror] Failed to load env.production.yaml, falling back to process.env");
+    }
+}
 
 // Load credentials from the verified environment
-const PINATA_JWT = process.env.PINATA_JWT || '';
+const PINATA_JWT = productionEnv.PINATA_JWT || process.env.PINATA_JWT || '';
+const PINATA_API_KEY = productionEnv.PINATA_API_KEY || process.env.PINATA_API_KEY || '';
+const PINATA_API_SECRET = productionEnv.PINATA_API_SECRET || process.env.PINATA_API_SECRET || '';
 const ENGINE_URL = "https://economic-engine-385120524005.us-central1.run.app";
 
-const pinata = new PinataClient({ pinataJWTKey: PINATA_JWT });
+// Initialize Pinata with best available credentials
+const pinata = (PINATA_JWT) 
+    ? new PinataClient({ pinataJWTKey: PINATA_JWT })
+    : new PinataClient(PINATA_API_KEY, PINATA_API_SECRET);
 
 /**
  * Sovereign Mirror Protocol
@@ -34,24 +51,25 @@ async function executeSovereignMirror() {
         
         console.log(`[Artifact] 📦 Snapshot saved locally: ${filePath}`);
 
-        // Step 3: Pin to IPFS (The Immutable Layer)
-        console.log("[IPFS] ⛓️  Staking snapshot to the decentralized web via Pinata...");
+        // Step 3: Pin to IPFS (The Immutable Layer) - SKIPPED DUE TO PLAN LIMIT
+        console.log("[IPFS] ⛓️  Pinata limit reached. Pivoting to Sovereign Storage (GCS)...");
         
-        const options = {
-            pinataMetadata: {
-                name: `Promethean_Network_State_Mirror_${new Date().toISOString()}`,
-                keyvalues: {
-                    type: 'SOVEREIGN_MIRROR',
-                    origin: 'GCP_CLOUD_RUN'
-                }
-            }
-        };
-
-        const result = await pinata.pinFromFS(buildDir, options);
+        // Step 4: Upload to Sovereign Storage (GCS)
+        const bucketName = 'promethea-public';
+        const destination = 'mirror/index.html';
         
-        console.log("\n[SUCCESS] ✅ SOVEREIGN MIRROR DEPLOYED.");
-        console.log(`[IPFS] 🌐 CID: ${result.IpfsHash}`);
-        console.log(`[IPFS] 🔗 Gateway: https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`);
+        console.log(`[Storage] 🏺 Staking snapshot to Sovereign Vault: gs://${bucketName}/${destination}...`);
+        
+        try {
+            const { execSync } = require('child_process');
+            execSync(`gcloud storage cp "${filePath}" "gs://${bucketName}/${destination}"`);
+            
+            console.log("\n[SUCCESS] ✅ SOVEREIGN MIRROR DEPLOYED.");
+            console.log(`[Storage] 🌐 URL: https://storage.googleapis.com/${bucketName}/${destination}`);
+        } catch (storageErr: any) {
+            console.error("[Storage] ❌ Vault staking failed:", storageErr.message);
+            throw storageErr;
+        }
         
     } catch (error) {
         console.error("[CRITICAL] ❌ Mirror Protocol Failure:", error);

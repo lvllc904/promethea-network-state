@@ -32,7 +32,7 @@ export async function invokeRefineProposal(input: RefineProposalInput): Promise<
 
 const refineProposalPrompt = ai.definePrompt({
   name: 'refineProposalPrompt',
-  model: 'googleAI/gemini-1.5-flash',
+  model: 'gemini-1.5-flash',
   input: { schema: RefineProposalInputSchema },
   output: { schema: RefineProposalOutputSchema },
   prompt: `You are an AI assistant that helps refine policy proposals for the Promethea DAC based on ethical considerations and past learnings.

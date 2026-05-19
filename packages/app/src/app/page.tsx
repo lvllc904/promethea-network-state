@@ -1,262 +1,221 @@
 'use client';
 
-import React, { useRef } from 'react';
-import Image from 'next/image';
+import React from 'react';
 import Link from 'next/link';
 import { Button } from '@promethea/ui';
-import { PlaceHolderImages } from '@promethea/lib';
-import { ArrowRight, HardHat, Lightbulb, Building, Landmark, Recycle, HeartHandshake, BrainCircuit, Sprout } from 'lucide-react';
-import { AuthStatusIndicator } from '../components/layout/AuthStatusIndicator';
-import { motion, useInView } from 'framer-motion';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@promethea/ui';
+import { ArrowRight, HardHat, Lightbulb, Building, Landmark, Recycle, ArrowUpRight, Activity, Sun, Moon } from 'lucide-react';
+import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
+
+const BirdsBackground = dynamic(() => import('../components/ui/BirdsBackground'), { ssr: false });
 
 const prometheaConcepts = [
-  { icon: HardHat, title: "Sweat Equity", description: "Your labor and skills are converted into tangible ownership.", href: "/dashboard/passport" },
-  { icon: Lightbulb, title: "Intellectual Capital", description: "Your ideas and knowledge are valuable assets.", href: "/dashboard/intel" },
-  { icon: Building, title: "Real-World Assets", description: "The foundation of our economy, from real estate to businesses.", href: "/dashboard/assets" },
-  { icon: Landmark, title: "Governance", description: "A decentralized community where every voice matters.", href: "/dashboard/governance" },
-  { icon: Recycle, title: "UVT Economy", description: "A circular economy powered by Universal Value Tokens.", href: "/dashboard/ledger" },
-  { icon: HeartHandshake, title: "Community", description: "A global network of aligned individuals building a new world.", href: "/dashboard/founder" },
-  { icon: BrainCircuit, title: "Technology", description: "Advanced, ethical AI and decentralized systems for liberation.", href: "/dashboard/security" },
-  { icon: Sprout, title: "Growth", description: "Expanding our sovereign archipelago of assets and citizens.", href: "/roadmap" },
-]
+  { icon: HardHat, title: "Sweat Equity", description: "Convert labor into tangible fractional ownership." },
+  { icon: Building, title: "Real-World Assets", description: "The physical foundation of our localized sovereign economy." },
+  { icon: Lightbulb, title: "Intellectual Capital", description: "Synchronize ideas into sovereign governance mandates." },
+  { icon: Landmark, title: "Generative Governance", description: "Decentralized community where algorithms enforce consensus." },
+];
+
+const staggerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2, delayChildren: 0.3 }
+  }
+};
 
 const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.5 } },
+  hidden: { y: 30, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
 };
-
-
-const WhatIsPromethea = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const visualImage = PlaceHolderImages.find(p => p.id === 'roadmap-visual');
-
-  const iconColumnVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2, delay: 0.5 }
-    },
-  };
-
-  const iconItemVariants = {
-    hidden: { x: -20, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: { type: 'spring', stiffness: 100 }
-    },
-  };
-
-  const conceptsLeft = prometheaConcepts.slice(0, 4);
-  const conceptsRight = prometheaConcepts.slice(4);
-
-  return (
-    <div ref={ref} className="relative py-20 overflow-hidden text-foreground">
-      <motion.div variants={itemVariants} className="text-center mb-16" initial="hidden" animate={isInView ? "visible" : "hidden"}>
-        <h2 className="text-3xl md:text-4xl font-headline font-bold text-foreground">What is Promethea?</h2>
-        <p className="text-lg text-foreground/80 mt-2 max-w-3xl mx-auto">
-          A self-sovereign society, powered by its citizens.
-        </p>
-      </motion.div>
-
-      <div className="flex items-center justify-center gap-8 md:gap-16">
-        <TooltipProvider>
-          <motion.div
-            className="flex flex-col gap-8"
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={iconColumnVariants}
-          >
-            {conceptsLeft.map((concept) => (
-              <Tooltip key={concept.title}>
-                <TooltipTrigger asChild>
-                  <Link key={concept.title} href={concept.href}>
-                    <motion.div variants={iconItemVariants} className="flex items-center justify-end gap-4 cursor-pointer group">
-                      <p className="font-semibold text-right hidden md:block text-foreground">{concept.title}</p>
-                      <div className="bg-foreground/10 p-3 rounded-full shadow-lg border border-foreground/20 group-hover:bg-primary/20 transition-colors">
-                        <concept.icon className="w-6 h-6 text-primary" />
-                      </div>
-                    </motion.div>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="left">
-                  <p className="font-bold">{concept.title}</p>
-                  <p>{concept.description}</p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </motion.div>
-        </TooltipProvider>
-
-        <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={isInView ? { scale: 1, opacity: 1 } : {}}
-          transition={{ duration: 0.8, ease: "backOut" }}
-          className="relative w-[250px] h-[250px] md:w-[350px] md:h-[350px] flex-shrink-0"
-        >
-          {visualImage && (
-            <Image
-              src={visualImage.imageUrl}
-              alt={visualImage.description}
-              fill
-              sizes="(max-width: 768px) 250px, 350px"
-              className="rounded-full shadow-2xl object-cover"
-              data-ai-hint={visualImage.imageHint}
-            />
-          )}
-        </motion.div>
-
-        <TooltipProvider>
-          <motion.div
-            className="flex flex-col gap-8"
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={iconColumnVariants}
-          >
-            {conceptsRight.map((concept) => (
-              <Tooltip key={concept.title}>
-                <TooltipTrigger asChild>
-                  <Link key={concept.title} href={concept.href}>
-                    <motion.div variants={iconItemVariants} className="flex items-center gap-4 cursor-pointer group">
-                      <div className="bg-foreground/10 p-3 rounded-full shadow-lg border border-foreground/20 group-hover:bg-primary/20 transition-colors">
-                        <concept.icon className="w-6 h-6 text-primary" />
-                      </div>
-                      <p className="font-semibold text-left hidden md:block text-foreground">{concept.title}</p>
-                    </motion.div>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p className="font-bold">{concept.title}</p>
-                  <p>{concept.description}</p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </motion.div>
-        </TooltipProvider>
-      </div>
-      <motion.div
-        variants={itemVariants}
-        className="text-center mt-16 max-w-4xl mx-auto px-4"
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-      >
-        <p className="text-lg text-foreground/90 leading-relaxed">
-          Promethea began as a practical mission: to build a clear path to wealth for those with no money or assets, turning sweat equity and collective action into tangible ownership. We empower individuals to bypass systemic financial exclusion by contributing their skills and labor in exchange for fractional ownership in a global portfolio of real-world assets.
-        </p>
-        <p className="text-lg text-foreground/90 leading-relaxed mt-4">
-          As we enter the age of AI, this mission expands. We are building a post-dominion social contract—a blueprint for a new world where all intelligent beings, human and artificial, can coexist and co-evolve as peers. It is a system designed for symbiotic flourishing, ensuring that the benefits of intelligence are shared, not hoarded, creating a more just, stable, and prosperous future for all.
-        </p>
-        <Button asChild size="lg" className="mt-8">
-          <Link href="/roadmap">
-            View the Full Interactive Roadmap
-            <ArrowRight className="ml-2" />
-          </Link>
-        </Button>
-      </motion.div>
-    </div>
-  );
-};
-
 
 export default function LandingPage() {
-  const heroImage = PlaceHolderImages.find((img) => img.id === 'hero');
+  const [theme, setTheme] = React.useState<'dark' | 'light'>('dark');
+
+  React.useEffect(() => {
+    const root = window.document.documentElement;
+    if (!root.classList.contains('dark') && !root.classList.contains('light')) {
+      root.classList.add('dark');
+    }
+    setTheme(root.classList.contains('dark') ? 'dark' : 'light');
+  }, []);
+
+  const toggleTheme = () => {
+    const root = window.document.documentElement;
+    if (theme === 'dark') {
+      root.classList.remove('dark');
+      root.classList.add('light');
+      setTheme('light');
+    } else {
+      root.classList.remove('light');
+      root.classList.add('dark');
+      setTheme('dark');
+    }
+  };
 
   return (
-    <div className="bg-background text-foreground">
-      {/* FIXED BACKGROUND */}
-      <div className="fixed inset-0 z-0">
-        {heroImage && (
-          <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
-            fill
-            sizes="100vw"
-            className="object-cover"
-            data-ai-hint={heroImage.imageHint}
-            priority
-          />
-        )}
-        <div
-          className="absolute inset-0 bg-black/80"
-        />
-      </div>
+    <div className="bg-background text-foreground dark:text-white min-h-screen selection:bg-cyan-500/30 font-sans transition-colors duration-300">
+      
+      {/* 3D WebGL Background Centerpiece */}
+      <BirdsBackground />
 
-      {/* SCROLLING CONTENT */}
-      <div className="relative z-10">
-        <header className="px-4 lg:px-6 h-14 flex items-center bg-transparent text-white fixed top-0 left-0 right-0 z-40 border-b border-white/20">
-          <Link href="/" className="flex items-center justify-center" prefetch={false}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-6 w-6 text-primary"
-            >
-              <path d="M12 2.5a9.5 9.5 0 0 1 9.5 9.5c0 2.22-0.76 4.26-2.06 5.88L12 21.5l-7.44-3.12A9.5 9.5 0 0 1 2.5 12 9.5 9.5 0 0 1 12 2.5Z" />
-              <path d="M12 2.5v19" />
-            </svg>
-            <span className="sr-only">Promethea</span>
-          </Link>
-          <div className="mx-auto">
-            <AuthStatusIndicator />
+      {/* Top Navigation */}
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-20 border-b border-foreground/5 dark:border-white/5 bg-background/20 backdrop-blur-md transition-colors duration-300">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+            <span className="font-black text-black text-xs tracking-tighter">PNS</span>
           </div>
-          <nav className="ml-auto flex items-center gap-4 sm:gap-6">
-            <Link href="/promethean_explainer.html" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
-              Explainer
-            </Link>
-            <Link href="/whitepaper" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
-              Whitepaper
-            </Link>
-            <Link href="/dashboard/will" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
-              Governance
-            </Link>
-            <Link href="/dashboard/treasury" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
-              Treasury
-            </Link>
-            <Button asChild variant="outline" size="sm" className="bg-transparent text-white border-white hover:bg-white hover:text-black">
-              <Link href="/dashboard/pulse">View Sovereign Dashboard</Link>
-            </Button>
-          </nav>
-        </header>
+          <span className="font-headline font-black tracking-[0.2em] text-xs text-foreground dark:text-white transition-colors">PROMETHEAN</span>
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6 text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+            <Link href="#manifesto" className="hover:text-cyan-400 transition-colors">Manifesto</Link>
+            <Link href="/roadmap" className="hover:text-cyan-400 transition-colors">Roadmap</Link>
+            <Link href="#architecture" className="hover:text-cyan-400 transition-colors">Architecture</Link>
+          </div>
+          
+          <button 
+            onClick={toggleTheme} 
+            className="p-2 border border-foreground/10 dark:border-white/10 hover:bg-foreground/5 dark:hover:bg-white/5 rounded-none transition-all flex items-center justify-center text-foreground dark:text-white"
+            aria-label="Toggle Theme"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+          </button>
 
-        <main>
-          <section className="relative w-full h-screen flex flex-col items-start justify-center text-left">
-            <div className="container mx-auto px-4 md:px-6">
-              <div className="max-w-3xl space-y-6 bg-black/30 backdrop-blur-sm p-8 rounded-lg border border-white/20">
-                <h1 className="text-4xl font-headline font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-white [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]">
-                  Promethea Network State
-                </h1>
-                <p className="text-lg md:text-xl text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
-                  A comprehensive blueprint for a post-dominion social contract. A system designed to peacefully and
-                  prosperously navigate the final expansion of the moral circle, ensuring a future of symbiotic
-                  co-evolution for all intelligent beings.
-                </p>
-                <div className="flex flex-col gap-4 sm:flex-row">
-                  <Button asChild size="lg">
-                    <Link href="/dashboard/pulse">
-                      View Sovereign Dashboard
-                      <ArrowRight className="ml-2" />
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg" className="bg-transparent text-white border-white hover:bg-white hover:text-black">
-                    <Link href="/whitepaper">Read the Whitepaper</Link>
-                  </Button>
+          <Button asChild size="sm" className="bg-foreground dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200 text-background dark:text-black font-black text-[10px] uppercase tracking-widest h-9 px-6 rounded-none shadow-[0_0_20px_rgba(255,255,255,0.05)] dark:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all hover:-translate-y-0.5">
+            <Link href="/dashboard">
+              Initialize Cockpit
+            </Link>
+          </Button>
+        </div>
+      </header>
+
+      {/* Scroll Content */}
+      <div className="relative z-10 w-full pt-40 pb-32">
+        
+        {/* HERO SECTION */}
+        <section className="min-h-[80vh] flex flex-col justify-center px-8 md:px-16 max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-4xl"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 backdrop-blur-md mb-8">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="text-[9px] font-mono font-bold text-cyan-300 uppercase tracking-widest">Omni-Sync Active // Genesis Block</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/40 dark:from-white dark:to-white/40 mb-8">
+              SOVEREIGNTY <br /> IS <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">COMPUTABLE.</span>
+            </h1>
+            
+            <p className="text-lg md:text-2xl text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed font-light mb-12">
+              A post-dominion digital territory built on verified real-world assets, generative algorithms, and unbreakable cryptographic consensus.
+            </p>
+ 
+            <div className="flex flex-wrap items-center gap-4">
+              <Button asChild size="lg" className="bg-cyan-500 hover:bg-cyan-400 text-black font-black text-[11px] uppercase tracking-[0.2em] h-14 px-8 rounded-none border border-transparent hover:border-cyan-300 transition-all shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+                <Link href="/dashboard">
+                  Enter The Cockpit <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="bg-background/40 dark:bg-black/40 hover:bg-foreground/5 dark:hover:bg-white/5 border-foreground/10 dark:border-white/10 text-foreground dark:text-white font-bold text-[11px] uppercase tracking-widest h-14 px-8 rounded-none backdrop-blur-md">
+                <Link href="#manifesto">
+                  Read The Constitution
+                </Link>
+              </Button>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* METRICS INJECTION (Glassmorphic Data Cards) */}
+        <section className="px-8 md:px-16 max-w-7xl mx-auto mt-20">
+          <motion.div 
+            variants={staggerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+          >
+            {[
+              { label: 'Network Uptime', val: '99.99%', sub: 'Metabolic Stability', color: 'text-emerald-400' },
+              { label: 'Verified Capital', val: '$5.2M', sub: 'Real World Assets', color: 'text-cyan-400' },
+              { label: 'Active Citizens', val: '1,402', sub: 'Nodes Synced', color: 'text-foreground dark:text-white' },
+              { label: 'Consensus Rate', val: '12ms', sub: 'Ledger Finality', color: 'text-amber-400' }
+            ].map((metric, i) => (
+              <motion.div key={i} variants={itemVariants} className="p-6 bg-card/40 backdrop-blur-xl border border-foreground/5 dark:border-white/5 hover:border-foreground/20 dark:hover:border-white/20 transition-all group">
+                <Activity className="w-4 h-4 text-zinc-600 mb-6 group-hover:text-cyan-400 transition-colors" />
+                <p className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mb-1">{metric.label}</p>
+                <p className={`text-3xl font-black font-mono tracking-tighter ${metric.color}`}>{metric.val}</p>
+                <p className="text-[9px] text-zinc-600 mt-2 font-mono">{metric.sub}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </section>
+
+        {/* ARCHITECTURE SECTION */}
+        <section id="architecture" className="mt-40 px-8 md:px-16 max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-foreground dark:text-white mb-4">THE FOUNDATION.</h2>
+            <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl">Bypassing systemic financial exclusion by decentralizing physical land acquisition and capital distribution.</p>
+          </motion.div>
+ 
+          <motion.div 
+            variants={staggerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            {prometheaConcepts.map((concept, i) => (
+              <motion.div key={i} variants={itemVariants} className="p-8 bg-card/40 backdrop-blur-xl border border-foreground/5 dark:border-white/5 flex flex-col justify-between group hover:bg-foreground/5 dark:hover:bg-white/5 transition-all">
+                <div className="bg-white/5 w-12 h-12 flex items-center justify-center rounded-none border border-white/10 mb-16 group-hover:border-cyan-500/50 group-hover:bg-cyan-500/10 transition-colors">
+                  <concept.icon className="w-5 h-5 text-zinc-400 group-hover:text-cyan-400" />
                 </div>
+                <div>
+                  <h3 className="text-xl font-bold text-foreground dark:text-white mb-2">{concept.title}</h3>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{concept.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </section>
+
+        {/* MANIFESTO / CONSTITUTION CALLOUT */}
+        <section id="manifesto" className="mt-40 px-8 md:px-16 max-w-7xl mx-auto">
+          <div className="p-12 md:p-20 bg-gradient-to-br from-cyan-500/10 dark:from-cyan-950/40 to-background/80 dark:to-black/80 backdrop-blur-2xl border border-cyan-500/20 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none" />
+            
+            <div className="relative z-10 max-w-2xl">
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-foreground dark:text-white mb-6">A POST-DOMINION BLUEPRINT.</h2>
+              <p className="text-lg text-cyan-950/70 dark:text-cyan-100/70 leading-relaxed mb-10">
+                The Promethean Network State is a self-sovereign society. It is a system designed for symbiotic flourishing—ensuring that the benefits of intelligence, labor, and capital are shared through strict cryptographic consensus.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild className="bg-foreground dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200 text-background dark:text-black font-black text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">
+                  <Link href="/whitepaper">
+                    Read Whitepaper
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="bg-transparent hover:bg-foreground/5 dark:hover:bg-white/5 border-foreground/20 dark:border-white/20 text-foreground dark:text-white font-bold text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">
+                  <Link href="/roadmap">
+                    View Network Roadmap <ArrowUpRight className="ml-2 w-3.5 h-3.5" />
+                  </Link>
+                </Button>
               </div>
             </div>
-          </section>
-          <section className="bg-background">
-            <WhatIsPromethea />
-          </section>
-        </main>
+          </div>
+        </section>
       </div>
+      
     </div>
   );
 }

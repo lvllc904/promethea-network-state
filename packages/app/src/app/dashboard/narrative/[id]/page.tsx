@@ -3,8 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
-import { useDoc, useFirestore, useMemoFirebase } from '@promethea/identity';
-import { doc, type DocumentReference } from 'firebase/firestore';
+import { useDoc, useFirestore, useSovereignMemo, doc, type DocumentReference } from '@promethea/identity';
 import { Card, CardContent, Button, Badge, Separator } from '@promethea/ui';
 import { Newspaper, ArrowLeft, Calendar, User, Share2, ShieldCheck, Lock } from 'lucide-react';
 import Link from 'next/link';
@@ -50,7 +49,7 @@ const MarkdownComponents = {
 export default function NarrativePostPage({ params }: { params: { id: string } }) {
     const firestore = useFirestore();
 
-    const postRef = useMemoFirebase(
+    const postRef = useSovereignMemo(
         () => (firestore ? doc(firestore, 'narrative', params.id) : null) as unknown as DocumentReference<BlogPost> | null,
         [firestore, params.id]
     );

@@ -3,8 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useCallback } from 'react';
-import { useCollection, useFirestore, useMemoFirebase } from '@promethea/identity';
-import { collection, query, where, orderBy, type Query } from 'firebase/firestore';
+import { useCollection, useFirestore, useSovereignMemo, collection, query, where, orderBy, type Query } from '@promethea/identity';
 import {
     Card,
     CardContent,
@@ -59,7 +58,7 @@ interface MarketplaceItem {
 export default function MarketplacePage() {
     const firestore = useFirestore();
 
-    const marketQuery = useMemoFirebase(
+    const marketQuery = useSovereignMemo(
         () => (firestore ? query(
             collection(firestore, 'marketplace'),
             orderBy('createdAt', 'desc')

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://agentskills.io/v0.2.0/schema.json",
+  "skills": [
+    {
+      "id": "shadow-protocol",
+      "name": "Sovereign Shadow Protocol",
+      "type": "skill-md",
+      "description": "Enables agents to consume the network state via semantic shadow HTML.",
+      "url": "https://lvhllc.org/api/shadow/"
+    },
+    {
+      "id": "treasury-sync",
+      "name": "Treasury Sync",
+      "type": "skill-md",
+      "description": "Live economic vitals for the sovereign treasury.",
+      "url": "https://lvhllc.org/dashboard/treasury"
+    }
+  ]
+}

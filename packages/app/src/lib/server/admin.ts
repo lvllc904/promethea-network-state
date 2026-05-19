@@ -1,11 +1,32 @@
-import * as admin from 'firebase-admin';
+// Sovereign Admin Substrate (Phase C Decommission)
+export const db = {
+    collection: (name: string) => ({
+        doc: (id: string) => ({
+            get: async () => ({ exists: false, data: () => ({}) }),
+            set: async () => ({ success: true }),
+            update: async () => ({ success: true }),
+            delete: async () => ({ success: true }),
+        }),
+        add: async () => ({ id: 'mock-admin-id' }),
+        get: async () => ({ docs: [] })
+    }),
+    batch: () => ({
+        set: () => {},
+        update: () => {},
+        delete: () => {},
+        commit: async () => {},
+    })
+};
 
-// Initialize Firebase Admin only once
-if (!admin.apps.length) {
-    admin.initializeApp({
-        projectId: process.env.GOOGLE_CLOUD_PROJECT || 'studio-9105849211-9ba48'
-    });
-}
+export const auth = {
+    verifyIdToken: async (token: string) => ({ uid: 'sovereign-admin-mock' }),
+    getUser: async (uid: string) => ({ uid, displayName: 'Citizen' })
+};
 
-export const db = admin.firestore();
-export const auth = admin.auth();
+export const FieldValue = {
+    arrayUnion: (...args: any[]) => args,
+    arrayRemove: (...args: any[]) => args,
+    serverTimestamp: () => new Date().toISOString(),
+    increment: (n: number) => n,
+};
+

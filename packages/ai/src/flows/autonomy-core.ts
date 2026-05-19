@@ -1,5 +1,5 @@
 
-import { ai } from '../genkit.js';
+import { ai, sovereignModel } from '../genkit.js';
 import { z } from 'genkit';
 import { readFile, writeFile, listFiles } from '../tools/file-system.js';
 import { runTerminalCommand } from '../tools/terminal.js';
@@ -29,7 +29,7 @@ export const autonomyCore = ai.defineFlow(
     const task = initialGoal || autonomyCoreGoal;
 
     const llmResponse = await ai.generate({
-      model: 'googleAI/gemini-1.5-pro',
+      model: sovereignModel,
       prompt: task,
       config: {
         temperature: 0.0,

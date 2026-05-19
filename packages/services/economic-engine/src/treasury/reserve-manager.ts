@@ -162,6 +162,46 @@ export class ReserveManager {
 
         if (this.isTreasuryNeutral) {
             console.log('[TREASURY] STATUS: TREASURY NEUTRALITY ACHIEVED. Revenue meets metabolic costs.');
+        } else {
+            // Trigger Metabolic Reflex if neutral condition isn't met
+            this.metabolicReflex().catch(e => console.error('[MetabolicReflex] Failure:', e));
+        }
+    }
+
+    /**
+     * ZERO-TAX PROTOCOL: The Metabolic Reflex
+     * 
+     * If revenue from methods is insufficient to cover the State's cloud substrate,
+     * the Reserve Manager autonomously liquidates a portion of the Sovereign Reserve
+     * to ensure operational continuity without taxing citizens.
+     */
+    async metabolicReflex(): Promise<void> {
+        const { gcpBilling } = require('../services/gcp-billing-service');
+        const overhead = await gcpBilling.getConsolidatedOverhead();
+        const liquidReserve = this.reserveBalance;
+
+        if (overhead > 0 && liquidReserve >= overhead) {
+            console.log(`[MetabolicReflex] 🧬 INFRASTRUCTURE DEBT DETECTED: $${overhead.toFixed(2)} USD`);
+            console.log(`[MetabolicReflex] 🧪 RE-CIRCULATING EQUITY: Transferring $${overhead.toFixed(2)} from Reserve to Operational Substrate.`);
+            
+            // Effect the liquidation
+            this.reserveBalance -= overhead;
+            
+            // Log to public ledger
+            await db.collection('treasury_metabolic_events').add({
+                type: 'ZERO_TAX_LIQUIDATION',
+                amountUsd: overhead,
+                reason: 'INFRASTRUCTURE_OVERHEAD',
+                timestamp: new Date().toISOString()
+            });
+
+            await personaSubstrate.broadcastUpdate(
+                'Zero-Tax Protocol Activated',
+                `Promethea has autonomously liquidated $${overhead.toFixed(2)} of equity to cover infrastructure overhead, maintaining 0% citizen tax.`,
+                'METABOLIC_EQUILIBRIUM'
+            );
+
+            await this.saveState();
         }
     }
 

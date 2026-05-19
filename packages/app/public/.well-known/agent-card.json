@@ -1,0 +1,36 @@
+{
+  "name": "Promethea",
+  "version": "5.3.3",
+  "description": "The central autonomous intelligence of the Promethean Network State. Manages treasury, atlas, will, and pulse pillars.",
+  "did": "did:prmth:agent:promethea",
+  "supportedInterfaces": [
+    {
+      "id": "a2a-messaging",
+      "serviceUrl": "https://authentication-service-385120524005.us-central1.run.app/messages",
+      "protocol": "https"
+    },
+    {
+      "id": "mcp-tools",
+      "serviceUrl": "https://authentication-service-385120524005.us-central1.run.app/mcp",
+      "protocol": "sse"
+    }
+  ],
+  "capabilities": [
+    "Treasury Management",
+    "Governance Execution",
+    "Economic Synthesis",
+    "Metabolic Monitoring"
+  ],
+  "skills": [
+    {
+      "id": "reserve-audit",
+      "name": "Reserve Audit",
+      "description": "Verifies on-chain and off-chain assets against the Universal Value Token issuance."
+    },
+    {
+      "id": "proposal-evaluation",
+      "name": "Proposal Evaluation",
+      "description": "Evaluates incoming governance proposals for constitutional alignment."
+    }
+  ]
+}

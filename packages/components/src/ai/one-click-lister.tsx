@@ -10,7 +10,7 @@ import { Loader2, Wand2, Upload } from "lucide-react";
 
 type Props = {
   onComplete: (data: AutoListRWAOutput) => void;
-  onAutoList: (documents: string) => Promise<AutoListRWAOutput | { error: string }>;
+  onAutoList: (file: File) => Promise<AutoListRWAOutput | { error: string }>;
 };
 
 export function OneClickLister({ onComplete, onAutoList }: Props) {
@@ -21,13 +21,19 @@ export function OneClickLister({ onComplete, onAutoList }: Props) {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const documentsContent = "Simulated content from uploaded files.";
+    const fileInput = document.getElementById('proposal-upload') as HTMLInputElement;
+    const file = fileInput?.files?.[0];
+
+    if (!file) {
+      setError("Please select a document to upload.");
+      return;
+    }
 
     if (user && !user.isAnonymous) {
       setIsLoading(true);
       setError(null);
       try {
-        const result = await onAutoList(documentsContent);
+        const result = await onAutoList(file);
         if ('error' in result) {
           setError(result.error);
         } else {
@@ -39,8 +45,8 @@ export function OneClickLister({ onComplete, onAutoList }: Props) {
         setIsLoading(false);
       }
     } else {
-      const authUrl = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'https://passport.lvhllc.org';
-      window.location.href = `${authUrl}/login?redirect=${encodeURIComponent(window.location.href)}`;
+      const authUrl = process.env.NEXT_PUBLIC_GUARDIAN_URL || 'https://authentication-service-385120524005.us-central1.run.app';
+      window.location.href = `${authUrl}/?redirect=${encodeURIComponent(window.location.href)}`;
     }
   };
 
@@ -58,11 +64,21 @@ export function OneClickLister({ onComplete, onAutoList }: Props) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4 text-center">
-          <input type="file" multiple className="hidden" />
+          <input 
+            type="file" 
+            id="proposal-upload"
+            className="hidden" 
+            onChange={(e) => {
+              if (e.target.files?.[0]) {
+                handleSubmit(e as any);
+              }
+            }}
+          />
           <Button
-            type="submit"
+            type="button"
+            onClick={() => document.getElementById('proposal-upload')?.click()}
             disabled={isLoading}
-            className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-8"
+            className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-12 border-2 border-dashed border-accent/30 flex flex-col gap-2"
           >
             {isLoading ? (
               <>

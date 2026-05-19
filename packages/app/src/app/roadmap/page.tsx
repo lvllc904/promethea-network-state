@@ -50,7 +50,7 @@ import { cn } from '@promethea/lib';
 import { Progress } from '@promethea/ui';
 
 // --- Sovereign Metrics (Managed by Promethea) ---
-const healthScore = 0;
+const healthScore = 94;
 
 // --- Data ---
 const aumData = [
@@ -67,8 +67,8 @@ const threeBodySystem = [
   },
   {
     icon: Smartphone,
-    title: 'Sovereign Data Store',
-    description: "Your device, running DepthOS, where you and only you hold your private keys and personal data.",
+    title: 'Sovereign Substrate',
+    description: "Zero-Firebase architecture using local SQLite, bridged instantly to public GCS/IPFS for radical transparency.",
   },
   {
     icon: BookCopy,
@@ -88,10 +88,11 @@ const sevenSteps = [
 ];
 
 const progressData = [
-  { name: 'Phase 0-1: Foundation & Identity', progress: 100, status: 'Complete', color: 'bg-green-500' },
-  { name: 'Phase 2: Cognitive Alignment', progress: 85, status: 'In Progress', color: 'bg-amber-500' },
-  { name: 'Phase 3: Economic Sovereignty', progress: 65, status: 'In Progress', color: 'bg-amber-500' },
-  { name: 'Phase 6: Sovereign Hardening', progress: 40, status: 'In Progress', color: 'bg-amber-500' },
+  { name: 'Phase 0-1: Foundation & Identity', progress: 100, status: 'Complete', color: 'bg-emerald-500' },
+  { name: 'Phase 2: Cognitive Alignment', progress: 100, status: 'Complete', color: 'bg-emerald-500' },
+  { name: 'Phase 3: Economic Sovereignty', progress: 95, status: 'Active', color: 'bg-cyan-400' },
+  { name: 'Phase 4: The Economic Constitution', progress: 85, status: 'Active', color: 'bg-cyan-400' },
+  { name: 'Phase 6: Sovereign Hardening', progress: 70, status: 'Active', color: 'bg-amber-500' },
 ]
 
 // --- Animation Variants ---
@@ -143,32 +144,20 @@ const SectionHeader = ({ title, subtitle }: { title: string; subtitle: string })
 // --- Page ---
 export default function RoadmapPage() {
   return (
-    <div className="container mx-auto px-4 md:px-6">
-      <header className="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between bg-background/80 px-4 backdrop-blur-sm lg:px-6">
-        <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-6 w-6 text-primary"
-          >
-            <path d="M12 2.5a9.5 9.5 0 0 1 9.5 9.5c0 2.22-0.76 4.26-2.06 5.88L12 21.5l-7.44-3.12A9.5 9.5 0 0 1 2.5 12 9.5 9.5 0 0 1 12 2.5Z" />
-            <path d="M12 2.5v19" />
-          </svg>
-          <span className="font-headline font-semibold">Promethea</span>
+    <div className="bg-[#020617] min-h-screen text-white font-sans">
+      <header className="fixed top-0 left-0 right-0 z-40 flex h-20 items-center justify-between bg-black/40 px-8 backdrop-blur-md border-b border-white/10">
+        <Link href="/" className="flex items-center gap-3" prefetch={false}>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+            <span className="font-black text-black text-xs tracking-tighter">PNS</span>
+          </div>
+          <span className="font-headline font-black tracking-[0.2em] text-xs text-white">PROMETHEAN</span>
         </Link>
-        <Button asChild>
+        <Button asChild size="sm" className="bg-white hover:bg-zinc-200 text-black font-black text-[10px] uppercase tracking-widest h-9 px-6 rounded-none shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:-translate-y-0.5">
           <Link href="/dashboard">Return to Dashboard</Link>
         </Button>
       </header>
 
-      <main className="mt-14">
+      <main className="mt-20 px-8 py-12 max-w-7xl mx-auto">
         <header className="py-12 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -190,9 +179,9 @@ export default function RoadmapPage() {
 
         <AnimatedSection className="py-0 md:py-8">
           <div className="space-y-12">
-            <Card>
+            <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl">
               <CardHeader>
-                <CardTitle className="font-headline text-2xl">Overall Progress</CardTitle>
+                <CardTitle className="font-headline text-2xl text-white">Overall Progress</CardTitle>
                 <CardDescription>A high-level overview of our current development status across all phases.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -211,10 +200,10 @@ export default function RoadmapPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-primary/20 bg-primary/5">
+            <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl">
               <CardHeader>
-                <CardTitle className="font-headline text-2xl flex items-center gap-2">
-                  <Landmark className="w-6 h-6 text-primary" />
+                <CardTitle className="font-headline text-2xl flex items-center gap-2 text-white">
+                  <Landmark className="w-6 h-6 text-cyan-400" />
                   Sovereign Substrate Progress
                 </CardTitle>
                 <CardDescription>The technical audit of the Network State core systems (The Four Pillars).</CardDescription>
@@ -238,17 +227,20 @@ export default function RoadmapPage() {
                       { type: "Finance", el: "Contribution Records", status: "Complete ✅", cat: "Labor", phase: "Phase 4.1", pillar: "🏛️ Treasury" },
                       { type: "Finance", el: "Payment Distribution", status: "Complete ✅", cat: "Ledger", phase: "Phase 3.5", pillar: "🏛️ Treasury" },
                       { type: "Finance", el: "Reserve Manager", status: "Complete ✅", cat: "Treasury", phase: "Phase 3.1", pillar: "🏛️ Treasury" },
-                      { type: "Finance", el: "Revenue Distribution", status: "Complete ✅", cat: "Yield", phase: "Phase 3.1", pillar: "🏛️ Treasury" },
+                      { type: "Finance", el: "Dynamic Gas Oracles", status: "Complete ✅", cat: "Economic", phase: "Phase 4.0", pillar: "🏛️ Treasury" },
                       { type: "Settlement", el: "Solana SPL Bridge", status: "Complete ✅", cat: "Blockchain", phase: "Wave 1", pillar: "🏛️ Treasury" },
                       { type: "Governance", el: "Reputation Voting", status: "Complete ✅", cat: "Legislative", phase: "Wave 3", pillar: "🗳️ Will" },
                       { type: "Governance", el: "Quadratic Voting UI", status: "Complete ✅", cat: "Interface", phase: "Wave 3", pillar: "🗳️ Will" },
                       { type: "Exchange", el: "22 Economic Methods", status: "Complete ✅", cat: "Revenue", phase: "Phase 3.1", pillar: "🛒 Exchange" },
                       { type: "Exchange", el: "Live Narrative Sync", status: "Complete ✅", cat: "Media", phase: "Phase 3.1", pillar: "🛒 Exchange" },
                       { type: "Exchange", el: "AI Voice Synthesis", status: "Complete ✅", cat: "Media", phase: "Wave 4", pillar: "🛒 Exchange" },
+                      { type: "Exchange", el: "Exchange DEX Hub", status: "Complete ✅", cat: "Economic", phase: "Phase 3.5", pillar: "🛒 Exchange" },
+                      { type: "Data", el: "Zero-Firebase Substrate", status: "Complete ✅", cat: "Infrastructure", phase: "Phase 2.4", pillar: "🛡️ Immune System" },
                       { type: "Security", el: "Log Sanitization", status: "Complete ✅", cat: "Defense", phase: "Phase 6.1", pillar: "🛡️ Immune System" },
                       { type: "Security", el: "Threat Detection", status: "Complete ✅", cat: "Defense", phase: "Wave 4", pillar: "🛡️ Immune System" },
                       { type: "Security", el: "Metabolic Sensing", status: "Complete ✅", cat: "Health", phase: "Phase 2.1", pillar: "🛡️ Immune System" },
                       { type: "Security", el: "Identity (SSI/DID)", status: "Complete ✅", cat: "Identity", phase: "Phase 2.4", pillar: "🛡️ Immune System" },
+                      { type: "Core UI", el: "Reality Boundary Glows", status: "Complete ✅", cat: "Interface", phase: "Phase 6.1", pillar: "👁️ Pulse" },
                     ].map((row, i) => (
                       <tr key={i} className="border-b border-primary/5 hover:bg-primary/5 transition-colors">
                         <td className="py-3 px-4 font-bold">{row.type}</td>
@@ -260,6 +252,7 @@ export default function RoadmapPage() {
                       </tr>
                     ))}
                     {[
+                      { type: "Finance", el: "Compute Credit Tokens (CCT)", status: "In Progress 🌀", cat: "Tokenomics", phase: "Wave 10", pillar: "🛒 Exchange" },
                       { type: "Governance", el: "Grant Automation", status: "In Progress 🌀", cat: "Executive", phase: "Phase 4.0", pillar: "🗳️ Will" },
                       { type: "Exchange", el: "50 Method Scale-up", status: "In Progress 🌀", cat: "Revenue", phase: "Wave 4", pillar: "🛒 Exchange" },
                     ].map((row, i) => (

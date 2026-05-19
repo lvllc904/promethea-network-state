@@ -5,6 +5,20 @@ steps:
       - --cache=true
       - --cache-ttl=168h
       - --dockerfile=packages/services/ai-service/Dockerfile
-      - --build-arg=CACHE_BUSTER=${_CACHE_BUSTER}
-substitutions:
-  _CACHE_BUSTER: '1'
+      - --build-arg=CACHE_BUSTER=$BUILD_ID
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'ai-service'
+      - '--image=gcr.io/studio-9105849211-9ba48/ai-service:latest'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=1Gi'
+      - '--cpu=1'
+      - '--min-instances=0'
+      - '--timeout=300'
+

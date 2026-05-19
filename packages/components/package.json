@@ -24,7 +24,7 @@
     "firebase": "^9.23.0",
     "@promethea/lib": "file:../lib",
     "@promethea/ui": "file:../ui",
-    "@promethea/identity": "file:../firebase",
+    "@promethea/identity": "file:../identity",
     "@promethea/hooks": "file:../hooks",
     "@promethea/ai": "file:../ai",
     "@promethea/sovereign-store": "file:../sovereign-store"

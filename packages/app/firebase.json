@@ -1,7 +1,6 @@
 {
     "hosting": {
-        "source": ".",
-        "framework": "nextjs",
+        "public": "public",
         "target": "app",
         "ignore": [
             "firebase.json",
@@ -20,6 +19,13 @@
                 "source": "/api/engine/**",
                 "run": {
                     "serviceId": "economic-engine",
+                    "region": "us-central1"
+                }
+            },
+            {
+                "source": "**",
+                "run": {
+                    "serviceId": "promethea-frontend",
                     "region": "us-central1"
                 }
             }

@@ -23,7 +23,7 @@
     "react": "18.3.1",
     "swr": "^2.2.5",
     "@promethea/lib": "file:../lib",
-    "@promethea/identity": "file:../firebase"
+    "@promethea/identity": "file:../identity"
   },
   "devDependencies": {
     "@types/react": "18.3.3"

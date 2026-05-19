@@ -191,7 +191,7 @@ export default function NewAssetPage() {
                 setIsLoading(false);
             }
         } else {
-            window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+            window.location.href = (process.env.NEXT_PUBLIC_GUARDIAN_URL || 'https://authentication-service-385120524005.us-central1.run.app') + '/?redirect=' + encodeURIComponent(window.location.href);
         }
     };
 
@@ -214,6 +214,12 @@ export default function NewAssetPage() {
         setError(null);
     };
 
+    const handleAutoListProxy = async (file: File) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return await handleAutoList(formData);
+    };
+
 
     return (
         <div className="grid gap-8 lg:grid-cols-2">
@@ -229,7 +235,7 @@ export default function NewAssetPage() {
                         <TabsTrigger value="manual">Manual Listing</TabsTrigger>
                     </TabsList>
                     <TabsContent value="one-click" className="mt-4">
-                        <OneClickLister onComplete={handleAutoListComplete} onAutoList={handleAutoList} />
+                        <OneClickLister onComplete={handleAutoListComplete} onAutoList={handleAutoListProxy} />
                     </TabsContent>
                     <TabsContent value="manual" className="mt-4">
                         <Card className="shadow-lg">

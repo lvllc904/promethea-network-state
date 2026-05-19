@@ -40,7 +40,7 @@
       "path": "../components"
     },
     {
-      "path": "../firebase"
+      "path": "../identity"
     },
     {
       "path": "../hooks"

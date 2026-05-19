@@ -1,5 +1,5 @@
 import { BaseMethod, ExecutionResult } from './base-method';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { sovereignAI } from '../services/sovereign-ai';
 import { sovereignIntelligence } from '../services/sovereign-intelligence';
 
 /**
@@ -9,7 +9,6 @@ import { sovereignIntelligence } from '../services/sovereign-intelligence';
  * Revenue from premium signals/intel.
  */
 export class StockAnalysisMethod extends BaseMethod {
-    private genAI: GoogleGenerativeAI;
 
     constructor(apiKey: string) {
         super('stock-analysis', 'Real-time Market Intel', {
@@ -18,8 +17,6 @@ export class StockAnalysisMethod extends BaseMethod {
             maxExecutionsPerDay: 5,
             estimatedRevenue: { min: 20, max: 100 },
         });
-
-        this.genAI = new GoogleGenerativeAI(apiKey);
     }
 
     async execute(ticker: string = "NVDA"): Promise<ExecutionResult> {
@@ -27,7 +24,6 @@ export class StockAnalysisMethod extends BaseMethod {
         logs.push(`Performing technical analysis and sentiment check for: ${ticker}...`);
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
             const prompt = `Act as a Quantitative Financial Analyst. Analyze the current market sentiment (Jan 2026 hypothesis) for ${ticker}.
             Provide:
             1. Technical Sentiment (Bullish/Bearish/Neutral)
@@ -35,8 +31,7 @@ export class StockAnalysisMethod extends BaseMethod {
             3. Macro Catalysts
             4. Risk Rating (1-10)`;
 
-            const result = await model.generateContent(prompt);
-            const analysis = result.response.text();
+            const analysis = await sovereignAI.generateContent('gemini-1.5-pro', prompt);
 
             logs.push(`Market Intel synthesized: ${analysis.length} characters.`);
             logs.push(`${ticker} Analysis: Bullish sentiment detected.`);

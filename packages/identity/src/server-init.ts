@@ -1,8 +1,8 @@
 export const getServerFirebase = async () => {
   return {
     firestore: () => ({
-      collection: () => ({
-        doc: () => ({
+      collection: (name?: string) => ({
+        doc: (id?: string) => ({
           get: async () => ({ exists: false, data: () => ({}) }),
           set: async () => {},
           update: async () => {},

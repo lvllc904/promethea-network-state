@@ -1,9 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import { ethers } from 'ethers';
-import { initializeApp, cert, App } from 'firebase-admin/app';
-import { getAuth, Auth } from 'firebase-admin/auth';
-import { getFirestore, Firestore } from 'firebase-admin/firestore';
+import jwt from 'jsonwebtoken';
+import sqlite3 from 'sqlite3';
+import { open, Database } from 'sqlite';
+import path from 'path';
 import crypto from 'crypto';
 import { guardianSingleton } from '@promethea/guardian';
 
@@ -15,58 +16,46 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static('public'));
 
-// Initialize Firebase Admin
-let adminApp: App;
-let auth: Auth;
-let db: Firestore;
+// Sovereign Identity Substrate (SQLite)
+let db: Database;
+const JWT_SECRET = process.env.JWT_SECRET || 'promethea-sovereign-intelligence-v5';
 
-try {
-  const serviceAccountEnv = process.env.FIREBASE_SERVICE_ACCOUNT;
-  const projectId = process.env.FIREBASE_PROJECT_ID || 'studio-9105849211-9ba48';
+async function initIdentityDb() {
+  db = await open({
+    filename: path.join(process.cwd(), 'identity.db'),
+    driver: sqlite3.Database
+  });
 
-  const initConfig: any = {
-    projectId: projectId
-  };
-
-  if (serviceAccountEnv) {
-    console.log('[Auth Service] Initializing with Service Account JSON...');
-    initConfig.credential = cert(JSON.parse(serviceAccountEnv));
-  } else {
-    console.log('[Auth Service] No service account key provided. Falling back to Application Default Credentials (ADC)...');
-    // On Cloud Run, this will automatically use the Compute Service Account
-  }
-
-  adminApp = initializeApp(initConfig);
-
-  auth = getAuth(adminApp);
-  db = getFirestore(adminApp);
-
-  console.log('[Auth Service] Firebase Admin initialized successfully');
-
-  // Initialize Apex Master Guardian
-  try {
-    // Top-level async is tricky in this file scope, so we just let it run async
-    guardianSingleton.on('consciousness_pulse', async (state: any) => {
-      try {
-        await db.collection('security_telemetry').doc('pulse').set({
-          ...state,
-          timestamp: new Date().toISOString()
-        });
-      } catch (e) {
-        console.error('[Auth Service] Failed to write AMG pulse to Firestore:', e);
-      }
-    });
-
-    console.log('[Auth Service] AMG initialized and monitoring gates.');
-  } catch (error) {
-    console.error('[Auth Service] AMG Failed to initialize', error);
-  }
-
-} catch (error) {
-  console.error('[Auth Service] Failed to initialize Firebase Admin:', error);
-  // Do not exit here to allow for local development without Firebase if needed, 
-  // but most endpoints will fail.
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS citizens (
+      uid TEXT PRIMARY KEY,
+      decentralizedId TEXT,
+      displayName TEXT,
+      email TEXT,
+      reputation REAL DEFAULT 0,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TABLE IF NOT EXISTS security_telemetry (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      data TEXT,
+      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+  console.log('[Auth Service] 🏰 Sovereign Identity Substrate initialized: identity.db');
 }
+
+initIdentityDb().catch(err => console.error('[Auth Service] DB Init Failed:', err));
+
+// Guardian Pulse Bridge
+guardianSingleton.on('consciousness_pulse', async (state: any) => {
+  try {
+    if (db) {
+      await db.run('INSERT INTO security_telemetry (data) VALUES (?)', JSON.stringify(state));
+    }
+  } catch (e) {
+    console.error('[Auth Service] Failed to log Guardian pulse:', e);
+  }
+});
 
 // In-memory challenge store (use Redis in production)
 interface Challenge {
@@ -89,6 +78,12 @@ setInterval(() => {
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'healthy', service: 'authentication' });
+});
+
+// Legacy redirect for /login
+app.get('/login', (req, res) => {
+  const query = req.url.includes('?') ? req.url.split('?')[1] : '';
+  res.redirect(`/?${query}`);
 });
 
 // 1. Generate authentication challenge
@@ -167,13 +162,17 @@ app.post('/auth/verify', async (req, res) => {
     // Challenge used, delete it to prevent replay attacks
     challenges.delete(did);
 
-    // Create custom Firebase token
-    const customToken = await auth.createCustomToken(uid);
+    // Create Sovereign JWT
+    const token = jwt.sign(
+      { uid, did, address }, 
+      JWT_SECRET, 
+      { expiresIn: '24h' }
+    );
 
-    console.log(`[Auth Service] Authentication successful for DID: ${did}`);
+    console.log(`[Auth Service] Sovereign Authentication successful for DID: ${did}`);
 
     res.json({
-      token: customToken,
+      token,
       did,
       authenticated: true
     });
@@ -201,50 +200,26 @@ app.post('/auth/register', async (req, res) => {
       return res.status(400).json({ error: 'Invalid DID format' });
     }
 
-    // Create Firebase user
-    const userRecord = await auth.createUser({
-      email,
-      password,
-      displayName
-    });
+    // Generate a unique ID if not provided
+    const userUid = crypto.randomBytes(16).toString('hex');
 
-    // Create citizen profile in Firestore
-    await db.collection('citizens').doc(userRecord.uid).set({
-      uid: userRecord.uid,
-      id: userRecord.uid,
-      decentralizedId: did,
-      displayName,
-      email,
-      reputation: 0,
-      governanceTokens: 0,
-      createdAt: new Date(),
-      reputationScore: 0,
-      personhoodScore: 0,
-      contributionScore: 0,
-      isGovIdVerified: false,
-      proofOfUniqueness: {
-        issuer: "did:prmth:identity-oracle.promethea.network",
-        issuanceDate: new Date().toISOString()
-      }
-    });
+    // Create citizen profile in Sovereign SQLite
+    await db.run(
+      'INSERT INTO citizens (uid, decentralizedId, displayName, email) VALUES (?, ?, ?, ?)',
+      [userUid, did, displayName, email]
+    );
 
-    console.log(`[Auth Service] New citizen registered: ${did}`);
+    console.log(`[Auth Service] New Sovereign Citizen registered: ${did}`);
 
     res.json({
       success: true,
-      uid: userRecord.uid,
+      uid: userUid,
       did
     });
 
   } catch (error: any) {
     console.error('[Auth Service] Registration error:', error);
-
-    let errorMessage = error.message || 'Registration failed';
-    if (error.code === 'auth/email-already-in-use') {
-      errorMessage = 'An account with this email already exists';
-    }
-
-    res.status(500).json({ error: errorMessage });
+    res.status(500).json({ error: error.message || 'Registration failed' });
   }
 });
 

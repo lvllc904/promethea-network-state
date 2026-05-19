@@ -1,3 +1,7 @@
+export interface Query<T = any> {
+  name: string;
+}
+
 export interface Citizen {
   uid: string;
   id?: string; // Legacy ID compatibility

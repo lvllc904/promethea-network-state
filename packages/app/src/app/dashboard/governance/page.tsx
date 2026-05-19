@@ -13,8 +13,7 @@ import { Progress } from '@promethea/ui';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@promethea/ui';
 import { User, CheckCircle, XCircle, Clock, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
-import { useCollection, useFirestore, useMemoFirebase, useUser } from '@promethea/identity';
-import { collection, query, where, getDocs, doc, getDoc, type Query, type DocumentReference } from 'firebase/firestore';
+import { useUser, useSovereignData } from '@promethea/hooks';
 import { Proposal, Vote, Citizen } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
 import { RealityBadge } from '@promethea/components';
@@ -26,69 +25,45 @@ type EnrichedProposal = Proposal & {
 };
 
 export default function GovernancePage() {
-  const firestore = useFirestore();
   const { user, isUserLoading: isAuthLoading } = useUser();
+  const { data: rawProposals, loading: proposalsLoading } = useSovereignData<Proposal[]>('/api/proposals');
+  const { data: rawVotes } = useSovereignData<Vote[]>('/api/votes');
+  const { data: rawCitizens } = useSovereignData<Citizen[]>('/api/citizens');
+  
   const [proposals, setProposals] = useState<EnrichedProposal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const proposalsQuery = useMemoFirebase(
-    () => (firestore ? collection(firestore, 'proposals') : null) as unknown as Query<Proposal> | null,
-    [firestore]
-  );
-
-  const { data: rawProposals, isLoading: proposalsLoading } = useCollection<Proposal>(proposalsQuery as any);
 
   useEffect(() => {
     if (proposalsLoading || isAuthLoading) {
       setIsLoading(true);
       return;
     }
-    // Guard against running when data is not yet available.
-    if (!rawProposals || !firestore) {
+
+    if (!rawProposals) {
       setIsLoading(false);
-      // If there are no raw proposals, ensure the proposals list is empty.
-      if (!rawProposals) {
-        setProposals([]);
-      }
+      setProposals([]);
       return;
     }
 
-    const enrichProposals = async () => {
-      setIsLoading(true);
-      const enriched = await Promise.all(
-        rawProposals.map(async (p) => {
-          const enrichedProposal: EnrichedProposal = { ...p };
-          // Fetch proposer
-          if (p.proposerId) {
-            try {
-              const proposerRef = doc(firestore, 'citizens', p.proposerId);
-              const proposerSnap = await getDoc(proposerRef);
-              if (proposerSnap.exists()) {
-                enrichedProposal.proposer = { ...proposerSnap.data(), id: proposerSnap.id } as Citizen;
-              }
-            } catch (e) {
-              console.error(`Could not fetch proposer for proposal ${p.id}`, e);
-            }
-          }
+    const enriched = rawProposals.map((p) => {
+      const enrichedProposal: EnrichedProposal = { ...p };
+      
+      // Fetch proposer from citizens cache
+      if (p.proposerId && rawCitizens) {
+        enrichedProposal.proposer = rawCitizens.find(c => c.id === p.proposerId);
+      }
 
-          // Fetch votes
-          const votesQuery = query(
-            collection(firestore, 'votes'),
-            where('proposalId', '==', p.id)
-          );
-          const votesSnapshot = await getDocs(votesQuery);
-          enrichedProposal.votes = votesSnapshot.docs.map(
-            (d) => ({ ...d.data(), id: d.id } as Vote)
-          );
-          return enrichedProposal;
-        })
-      );
-      setProposals(enriched);
-      setIsLoading(false);
-    };
-    enrichProposals();
+      // Fetch votes from votes cache
+      if (rawVotes) {
+        enrichedProposal.votes = rawVotes.filter(v => v.proposalId === p.id);
+      }
+      
+      return enrichedProposal;
+    });
 
-  }, [rawProposals, firestore, proposalsLoading, isAuthLoading, user]);
+    setProposals(enriched);
+    setIsLoading(false);
+  }, [rawProposals, rawVotes, rawCitizens, proposalsLoading, isAuthLoading, user]);
 
 
   const renderProposalCard = (proposal: EnrichedProposal) => {

@@ -71,6 +71,23 @@ const nextConfig = {
             },
         ];
     },
+    async headers() {
+        return [
+            {
+                source: '/(.*)',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'no-store, no-cache, must-revalidate, proxy-revalidate'
+                    },
+                    {
+                        key: 'Link',
+                        value: '</.well-known/api-catalog>; rel="api-catalog", </.well-known/agent-card.json>; rel="agent-card", </.well-known/mcp/server-card.json>; rel="mcp-server-card"'
+                    }
+                ]
+            }
+        ];
+    }
 };
 
 export default nextConfig;

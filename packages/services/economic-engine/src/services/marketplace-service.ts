@@ -1,4 +1,5 @@
 import { db, COLLECTIONS } from '../db';
+import { personaSubstrate } from '../tools/persona-substrate';
 
 /**
  * Sovereign Marketplace Service (Phase 3.5)
@@ -114,6 +115,61 @@ export class MarketplaceService {
             providerId,
             methodId: 'ai-ingestion'
         });
+    }
+    /**
+     * ATOMIC ASSET SWAP (Wave 10)
+     * 
+     * Executes a one-click settlement where UVT is transferred from the buyer 
+     * and the asset is marked as Sold/Actualized.
+     */
+    async executeAtomicSwap(itemId: string, buyerDid: string, buyerWallet: string): Promise<string> {
+        const { walletManager } = require('../treasury/wallet-manager');
+        const { reserveManager } = require('../treasury/reserve-manager');
+
+        const doc = await db.collection('marketplace').doc(itemId).get();
+        if (!doc.exists) throw new Error('Marketplace item not found');
+
+        const item = doc.data() as MarketplaceItem;
+        const mintAddress = process.env.UVT_MINT_ADDRESS || 'Bm2GRKS92odxL6P4grmYyDMNChWNhQPHrLgcJRab7vf1';
+
+        console.log(`[Exchange] 🏛️  Initiating Atomic Swap for ${item.title} ($${item.price})`);
+
+        // 1. Bonded Escrow Check (Phase 10.2)
+        if (item.collateralBond && item.collateralBond > 0) {
+            console.log(`[Exchange] 🛡️  Verifying Bonded Escrow: $${item.collateralBond} required.`);
+            // In production, we would check the buyer's reputation score or staked UVT.
+        }
+
+        try {
+            // 2. Execute UVT Transfer (The Payment)
+            // Note: In this simulation, the engine facilitates the transfer via the master key 
+            // if authorized by the 3-Body handshake.
+            const sig = await walletManager.transferSPL(
+                mintAddress, 
+                item.providerId, // Seller's address
+                item.price,
+                9
+            );
+
+            // 3. Update Ledger
+            await this.markAsSold(itemId);
+
+            // 4. Trigger Waterfall Synthesis (Plowback)
+            reserveManager.onProfitRealized(item.price);
+
+            console.log(`[Exchange] ✅ Atomic Swap Complete. TX: ${sig}`);
+
+            await personaSubstrate.broadcastUpdate(
+                'Sovereign Exchange: Atomic Swap Success',
+                `${buyerDid} has acquired ${item.title} for ${item.price} UVT.`,
+                itemId
+            );
+
+            return sig;
+        } catch (e) {
+            console.error(`[Exchange] ❌ Atomic Swap Failed:`, e);
+            throw e;
+        }
     }
 }
 

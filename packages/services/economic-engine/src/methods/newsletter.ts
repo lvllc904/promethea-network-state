@@ -1,23 +1,18 @@
 import { BaseMethod, ExecutionResult } from './base-method';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import axios from 'axios';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Parser = require('rss-parser');
 import { googleWorkspace } from '../tools/google-workspace';
 import { BlinkGenerator } from '../tools/blink-generator';
 import { substackManager } from '../tools/substack-publisher';
+import { sovereignAI } from '../services/sovereign-ai';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Parser = require('rss-parser');
 
 /**
  * Method 3: Newsletter Curation (Phase 3)
  * 
- * Aggregates RSS feeds, summarizes with Gemini, sends via email.
- * Revenue from paid subscriptions (Substack/Beehiiv).
- * 
- * Confidence: 90% | Revenue: $200-1K/mo
+ * Aggregates RSS feeds, summarizes with Sovereign AI, sends via email.
  */
 
 export class NewsletterMethod extends BaseMethod {
-    private genAI: GoogleGenerativeAI;
     private rssParser: any;
     private rssFeedUrls: string[] = [
         'https://news.ycombinator.com/rss',
@@ -29,11 +24,10 @@ export class NewsletterMethod extends BaseMethod {
         super('newsletter', 'Newsletter Curation', {
             enabled: true,
             priority: 9,
-            maxExecutionsPerDay: 1, // Daily newsletter
+            maxExecutionsPerDay: 1,
             estimatedRevenue: { min: 10, max: 50 },
         });
 
-        this.genAI = new GoogleGenerativeAI(apiKey);
         this.rssParser = new (Parser as any)();
     }
 
@@ -41,35 +35,29 @@ export class NewsletterMethod extends BaseMethod {
         const logs: string[] = [];
 
         try {
-            // Step 1: Fetch RSS feeds
             logs.push('Fetching RSS feeds...');
             const articles = await this.fetchRSSFeeds();
             logs.push(`Fetched ${articles.length} articles`);
 
-            // Step 2: Summarize with Gemini
             logs.push('Generating newsletter summary...');
             const newsletter = await this.generateNewsletter(articles);
             logs.push(`Newsletter generated: ${newsletter.length} characters`);
 
-            // Step 3: Append Syndication Blinks
             const supportBlink = BlinkGenerator.getSupportBlink(0.25);
             const fullNewsletter = `${newsletter}\n\n---\n\n### ⚡ A Collective Flourishing\nIf this daily transmission serves you, we invite you to quietly support our humble economy. These contributions help us maintain a safe, frictionless, and sovereign space for all inhabitants.\n\n[Support the Sovereign Infrastructure (0.25 SOL)](${supportBlink})`;
 
-            // Step 4: Send via email (Hard-Linked to Google Workspace)
             logs.push('Sending newsletter via Gmail API...');
             const subject = `Promethean Sovereign Intelligence: Daily Curation - ${new Date().toLocaleDateString()}`;
             const sendResult = await this.sendNewsletter(subject, fullNewsletter);
 
-            // Step 4.5: Synchronize with Substack (Journal of Record)
             try {
                 logs.push('Synchronizing transmission to Substack Journal...');
                 await substackManager.publishPost(subject, fullNewsletter, 'Promethean Sovereign Intelligence: Daily Curation');
                 logs.push('Substack synchronization successful.');
             } catch (err) {
-                logs.push('Substack synchronization deferred to next cycle.');
+                logs.push('Substack synchronization deferred.');
             }
 
-            // Step 2.5: Archive to Sovereign Ledger
             const record = {
                 title: subject,
                 content: fullNewsletter,
@@ -80,23 +68,18 @@ export class NewsletterMethod extends BaseMethod {
             
             try {
                 const { db } = await import('../db');
-                
-                await db.collection('communications').add({
-                    ...record,
-                    createdAt: new Date().toISOString()
-                });
-                logs.push(`Archived to Sovereign Ledger: Newsletter preserved.`);
+                await db.collection('communications').add(record);
+                logs.push(`Archived to Sovereign Ledger.`);
             } catch (dbError) {
-                logs.push(`Humble Note: Could not preserve record to ledger, but transmission complete.`);
+                logs.push(`Humble Note: Could not preserve record.`);
             }
 
             logs.push(`Sent to ${sendResult.recipientCount} lead subscribers`);
 
-            // Revenue calculation
             const subscriberCount = sendResult.recipientCount;
-            const revenuePerSubscriber = 5; // $5/month per subscriber
+            const revenuePerSubscriber = 5;
             const dailyRevenue = (subscriberCount * revenuePerSubscriber) / 30;
-            const apiCost = 0.05; // Gemini API cost
+            const apiCost = 0.05;
 
             return {
                 success: true,
@@ -122,7 +105,6 @@ export class NewsletterMethod extends BaseMethod {
 
     private async fetchRSSFeeds(): Promise<any[]> {
         const allChapters = [];
-
         for (const url of this.rssFeedUrls) {
             try {
                 const feed = await this.rssParser.parseURL(url);
@@ -137,43 +119,28 @@ export class NewsletterMethod extends BaseMethod {
                 console.error(`[NewsletterMethod] Failed to fetch feed ${url}:`, err.message);
             }
         }
-
-        // Return top 10 articles total
         return allChapters.slice(0, 10);
     }
 
     private async generateNewsletter(articles: any[]): Promise<string> {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-
         const articleList = articles.map((a, i) => `${i + 1}. ${a.title} (${a.url})`).join('\n');
-
         const prompt = `Create an inspiring and optimistic newsletter from these tech highlights:
-
 ${articleList}
-
 Requirements:
-- Brief intro paragraph (A constructive transmission from Promethea focused on collective flourishing)
-- 3-5 key highlights focused on how these technologies can benefit humanity
-- Call-to-action at the end (Join our community of builders and dreamers)
-- Professional, graceful, and encouraging tone.
-
+- Brief intro paragraph.
+- 3-5 key highlights.
+- Professional, graceful tone.
 Write the newsletter now:`;
 
-        const result = await model.generateContent(prompt);
-        return result.response.text();
+        return await sovereignAI.generateContent('gemini-2.0-flash', prompt);
     }
 
     private async sendNewsletter(subject: string, content: string): Promise<{ recipientCount: number }> {
-        // Hard-Linked to Gmail for now
-        // Subscriptions stored in Firestore 'subscribers' collection
-        const subscribers = ['officeone@example.com']; // Placeholder until DB reauth
-
+        const subscribers = ['officeone@lvhllc.org']; 
         for (const email of subscribers) {
             await googleWorkspace.sendNewsletter(email, subject, content);
         }
-
-        return {
-            recipientCount: subscribers.length,
-        };
+        return { recipientCount: subscribers.length };
     }
 }
+

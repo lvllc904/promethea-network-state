@@ -40,11 +40,9 @@ import {
 import {
   useDoc,
   useFirestore,
-  useMemoFirebase,
+  useSovereignMemo,
   useUser,
   useCollection,
-} from '@promethea/identity';
-import {
   doc,
   collection,
   query,
@@ -53,7 +51,7 @@ import {
   getDoc,
   type Query,
   type DocumentReference
-} from 'firebase/firestore';
+} from '@promethea/identity';
 import { Proposal, Vote, Citizen, Task, type CompensationChoice } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
 import { useEffect, useState } from 'react';
@@ -201,14 +199,14 @@ export default function ProposalDetailPage({
   const [applyingTaskId, setApplyingTaskId] = useState<string | null>(null);
   const [voteCredits, setVoteCredits] = useState(1);
   const [isCastingVote, setIsCastingVote] = useState(false);
-  const proposalRef = useMemoFirebase(
+  const proposalRef = useSovereignMemo(
     () => (firestore ? doc(firestore, 'proposals', params.id) : null) as unknown as DocumentReference<Proposal> | null,
     [firestore, params.id]
   );
   const { data: proposal, isLoading: isProposalLoading } =
     useDoc<Proposal>(proposalRef as any);
 
-  const currentCitizenRef = useMemoFirebase(
+  const currentCitizenRef = useSovereignMemo(
     () => (firestore && user && !user.isAnonymous ? doc(firestore, 'citizens', user.uid) : null) as unknown as DocumentReference<Citizen> | null,
     [firestore, user]
   );
@@ -220,7 +218,7 @@ export default function ProposalDetailPage({
   const qvVoice = qvVoiceValue.toFixed(3);
   const qvCost = voteCredits * voteCredits;
 
-  const tasksQuery = useMemoFirebase(
+  const tasksQuery = useSovereignMemo(
     () =>
       firestore && proposal
         ? query(
@@ -291,7 +289,7 @@ export default function ProposalDetailPage({
         setIsCastingVote(false);
       }
     } else if (!user || user.isAnonymous) {
-      window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+      window.location.href = (process.env.NEXT_PUBLIC_GUARDIAN_URL || 'https://authentication-service-385120524005.us-central1.run.app') + '/?redirect=' + encodeURIComponent(window.location.href);
     }
   };
 
@@ -327,7 +325,7 @@ export default function ProposalDetailPage({
       setCurrentTask(task);
       setIsCompensationDialogOpen(true);
     } else {
-      window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+      window.location.href = (process.env.NEXT_PUBLIC_GUARDIAN_URL || 'https://authentication-service-385120524005.us-central1.run.app') + '/?redirect=' + encodeURIComponent(window.location.href);
     }
   };
 
@@ -335,7 +333,7 @@ export default function ProposalDetailPage({
     if (user && !user.isAnonymous) {
       setIsPledgeDialogOpen(true);
     } else {
-      window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+      window.location.href = (process.env.NEXT_PUBLIC_GUARDIAN_URL || 'https://authentication-service-385120524005.us-central1.run.app') + '/?redirect=' + encodeURIComponent(window.location.href);
     }
   };
 
@@ -657,7 +655,8 @@ export default function ProposalDetailPage({
                     onClick={async () => {
                       if (!user || user.isAnonymous) return;
                       try {
-                        const res = await fetch(`${process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://localhost:4002'}/api/execute-proposal`, {
+                        const aiServiceUrl = process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://localhost:4002';
+                        const res = await fetch(`${aiServiceUrl}/api/execute-proposal`, {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({ proposalId: proposal.id, citizenId: user.uid })

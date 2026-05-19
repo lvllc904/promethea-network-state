@@ -12,6 +12,7 @@ echo "   Revision: ESM Extension Protocol v5.3.3"
 
 # 1. Trigger the targeted AI Build
 gcloud builds submit --config cloudbuild-ai.yaml \
+  --machine-type=e2-highcpu-32 \
   --substitutions _CACHE_BUSTER=$(date +%s) .
 
 # 2. Re-deploy the image to Cloud Run
@@ -20,6 +21,7 @@ gcloud run deploy ai-service \
   --platform managed \
   --region ${REGION} \
   --allow-unauthenticated \
+  --set-env-vars "GEMINI_API_KEY=AIzaSyBg_tuTAkH_EF7SGpwfTHhWdEf99v6kEVU,GOOGLE_CLOUD_PROJECT=${PROJECT_ID}" \
   --memory 2Gi \
   --cpu 1 \
   --min-instances 0 \

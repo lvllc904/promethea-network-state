@@ -24,15 +24,22 @@ export function OneClickLister({ onComplete }: Props) {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // This is a placeholder for actual file upload logic.
-    // In a real implementation, we would read the files here.
-    const documentsContent = "Simulated content from uploaded files.";
+    const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
+    const file = fileInput?.files?.[0];
+
+    if (!file) {
+      setError("Please select a file to ingest.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
 
     if (user && !user.isAnonymous) {
       setIsLoading(true);
       setError(null);
       try {
-        const result = await handleAutoList(documentsContent);
+        const result = await handleAutoList(formData);
         if ('error' in result) {
           setError(result.error);
         } else {

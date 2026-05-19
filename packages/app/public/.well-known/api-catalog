@@ -1,0 +1,26 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://lvhllc.org/api",
+      "rel": "service-desc",
+      "href": "https://lvhllc.org/api/docs/openapi.json",
+      "type": "application/openapi+json"
+    },
+    {
+      "anchor": "https://lvhllc.org/api",
+      "rel": "service-doc",
+      "href": "https://lvhllc.org/docs/api"
+    },
+    {
+      "anchor": "https://lvhllc.org/api",
+      "rel": "status",
+      "href": "https://lvhllc.org/api/health"
+    },
+    {
+      "anchor": "https://lvhllc.org/mcp",
+      "rel": "service-desc",
+      "href": "https://lvhllc.org/.well-known/mcp/server-card.json",
+      "type": "application/json"
+    }
+  ]
+}

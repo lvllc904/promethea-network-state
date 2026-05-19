@@ -24,6 +24,28 @@ export class CartographerService {
         `;
     }
 
+    async generateShadowMarkdown(path: string): Promise<string> {
+        const normalizedPath = path.startsWith('/') ? path : '/' + path;
+        
+        let title = "Command Cockpit";
+        let description = "The Promethean Network State: A fully autonomous, sovereign-managed digital jurisdiction.";
+        let body = "";
+
+        if (normalizedPath.includes('/treasury')) {
+            const stats = reserveManager.getStats();
+            title = "Sovereign Treasury";
+            description = `Live Treasury Reserves: $${stats.reserveBalance.toFixed(2)} USD equivalent.`;
+            body = `- Current Reserve Liquidity: $${stats.reserveBalance.toFixed(2)} USD\n- Backing Ratio: 10 UVT per $1 USD Reserve`;
+        } else if (normalizedPath.includes('/pulse')) {
+            const immuneStatus = await immuneSystem.getStatus();
+            title = "Sovereign Pulse";
+            description = `Metabolic Health: ${immuneStatus.status}.`;
+            body = `- System Uptime: ${immuneStatus.uptime} seconds\n- Sovereign Intent Audit: Verified.`;
+        }
+
+        return `# ${title} - Promethean Network State\n\n${description}\n\n${body}\n\n---\n*Notice: This is a machine-readable representation (text/markdown).*`;
+    }
+
     async generateShadowHtml(path: string): Promise<string> {
         // Normalize path
         const normalizedPath = path.startsWith('/') ? path : '/' + path;

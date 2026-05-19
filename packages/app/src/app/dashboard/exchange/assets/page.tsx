@@ -3,14 +3,13 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Badge, Button } from '@promethea/ui';
 import { Globe, HardDrive, Factory, Landmark, MapPin, DollarSign } from 'lucide-react';
-import { useCollection, useFirestore, useMemoFirebase } from '@promethea/identity';
-import { collection, query } from 'firebase/firestore';
+import { useCollection, useFirestore, useSovereignMemo, collection, query } from '@promethea/identity';
 import { RealWorldAsset } from '@promethea/lib';
 import Link from 'next/link';
 
 export default function PhysicalAssetsPage() {
     const firestore = useFirestore();
-    const assetsQuery = useMemoFirebase(
+    const assetsQuery = useSovereignMemo(
         () => (firestore ? query(collection(firestore, 'real_world_assets')) : null) as any,
         [firestore]
     );

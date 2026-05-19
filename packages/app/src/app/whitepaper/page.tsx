@@ -58,40 +58,28 @@ const TableOfContents = () => (
 
 export default function WhitepaperPage() {
   return (
-    <div className="container mx-auto px-4 md:px-6">
-      <header className="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between bg-background/80 px-4 backdrop-blur-sm lg:px-6 border-b">
-        <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-6 w-6 text-primary"
-          >
-            <path d="M12 2.5a9.5 9.5 0 0 1 9.5 9.5c0 2.22-0.76 4.26-2.06 5.88L12 21.5l-7.44-3.12A9.5 9.5 0 0 1 2.5 12 9.5 9.5 0 0 1 12 2.5Z" />
-            <path d="M12 2.5v19" />
-          </svg>
-          <span className="font-headline font-semibold">Promethea</span>
+    <div className="bg-[#020617] min-h-screen text-white font-sans">
+      <header className="fixed top-0 left-0 right-0 z-40 flex h-20 items-center justify-between bg-black/40 px-8 backdrop-blur-md border-b border-white/10">
+        <Link href="/" className="flex items-center gap-3" prefetch={false}>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+            <span className="font-black text-black text-xs tracking-tighter">PNS</span>
+          </div>
+          <span className="font-headline font-black tracking-[0.2em] text-xs text-white">PROMETHEAN</span>
         </Link>
-        <Button asChild>
+        <Button asChild size="sm" className="bg-white hover:bg-zinc-200 text-black font-black text-[10px] uppercase tracking-widest h-9 px-6 rounded-none shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:-translate-y-0.5">
           <Link href="/dashboard">Return to Dashboard</Link>
         </Button>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 mt-14 py-12">
+      <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 mt-20 py-12 px-8 max-w-7xl mx-auto">
         <aside className="w-full lg:w-64 xl:w-72 lg:sticky lg:top-28 lg:self-start">
-          <div className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
+          <div className="p-6 rounded-none border border-white/10 bg-black/40 backdrop-blur-xl shadow-lg">
             <TableOfContents />
           </div>
         </aside>
 
         <main className="flex-1 min-w-0">
-          <Card>
+          <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl">
             <CardHeader>
               <CardTitle className="text-center font-headline text-4xl">
                 Promethea: A White Paper &amp; Roadmap to a Network State and the New

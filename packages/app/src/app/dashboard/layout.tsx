@@ -1,29 +1,33 @@
 'use client';
 import { Suspense, useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
-import { Header, MainNav, DisclosureProvider } from '@promethea/components';
 import { SidebarProvider } from '@promethea/ui';
 import { useAuthStatus } from '@promethea/hooks';
 import { Skeleton } from '@promethea/ui';
 import { Handshake } from '@/components/auth/Handshake';
-import { LiveTicker } from '@/components/layout/LiveTicker';
+import { MainNav } from '@/components/layout/main-nav';
+import { SovereignHeaderTicker } from '@/components/hud/SovereignHeaderTicker';
+import { SovereignFooterTicker } from '@/components/hud/SovereignFooterTicker';
 
 function DashboardSkeleton() {
   return (
-    <div className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8">
+    <div className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8 bg-black h-screen w-full">
       <div className="grid gap-4 md:grid-cols-2 md-gap-8 lg:grid-cols-4">
-        <Skeleton className="h-28" />
-        <Skeleton className="h-28" />
-        <Skeleton className="h-28" />
-        <Skeleton className="h-28" />
+        <Skeleton className="h-28 bg-white/5" />
+        <Skeleton className="h-28 bg-white/5" />
+        <Skeleton className="h-28 bg-white/5" />
+        <Skeleton className="h-28 bg-white/5" />
       </div>
       <div className="grid gap-4 md-gap-8 lg:grid-cols-2 mt-8">
-        <Skeleton className="h-96" />
-        <Skeleton className="h-96" />
+        <Skeleton className="h-96 bg-white/5" />
+        <Skeleton className="h-96 bg-white/5" />
       </div>
     </div>
   )
 }
+
+import { HUDProvider } from '@/lib/hud-store';
 
 export default function DashboardLayout({
   children,
@@ -32,6 +36,7 @@ export default function DashboardLayout({
 }) {
   const [mounted, setMounted] = useState(false);
   const { isAuthStatusLoading } = useAuthStatus();
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -40,23 +45,32 @@ export default function DashboardLayout({
   // Prevent SSG/SSR from executing client-only sovereign hooks found in children
   if (!mounted) return <DashboardSkeleton />;
 
+  const isSubPage = pathname !== '/dashboard' && pathname !== '/dashboard/';
+
   return (
-    <SidebarProvider>
-      <Suspense fallback={null}>
-        <Handshake />
-      </Suspense>
-      <div className="flex min-h-screen w-full bg-muted/40">
-        <MainNav />
-        <div className="flex flex-col sm:pl-14 w-full">
-          <DisclosureProvider mode="SIMULATED">
-            <Header />
-            <LiveTicker />
-            <main className="flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-8 overflow-y-auto">
-              {isAuthStatusLoading ? <DashboardSkeleton /> : children}
-            </main>
-          </DisclosureProvider>
-        </div>
-      </div>
-    </SidebarProvider>
+    <HUDProvider>
+      <SidebarProvider>
+        <Suspense fallback={null}>
+          <Handshake />
+        </Suspense>
+        
+        {isSubPage ? (
+          <div className="flex h-screen w-screen bg-black overflow-hidden text-white relative">
+            <MainNav />
+            <div className="flex-1 flex flex-col h-full overflow-hidden">
+              <SovereignHeaderTicker />
+              <main className="flex-1 overflow-y-auto p-8 relative bg-zinc-950">
+                {isAuthStatusLoading ? <DashboardSkeleton /> : children}
+              </main>
+              <SovereignFooterTicker />
+            </div>
+          </div>
+        ) : (
+          <div className="w-full h-screen overflow-hidden bg-black text-white">
+            {isAuthStatusLoading ? <DashboardSkeleton /> : children}
+          </div>
+        )}
+      </SidebarProvider>
+    </HUDProvider>
   );
 }

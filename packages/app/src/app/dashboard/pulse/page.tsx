@@ -23,10 +23,27 @@ import { useSovereignData, executeSovereignMethod } from '@promethea/hooks';
 import { RealityBadge } from '@promethea/components';
 
 import { SovereignCockpit } from '@/components/SovereignCockpit';
+import { SovereignPulseChart } from '@/components/SovereignPulseChart';
+
+// Helper to generate NOC telemetry data
+const generateTelemetry = (base: number, volatility: number, count: number = 60, spikeIdx?: number) => {
+    let current = base;
+    const data = [];
+    const now = Math.floor(Date.now() / 1000);
+    for (let i = 0; i < count; i++) {
+        current = base + (Math.random() - 0.5) * volatility;
+        if (spikeIdx && i === spikeIdx) current += volatility * 3; // Simulate a spike
+        data.push({ time: (now - (count - i) * 60) as any, value: Math.max(0, current) });
+    }
+    return data;
+};
 
 export default function PulsePage() {
   const { data: pulse, refetch: refetchPulse } = useSovereignData<any>('/api/security_telemetry/pulse');
   const [isScanning, setIsScanning] = useState(false);
+
+  const velocityData = generateTelemetry(45, 15, 60, 45); // Spike at index 45
+  const immuneData = generateTelemetry(10, 5, 60, 45).map(d => ({ ...d, value: d.value * 2 })); // Correlated spike
 
   const handleAction = async (method: string, params?: any) => {
     if (method === 'perform_integrity_scan') setIsScanning(true);
@@ -116,33 +133,40 @@ export default function PulsePage() {
       label: 'Security Radar',
       icon: <ShieldCheck className="w-3 h-3" />,
       content: (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-           <div className="p-6 bg-gray-900 border border-gray-800 rounded">
-              <h3 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <ShieldAlert className="w-4 h-4 text-red-500" /> IP Quarantine Log
-              </h3>
-              <div className="space-y-2 opacity-40">
-                 {[1, 2, 3].map(i => (
-                   <div key={i} className="p-2 bg-black border border-gray-800 rounded flex justify-between">
-                      <span className="text-[10px] font-mono">192.168.1.{i * 14}</span>
-                      <span className="text-[10px] text-red-500 uppercase font-bold">Blocked</span>
-                   </div>
-                 ))}
-              </div>
+        <div className="space-y-4">
+           {/* NOC Dual-Axis Area Chart */}
+           <div className="w-full">
+              <SovereignPulseChart velocityData={velocityData} immuneData={immuneData} />
            </div>
-           <div className="p-6 bg-gray-900 border border-gray-800 rounded flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] text-emerald-500 uppercase font-black tracking-widest mb-2 animate-pulse">Defense Level 4</span>
-              <h4 className="text-xl font-black font-mono text-white mb-4">Immune Integrity</h4>
-              <div className="w-full h-1 bg-gray-800 rounded-full mb-6">
-                 <div className="h-full bg-emerald-500" style={{ width: '94%' }}></div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-6 bg-gray-900 border border-gray-800 rounded">
+                 <h3 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <ShieldAlert className="w-4 h-4 text-red-500" /> IP Quarantine Log
+                 </h3>
+                 <div className="space-y-2 opacity-40">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="p-2 bg-black border border-gray-800 rounded flex justify-between">
+                         <span className="text-[10px] font-mono">192.168.1.{i * 14}</span>
+                         <span className="text-[10px] text-red-500 uppercase font-bold">Blocked</span>
+                      </div>
+                    ))}
+                 </div>
               </div>
-              <button 
-                onClick={() => handleAction('perform_integrity_scan')}
-                disabled={isScanning}
-                className="w-full py-3 bg-gray-800 hover:bg-emerald-600 text-[10px] font-black uppercase tracking-widest rounded transition-all"
-              >
-                {isScanning ? 'Scanning Substrate...' : 'Run Integrity Scan'}
-              </button>
+              <div className="p-6 bg-gray-900 border border-gray-800 rounded flex flex-col items-center justify-center text-center">
+                 <span className="text-[10px] text-emerald-500 uppercase font-black tracking-widest mb-2 animate-pulse">Defense Level 4</span>
+                 <h4 className="text-xl font-black font-mono text-white mb-4">Immune Integrity</h4>
+                 <div className="w-full h-1 bg-gray-800 rounded-full mb-6">
+                    <div className="h-full bg-emerald-500" style={{ width: '94%' }}></div>
+                 </div>
+                 <button 
+                   onClick={() => handleAction('perform_integrity_scan')}
+                   disabled={isScanning}
+                   className="w-full py-3 bg-gray-800 hover:bg-emerald-600 text-[10px] font-black uppercase tracking-widest rounded transition-all"
+                 >
+                   {isScanning ? 'Scanning Substrate...' : 'Run Integrity Scan'}
+                 </button>
+              </div>
            </div>
         </div>
       )
@@ -152,8 +176,32 @@ export default function PulsePage() {
       label: 'Syndication Matrix',
       icon: <RefreshCcw className="w-3 h-3" />,
       content: (
-        <div className="p-8 text-center text-gray-600 uppercase font-bold tracking-[0.3em] opacity-40">
-           [ Narrative Broadcast Substrate Linked ]
+        <div className="space-y-4">
+           {(() => {
+              const { data: intel } = useSovereignData<any[]>('/api/lake');
+              const syndicationLogs = intel?.filter(i => i.type === 'NARRATIVE_SIGNAL' || i.category === 'GOVERNANCE').slice(0, 5);
+              
+              if (!syndicationLogs || syndicationLogs.length === 0) {
+                 return <div className="p-8 text-center text-gray-600 uppercase font-bold tracking-[0.3em] opacity-40">[ Narrative Broadcast Substrate Linked ]</div>;
+              }
+
+              return (
+                 <div className="grid grid-cols-1 gap-2">
+                    {syndicationLogs.map((log, i) => (
+                       <div key={i} className="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between items-center group hover:border-cyan-500/30 transition-all">
+                          <div className="flex gap-4 items-center">
+                             <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                             <div className="space-y-0.5">
+                                <span className="text-[7px] text-gray-600 font-bold uppercase">{log.source || 'Sovereign_Node'} // {log.timestamp}</span>
+                                <p className="text-[10px] text-gray-300 font-mono group-hover:text-cyan-400 transition-colors">{(log.payload?.observation || log.payload?.title || 'Relaying Sovereign Narrative...').substring(0, 80)}...</p>
+                             </div>
+                          </div>
+                          <Badge className="bg-cyan-900/20 text-cyan-500 text-[7px] border-cyan-500/20">LIVE</Badge>
+                       </div>
+                    ))}
+                 </div>
+              );
+           })()}
         </div>
       )
     }

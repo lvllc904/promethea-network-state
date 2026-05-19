@@ -17,6 +17,7 @@ import {
   Landmark,
   Scale,
   Activity,
+  Code2,
   Settings,
 } from "lucide-react";
 
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/dashboard/atlas", icon: Landmark, label: "Sovereign Atlas" },
   { href: "/dashboard/will", icon: Scale, label: "Sovereign Will" },
   { href: "/dashboard/pulse", icon: Activity, label: "Sovereign Pulse" },
+  { href: "/dashboard/developers", icon: Code2, label: "Sovereign Developers" },
 ];
 
 export function MainNav() {

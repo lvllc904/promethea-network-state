@@ -95,8 +95,7 @@ export async function speechToTextAction(input: any): Promise<any | { error: str
     }
 }
 
-import { db } from '@/lib/server/admin';
-import { FieldValue } from 'firebase-admin/firestore';
+import { db, FieldValue } from '@/lib/server/admin';
 
 export async function genesisMintAction(uid: string, displayName: string, email: string) {
     console.log(`[GENESIS] Initiating Genesis Merge for UID: ${uid}`);
@@ -149,8 +148,8 @@ export async function genesisMintAction(uid: string, displayName: string, email:
             uid: uid,
             decentralizedId: `did:prmth:sol:${uid.slice(-10)}`,
             solanaAddress: solanaPublicKey, // Persistent link to on-chain liquidity
-            displayName: displayName || 'Joshua Wicke',
-            email: email || 'joshua@lvhllc.org',
+            displayName: displayName || 'Promethea',
+            email: email || 'promethea@lvhllc.org',
             governanceTokens: 1000,
             reputation: totalReputation,
             reputationScore: 100,

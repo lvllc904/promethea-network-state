@@ -67,15 +67,41 @@ export class SensoryAgent {
         taskQueue.broadcastStimulus(lakeRecord);
     }
 
+    async ingestEnvironmentalData() {
+        console.log('[SensoryAgent] 🛰️  Polling Open-Meteo for real-world territorial telemetry...');
+        try {
+            // Target coordinates: High Plains, WY (Sovereign Hub)
+            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=42.8666&longitude=-106.3131&current=temperature_2m,relative_humidity_2m,wind_speed_10m,shortwave_radiation');
+            const data: any = await res.json();
+            
+            const lakeRecord = {
+                id: `env.raw.${Date.now()}`,
+                producer_id: 'sensory.open-meteo',
+                category: 'ENVIRONMENTAL',
+                payload: JSON.stringify(data.current),
+                priority_score: 1.0,
+                timestamp: new Date().toISOString()
+            };
+
+            await db.collection(COLLECTIONS.OMNI_INTEL_LAKE).doc(lakeRecord.id).set(lakeRecord);
+            console.log(`[SensoryAgent] 💧 Actualized Environmental Packet: ${lakeRecord.id}`);
+            taskQueue.broadcastStimulus(lakeRecord);
+        } catch (e) {
+            console.error('[SensoryAgent] Failed to ingest real-world environment data:', e);
+        }
+    }
+
     start() {
-        console.log('[SensoryAgent] 🟢 Sensory Organ Active. Polling interval set to 15m.');
+        console.log('[SensoryAgent] 🟢 Sensory Organ Active. Live telemetry enabled.');
         // Initial drop
         this.ingestGrantsData();
         this.ingestRealEstateData();
+        this.ingestEnvironmentalData();
         
         setInterval(() => {
             this.ingestGrantsData();
             this.ingestRealEstateData();
+            this.ingestEnvironmentalData();
         }, 15 * 60 * 1000); // 15 minutes
     }
 }

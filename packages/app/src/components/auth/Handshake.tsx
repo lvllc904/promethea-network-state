@@ -24,7 +24,7 @@ export function Handshake() {
             }
 
             if (token) {
-                localStorage.setItem('authToken', token);
+                localStorage.setItem('pns_sovereign_token', token);
             }
 
             // Body 3 Hydration

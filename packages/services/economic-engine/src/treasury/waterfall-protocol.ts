@@ -331,48 +331,64 @@ export class WaterfallProtocol {
      * Returns a live status snapshot of all rings for the Dashboard.
      */
     async getStatus(): Promise<WaterfallStatus> {
-        if (!this.initialized) await this.initialize();
+        try {
+            if (!this.initialized) await this.initialize();
 
-        const rings: RingStatus[] = [];
-        let totalTvlUsd = 0;
-        let activeRings = 0;
-        let nextUnlock = 'All Rings Active';
+            const rings: RingStatus[] = [];
+            let totalTvlUsd = 0;
+            let activeRings = 0;
+            let nextUnlock = 'All Rings Active';
 
-        const allPartitions = walletManager.listPartitions();
+            const allPartitions = walletManager.listPartitions();
 
-        for (const partition of allPartitions) {
-            const config = RING_THRESHOLDS[partition.name];
-            if (!config) continue;
+            for (const partition of allPartitions) {
+                const config = RING_THRESHOLDS[partition.name];
+                if (!config) continue;
 
-            const balanceSol = await walletManager.getPartitionBalance(partition.name);
-            const isActive = balanceSol >= config.threshold;
-            if (isActive) activeRings++;
-            if (!isActive && nextUnlock === 'All Rings Active') {
-                nextUnlock = `${partition.name} needs ${config.threshold} SOL (${config.description})`;
+                const balanceSol = await walletManager.getPartitionBalance(partition.name);
+                const isActive = balanceSol >= config.threshold;
+                if (isActive) activeRings++;
+                if (!isActive && nextUnlock === 'All Rings Active') {
+                    nextUnlock = `${partition.name} needs ${config.threshold} SOL (${config.description})`;
+                }
+
+                totalTvlUsd += balanceSol * 145; // Rough SOL/USD price placeholder
+
+                rings.push({
+                    name: partition.name,
+                    address: partition.address,
+                    balanceSol,
+                    thresholdSol: config.threshold,
+                    isActive,
+                    ringIndex: Object.keys(RING_THRESHOLDS).indexOf(partition.name),
+                });
             }
 
-            totalTvlUsd += balanceSol * 145; // Rough SOL/USD price placeholder
+            let infrastructureCostUsd = 0;
+            try {
+                infrastructureCostUsd = await gcpBilling.getConsolidatedOverhead();
+            } catch (e) {
+                console.warn('[Waterfall] Failed to fetch infrastructure costs:', e);
+            }
 
-            rings.push({
-                name: partition.name,
-                address: partition.address,
-                balanceSol,
-                thresholdSol: config.threshold,
-                isActive,
-                ringIndex: Object.keys(RING_THRESHOLDS).indexOf(partition.name),
-            });
+            return {
+                rings,
+                totalTvlUsd: Math.max(0, totalTvlUsd - infrastructureCostUsd), // Net Treasury Value
+                activeRings,
+                nextUnlock,
+                lastSwept: this.lastSwept.toISOString(),
+                infrastructureCostUsd
+            };
+        } catch (error) {
+            console.error('[Waterfall] ❌ Status fetch failed:', error);
+            return {
+                rings: [],
+                totalTvlUsd: 0,
+                activeRings: 0,
+                nextUnlock: 'Protocol Offline',
+                lastSwept: new Date(0).toISOString()
+            };
         }
-
-        const infrastructureCostUsd = await gcpBilling.getConsolidatedOverhead();
-
-        return {
-            rings,
-            totalTvlUsd: totalTvlUsd - infrastructureCostUsd, // Net Treasury Value
-            activeRings,
-            nextUnlock,
-            lastSwept: this.lastSwept.toISOString(),
-            infrastructureCostUsd
-        };
     }
 }
 

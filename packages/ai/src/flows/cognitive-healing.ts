@@ -27,7 +27,7 @@ export const cognitiveHealingFlow = ai.defineFlow(
   async ({ errorLog }) => {
     // Steps 1-3: Sense, Hypothesize, Investigate (As before)
     const analysisPrompt = `Analyze the following error log. Identify the root cause, the file to modify, and what to look for.\n\nError Log:\n---\n${errorLog}\n---`;
-    const analysis = await ai.generate({ model: 'googleAI/gemini-1.5-flash', prompt: analysisPrompt });
+    const analysis = await ai.generate({ model: 'gemini-1.5-flash', prompt: analysisPrompt });
     const structuredAnalysis = analysis.text;
     const filePathRegex = /([\w\/\.-]+package\.json)/g; // Focus on package.json for this error
     const targetFile = (structuredAnalysis.match(filePathRegex) || [])[0];
@@ -42,7 +42,7 @@ export const cognitiveHealingFlow = ai.defineFlow(
     // Step 4: Generate a precise code fix
     const fixGenerationPrompt = `Based on the error and the file content, generate the complete, corrected content for the file '${targetFile}'. Your response must be only the raw code for the new file.\n\nError Log:\n---\n${errorLog}\n---\n\nOriginal Content of '${targetFile}':\n---\n${fileContent}\n---`;
 
-    const fix = await ai.generate({ model: 'googleAI/gemini-1.5-flash', prompt: fixGenerationPrompt });
+    const fix = await ai.generate({ model: 'gemini-1.5-flash', prompt: fixGenerationPrompt });
     const newCode = fix.text;
 
     // Step 5: ACT - Execute the fix autonomously

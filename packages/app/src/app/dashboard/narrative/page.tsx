@@ -3,8 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
-import { useCollection, useFirestore, useMemoFirebase } from '@promethea/identity';
-import { collection, query, orderBy, type Query } from 'firebase/firestore';
+import { useCollection, useFirestore, useSovereignMemo, collection, query, orderBy, type Query } from '@promethea/identity';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Button, Badge, Skeleton } from '@promethea/ui';
 import { Newspaper, Send, ArrowRight, BrainCircuit, Globe, BookOpen } from 'lucide-react';
 import { RealityBadge } from '@promethea/components';
@@ -25,7 +24,7 @@ interface BlogPost {
 export default function NarrativePage() {
     const firestore = useFirestore();
 
-    const narrativeQuery = useMemoFirebase(
+    const narrativeQuery = useSovereignMemo(
         () => (firestore ? query(
             collection(firestore, 'narrative'),
             orderBy('createdAt', 'desc')

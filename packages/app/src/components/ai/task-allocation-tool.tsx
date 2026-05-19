@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import type { AllocateRWATasksInput, AllocateRWATasksOutput } from "@promethea/ai";
-import { useCollection, useFirestore, useMemoFirebase } from '@promethea/identity';
-import { collection } from 'firebase/firestore';
+import { useCollection, useFirestore, useSovereignMemo } from '@promethea/identity';
 import { Citizen } from '@promethea/lib';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@promethea/ui";
 import { Label } from "@promethea/ui";
@@ -25,8 +24,8 @@ export function TaskAllocationTool({ onAllocate }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const firestore = useFirestore();
-  const citizensQuery = useMemoFirebase(
-    () => (firestore ? collection(firestore, 'citizens') : null),
+  const citizensQuery = useSovereignMemo(
+    () => (firestore ? { name: 'citizens' } : null),
     [firestore]
   );
   const { data: citizens } = useCollection<Citizen>(citizensQuery as any);

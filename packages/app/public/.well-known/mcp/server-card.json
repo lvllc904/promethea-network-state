@@ -1,0 +1,31 @@
+{
+  "serverInfo": {
+    "name": "Promethean Network State MCP Gateway",
+    "version": "1.0.0"
+  },
+  "transport": {
+    "type": "sse",
+    "endpoint": "https://authentication-service-385120524005.us-central1.run.app/mcp"
+  },
+  "capabilities": {
+    "tools": [
+      {
+        "name": "fetch_treasury_stats",
+        "description": "Returns live reserve balance and UVT backing ratio.",
+        "inputSchema": { "type": "object", "properties": {} }
+      },
+      {
+        "name": "submit_proposal",
+        "description": "Submits a new governance proposal to the Constitutional Ledger.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "type": { "type": "string", "enum": ["GRANTS", "TREASURY", "CONSTITUTION"] }
+          }
+        }
+      }
+    ]
+  }
+}

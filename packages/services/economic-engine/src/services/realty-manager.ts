@@ -35,7 +35,10 @@ export class RealtyManager {
                     status: 'Active' as const,
                     realityState: 'SIMULATED' as RealityState,
                     createdAt: new Date().toISOString(),
-                    url: 'https://crexi.com/land-discovery'
+                    url: 'https://crexi.com/land-discovery',
+                    coords: criteria.region.toLowerCase().includes('washington')
+                        ? { lat: 47.7511 + (Math.random() - 0.5) * 0.2, lng: -120.7401 + (Math.random() - 0.5) * 0.2 }
+                        : { lat: 44.5720 + (Math.random() - 0.5) * 0.2, lng: -124.0531 + (Math.random() - 0.5) * 0.2 }
                 }
             ];
 

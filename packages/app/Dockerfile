@@ -8,7 +8,7 @@ COPY packages/app/package.json ./packages/app/
 COPY packages/lib/package.json ./packages/lib/
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/components/package.json ./packages/components/
-COPY packages/firebase/package.json ./packages/firebase/
+COPY packages/identity/package.json ./packages/identity/
 COPY packages/hooks/package.json ./packages/hooks/
 COPY packages/sovereign-store/package.json ./packages/sovereign-store/
 COPY packages/ai/package.json ./packages/ai/
@@ -24,12 +24,14 @@ ARG NEXT_PUBLIC_AI_SERVICE_URL
 ARG NEXT_PUBLIC_GUARDIAN_URL
 ARG NEXT_PUBLIC_ENGINE_URL
 ARG NEXT_PUBLIC_DISABLE_FIREBASE
-ARG CACHE_BUSTER=1776555360
+ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+ARG CACHE_BUSTER=1776555364
 
 ENV NEXT_PUBLIC_AI_SERVICE_URL=$NEXT_PUBLIC_AI_SERVICE_URL
 ENV NEXT_PUBLIC_GUARDIAN_URL=$NEXT_PUBLIC_GUARDIAN_URL
 ENV NEXT_PUBLIC_ENGINE_URL=$NEXT_PUBLIC_ENGINE_URL
 ENV NEXT_PUBLIC_DISABLE_FIREBASE=$NEXT_PUBLIC_DISABLE_FIREBASE
+ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 ENV NEXT_PUBLIC_FIREBASE_PROJECT_ID=studio-9105849211-9ba48
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -39,7 +41,7 @@ RUN echo "Cache Busting Substrate: $CACHE_BUSTER"
 RUN npx tsc --build packages/lib/tsconfig.json
 RUN npx tsc --build packages/sovereign-store/tsconfig.json
 RUN npx tsc --build packages/hooks/tsconfig.json
-RUN npx tsc --build packages/firebase/tsconfig.json
+RUN npx tsc --build packages/identity/tsconfig.json
 RUN npx tsc --build packages/ui/tsconfig.json
 RUN npx tsc --build packages/ai/tsconfig.json
 RUN npx tsc --build packages/components/tsconfig.json

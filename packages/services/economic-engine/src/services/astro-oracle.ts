@@ -1,7 +1,8 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { google } from 'googleapis';
+import axios from 'axios';
 import { metabolicArbitrator } from './metabolic-arbitrator';
 import { reserveManager } from '../treasury/reserve-manager';
-import { db, COLLECTIONS } from '../db';
+import { db } from '../db';
 import { sovereignIntelligence } from './sovereign-intelligence';
 
 /**
@@ -19,22 +20,36 @@ export interface CelestialState {
 }
 
 export class AstroOracleService {
-    private genAI: GoogleGenerativeAI;
+    private auth: any;
+    private projectId: string = 'studio-9105849211-9ba48';
+    private region: string = 'us-central1';
 
-    constructor(apiKey: string) {
-        this.genAI = new GoogleGenerativeAI(apiKey);
+    constructor() {
+        const jsonKey = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+        if (jsonKey) {
+            try {
+                const credentials = JSON.parse(jsonKey);
+                this.projectId = credentials.project_id || this.projectId;
+                this.auth = new google.auth.GoogleAuth({
+                    credentials,
+                    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+                });
+                console.log('[AstroOracle] Sovereign Identity initialized via Master Key.');
+            } catch (err) {
+                console.error('[AstroOracle] Failed to parse Sovereign JSON:', err);
+            }
+        }
     }
 
     /**
-     * Polls astronomical data sources (simulated via high-reasoning model)
+     * Polls astronomical data sources (via Vertex AI REST)
      * and updates the Sovereign Substrate.
      */
     async scanCelestialEnvironment(): Promise<CelestialState> {
         const stats = reserveManager.getStats();
         const modelInfo = metabolicArbitrator.getBestModel(6, stats.reserveBalance);
-        const model = this.genAI.getGenerativeModel({ model: modelInfo.modelName });
-
-        console.log(`[AstroOracle] Scanning celestial perimeter using ${modelInfo.modelName}...`);
+        
+        console.log(`[AstroOracle] Scanning celestial perimeter using ${modelInfo.modelName} (Vertex AI)...`);
 
         const prompt = `You are the Promethean Celestial Sentinel. 
         Your task is to provide a brief "Astro-Metabolic" assessment of the planetary environment for: ${new Date().toISOString()}.
@@ -54,10 +69,32 @@ export class AstroOracleService {
         }`;
 
         try {
-            const result = await model.generateContent(prompt);
-            const text = result.response.text();
-            const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            const data = JSON.parse(jsonStr);
+            if (!this.auth) throw new Error('No Sovereign Identity found for Vertex AI.');
+
+            const client = await this.auth.getClient();
+            const token = await client.getAccessToken();
+            
+            const url = `https://${this.region}-aiplatform.googleapis.com/v1/projects/${this.projectId}/locations/${this.region}/publishers/google/models/${modelInfo.modelName}:generateContent`;
+
+            const response = await axios.post(url, {
+                contents: [{
+                    role: 'user',
+                    parts: [{ text: prompt }]
+                }],
+                generationConfig: {
+                    temperature: 0.2,
+                    maxOutputTokens: 1000,
+                    responseMimeType: "application/json"
+                }
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const content = response.data.candidates[0].content.parts[0].text;
+            const data = typeof content === 'string' ? JSON.parse(content) : content;
 
             const celestialState: CelestialState = {
                 threatLevel: data.threatLevel,
@@ -73,7 +110,6 @@ export class AstroOracleService {
                 timestamp: new Date()
             });
 
-            // Phase 10: Ingest into Sovereign Intelligence
             await sovereignIntelligence.ingest({
                 category: 'Environmental',
                 summary: `Celestial Scan [Risk: ${data.threatLevel}]: ${data.analysis}`,
@@ -82,8 +118,8 @@ export class AstroOracleService {
             });
 
             return celestialState;
-        } catch (err) {
-            console.error('[AstroOracle] Failed to scan celestial environment:', err);
+        } catch (err: any) {
+            console.error('[AstroOracle] Failed to scan celestial environment:', err.response?.data || err.message);
             return {
                 threatLevel: 'Green',
                 solarStormRisk: 0,
@@ -96,11 +132,10 @@ export class AstroOracleService {
 
     start() {
         const isConservation = process.env.CONSERVATION_MODE === 'true';
-        // Scan environment every 24 hours (Conservation) or 12 hours (Dynamic)
         const interval = isConservation ? 24 * 60 * 60 * 1000 : 12 * 60 * 60 * 1000;
         
         setInterval(() => this.scanCelestialEnvironment(), interval);
-        // Initial scan
         setTimeout(() => this.scanCelestialEnvironment(), 30000);
     }
 }
+

@@ -185,7 +185,7 @@ export const useFirebaseApp = (): FirebaseApp | null => {
   return context?.firebaseApp || null;
 };
 
-export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T {
+export function useSovereignMemo<T>(factory: () => T, deps: DependencyList): T {
   return useMemo(factory, deps);
 }
 

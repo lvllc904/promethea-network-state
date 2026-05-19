@@ -44,7 +44,7 @@ const initiateCommunityVote = ai.defineTool({
 
 const detectNetworkThreatsPrompt = ai.definePrompt({
   name: 'detectNetworkThreatsPrompt',
-  model: 'googleAI/gemini-1.5-flash',
+  model: 'gemini-1.5-flash',
   input: { schema: DetectNetworkThreatsInputSchema },
   output: { schema: DetectNetworkThreatsOutputSchema },
   tools: [initiateCommunityVote],

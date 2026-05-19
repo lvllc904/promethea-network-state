@@ -63,7 +63,7 @@ Analyze the task description and compare the required skills to the skills of th
 `;
 
     const { output } = await ai.generate({
-      model: 'googleAI/gemini-1.5-flash',
+      model: 'gemini-1.5-flash',
       prompt: prompt,
       output: {
         schema: AllocateRWATasksOutputSchema

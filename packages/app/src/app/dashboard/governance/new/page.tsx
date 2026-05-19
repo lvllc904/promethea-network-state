@@ -10,72 +10,42 @@ import { Textarea } from "@promethea/ui";
 
 import { useRouter } from "next/navigation";
 import { handleRefine } from "./actions";
+import { ProposalWizard } from "@promethea/components";
+import { addSovereignData } from "@promethea/hooks";
 
 export default function NewProposalPage() {
-  const user = { isAnonymous: false }; // Sovereign Auth Placeholder
   const router = useRouter();
-  const [description, setDescription] = useState('');
 
-  const handleProtectedAction = () => {
-    if (user && !user.isAnonymous) {
-      // In a real implementation, this would submit the form data
-      console.log("User is authenticated, proceeding with action.");
-    } else {
-      window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+  const onComplete = async (formData: any) => {
+    try {
+      await addSovereignData('proposals', {
+        ...formData,
+        proposerId: 'sovereign-citizen-01',
+        status: 'Active',
+        realityState: 'SIMULATED',
+        createdAt: new Date().toISOString(),
+        votingEndTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      });
+      router.push('/dashboard/governance');
+    } catch (e) {
+      console.error(e);
+      alert('Failed to submit proposal.');
     }
   };
 
   return (
-    <div className="grid gap-8 md:grid-cols-2">
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-headline font-bold">Create New Proposal</h1>
-          <p className="text-muted-foreground">Draft and submit a new proposal to the Promethean DAC. All ideas are welcome and will be judged on their merit.</p>
-        </div>
-        <Card className="shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="font-headline">Proposal Details</CardTitle>
-            {user?.isAnonymous && (
-              <Button asChild variant="outline" size="sm" className="bg-transparent text-white border-white hover:bg-white hover:text-black">
-                <a href={process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "http://localhost:3001"}>Sign In</a>
-              </Button>
-            )}
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
-              <Input id="title" placeholder="A concise and descriptive title" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Input id="category" placeholder="e.g., RWA Acquisition, Governance, Technology" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Full Description</Label>
-              <Textarea
-                id="description"
-                placeholder="Provide all the details for your proposal here."
-                className="min-h-[200px]"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="ipfsCid">IPFS Content ID (CID)</Label>
-              <Input id="ipfsCid" placeholder="e.g., QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco" />
-              <p className="text-xs text-muted-foreground">Optional: Link to full proposal documentation on the InterPlanetary File System.</p>
-            </div>
-            <Button size="lg" onClick={handleProtectedAction}>Submit Proposal to DAC</Button>
-            {user?.isAnonymous && (
-              <p className="text-xs text-center text-muted-foreground pt-2">Create a Promethean Passport to submit a proposal.</p>
-            )}
-          </CardContent>
-        </Card>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-4xl font-headline font-bold tracking-tighter">Governance Engine</h1>
+        <p className="text-zinc-500 max-w-2xl mt-2">
+          Translate your sovereign intent into a verifiable protocol. Use the wizard below to synthesize, simulate, and actualize your proposal.
+        </p>
       </div>
 
-      <div>
-        <EthicalRefinementTool onRefine={handleRefine} proposalText={description} />
-      </div>
+      <ProposalWizard 
+        onComplete={onComplete}
+        onRefine={handleRefine}
+      />
     </div>
   );
 }

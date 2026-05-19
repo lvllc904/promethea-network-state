@@ -43,37 +43,37 @@ body {
     --sidebar-ring: 208 100% 73%;
   }
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 0 0% 2%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 0 0% 4%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 0 0% 4%;
     --popover-foreground: 210 40% 98%;
     --primary: 208 100% 73%;
     --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 0 0% 9%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 9%;
+    --muted-foreground: 215.4 16.3% 56.9%;
     --accent: 282 100% 41%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
     --ring: 208 100% 73%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --sidebar-background: 222.2 84% 4.9%;
+    --sidebar-background: 0 0% 2%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 208 100% 73%;
     --sidebar-primary-foreground: 222.2 47.4% 11.2%;
-    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent: 0 0% 9%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-border: 0 0% 12%;
     --sidebar-ring: 208 100% 73%;
   }
 }
@@ -112,5 +112,86 @@ body {
     vertical-align: super;
     color: hsl(var(--muted-foreground));
     opacity: 0.7;
+  }
+}
+
+@layer utilities {
+  /* Hyper-Realistic Z-Axis Physics */
+  .glass-panel {
+    @apply bg-black/60 backdrop-blur-xl border border-white/5;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 10px 50px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Physical Rim Highlights (The 1px top edge) */
+  .rim-highlight {
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .rim-highlight-economics { box-shadow: inset 0 1px 0 0 theme('colors.economics.DEFAULT'); }
+  .rim-highlight-governance { box-shadow: inset 0 1px 0 0 theme('colors.governance.DEFAULT'); }
+  .rim-highlight-narrative { box-shadow: inset 0 1px 0 0 theme('colors.narrative.DEFAULT'); }
+  .rim-highlight-diplomatic { box-shadow: inset 0 1px 0 0 theme('colors.diplomatic.DEFAULT'); }
+
+  /* Focus Mechanics (Depth of Field) */
+  .hud-eclipse-active {
+    @apply transition-all duration-500 ease-out;
+  }
+  
+  .hud-eclipse-background {
+    @apply blur-md saturate-0 brightness-50 transition-all duration-500 ease-out pointer-events-none;
+  }
+
+  /* --- SOVEREIGN REALITY BOUNDARY UTILITIES --- */
+  @keyframes sim-breath {
+    0%, 100% {
+      opacity: 0.7;
+      filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.4));
+    }
+    50% {
+      opacity: 1;
+      filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8));
+    }
+  }
+
+  @keyframes ai-breath {
+    0%, 100% {
+      opacity: 0.8;
+      filter: drop-shadow(0 0 2px rgba(6, 182, 212, 0.4));
+    }
+    50% {
+      opacity: 1;
+      filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8));
+    }
+  }
+
+  .animate-reality-sim-pulse {
+    animation: sim-breath 3s ease-in-out infinite;
+  }
+
+  .animate-reality-ai-pulse {
+    animation: ai-breath 3s ease-in-out infinite;
+  }
+
+  /* Reality Spectrum Borders & Glows */
+  .rim-highlight-reality-live {
+    box-shadow: inset 0 1px 0 0 #10b981;
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+
+  .rim-highlight-reality-cached {
+    box-shadow: inset 0 1px 0 0 #2dd4bf;
+    border-color: rgba(45, 212, 191, 0.2);
+  }
+
+  .rim-highlight-reality-sim {
+    box-shadow: inset 0 1px 0 0 #f59e0b;
+    border-color: rgba(245, 158, 11, 0.2);
+    @apply animate-reality-sim-pulse;
+  }
+
+  .rim-highlight-reality-ai {
+    box-shadow: inset 0 1px 0 0 #06b6d4;
+    border-color: rgba(6, 182, 212, 0.2);
+    @apply animate-reality-ai-pulse;
   }
 }

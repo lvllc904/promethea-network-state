@@ -61,3 +61,13 @@ tmp_json.txt
 service-account.json
 tmp_sa.json
 packages/**/.env
+
+# Sensitive local credentials & tools
+ibeam.env
+sovereign_injection.yaml
+scratch/key_rotation_sketchpad.md
+scratch/trigger_simulation_trade.js
+scratch/lake_seeder.ts
+docker-compose.ibkr.yaml
+mirror_snapshot/
+

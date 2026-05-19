@@ -32,7 +32,7 @@ export type AutoListRWAInput = z.infer<typeof AutoListRWAInputSchema>;
 
 const autoListRWAPrompt = ai.definePrompt({
     name: 'autoListRWAPrompt',
-    model: 'googleAI/gemini-1.5-flash',
+    model: 'gemini-1.5-flash',
     input: { schema: AutoListRWAInputSchema },
     output: { schema: AutoListRWAOutputSchema },
     prompt: `You are a sophisticated AI agent for the Promethean Network State.

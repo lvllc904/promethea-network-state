@@ -15,3 +15,4 @@ export async function handleRefine(data: RefineProposalInput): Promise<{ refined
     throw new Error(error.message || 'Could not refine proposal.');
   }
 }
+

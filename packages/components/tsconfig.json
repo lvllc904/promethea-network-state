@@ -16,7 +16,7 @@
       "path": "../lib"
     },
     {
-      "path": "../firebase"
+      "path": "../identity"
     },
     {
       "path": "../hooks"

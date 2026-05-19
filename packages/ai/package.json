@@ -1,13 +1,13 @@
 {
   "name": "@promethea/ai",
   "version": "5.2.3",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts",
-      "default": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./*": "./dist/*"
   },
@@ -20,11 +20,13 @@
     "@genkit-ai/core": "^1.24.0",
     "@genkit-ai/flow": "^0.5.17",
     "@genkit-ai/google-genai": "^1.24.0",
+    "axios": "^1.7.9",
     "dotenv": "^16.5.0",
     "genkit": "^1.24.0",
+    "googleapis": "^144.0.0",
     "wav": "^1.0.2",
     "zod": "^3.24.2",
     "@promethea/lib": "file:../lib",
-    "@promethea/identity": "file:../firebase"
+    "@promethea/identity": "file:../identity"
   }
 }

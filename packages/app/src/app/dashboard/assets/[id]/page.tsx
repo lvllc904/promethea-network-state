@@ -25,15 +25,14 @@ import { Badge } from '@promethea/ui';
 import { Button } from '@promethea/ui';
 import { DollarSign, MapPin, Wrench, PieChart, Briefcase, Star, Users, Loader2, Key } from 'lucide-react';
 import { TaskAllocationTool } from '@promethea/components';
-import { useDoc, useCollection, useMemoFirebase, useUser, useFirestore } from '@promethea/identity';
-import { doc, collection, query, where } from 'firebase/firestore';
+import { useDoc, useCollection, useSovereignMemo, useUser, useFirestore, doc, collection, query, where } from '@promethea/identity';
 import { RealWorldAsset, Task, UniversalValueToken } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
 import { handleAllocate } from './actions';
 import { applyForTask, purchaseFractionalShare } from '@/lib/client-actions';
 
 import { Pie, Cell, ResponsiveContainer, PieChart as RechartsPieChart } from 'recharts';
-import { type DocumentReference, type Query } from 'firebase/firestore';
+import { type DocumentReference, type Query } from '@promethea/identity';
 import { Avatar, AvatarFallback } from '@promethea/ui';
 import { useToast } from '@promethea/hooks';
 import { useState, useMemo } from 'react';
@@ -70,33 +69,21 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
   const { toast } = useToast();
   const [applyingTaskId, setApplyingTaskId] = useState<string | null>(null);
 
-  const assetRef = useMemoFirebase(
-    () => (firestore ? doc(firestore, 'real_world_assets', params.id) : null) as DocumentReference<RealWorldAsset> | null,
+  const assetRef = useSovereignMemo(
+    () => (firestore && params.id ? doc(firestore, 'real_world_assets', params.id) : null),
     [firestore, params.id]
   );
   const { data: asset, isLoading: isAssetLoading } = useDoc<RealWorldAsset>(assetRef as any);
 
-  const tasksQuery = useMemoFirebase(
-    () =>
-      firestore
-        ? query(
-          collection(firestore, 'tasks'),
-          where('assetId', '==', params.id)
-        ) as Query<Task>
-        : null,
+  const tasksQuery = useSovereignMemo(
+    () => (firestore && params.id ? query(collection(firestore, 'tasks'), where('assetId', '==', params.id)) : null),
     [firestore, params.id]
   );
-  const { data: tasks, isLoading: areTasksLoading } = useCollection<Task>(tasksQuery as any);
+  const { data: tasks, isLoading: areTasksLoading } = useCollection<any>(tasksQuery as any);
 
-  const uvtQuery = useMemoFirebase(
-    () =>
-      firestore
-        ? query(
-          collection(firestore, 'universal_value_tokens'),
-          where('assetId', '==', params.id)
-        ) as Query<UniversalValueToken>
-        : null,
-    [firestore, params.id]
+  const uvtQuery = useSovereignMemo(
+    () => (firestore && params.id && user && !user.isAnonymous ? query(collection(firestore, 'universal_value_tokens'), where('assetId', '==', params.id), where('ownerId', '==', user.uid)) : null),
+    [firestore, params.id, user]
   );
   const { data: uvts, isLoading: areUvtsLoading } = useCollection<UniversalValueToken>(uvtQuery as any);
 
@@ -126,7 +113,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
         setApplyingTaskId(null);
       }
     } else {
-      window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+      window.location.href = (process.env.NEXT_PUBLIC_GUARDIAN_URL || 'https://authentication-service-385120524005.us-central1.run.app') + '/?redirect=' + encodeURIComponent(window.location.href);
     }
   };
 
@@ -443,7 +430,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                 variant="outline"
                 className="text-[10px] h-9 hover:bg-primary/10 border-primary/20"
                 onClick={async () => {
-                  if (!user || user.isAnonymous) return window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+                  if (!user || user.isAnonymous) return window.location.href = (process.env.NEXT_PUBLIC_GUARDIAN_URL || 'https://authentication-service-385120524005.us-central1.run.app') + '/?redirect=' + encodeURIComponent(window.location.href);
                   const amountString = window.prompt("Enter amount of Reputation to swap for UVT (1:1):");
                   const amount = parseInt(amountString || "0");
                   if (amount > 0) {
@@ -460,7 +447,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                 variant="outline"
                 className="text-[10px] h-9 hover:bg-primary/10 border-primary/20"
                 onClick={async () => {
-                  if (!user || user.isAnonymous) return window.location.href = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3001';
+                  if (!user || user.isAnonymous) return window.location.href = (process.env.NEXT_PUBLIC_GUARDIAN_URL || 'https://authentication-service-385120524005.us-central1.run.app') + '/?redirect=' + encodeURIComponent(window.location.href);
                   toast({ title: "Capital Swap", description: "Atomic capital swaps (USDC/SOL) are Wave 6 protocol. Simulate with Reputation for now." });
                 }}
               >

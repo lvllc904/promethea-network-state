@@ -17,9 +17,8 @@ import { Copy, Star, ShieldCheck, ShieldAlert, RefreshCcw, CheckCircle2 } from '
 import { Button } from '@promethea/ui';
 import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { useDoc, useFirestore, useUser, useMemoFirebase, useCollection } from '@promethea/identity';
-import { doc, collection, query, where } from 'firebase/firestore';
-import { Citizen } from '@promethea/lib';
+import { useDoc, useFirestore, useUser, useSovereignMemo, useCollection, doc, collection, query, where, type Query, type DocumentReference } from '@promethea/identity';
+import { Citizen, UniversalValueToken } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
 import { RealityBadge } from '@promethea/components';
 import { useToast } from '@promethea/hooks';
@@ -32,21 +31,19 @@ export default function PassportPage() {
   const { localProfile } = useLocalProfile();
   const [uvtBalance, setUvtBalance] = React.useState<number | null>(null);
 
-  const citizenRef = useMemoFirebase(
-    () => (firestore && user ? doc(firestore, 'citizens', user.uid) : null),
+  const citizenRef = useSovereignMemo(
+    () => (firestore && user && user.uid !== 'anonymous' ? doc(firestore, 'citizens', user.uid) : null) as DocumentReference<Citizen> | null,
     [firestore, user]
   );
-
   const { data: citizen, isLoading: isCitizenLoading } = useDoc<Citizen>(citizenRef as any);
-  const { syncFromPublic } = useLocalProfile();
 
-  const userDID = citizen?.decentralizedId;
-
-  const uvtQuery = useMemoFirebase(
-    () => (firestore && userDID ? query(collection(firestore, 'uvt_transfers'), where('ownerId', '==', userDID)) : null),
-    [firestore, userDID]
+  const uvtQuery = useSovereignMemo(
+    () => (firestore && user && user.uid !== 'anonymous' ? query(collection(firestore, 'universal_value_tokens'), where('ownerId', '==', user.uid)) : null) as unknown as Query<UniversalValueToken> | null,
+    [firestore, user]
   );
   const { data: laborCredits } = useCollection(uvtQuery as any);
+
+  const { syncFromPublic } = useLocalProfile();
 
   // "Dehydration" sync: Public Ledger -> Sovereign Device
   useEffect(() => {
@@ -154,8 +151,8 @@ export default function PassportPage() {
                 Decentralized Identifier (DID)
               </h3>
               <div className="flex items-center justify-between rounded-md border bg-muted/50 p-3">
-                <code className="text-sm font-mono truncate">{userDID}</code>
-                <Button variant="ghost" size="icon" onClick={() => handleCopy(userDID || '')}>
+                <code className="text-sm font-mono truncate">{user.did}</code>
+                <Button variant="ghost" size="icon" onClick={() => handleCopy(user.did || '')}>
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>

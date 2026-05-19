@@ -27,6 +27,8 @@ import {
   Activity,
   Globe,
   Handshake,
+  TrendingUp,
+  Terminal
 } from "lucide-react";
 
 const navItems = [
@@ -35,12 +37,14 @@ const navItems = [
   { href: "/blog", icon: FileText, label: "Blog" }, // Integrated Promethean Blog
   { href: "/dashboard/passport", icon: Wallet, label: "Passport" },
   { href: "/dashboard/founder", icon: Users, label: "Founders" },
-  { href: "/dashboard/governance", icon: Landmark, label: "Governance" },
-  { href: "/dashboard/constitution", icon: Scale, label: "Constitution" },
+  { href: "/dashboard/treasury", icon: Landmark, label: "Treasury (Cap Table)" },
+  { href: "/dashboard/governance", icon: Scale, label: "Governance" },
   { href: "/dashboard/assets", icon: Store, label: "Marketplace" },
+  { href: "/dashboard/exchange", icon: TrendingUp, label: "Exchange DEX" },
   { href: "/dashboard/financing", icon: HandCoins, label: "Financing" },
   { href: "/dashboard/ledger", icon: BookOpen, label: "My Assets" },
   { href: "/dashboard/ledger/public", icon: Globe, label: "Sovereign Ledger" },
+  { href: "/dashboard/developers", icon: Terminal, label: "Cartographer CLI" },
   { href: "/dashboard/security", icon: Shield, label: "Immune System" },
   { href: "/dashboard/diplomatic-portal", icon: Handshake, label: "Diplomatic Portal" },
   { href: "/roadmap", icon: GitMerge, label: "Roadmap" },
@@ -54,22 +58,12 @@ export function MainNav() {
       <SidebarHeader className="flex-grow-0 justify-center p-2">
         <Link href="/" prefetch={false}>
           <SidebarMenuButton tooltip={{ children: "Home" }} className="h-auto">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-8 w-8 text-primary"
-            >
-              <path d="M12 2.5a9.5 9.5 0 0 1 9.5 9.5c0 2.22-0.76 4.26-2.06 5.88L12 21.5l-7.44-3.12A9.5 9.5 0 0 1 2.5 12 9.5 9.5 0 0 1 12 2.5Z" />
-              <path d="M12 2.5v19" />
-            </svg>
-            <span className="text-lg font-headline font-semibold">Promethea</span>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                <span className="font-black text-black text-xs tracking-tighter">PNS</span>
+              </div>
+              <span className="font-headline font-black tracking-[0.2em] text-xs text-white">PROMETHEAN</span>
+            </div>
           </SidebarMenuButton>
         </Link>
       </SidebarHeader>
