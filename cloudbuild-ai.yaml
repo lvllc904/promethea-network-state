@@ -22,3 +22,7 @@ steps:
       - '--min-instances=0'
       - '--timeout=300'
 
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+
