@@ -31,9 +31,11 @@ export default function AtlasPage() {
 
   const { toast } = (require('@promethea/ui') as any);
   const { data: refineries } = useSovereignData<any[]>('/api/refineries');
+  const { data: institutionsData } = useSovereignData<any[]>('/api/institutions');
 
   const assets = liveAssets || [];
   const layers = atlasLayers || [];
+  const institutions = institutionsData || [];
 
   const handleAction = async (method: string, params: any) => {
     try {
@@ -148,7 +150,7 @@ export default function AtlasPage() {
                         <span className="text-[8px] font-bold text-gray-600 uppercase">{asset.type}</span>
                         <h3 className="text-xs font-bold uppercase truncate text-white">{asset.name}</h3>
                      </div>
-                     <RealityBadge state="SIMULATED" size="sm" />
+                     <RealityBadge state={asset.status as any} size="sm" />
                   </div>
                   <div className="space-y-2 mb-4">
                      <div className="flex justify-between text-[9px]">
@@ -187,10 +189,7 @@ export default function AtlasPage() {
            </div>
            
            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                { name: 'Promethean Society DAO', type: 'DAO', status: 'ACTUALIZED', stake: '50,000 UVT' },
-                { name: 'Archipelago Holdings LLC', type: 'LLC', status: 'STAKED', stake: '12,500 UVT' }
-              ].map((org, i) => (
+              {institutions.length > 0 ? institutions.map((org, i) => (
                 <div key={i} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-emerald-500/50 transition-all">
                    <div className="flex justify-between items-start mb-3">
                       <div>
@@ -209,11 +208,12 @@ export default function AtlasPage() {
                       </button>
                    </div>
                 </div>
-              ))}
-              <div className="p-8 border border-dashed border-gray-800 rounded flex flex-col items-center justify-center text-center opacity-40">
-                 <Building2 className="w-6 h-6 text-gray-700 mb-2" />
-                 <span className="text-[8px] uppercase font-bold text-gray-600 tracking-widest">Awaiting Institutional Entry</span>
-              </div>
+              )) : (
+                <div className="p-8 border border-dashed border-gray-800 rounded flex flex-col items-center justify-center text-center opacity-40 col-span-2">
+                   <Building2 className="w-6 h-6 text-gray-700 mb-2" />
+                   <span className="text-[8px] uppercase font-bold text-gray-600 tracking-widest">Awaiting Institutional Entry</span>
+                </div>
+              )}
            </div>
         </div>
       )

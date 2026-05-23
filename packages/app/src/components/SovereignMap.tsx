@@ -52,7 +52,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         disableDefaultUI: true,
                         backgroundColor: '#000000',
                         gestureHandling: 'greedy',
-                        mapId: 'DEMO_MAP_ID'
+                        mapId: 'aa43c9e9e082ca1d8d1fc65d'
                     });
                     mapInstanceRef.current = map;
 
