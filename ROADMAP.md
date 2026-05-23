@@ -17,6 +17,7 @@ TPNS has evolved from a standalone digital jurisdiction into the **Sovereign Sub
 *   **Phase 2: UCS-ADM Authorization Integration [PENDING]**: Updating the Auth Gateway so stateless JWTs contain contextual `syndicates` map claims.
 *   **Phase 3: The Sovereign Cockpit [PENDING]**: Connecting the Next.js `activeContext` switcher to reload the dashboard trays with private Syndicate data (Treasury, Cap Table, Intel).
 *   **Phase 4: Autonomous Syndicate Generation (ASGI) [PENDING]**: Linking Promethea's legal engine to auto-generate off-grid LLC operating agreements and provision infrastructure upon clicking "Form Syndicate".
+*   **Phase 5: Autonomous Proof-of-Work Oracle & Biological PoW [NEW]**: Implementing an AI-driven valuation matrix for automated equity generation from GitHub commits and verifiable physical labor. [View the Plan](BIOLOGICAL_POW_AND_AUTONOMOUS_EVALUATION_PLAN.md)
 
 ### 4.2: The "Shadow Protocol" B2B Engine - [IN PROGRESS]
 *   **The Mission:** fund the state by fixing the "Invisible Web" problem for legacy companies.

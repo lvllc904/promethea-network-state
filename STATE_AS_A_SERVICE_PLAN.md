@@ -43,3 +43,7 @@ This document outlines the architectural, operational, and user-experience plan 
 - **Multi-Tiered Dehydration (Cold Storage)**:
   - *The Dehydration Event*: Upon logout, the Service Worker compiles the final state into a highly compressed, E2E encrypted file.
   - *Storage Agnosticism*: State can be dehydrated to cloud drives or directly to physical air-gapped hardware wallets (Cold Storage). When plugged back in, the local browser reads the hash state, operates offline, and delta-syncs when returning to the mesh.
+
+## 9. The Autonomous Evaluation Pipeline & Biological PoW
+- **SaaS Offering**: The AI-driven valuation engine can be attached to external GitHub repositories via the "Shadow Protocol" or DepthOS bridge, offering a free tier for sweat equity analysis.
+- **Detailed Blueprint**: See the [Biological PoW and Autonomous Evaluation Plan](BIOLOGICAL_POW_AND_AUTONOMOUS_EVALUATION_PLAN.md) for full mechanics on the AI Auditor, Elegance Multiplier, and Biological Proof-of-Work verification.
