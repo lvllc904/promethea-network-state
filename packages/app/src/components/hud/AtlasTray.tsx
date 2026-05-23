@@ -85,7 +85,7 @@ export const AtlasTray = () => {
     return (
         <div className="space-y-4 text-zinc-100">
             {/* Quick Actions Panel */}
-            <div className="grid grid-cols-3 gap-1.5 p-1 bg-black/40 border border-white/5 rounded-lg">
+            <div className="grid grid-cols-4 gap-1.5 p-1 bg-black/40 border border-white/5 rounded-lg">
                 <button
                     onClick={() => handleAction('initialize_scan')}
                     disabled={isProcessing !== null}
@@ -108,6 +108,13 @@ export const AtlasTray = () => {
                 >
                     <PlusCircle className="w-3 h-3 text-purple-400" />
                     <span>Land Claim</span>
+                </button>
+                <button
+                    onClick={() => activateFocusPanel('BIOLOGICAL_POW')}
+                    className="py-1 px-1 flex flex-col items-center justify-center gap-1 bg-white/5 hover:bg-white/10 rounded transition-all text-[8px] font-black uppercase text-teal-400 hover:text-teal-300"
+                >
+                    <Zap className="w-3 h-3 text-teal-400" />
+                    <span>PoW Oracle</span>
                 </button>
             </div>
 

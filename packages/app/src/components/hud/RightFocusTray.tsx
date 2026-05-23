@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { createChart, IChartApi, ISeriesApi, ColorType, CandlestickSeries } from 'lightweight-charts';
+import { ProofOfWorkSubmission } from '../intel/ProofOfWorkSubmission';
 
 // --- SUB-PANEL: RWA EXCHANGE ---
 function ExchangePanel() {
@@ -1775,6 +1776,7 @@ export const RightFocusTray = () => {
         case 'OMNI_SCANNER': title = 'PROMETHEA // OMNI-SCANNER'; break;
         case 'ASSET_CANVAS': title = 'ASGI // DYNAMIC ASSET CANVAS'; break;
         case 'CONFERENCE': title = 'ASGI // LIVE CONFERENCE'; break;
+        case 'BIOLOGICAL_POW': title = 'ORACLE // BIOLOGICAL PROOF OF WORK'; break;
     }
 
     return (
@@ -1802,6 +1804,16 @@ export const RightFocusTray = () => {
                 {activeFocusPanel === 'OMNI_SCANNER' && <OmniScannerPanel />}
                 {activeFocusPanel === 'ASSET_CANVAS' && <AssetCanvasPanel />}
                 {activeFocusPanel === 'CONFERENCE' && <ConferencePanel />}
+                {activeFocusPanel === 'BIOLOGICAL_POW' && (
+                    <div className="flex items-center justify-center h-full">
+                        <ProofOfWorkSubmission 
+                            taskId="oracle-eval-task"
+                            syndicateId="primary-syndicate"
+                            onSuccess={() => activateFocusPanel(null)}
+                            onCancel={() => activateFocusPanel(null)}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );
