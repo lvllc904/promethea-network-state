@@ -38,7 +38,7 @@ steps:
       - 'CLOUDFLARE_EMAIL=lvllc@lvhllc.org'
 
 options:
-  machineType: E2_HIGHCPU_32
+  machineType: E2_HIGHCPU_8
   diskSizeGb: 100
   logging: CLOUD_LOGGING_ONLY
 timeout: '1200s'
