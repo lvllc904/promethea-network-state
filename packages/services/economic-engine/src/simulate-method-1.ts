@@ -2,7 +2,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import * as fs from 'fs';
 
-const API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyBg_tuTAkH_EF7SGpwfTHhWdEf99v6kEVU';
+const API_KEY = process.env.GEMINI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 async function simulate() {

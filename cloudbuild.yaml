@@ -56,7 +56,7 @@ steps:
       - --build-arg=NEXT_PUBLIC_AI_SERVICE_URL=https://ai-service-385120524005.us-central1.run.app
       - --build-arg=NEXT_PUBLIC_GUARDIAN_URL=https://authentication-service-385120524005.us-central1.run.app
       - --build-arg=NEXT_PUBLIC_ENGINE_URL=https://economic-engine-385120524005.us-central1.run.app
-      - --build-arg=NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyC06Ezpef-AKBBuLeThqWmP687vStwS2mE
+      - --build-arg=NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${_MAPS_KEY}
       - --build-arg=NEXT_PUBLIC_DISABLE_FIREBASE=true
       - --build-arg=CACHE_BUSTER=$BUILD_ID
 

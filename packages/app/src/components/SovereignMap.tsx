@@ -24,7 +24,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
 
                 try {
                     await setOptions({
-                        key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyC06Ezpef-AKBBuLeThqWmP687vStwS2mE',
+                        key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
                         v: 'weekly',
                         libraries: ['maps', 'marker']
                     });

@@ -53,6 +53,6 @@ substitutions:
   _GUARDIAN_URL: 'https://authentication-service-385120524005.us-central1.run.app'
   _ENGINE_URL: 'https://economic-engine-385120524005.us-central1.run.app'
   _LEDGER_URL: 'https://sovereign-ledger-385120524005.us-central1.run.app'
-  _MAPS_KEY: 'AIzaSyC06Ezpef-AKBBuLeThqWmP687vStwS2mE'
+  _MAPS_KEY: ''
   _DISABLE_FIREBASE: 'true'
 
