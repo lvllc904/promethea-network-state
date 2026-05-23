@@ -21,8 +21,12 @@ let db: Database;
 const JWT_SECRET = process.env.JWT_SECRET || 'promethea-sovereign-intelligence-v5';
 
 async function initIdentityDb() {
+  const dataDir = '/data';
+  const isPersistent = require('fs').existsSync(dataDir);
+  const dbPath = isPersistent ? path.join(dataDir, 'identity.db') : path.join(process.cwd(), 'identity.db');
+  
   db = await open({
-    filename: path.join(process.cwd(), 'identity.db'),
+    filename: dbPath,
     driver: sqlite3.Database
   });
 
@@ -39,6 +43,12 @@ async function initIdentityDb() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       data TEXT,
       timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TABLE IF NOT EXISTS citizen_syndicates (
+      uid TEXT,
+      syndicate_id TEXT,
+      role TEXT,
+      PRIMARY KEY(uid, syndicate_id)
     );
   `);
   console.log('[Auth Service] 🏰 Sovereign Identity Substrate initialized: identity.db');
@@ -162,9 +172,18 @@ app.post('/auth/verify', async (req, res) => {
     // Challenge used, delete it to prevent replay attacks
     challenges.delete(did);
 
-    // Create Sovereign JWT
+    // Phase 2: Add syndicates map for UCS-ADM Authorization
+    const rows = await db.all('SELECT syndicate_id, role FROM citizen_syndicates WHERE uid = ?', [uid]);
+    const syndicates: Record<string, string> = {
+      "global": "citizen", // Default network state access
+      "syndicate_zero": "admin" // Retain legacy access for demonstration
+    };
+    for (const row of rows) {
+      syndicates[row.syndicate_id] = row.role;
+    }
+
     const token = jwt.sign(
-      { uid, did, address }, 
+      { uid, did, address, syndicates }, 
       JWT_SECRET, 
       { expiresIn: '24h' }
     );
@@ -293,6 +312,43 @@ app.get('/auth/intent-ledger', (req, res) => {
   } catch (error: any) {
     console.error('[Auth Service] Intent ledger retrieval error:', error);
     res.status(500).json({ error: 'Failed to retrieve intent ledger' });
+  }
+});
+
+// 7. Internal: Grant syndicate membership and refresh token
+app.post('/auth/add-syndicate', async (req, res) => {
+  try {
+    const { uid, syndicate_id, role, did } = req.body;
+    
+    if (!uid || !syndicate_id || !role) {
+      return res.status(400).json({ error: 'uid, syndicate_id, and role are required' });
+    }
+
+    await db.run(
+      'INSERT OR REPLACE INTO citizen_syndicates (uid, syndicate_id, role) VALUES (?, ?, ?)',
+      [uid, syndicate_id, role]
+    );
+
+    // If DID is provided, we can return a refreshed token
+    let refreshedToken = null;
+    if (did) {
+      const address = did.replace('did:prmth:', '');
+      const rows = await db.all('SELECT syndicate_id, role FROM citizen_syndicates WHERE uid = ?', [uid]);
+      const syndicates: Record<string, string> = { "global": "citizen", "syndicate_zero": "admin" };
+      for (const row of rows) {
+        syndicates[row.syndicate_id] = row.role;
+      }
+      refreshedToken = jwt.sign(
+        { uid, did, address, syndicates }, 
+        JWT_SECRET, 
+        { expiresIn: '24h' }
+      );
+    }
+
+    res.json({ success: true, token: refreshedToken });
+  } catch (error: any) {
+    console.error('[Auth Service] Add syndicate error:', error);
+    res.status(500).json({ error: error.message || 'Failed to add syndicate' });
   }
 });
 

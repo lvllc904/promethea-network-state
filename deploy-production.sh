@@ -104,6 +104,9 @@ echo ""
 echo "🌐 [5/5] Building and deploying DAC Frontend (SOVEREIGN MODE)..."
 
 # Inject backend URLs into the frontend build
+echo "   Running make copy-wasm..."
+make copy-wasm
+
 export NEXT_PUBLIC_AI_SERVICE_URL=${AI_URL}
 export NEXT_PUBLIC_GUARDIAN_URL=${GUARDIAN_URL}
 export NEXT_PUBLIC_ENGINE_URL=${ENGINE_URL}

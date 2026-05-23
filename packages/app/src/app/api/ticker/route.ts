@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 
 // In-memory cache: one entry lives for CACHE_TTL_MS

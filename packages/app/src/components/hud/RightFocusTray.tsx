@@ -6,7 +6,8 @@ import {
     X, Wallet, TrendingUp, RefreshCw, ThumbsUp, ThumbsDown, 
     ArrowUpRight, ArrowDownLeft, Terminal, Play, Database,
     FileText, Key, Award, UserCheck, Shield, BookOpen, ExternalLink,
-    BrainCircuit, Cpu, Server, Layers, Loader2, Zap
+    BrainCircuit, Cpu, Server, Layers, Loader2, Zap,
+    PhoneOff, Mic, MicOff, Video, VideoOff, Radio
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { createChart, IChartApi, ISeriesApi, ColorType, CandlestickSeries } from 'lightweight-charts';
@@ -1475,6 +1476,287 @@ const AssetCanvasPanel = () => {
     );
 };
 
+// --- SUB-PANEL: DYNAMIC VIDEO CONFERENCE ---
+function ConferencePanel() {
+    const { activeMeetUrl, endVideoConference } = useHUD();
+    const [seconds, setSeconds] = useState(0);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isVideoOff, setIsVideoOff] = useState(false);
+    const [isScreenSharing, setIsScreenSharing] = useState(false);
+    const [viewMode, setViewMode] = useState<'meet' | 'simulator'>(activeMeetUrl ? 'meet' : 'simulator');
+
+    // Call duration timer
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSeconds(prev => prev + 1);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const formatTime = (totalSeconds: number) => {
+        const mins = Math.floor(totalSeconds / 60);
+        const secs = totalSeconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    };
+
+    // Simulated WebRTC audio visualization frequencies
+    const [freqs, setFreqs] = useState<number[]>([12, 24, 8, 45, 18, 30, 5, 20, 15, 38, 22, 10, 42, 28, 14]);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setFreqs(prev => prev.map(() => Math.floor(Math.random() * 40) + 5));
+        }, 100);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <div className="flex flex-col h-full overflow-hidden text-white space-y-4 select-none">
+            {/* Status bar */}
+            <div className="flex justify-between items-center p-3 bg-black/45 border border-white/5 rounded-xl">
+                <div className="flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                    </span>
+                    <span className="text-[10px] font-mono font-black uppercase tracking-wider text-cyan-400">
+                        WebRTC Connected
+                    </span>
+                    <span className="text-[8px] font-mono text-zinc-500">· secp256k1-E2EE</span>
+                </div>
+                <div className="flex items-center gap-3">
+                    <span className="text-xs font-mono font-bold text-white bg-white/5 px-2.5 py-0.5 rounded border border-white/5 shadow-[0_0_10px_rgba(255,255,255,0.02)]">
+                        {formatTime(seconds)}
+                    </span>
+                    {activeMeetUrl && (
+                        <div className="flex rounded bg-black/40 p-0.5 border border-white/5 text-[8px] font-mono">
+                            <button 
+                                onClick={() => setViewMode('meet')}
+                                className={`px-2 py-0.5 rounded ${viewMode === 'meet' ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-white'}`}
+                            >
+                                Google Meet
+                            </button>
+                            <button 
+                                onClick={() => setViewMode('simulator')}
+                                className={`px-2 py-0.5 rounded ${viewMode === 'simulator' ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-white'}`}
+                            >
+                                Simulator
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Video Viewport / Simulator Grid */}
+            <div className="flex-1 min-h-[300px] relative overflow-hidden bg-black/40 border border-white/5 rounded-xl">
+                {viewMode === 'meet' && activeMeetUrl ? (
+                    <div className="w-full h-full flex flex-col justify-between p-1">
+                        <iframe
+                            src={activeMeetUrl}
+                            allow="camera; microphone; fullscreen; display-capture; autoplay"
+                            className="w-full flex-1 border border-cyan-500/10 rounded-lg bg-black/60 shadow-inner"
+                        />
+                        <div className="p-2 flex justify-between items-center text-[8px] font-mono text-zinc-500 bg-black/20 rounded-b-lg border-t border-white/5 mt-1">
+                            <span className="truncate max-w-[280px]">Meeting URL: <a href={activeMeetUrl} target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">{activeMeetUrl}</a></span>
+                            <span className="shrink-0 text-emerald-400">● LIVE HUD PIPELINE</span>
+                        </div>
+                    </div>
+                ) : (
+                    /* High-Fidelity WebRTC Simulator */
+                    <div className="w-full h-full flex flex-col justify-between p-3 space-y-3">
+                        {/* 2x2 Grid of participants */}
+                        <div className="grid grid-cols-2 gap-3 flex-1">
+                            {/* Participant 1: User */}
+                            <div className="relative bg-zinc-950 border border-white/5 rounded-lg overflow-hidden flex flex-col justify-between p-2">
+                                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none" />
+                                {/* Cyber scanline effect if video on */}
+                                {!isVideoOff && (
+                                    <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,3px_100%] opacity-20 pointer-events-none" />
+                                )}
+                                <div className="flex justify-between items-start z-10">
+                                    <span className="text-[8px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-1 py-0.2 rounded uppercase font-bold tracking-wider">
+                                        YOU (Citizen)
+                                    </span>
+                                    <span className="text-[7px] font-mono text-zinc-600">secp256k1</span>
+                                </div>
+                                <div className="flex-1 flex items-center justify-center py-4 z-10">
+                                    {!isVideoOff ? (
+                                        /* Orbital particle mesh animation */
+                                        <div className="relative w-12 h-12 flex items-center justify-center">
+                                            <div className="absolute inset-0 rounded-full border border-dashed border-cyan-500/40 animate-[spin_10s_linear_infinite]" />
+                                            <div className="absolute inset-2 rounded-full border border-double border-cyan-500/20 animate-[spin_6s_linear_infinite_reverse]" />
+                                            <div className="w-6 h-6 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+                                                <span className="text-[10px]">📡</span>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="w-10 h-10 rounded-full bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-600 font-mono text-xs">
+                                            MUTED
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="flex justify-between items-center z-10 text-[7px] font-mono text-zinc-500 mt-1">
+                                    <span className="flex items-center gap-0.5">
+                                        {isMuted ? '🔇 Audio Off' : '🎙️ Mic Active'}
+                                    </span>
+                                    <span>Signal: 100%</span>
+                                </div>
+                            </div>
+
+                            {/* Participant 2: Citizen Joshua */}
+                            <div className="relative bg-zinc-950 border border-white/5 rounded-lg overflow-hidden flex flex-col justify-between p-2">
+                                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none" />
+                                <div className="flex justify-between items-start z-10">
+                                    <span className="text-[8px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1 py-0.2 rounded uppercase font-bold tracking-wider">
+                                        Citizen Joshua
+                                    </span>
+                                    <span className="text-[7px] font-mono text-zinc-600">secp256k1</span>
+                                </div>
+                                <div className="flex-1 flex items-center justify-center py-4 z-10">
+                                    {/* Joshua voice mesh */}
+                                    <div className="relative w-12 h-12 flex items-center justify-center">
+                                        <div className="absolute inset-0 rounded-full border border-dashed border-emerald-500/30 animate-[spin_8s_linear_infinite]" />
+                                        <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shadow-[0_0_10px_rgba(16,185,129,0.1)]">
+                                            <span className="text-xs">💎</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between items-center z-10 text-[7px] font-mono text-zinc-500 mt-1">
+                                    <span className="flex items-center gap-0.5">
+                                        🎙️ Mic Active
+                                    </span>
+                                    <span>Signal: 98%</span>
+                                </div>
+                            </div>
+
+                            {/* Participant 3: Promethea ASGI */}
+                            <div className="relative bg-zinc-950 border border-white/5 rounded-lg overflow-hidden flex flex-col justify-between p-2">
+                                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent pointer-events-none" />
+                                <div className="flex justify-between items-start z-10">
+                                    <span className="text-[8px] font-mono text-purple-400 bg-purple-500/10 border border-purple-500/20 px-1 py-0.2 rounded uppercase font-bold tracking-wider">
+                                        Promethea ASGI
+                                    </span>
+                                    <span className="text-[7px] font-mono text-purple-500">Cognitive Hub</span>
+                                </div>
+                                <div className="flex-1 flex items-center justify-center py-4 z-10">
+                                    <div className="relative w-12 h-12 flex items-center justify-center">
+                                        <div className="absolute inset-0 rounded-full border border-dashed border-purple-500/30 animate-[spin_12s_linear_infinite]" />
+                                        <div className="w-8 h-8 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center shadow-[0_0_10px_rgba(168,85,247,0.1)]">
+                                            <span className="text-xs">⚡</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between items-center z-10 text-[7px] font-mono text-zinc-500 mt-1">
+                                    <span>🧠 Core Substrate</span>
+                                    <span>Quorum: VETO</span>
+                                </div>
+                            </div>
+
+                            {/* Participant 4: Antigravity */}
+                            <div className="relative bg-zinc-950 border border-white/5 rounded-lg overflow-hidden flex flex-col justify-between p-2">
+                                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none" />
+                                <div className="flex justify-between items-start z-10">
+                                    <span className="text-[8px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-1 py-0.2 rounded uppercase font-bold tracking-wider">
+                                        Antigravity Pair
+                                    </span>
+                                    <span className="text-[7px] font-mono text-amber-500">Staging Link</span>
+                                </div>
+                                <div className="flex-1 flex items-center justify-center py-4 z-10">
+                                    <div className="relative w-12 h-12 flex items-center justify-center">
+                                        <div className="absolute inset-0 rounded-full border border-dashed border-amber-500/30 animate-[spin_6s_linear_infinite]" />
+                                        <div className="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                                            <span className="text-xs">🪐</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between items-center z-10 text-[7px] font-mono text-zinc-500 mt-1">
+                                    <span>👾 Pair Engine</span>
+                                    <span>Sandbox: OK</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Interactive audio waves visualizer */}
+                        <div className="h-10 bg-black/50 border border-white/5 rounded-lg flex items-center justify-center gap-1.5 px-3">
+                            {freqs.map((freq, idx) => (
+                                <span 
+                                    key={idx}
+                                    style={{ height: `${freq}%` }}
+                                    className="w-1 bg-gradient-to-t from-cyan-600 via-cyan-400 to-indigo-500 rounded-full transition-all duration-75"
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Connection Metrics dashboard */}
+            <div className="grid grid-cols-4 gap-2.5 p-3 bg-black/40 border border-white/5 rounded-xl font-mono text-[9px]">
+                <div className="p-2 bg-black/40 border border-white/5 rounded-lg flex flex-col gap-0.5">
+                    <span className="text-zinc-500 uppercase font-black tracking-widest text-[7px]">Bandwidth</span>
+                    <span className="text-white font-bold text-[10px]">1.24 Mbps</span>
+                </div>
+                <div className="p-2 bg-black/40 border border-white/5 rounded-lg flex flex-col gap-0.5">
+                    <span className="text-zinc-500 uppercase font-black tracking-widest text-[7px]">Ping</span>
+                    <span className="text-cyan-400 font-bold text-[10px]">12 ms</span>
+                </div>
+                <div className="p-2 bg-black/40 border border-white/5 rounded-lg flex flex-col gap-0.5">
+                    <span className="text-zinc-500 uppercase font-black tracking-widest text-[7px]">Packet Loss</span>
+                    <span className="text-emerald-400 font-bold text-[10px]">0.01 %</span>
+                </div>
+                <div className="p-2 bg-black/40 border border-white/5 rounded-lg flex flex-col gap-0.5">
+                    <span className="text-zinc-500 uppercase font-black tracking-widest text-[7px]">E2EE Key</span>
+                    <span className="text-purple-400 font-bold text-[10px] truncate">0x9f1d2b8a</span>
+                </div>
+            </div>
+
+            {/* Video conference call controls */}
+            <div className="flex gap-2.5 items-center justify-between p-3 bg-zinc-900 border border-white/5 rounded-xl">
+                <div className="flex items-center gap-2">
+                    <button 
+                        onClick={() => setIsMuted(prev => !prev)}
+                        className={`p-2.5 rounded-lg border transition-all flex items-center justify-center ${
+                            isMuted 
+                                ? 'bg-red-500/20 border-red-500/30 text-red-400' 
+                                : 'bg-black/50 border-white/10 text-zinc-300 hover:border-white/20 hover:text-white'
+                        }`}
+                        title={isMuted ? "Unmute Mic" : "Mute Mic"}
+                    >
+                        {isMuted ? <MicOff size={16} /> : <Mic size={16} />}
+                    </button>
+                    <button 
+                        onClick={() => setIsVideoOff(prev => !prev)}
+                        className={`p-2.5 rounded-lg border transition-all flex items-center justify-center ${
+                            isVideoOff 
+                                ? 'bg-red-500/20 border-red-500/30 text-red-400' 
+                                : 'bg-black/50 border-white/10 text-zinc-300 hover:border-white/20 hover:text-white'
+                        }`}
+                        title={isVideoOff ? "Turn Camera On" : "Turn Camera Off"}
+                    >
+                        {isVideoOff ? <VideoOff size={16} /> : <Video size={16} />}
+                    </button>
+                    <button 
+                        onClick={() => setIsScreenSharing(prev => !prev)}
+                        className={`p-2.5 rounded-lg border transition-all flex items-center justify-center ${
+                            isScreenSharing 
+                                ? 'bg-cyan-500/20 border-cyan-500/30 text-cyan-400' 
+                                : 'bg-black/50 border-white/10 text-zinc-300 hover:border-white/20 hover:text-white'
+                        }`}
+                        title="Share Screen"
+                    >
+                        <Radio size={16} />
+                    </button>
+                </div>
+
+                <button 
+                    onClick={endVideoConference}
+                    className="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-black text-[10px] uppercase tracking-widest rounded-lg flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(239,68,68,0.35)]"
+                >
+                    <PhoneOff size={14} /> Disconnect Call
+                </button>
+            </div>
+        </div>
+    );
+}
+
 // --- CONTAINER TRAY COMPONENT ---
 export const RightFocusTray = () => {
     const { activeFocusPanel, activateFocusPanel } = useHUD();
@@ -1492,6 +1774,7 @@ export const RightFocusTray = () => {
         case 'WALLET': title = 'IDENTITY // SOVEREIGN WALLET'; break;
         case 'OMNI_SCANNER': title = 'PROMETHEA // OMNI-SCANNER'; break;
         case 'ASSET_CANVAS': title = 'ASGI // DYNAMIC ASSET CANVAS'; break;
+        case 'CONFERENCE': title = 'ASGI // LIVE CONFERENCE'; break;
     }
 
     return (
@@ -1518,6 +1801,7 @@ export const RightFocusTray = () => {
                 {activeFocusPanel === 'WALLET' && <WalletPanel />}
                 {activeFocusPanel === 'OMNI_SCANNER' && <OmniScannerPanel />}
                 {activeFocusPanel === 'ASSET_CANVAS' && <AssetCanvasPanel />}
+                {activeFocusPanel === 'CONFERENCE' && <ConferencePanel />}
             </div>
         </div>
     );

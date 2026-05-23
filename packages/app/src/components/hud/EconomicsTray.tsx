@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Wallet, BarChart3, Zap, TrendingUp, RefreshCw, ThumbsUp, ThumbsDown, ShieldCheck } from 'lucide-react';
+import { Wallet, BarChart3, Zap, TrendingUp, RefreshCw, ThumbsUp, ThumbsDown, ShieldCheck, Plus, Trash2, BrainCircuit } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
 
 function useBFFData<T>(path: string, defaultValue: T): { data: T; refetch: () => void } {
@@ -25,15 +25,33 @@ const generateWalk = (start: number, vol: number, trend: number, count = 30) => 
 };
 
 import { useHUD } from '@/lib/hud-store';
+import { useRouter } from 'next/navigation';
 
 export const EconomicsTray = () => {
-    const { activateFocusPanel, triggerOmniScanner, activateAssetCanvas } = useHUD();
+    const { 
+        activateFocusPanel, 
+        triggerOmniScanner, 
+        activateAssetCanvas,
+        watchlists,
+        activeWatchlistName,
+        createWatchlist,
+        deleteWatchlist,
+        addTickerToWatchlist,
+        removeTickerFromWatchlist,
+        setActiveWatchlist,
+        setHUDState 
+    } = useHUD();
+    const router = useRouter();
+    
+    const [newListName, setNewListName] = useState('');
+    const [newTickerName, setNewTickerName] = useState('');
+
     const { data: intel } = useBFFData<any>('/api/intel', null);
     const { data: waterfall, refetch: refetchWaterfall } = useBFFData<any>('/api/waterfall', null);
     const { data: methods } = useBFFData<any[]>('/api/refineries', []);
     const { data: broker } = useBFFData<any>('/api/broker', null);
     const { data: assets, refetch: refetchAssets } = useBFFData<any[]>('/api/assets', []);
-    const [activeSection, setActiveSection] = useState<'reserve' | 'equities' | 'crypto' | 'treasury' | 'waterfall'>('equities');
+    const [activeSection, setActiveSection] = useState<'reserve' | 'watchlists' | 'treasury' | 'waterfall' | 'methods' | 'marketplace' | 'carry'>('watchlists');
     const [isSweeping, setIsSweeping] = useState(false);
 
     const [extraAssets, setExtraAssets] = useState<any[]>([]);
@@ -88,8 +106,7 @@ export const EconomicsTray = () => {
 
     const SECTIONS = [
         { id: 'reserve', label: 'Reserve' },
-        { id: 'equities', label: 'Equities' },
-        { id: 'crypto', label: 'Crypto' },
+        { id: 'watchlists', label: 'Watchlists' },
         { id: 'treasury', label: 'Treasury' },
         { id: 'waterfall', label: 'Waterfall' },
     ] as const;
@@ -188,58 +205,139 @@ export const EconomicsTray = () => {
                 </div>
             )}
 
-            {/* EQUITIES SECTION */}
-            {activeSection === 'equities' && (
-                <div className="space-y-3">
-                    <div className="p-4 bg-black/40 border border-white/5 rim-highlight-reality-live rounded-lg">
-                        <div className="flex justify-between items-center mb-3">
+            {/* WATCHLISTS SECTION */}
+            {activeSection === 'watchlists' && (
+                <div className="space-y-3 font-mono">
+                    {/* Watchlist Manager Panel */}
+                    <div className="p-3 bg-black/40 border border-white/5 rim-highlight-reality-live rounded-lg space-y-3">
+                        <div className="flex justify-between items-center pb-2 border-b border-white/5">
                             <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                                <TrendingUp className="w-3 h-3 text-cyan-400" /> Alpaca / IBKR Equities
+                                <TrendingUp className="w-3 h-3 text-emerald-400" /> Active Watchlist
                             </p>
-                            <span className="text-[7px] font-black tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-1.5 py-0.5 rounded">
-                                LIVE FEED
+                            <span className="text-[7px] font-black tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-1.5 py-0.5 rounded animate-pulse">
+                                DYNAMIC SUBSTRATE
                             </span>
                         </div>
-                        <div className="space-y-2">
-                            {['TSLA', 'AAPL', 'NVDA', 'MSFT'].map((ticker) => (
-                                <div 
-                                    key={ticker} 
-                                    onClick={() => activateAssetCanvas(ticker)}
-                                    className="flex justify-between items-center p-3 bg-white/5 hover:bg-cyan-500/10 border border-white/5 hover:border-cyan-500/30 transition-all cursor-pointer rounded"
+
+                        {/* Watchlist Selector Dropdown */}
+                        <div className="flex gap-2">
+                            <select
+                                value={activeWatchlistName}
+                                onChange={(e) => setActiveWatchlist(e.target.value)}
+                                className="flex-1 bg-black/60 border border-white/10 rounded px-2.5 py-1.5 text-[10px] text-white focus:outline-none focus:border-emerald-500/40"
+                            >
+                                {watchlists.map(w => (
+                                    <option key={w.name} value={w.name}>{w.name}</option>
+                                ))}
+                            </select>
+                            {activeWatchlistName !== 'Default Watchlist' && (
+                                <button
+                                    onClick={() => deleteWatchlist(activeWatchlistName)}
+                                    className="p-1.5 bg-red-950/20 hover:bg-red-950/50 border border-red-500/30 hover:border-red-500/60 text-red-400 rounded transition-colors flex items-center justify-center"
+                                    title="Delete Watchlist"
                                 >
-                                    <span className="text-xs font-black text-white">{ticker}</span>
-                                    <span className="text-[9px] font-bold text-cyan-400 border border-cyan-500/20 px-2 py-0.5 rounded">
-                                        VIEW CANVAS
-                                    </span>
-                                </div>
-                            ))}
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Create Watchlist Input Form */}
+                        <div className="flex gap-1.5">
+                            <input
+                                type="text"
+                                placeholder="Create list (e.g. Blue Chips)..."
+                                value={newListName}
+                                onChange={(e) => setNewListName(e.target.value)}
+                                onKeyDown={(e) => { if (e.key === 'Enter') { createWatchlist(newListName); setNewListName(''); } }}
+                                className="flex-1 bg-black/50 border border-white/5 rounded px-2 py-1 text-[8.5px] text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/20"
+                            />
+                            <button
+                                onClick={() => { createWatchlist(newListName); setNewListName(''); }}
+                                className="px-2 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 text-[8px] font-bold uppercase rounded transition-colors flex items-center gap-1"
+                            >
+                                <Plus className="w-3 h-3" /> List
+                            </button>
                         </div>
                     </div>
-                </div>
-            )}
 
-            {/* CRYPTO SECTION */}
-            {activeSection === 'crypto' && (
-                <div className="space-y-3">
-                    <div className="p-4 bg-black/40 border border-white/5 rim-highlight-reality-live rounded-lg">
-                        <div className="flex justify-between items-center mb-3">
+                    {/* Add Asset Form & Asset Lists */}
+                    <div className="p-3 bg-black/40 border border-white/5 rim-highlight-reality-sim rounded-lg space-y-3">
+                        <div className="flex justify-between items-center pb-1 border-b border-white/5">
                             <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                                <Wallet className="w-3 h-3 text-emerald-400" /> DEX / CEX Assets
+                                <Plus className="w-3 h-3 text-cyan-400" /> Add Asset to {activeWatchlistName}
                             </p>
                         </div>
-                        <div className="space-y-2">
-                            {['SOL', 'ETH', 'USDC', 'BTC'].map((ticker) => (
-                                <div 
-                                    key={ticker} 
-                                    onClick={() => activateAssetCanvas(ticker)}
-                                    className="flex justify-between items-center p-3 bg-white/5 hover:bg-emerald-500/10 border border-white/5 hover:border-emerald-500/30 transition-all cursor-pointer rounded"
-                                >
-                                    <span className="text-xs font-black text-white">{ticker}</span>
-                                    <span className="text-[9px] font-bold text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded">
-                                        VIEW CANVAS
-                                    </span>
-                                </div>
-                            ))}
+
+                        {/* Add Ticker Input */}
+                        <div className="flex gap-1.5">
+                            <input
+                                type="text"
+                                placeholder="Add ticker (e.g. SOL, AAPL, COIN)..."
+                                value={newTickerName}
+                                onChange={(e) => setNewTickerName(e.target.value)}
+                                onKeyDown={(e) => { if (e.key === 'Enter') { addTickerToWatchlist(activeWatchlistName, newTickerName); setNewTickerName(''); } }}
+                                className="flex-1 bg-black/50 border border-white/5 rounded px-2 py-1 text-[8.5px] text-white placeholder-zinc-600 focus:outline-none focus:border-cyan-500/20"
+                            />
+                            <button
+                                onClick={() => { addTickerToWatchlist(activeWatchlistName, newTickerName); setNewTickerName(''); }}
+                                className="px-2 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 text-cyan-400 text-[8px] font-bold uppercase rounded transition-colors flex items-center gap-1"
+                            >
+                                <Plus className="w-3 h-3" /> Ticker
+                            </button>
+                        </div>
+
+                        {/* List of Tickers */}
+                        <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                            {(() => {
+                                const currentList = watchlists.find(w => w.name === activeWatchlistName);
+                                if (!currentList || currentList.tickers.length === 0) {
+                                    return (
+                                        <p className="py-6 text-center text-[8.5px] text-zinc-600 uppercase font-black tracking-widest animate-pulse">
+                                            No assets in this watchlist
+                                        </p>
+                                    );
+                                }
+                                return currentList.tickers.map((ticker) => {
+                                    return (
+                                        <div 
+                                            key={ticker} 
+                                            onClick={() => activateAssetCanvas(ticker)}
+                                            className="flex justify-between items-center p-2.5 bg-white/5 hover:bg-cyan-500/5 border border-white/5 hover:border-cyan-500/20 transition-all cursor-pointer rounded group"
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[11px] font-black text-white">{ticker}</span>
+                                                <span className="text-[7px] text-zinc-600 font-mono hidden group-hover:inline">
+                                                    CLICK TO CHART
+                                                </span>
+                                            </div>
+                                            
+                                            <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                                                {/* Evaluate Button */}
+                                                <button
+                                                    onClick={() => setHUDState({ 
+                                                        pendingCoPilotPrompt: `Evaluate asset constitutional and metabolic health: ${ticker}`,
+                                                        activeFocusPanel: null // Close other overlays
+                                                    })}
+                                                    className="p-1 bg-cyan-950/20 hover:bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 rounded transition-colors flex items-center gap-1 text-[7.5px] font-bold uppercase tracking-wider px-1.5"
+                                                    title={`Evaluate ${ticker}`}
+                                                >
+                                                    <BrainCircuit className="w-3 h-3 text-cyan-400" />
+                                                    <span>EVAL</span>
+                                                </button>
+                                                
+                                                {/* Delete Button */}
+                                                <button
+                                                    onClick={() => removeTickerFromWatchlist(activeWatchlistName, ticker)}
+                                                    className="p-1 hover:bg-red-500/20 text-zinc-500 hover:text-red-400 rounded transition-colors"
+                                                    title="Remove Asset"
+                                                >
+                                                    <Trash2 className="w-3 h-3" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                });
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -333,7 +431,23 @@ export const EconomicsTray = () => {
             {/* MARKETPLACE */}
             {activeSection === 'marketplace' && (
                 <div className="space-y-3">
-                    <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">ASGI Originations — Awaiting Consensus</p>
+                    <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                        <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">ASGI Originations</p>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => router.push('/dashboard/assets')}
+                                className="px-2 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 text-[8px] font-bold uppercase rounded transition-colors"
+                            >
+                                Marketplace
+                            </button>
+                            <button
+                                onClick={() => router.push('/dashboard/syndicate/new')}
+                                className="px-2 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 text-cyan-400 text-[8px] font-bold uppercase rounded transition-colors flex items-center gap-1"
+                            >
+                                <Plus className="w-3 h-3" /> Syndicate
+                            </button>
+                        </div>
+                    </div>
                     {combinedAssets.length === 0 ? (
                         <div className="py-10 text-center">
                             <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest animate-pulse">Promethea is synthesizing the Omni-Lake...</p>
@@ -341,7 +455,7 @@ export const EconomicsTray = () => {
                     ) : combinedAssets.map((a: any) => (
                         <div 
                             key={a.id} 
-                            onClick={() => activateFocusPanel('EXCHANGE')}
+                            onClick={() => router.push('/dashboard/assets')}
                             className="p-3 bg-black/40 border rim-highlight-reality-ai rounded-lg hover:border-emerald-500/20 cursor-pointer transition-colors relative overflow-hidden"
                         >
                             {/* AI Concert Reality Badge */}
@@ -370,7 +484,7 @@ export const EconomicsTray = () => {
                                     </button>
                                 </div>
                                 <button
-                                    onClick={(e) => { e.stopPropagation(); activateFocusPanel('EXCHANGE'); }}
+                                    onClick={(e) => { e.stopPropagation(); router.push('/dashboard/assets'); }}
                                     className="px-3 py-1.5 bg-cyan-900/30 border border-cyan-500/30 hover:bg-cyan-600 text-[8px] font-black uppercase text-cyan-100 hover:text-black rounded transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]"
                                 >
                                     Fund & Execute →

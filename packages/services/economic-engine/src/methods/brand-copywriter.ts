@@ -26,7 +26,7 @@ export class BrandCopywriterMethod extends BaseMethod {
         logs.push('Executing linguistic resonance scan for high-conversion sales copy...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Act as a world-class direct response copywriter. 
             Analyze 3 different target demographics (e.g., Retirees entering the Silver Economy, Gen-Z digital nomads).
             For each:
@@ -49,7 +49,7 @@ export class BrandCopywriterMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

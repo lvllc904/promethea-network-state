@@ -26,7 +26,7 @@ export class SupplyChainMethod extends BaseMethod {
         logs.push('Executing freight lane analysis and component sourcing scan...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Act as a logistics expert. 
             Identify 3 "bottlenecked" components or materials for 2026 (e.g., specialized 
             EV battery precursors, high-purity silica).
@@ -50,7 +50,7 @@ export class SupplyChainMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

@@ -7,28 +7,29 @@ export const firestore = {
   collection: (db: any, name?: string) => ({
     doc: (id?: string) => ({
       get: async () => ({ exists: false, data: () => ({}) }),
-      set: async () => {},
-      update: async () => {},
+      set: async (...args: any[]) => {},
+      update: async (...args: any[]) => {},
       onSnapshot: () => () => {},
     }),
-    add: async () => ({ id: 'mock-id' }),
-    where: () => firestore.collection(null),
-    orderBy: () => firestore.collection(null),
-    limit: () => firestore.collection(null),
-    onSnapshot: () => () => {},
-    get: async () => ({ docs: [], empty: true })
+    add: async (...args: any[]) => ({ id: 'mock-id' }),
+    where: (...args: any[]) => firestore.collection(null),
+    orderBy: (...args: any[]) => firestore.collection(null),
+    limit: (...args: any[]) => firestore.collection(null),
+    onSnapshot: (...args: any[]) => () => {},
+    get: async (...args: any[]) => ({ docs: [], empty: true })
   }),
   batch: () => ({
-    set: () => {},
-    update: () => {},
-    delete: () => {},
-    commit: async () => {},
+    set: (...args: any[]) => {},
+    update: (...args: any[]) => {},
+    delete: (...args: any[]) => {},
+    commit: async (...args: any[]) => {},
   })
 };
 
 // Sovereign Utility Mocks (for migration)
 export type DocumentReference<T = any> = { id: string, coll: string };
 export type Query<T = any> = { name: string };
+export type Firestore = typeof firestore;
 
 export const doc = (db: any, coll?: string, id?: string): DocumentReference => ({ id: id || coll || 'unknown', coll: coll || 'unknown' });
 export const collection = (db: any, name: string): Query => ({ name });
@@ -59,7 +60,7 @@ export const getDocs = async (q: any) => {
 
 
 export const useUser = () => {
-  const [user, setUser] = useState<{uid: string, isAnonymous: boolean, displayName: string | null, activeOrgId: string, did: string | null} | null>(null);
+  const [user, setUser] = useState<{uid: string, isAnonymous: boolean, displayName: string | null, activeOrgId: string, did: string | null, token: string | null} | null>(null);
   
   const switchContext = useCallback((orgId: string) => {
     if (typeof window !== 'undefined') {
@@ -80,7 +81,8 @@ export const useUser = () => {
           isAnonymous: false, 
           displayName: 'Promethea',
           activeOrgId,
-          did: localStorage.getItem('userDID') || 'did:prmth:sovereign-0x123'
+          did: localStorage.getItem('userDID') || 'did:prmth:sovereign-0x123',
+          token: localStorage.getItem('pns_sovereign_token') || null
         });
       } else {
         setUser({ 
@@ -88,7 +90,8 @@ export const useUser = () => {
           isAnonymous: true, 
           displayName: 'Anonymous',
           activeOrgId,
-          did: null
+          did: null,
+          token: null
         });
       }
     }
@@ -99,162 +102,106 @@ export const useUser = () => {
 
 export const useFirestore = () => firestore;
 
-const STATE_LAKE_URL = 'https://economic-engine-385120524005.us-central1.run.app';
-
-/**
- * BODY 3: STRICT DATA BIFURCATION (CONTEXT-AWARE)
- */
-export function useSovereignData<T = any>(type: 'USER' | 'STATE', endpoint: string, docId?: string) {
-  const [data, setData] = useState<T | null>( (type === 'USER' || docId) ? null : ([] as unknown as T));
+export function useComputeManifest<T = any>(manifest: any) {
+  const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<any>(null);
-  const { user } = useUser();
 
-  const fetchData = useCallback(async () => {
-    if (!user) return;
+  const executeManifest = useCallback(async () => {
     setIsLoading(true);
-
-    const orgId = user.activeOrgId;
-
-    // 3.1: Private User Store
-    if (type === 'USER') {
-      try {
-        const localData = localStorage.getItem(`sovereign_vault_${orgId}_${endpoint}_${docId || 'list'}`);
-        setData(localData ? JSON.parse(localData) : (docId ? null : [] as unknown as T));
-      } catch (e) {
-        setData(docId ? null : [] as unknown as T);
-      }
-      setIsLoading(false);
-      return;
-    }
-
-    // 3.2: Public Omni-Lake (Normalization & Rewriting)
-    let finalPath = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    
-    // Auto-rewrite raw collections or /api/collection to /api/state/:orgId/...
-    if (!finalPath.startsWith('/api/state/')) {
-        const parts = finalPath.split('/').filter(Boolean); // ['api', 'collection'] or ['collection']
-        
-        if (parts[0] === 'api' && parts[1] && !['state', 'shadow', 'execute', 'ai', 'asgi', 'lake'].includes(parts[1])) {
-            const collection = parts[1];
-            const remaining = parts.slice(2).join('/');
-            finalPath = `/api/state/${orgId}/${collection}${remaining ? '/' + remaining : ''}`;
-        } else if (parts[0] !== 'api') {
-            // Raw collection name passed
-            finalPath = `/api/state/${orgId}/${parts.join('/')}`;
-        }
-    }
-
-    // Map remote paths to local BFF endpoints to avoid CORS and handle fallbacks robustly
-    let bffPath: string | null = null;
-    const normalized = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
-    const cleanEndpoint = normalized.split('?')[0];
-    const queryStr = normalized.includes('?') ? normalized.slice(normalized.indexOf('?')) : '';
-
-    if (cleanEndpoint === 'ledger/uvt_history' || cleanEndpoint === 'ledger/uvt-history') {
-      bffPath = '/api/ledger/uvt-history' + queryStr;
-    } else if (cleanEndpoint === 'ledger/summary') {
-      bffPath = '/api/ledger/summary' + queryStr;
-    } else if (cleanEndpoint === 'governance/proposals') {
-      bffPath = '/api/governance/proposals' + queryStr;
-    } else if (cleanEndpoint === 'governance/cap_table' || cleanEndpoint === 'governance/cap-table') {
-      bffPath = '/api/governance/cap-table' + queryStr;
-    } else if (cleanEndpoint === 'lake') {
-      bffPath = '/api/lake' + queryStr;
-    } else if (cleanEndpoint === 'substrate/status') {
-      bffPath = '/api/security_telemetry/pulse' + queryStr;
-    } else if (cleanEndpoint === 'atlas/layers' || cleanEndpoint === 'atlas') {
-      bffPath = '/api/atlas/layers' + queryStr;
-    } else if (cleanEndpoint.startsWith('api/')) {
-      bffPath = '/' + normalized;
-    }
-
-    // Attempt BFF fetch first
-    if (bffPath) {
-      try {
-        const url = docId ? `${bffPath}/${docId}` : bffPath;
-        const res = await fetch(url);
-        if (res.ok) {
-          const json = await res.json();
-          const rawData = json.docs ? json.docs.map((d: any) => typeof d.data === 'function' ? d.data() : d.data) : json;
-          const validatedData = docId 
-            ? (rawData && !rawData.error ? rawData : null) 
-            : (Array.isArray(rawData) ? rawData : []);
-          
-          setData(validatedData);
-          setError(null);
-          setIsLoading(false);
-          return;
-        }
-      } catch (err) {
-        console.warn(`[Identity] BFF fetch failed for ${bffPath}, trying remote or falling back...`, err);
-      }
-    }
-
-    // Remote fallback (original logic)
-    const baseUrl = STATE_LAKE_URL.endsWith('/') ? STATE_LAKE_URL.slice(0, -1) : STATE_LAKE_URL;
-    const path = finalPath.startsWith('/') ? finalPath : `/${finalPath}`;
-    const url = docId ? `${baseUrl}${path}/${docId}` : `${baseUrl}${path}`;
-
     try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`State Engine Error: ${res.status}`);
-        const json = await res.json();
-        
-        const rawData = json.docs ? json.docs.map((d: any) => typeof d.data === 'function' ? d.data() : d.data) : json;
-        const validatedData = docId 
-          ? (rawData && !rawData.error ? rawData : null) 
-          : (Array.isArray(rawData) ? rawData : []);
-          
-        setData(validatedData);
-        setError(null);
-    } catch (err) {
-        console.error(`[Identity] Omni-Lake fetch failed for ${finalPath}, using local mock fallbacks:`, err);
-        setError(err);
+        if (typeof window !== 'undefined' && (window as any).executeComputeManifest) {
+            // First we need raw data. In reality this would be pulled from the Sovereign Ledger
+            const userDID = localStorage.getItem('userDID') || 'did:prmth:sovereign-0x123';
+            
+            let rawDataStr = "{}";
+            try {
+                // Fetch the encrypted blob from the new Go Sovereign Ledger (Phase 1)
+                const ledgerUrl = process.env.NEXT_PUBLIC_LEDGER_URL || 'http://localhost:4001';
+                const syndicateId = localStorage.getItem('activeOrganizationId') || 'global';
+                const token = localStorage.getItem('pns_sovereign_token') || '';
+                
+                const res = await fetch(`${ledgerUrl}/api/v1/blob?did=${userDID}&syndicate_id=${syndicateId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const blobBytes = await res.arrayBuffer();
+                    const decoder = new TextDecoder('utf-8');
+                    rawDataStr = decoder.decode(blobBytes);
+                } else {
+                     // If no blob exists yet, we provide fallback seed data for the gateway to decrypt
+                    rawDataStr = JSON.stringify({
+                        balances: { UVT: 500.0, USDC: 1500.0 },
+                        docs: [
+                            { id: "tx-1", timestamp: new Date(Date.now() - 3600000).toISOString(), amount: 150.0, description: "Substrate Validation Sweating Reward", citizen: "Promethea" },
+                            { id: "prop-101", title: "Establish Substrate Sentinel Node", description: "Deploy local validation node for multi-tenant isolation", votesFor: 4520, votesAgainst: 18, status: "active" }
+                        ]
+                    });
+                }
+            } catch (err) {
+                console.warn("[Gateway] Ledger unreachable, using local encrypted vault fallback");
+                rawDataStr = JSON.stringify({
+                    balances: { UVT: 500.0, USDC: 1500.0 },
+                    docs: [
+                        { id: "tx-1", timestamp: new Date(Date.now() - 3600000).toISOString(), amount: 150.0, description: "Substrate Validation Sweating Reward", citizen: "Promethea" },
+                        { id: "prop-101", title: "Establish Substrate Sentinel Node", description: "Deploy local validation node for multi-tenant isolation", votesFor: 4520, votesAgainst: 18, status: "active" }
+                    ]
+                });
+            }
 
-        // High-fidelity fallback/synthetic generator to guarantee zero 500 error disruptions
-        let fallbackData: any = docId ? null : [];
-        if (!docId) {
-          if (cleanEndpoint.includes('ledger/uvt')) {
-            fallbackData = [
-              { id: "tx-1", timestamp: new Date(Date.now() - 3600000).toISOString(), amount: 150.0, description: "Substrate Validation Sweating Reward", citizen: "Promethea" },
-              { id: "tx-2", timestamp: new Date(Date.now() - 7200000).toISOString(), amount: 450.0, description: "Value Recirculation Protocol distribution", citizen: "Citizen-0x7a8" }
-            ];
-          } else if (cleanEndpoint.includes('ledger/summary')) {
-            fallbackData = { totalSupply: 12500000, circulatingSupply: 9820450, burnRate: 0.85, recirculationRate: 91.2, activeWallets: 240 };
-          } else if (cleanEndpoint.includes('governance/proposals')) {
-            fallbackData = [
-              { id: "prop-101", title: "Establish Substrate Sentinel Node", description: "Deploy local validation node for multi-tenant isolation", votesFor: 4520, votesAgainst: 18, status: "active" },
-              { id: "prop-102", title: "Allocate RWA Liquidity Pool Cap", description: "Cap real-world asset exposure to prevent treasury contagion", votesFor: 8900, votesAgainst: 245, status: "passed" }
-            ];
-          } else if (cleanEndpoint.includes('governance/cap')) {
-            fallbackData = [
-              { citizen: "Promethea", stake: 4500000, percentage: 45 },
-              { citizen: "Founders Pool", stake: 3000000, percentage: 30 },
-              { citizen: "Public Stakeholders", stake: 2500000, percentage: 25 }
-            ];
-          } else if (cleanEndpoint.includes('lake')) {
-            fallbackData = [
-              { id: "sig-hud", title: "Sovereign Command HUD Initialized", content: "HUD shell is active and secure.", timestamp: new Date().toISOString(), type: "NARRATIVE_SIGNAL" }
-            ];
-          } else if (cleanEndpoint.includes('substrate') || cleanEndpoint.includes('status')) {
-            fallbackData = { status: "healthy", peers: 12, blockHeight: 124508, latency: 28 };
-          }
+            const manifestStr = JSON.stringify(manifest);
+            // The WASM Engine receives the encrypted raw data and the JSON logic manifest
+            // It decrypts the data locally, evaluates the logic, and returns just the result.
+            const resultStr = (window as any).executeComputeManifest(manifestStr, rawDataStr);
+            const result = JSON.parse(resultStr);
+            
+            if (result.error) {
+                // If it's an unsupported operation in our mock WASM engine, 
+                // we fall back to returning the mock docs to prevent the UI from breaking 
+                // while we build out the full WASM logic.
+                if (result.error === "Unsupported operation") {
+                     const parsedRaw = JSON.parse(rawDataStr);
+                     setData((manifest.docId ? parsedRaw.docs[0] : parsedRaw.docs) as unknown as T);
+                     setError(null);
+                } else {
+                    throw new Error(result.error);
+                }
+            } else {
+                setData(result as T);
+                setError(null);
+            }
         } else {
-          // Individual doc mock
-          fallbackData = { id: docId, name: `Mock Doc ${docId}`, status: "active", updated: new Date().toISOString() };
+            console.warn("[Gateway] WASM Engine not initialized yet. Retrying in 1s...");
+            setTimeout(executeManifest, 1000);
+            return;
         }
-        setData(fallbackData as T);
+    } catch (err) {
+        setError(err);
     } finally {
         setIsLoading(false);
     }
-  }, [type, endpoint, docId, user?.activeOrgId]);
+  }, [JSON.stringify(manifest)]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    executeManifest();
+  }, [executeManifest]);
 
-  return { data, isLoading, error, refetch: fetchData };
+  return { data, isLoading, error, refetch: executeManifest };
+}
+
+/**
+ * BODY 3: STRICT DATA BIFURCATION (CONTEXT-AWARE)
+ * Re-implemented as a wrapper around the UCS-ADM WASM Compute Manifest.
+ */
+export function useSovereignData<T = any>(type: 'USER' | 'STATE', endpoint: string, docId?: string) {
+  const manifest = useMemo(() => ({
+      operation: "query",
+      type,
+      endpoint,
+      docId
+  }), [type, endpoint, docId]);
+
+  return useComputeManifest<T>(manifest);
 }
 
 // Re-export for legacy components while they migrate

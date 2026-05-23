@@ -26,7 +26,7 @@ export class BugBountyMethod extends BaseMethod {
         logs.push('Executing static analysis on high-TVL repository branches...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify 3 "vulnerability classes" (e.g., Logic Errors in ZK-Proofs, Insecure State Sync in L3s) 
             that have seen an uptick in 2026.
             Describe:
@@ -49,7 +49,7 @@ export class BugBountyMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

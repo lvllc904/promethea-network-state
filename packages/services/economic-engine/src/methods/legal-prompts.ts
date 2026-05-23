@@ -26,7 +26,7 @@ export class LegalPromptsMethod extends BaseMethod {
         logs.push('Executing jurisdictional scan for DAO-friendly contract templates...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Act as an expert in Lex Cryptographia. 
             Identify 3 emerging jurisdictions (e.g., Wyoming, El Salvador, etc.) 
             with new laws regarding AI agents and sovereign organizations.
@@ -50,7 +50,7 @@ export class LegalPromptsMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

@@ -38,7 +38,7 @@ export class NicheAffiliateMethod extends BaseMethod {
                 cost: 0.05,
                 profit: revenue - 0.05,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 
@@ -56,7 +56,7 @@ export class NicheAffiliateMethod extends BaseMethod {
     }
 
     private async researchProducts(niche: string) {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const prompt = `Research 3 high-converting affiliate products for the niche: "${niche}".
         Provide JSON with:
         - topProduct: name of product

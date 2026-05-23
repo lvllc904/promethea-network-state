@@ -38,7 +38,7 @@ export class DomainAppraiserMethod extends BaseMethod {
                 cost: 0.01,
                 profit: revenue - 0.01,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 
@@ -56,7 +56,7 @@ export class DomainAppraiserMethod extends BaseMethod {
     }
 
     private async appraise(domain: string) {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const prompt = `Appraise the domain name: "${domain}".
         Provide JSON with:
         - usdValue: numeric string representing fair market value

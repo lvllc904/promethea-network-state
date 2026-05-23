@@ -9,7 +9,7 @@ async function simulate() {
     console.log('--- Promethean Economic Engine: Method 1 (Simulation) ---');
     console.log('Awaiting Cognitive Synthesis...');
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const topicPrompt = `Generate a humble, inviting, and peaceful blog title for the Promethean Network State. Themes: Creating a Safe Space, Frictionless Collaboration, Quiet Service to Humanity. Return ONLY the title.`;
     const topicRes = await model.generateContent(topicPrompt);

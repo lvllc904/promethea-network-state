@@ -30,7 +30,7 @@ export async function castVote(firestore: Firestore, proposalId: string, citizen
     try {
         console.log(`[Sovereign Reflex] Attempting to cast vote ON-CHAIN for proposal: ${proposalId}`);
         const provider = getSovereignProvider();
-        const program = new Program(SovereignGovernanceIDL as any, GOVERNANCE_PROGRAM_ID, provider);
+        const program = new (Program as any)(SovereignGovernanceIDL as any, GOVERNANCE_PROGRAM_ID, provider);
 
         // Simulated PDA for the Proposal pubkey
         // In reality, this would be computed via PublicKey.findProgramAddress based on the IPFS hash or proposal ID

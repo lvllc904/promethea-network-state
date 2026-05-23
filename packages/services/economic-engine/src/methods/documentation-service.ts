@@ -33,7 +33,7 @@ export class DocumentationServiceMethod extends BaseMethod {
 
         try {
             const stats = (global as any).reserveManager?.getStats() || { reserveBalance: 100000 };
-            const modelInfo = (global as any).metabolicArbitrator?.getBestModel(this.config.complexity, stats.reserveBalance) || { modelName: 'gemini-2.0-flash' };
+            const modelInfo = (global as any).metabolicArbitrator?.getBestModel(this.config.complexity, stats.reserveBalance) || { modelName: 'gemini-1.5-flash' };
             const model = this.genAI.getGenerativeModel({ model: modelInfo.modelName });
 
             // Step 1: Analytical Insight (Barriers to Entry)
@@ -107,7 +107,7 @@ export class DocumentationServiceMethod extends BaseMethod {
                 cost: apiCost,
                 profit: estimatedValue - apiCost,
                 timestamp: Date.now(),
-                modelDID: modelInfo.did || 'did:prmth:model:gemini-2.0-flash',
+                modelDID: modelInfo.did || 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

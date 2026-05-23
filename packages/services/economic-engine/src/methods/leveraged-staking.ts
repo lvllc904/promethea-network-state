@@ -26,7 +26,7 @@ export class LeveragedStakingMethod extends BaseMethod {
         logs.push('Analyzing collateral-to-borrow ratios on JitoSOL and stETH...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify the most efficient liquid staking loop currently available.
             Provide:
             1. The LSD Assets (e.g., mSOL, jitoSOL).
@@ -48,7 +48,7 @@ export class LeveragedStakingMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

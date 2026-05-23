@@ -79,9 +79,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         try {
                             map.moveCamera({
                                 center: { lat: currentLat, lng: currentLng },
-                                zoom: currentZoom,
-                                tilt: startTilt + (targetTilt - startTilt) * ease,
-                                heading: startHeading + (targetHeading - startHeading) * ease
+                                zoom: currentZoom
                             });
                         } catch (_) {
                             // Bulletproof fallback if vector map features are restricted by API key
@@ -96,9 +94,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                             try {
                                 map.moveCamera({
                                     center: { lat: center.lat, lng: center.lng },
-                                    zoom: targetZoom,
-                                    tilt: targetTilt,
-                                    heading: targetHeading
+                                    zoom: targetZoom
                                 });
                             } catch (_) {
                                 map.setCenter({ lat: center.lat, lng: center.lng });

@@ -38,7 +38,7 @@ export class ResumeOptimizationMethod extends BaseMethod {
                 cost: 0.05,
                 profit: revenue - 0.05,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 
@@ -56,7 +56,7 @@ export class ResumeOptimizationMethod extends BaseMethod {
     }
 
     private async generateAdvice(jd: string) {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const prompt = `Act as an expert career coach. Analyze this job description: "${jd}".
         Provide a JSON response with:
         - score: 0-100 (difficulty to land)

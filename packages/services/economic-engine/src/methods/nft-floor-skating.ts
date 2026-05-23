@@ -26,7 +26,7 @@ export class NFTFloorSkatingMethod extends BaseMethod {
         logs.push('Scanning MagicEden and OpenSea for liquidity gaps...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Find the top 5 blue-chip NFT collections (based on Jan 2026 data) 
             with high volatility but steady volume.
             Provide:
@@ -49,7 +49,7 @@ export class NFTFloorSkatingMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

@@ -26,7 +26,7 @@ export class AirdropFarmingMethod extends BaseMethod {
         logs.push('Scanning L2s and emerging protocols for airdrop signals...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Act as a crypto airdrop hunter. Analyze current market sentiment and technical roadmaps (Hypothetical for Jan 2026) to find the top 3 unconfirmed airdrops.
             For each, provide:
             1. Protocol Name
@@ -52,7 +52,7 @@ export class AirdropFarmingMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

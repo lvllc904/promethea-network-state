@@ -10,3 +10,4 @@ export * from './flows/underwrite-rwa.js';
 export * from './flows/autonomy-core.js';
 export * from './flows/self-healing.js';
 export * from './flows/cognitive-healing.js';
+export * from './flows/form-syndicate.js';

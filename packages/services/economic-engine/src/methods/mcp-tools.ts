@@ -26,7 +26,7 @@ export class MCPToolsMethod extends BaseMethod {
         logs.push(`Designing MCP tool definition for: ${toolRequest}...`);
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Generate a valid JSON tool definition for the Model Context Protocol (MCP).
             Request: ${toolRequest}
             Include:
@@ -49,7 +49,7 @@ export class MCPToolsMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

@@ -1,19 +1,24 @@
 // Sovereign Admin Substrate (Phase C Decommission)
 export const db = {
-    collection: (name: string) => ({
-        doc: (id: string) => ({
-            get: async () => ({ exists: false, data: () => ({}) }),
-            set: async () => ({ success: true }),
-            update: async () => ({ success: true }),
-            delete: async () => ({ success: true }),
-        }),
-        add: async () => ({ id: 'mock-admin-id' }),
-        get: async () => ({ docs: [] })
-    }),
+    collection: (name: string) => {
+        const mockCol = {
+            doc: (id: string) => ({
+                get: async (...args: any[]) => ({ exists: false, data: () => ({}) }),
+                set: async (...args: any[]) => ({ success: true }),
+                update: async (...args: any[]) => ({ success: true }),
+                delete: async (...args: any[]) => ({ success: true }),
+            }),
+            add: async (...args: any[]) => ({ id: 'mock-admin-id' }),
+            get: async (...args: any[]) => ({ docs: [] as any[], empty: true }),
+            where: (...args: any[]) => mockCol,
+            limit: (...args: any[]) => mockCol,
+        };
+        return mockCol;
+    },
     batch: () => ({
-        set: () => {},
-        update: () => {},
-        delete: () => {},
+        set: (...args: any[]) => {},
+        update: (...args: any[]) => {},
+        delete: (...args: any[]) => {},
         commit: async () => {},
     })
 };

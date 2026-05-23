@@ -26,7 +26,7 @@ export class GovernanceBribeMethod extends BaseMethod {
         logs.push('Executing influence scan on Curve, Frax, and Solana DAO proposals...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify 3 active governance proposals where voting power 
             is currently being incentivized (bribed).
             Provide:
@@ -49,7 +49,7 @@ export class GovernanceBribeMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

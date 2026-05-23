@@ -15,7 +15,7 @@
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "strict": false,
-        "downlevelIteration": true,
+        "downlevelIteration": true, "ignoreDeprecations": "5.0",
         "forceConsistentCasingInFileNames": true
     },
     "include": [

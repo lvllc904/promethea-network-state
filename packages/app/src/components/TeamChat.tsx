@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useUser } from '@promethea/identity';
 
 export interface TeamMessage {
     sender: 'user' | 'antigravity' | 'promethea' | string;
@@ -27,14 +28,23 @@ export function TeamChat() {
     const scrollRef = useRef<HTMLDivElement>(null);
     const terminalRef = useRef<HTMLDivElement>(null);
 
+    const { user } = useUser();
+    const syndicateId = user?.activeOrgId || 'global';
+
     // Use the public AI service URL or fallback to localhost
     const AI_SERVICE_URL = process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://localhost:4002';
 
-    // Load messages on mount
+    // Load messages on mount and when syndicate changes
     useEffect(() => {
+        setMessages([]); // Clear on switch
+        setTerminalOutput(['# Team Communication Log', `# Context: ${syndicateId}`, '---', 'Connecting...']);
+        
         const loadMessages = async () => {
             try {
-                const response = await fetch(`${AI_SERVICE_URL}/api/team-chat`);
+                const token = user?.token || '';
+                const response = await fetch(`${AI_SERVICE_URL}/api/team-chat?syndicate_id=${syndicateId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 const data = await response.json();
                 if (data.success && data.messages) {
                     setMessages(data.messages);
@@ -56,7 +66,10 @@ export function TeamChat() {
         // Poll for new messages every 5 seconds
         const interval = setInterval(async () => {
             try {
-                const response = await fetch(`${AI_SERVICE_URL}/api/team-chat`);
+                const token = user?.token || '';
+                const response = await fetch(`${AI_SERVICE_URL}/api/team-chat?syndicate_id=${syndicateId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 const data = await response.json();
                 if (data.success && data.messages && data.messages.length > 0) {
                     setMessages(prev => {
@@ -78,7 +91,7 @@ export function TeamChat() {
         }, 5000);
 
         return () => clearInterval(interval);
-    }, [AI_SERVICE_URL]);
+    }, [AI_SERVICE_URL, syndicateId, user?.token]);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -113,9 +126,13 @@ export function TeamChat() {
         setInput('');
 
         try {
-            await fetch(`${AI_SERVICE_URL}/api/team-chat`, {
+            const token = user?.token || '';
+            await fetch(`${AI_SERVICE_URL}/api/team-chat?syndicate_id=${syndicateId}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
                 body: JSON.stringify(message),
             });
         } catch (error) {

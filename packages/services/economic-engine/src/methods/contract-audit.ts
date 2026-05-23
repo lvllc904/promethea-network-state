@@ -50,7 +50,7 @@ export class ContractAuditMethod extends BaseMethod {
                 cost: 0.20, // Higher tokens for audit
                 profit: revenue - 0.20,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 
@@ -68,7 +68,7 @@ export class ContractAuditMethod extends BaseMethod {
     }
 
     private async auditCode(code: string) {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const prompt = `Perform a security audit on this code snippet: "${code}".
         Identify potential vulnerabilities like Integer Overflow, Reentrancy, or Front-running.
         Provide JSON with:

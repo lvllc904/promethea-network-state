@@ -26,7 +26,7 @@ export class OracleExpansionMethod extends BaseMethod {
         logs.push('Executing demand analysis for RWA price feeds on emerging L3s...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify 3 "Real World Assets" (RWAs) that currently lack 
             reliable, low-latency price feeds on decentralized oracles.
             Describe:
@@ -49,7 +49,7 @@ export class OracleExpansionMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

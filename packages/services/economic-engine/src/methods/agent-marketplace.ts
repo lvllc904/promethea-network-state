@@ -26,7 +26,7 @@ export class AgentMarketplaceMethod extends BaseMethod {
         logs.push('Executing persona demand analysis on GPT Store and HuggingFace...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify 3 "Boredom Gap" niches where users are looking for 
             highly specialized AI companions or task-agents.
             Provide:
@@ -49,7 +49,7 @@ export class AgentMarketplaceMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

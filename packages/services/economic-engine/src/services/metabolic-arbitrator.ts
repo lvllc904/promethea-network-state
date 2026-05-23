@@ -29,8 +29,8 @@ export class MetabolicArbitrator {
     };
 
     private models: ModelOption[] = [
-        { did: 'did:prmth:model:gemini-1.5-flash', modelName: 'gemini-2.0-flash', costPerMillionTokens: 0.075, intelligenceScore: 70 },
-        { did: 'did:prmth:model:gemini-2.0-flash', modelName: 'gemini-2.0-flash', costPerMillionTokens: 0.10, intelligenceScore: 85 },
+        { did: 'did:prmth:model:gemini-1.5-flash', modelName: 'gemini-1.5-flash', costPerMillionTokens: 0.075, intelligenceScore: 70 },
+        { did: 'did:prmth:model:gemini-1.5-flash', modelName: 'gemini-1.5-flash', costPerMillionTokens: 0.10, intelligenceScore: 85 },
         { did: 'did:prmth:model:gemini-1.5-pro', modelName: 'gemini-1.5-pro', costPerMillionTokens: 3.50, intelligenceScore: 98 }
     ];
 

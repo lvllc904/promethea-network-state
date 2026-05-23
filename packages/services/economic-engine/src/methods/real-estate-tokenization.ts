@@ -26,7 +26,7 @@ export class RealEstateTokenizationMethod extends BaseMethod {
         logs.push('Executing geo-spatial yield analysis for nomadic-friendly housing nodes...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify 3 global regions with "Innovation-friendly" property laws 
             suitable for DAC-led acquisition and tokenization.
             Provide:
@@ -49,7 +49,7 @@ export class RealEstateTokenizationMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

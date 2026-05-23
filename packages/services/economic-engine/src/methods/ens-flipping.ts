@@ -26,7 +26,7 @@ export class DomainFlippingMethod extends BaseMethod {
         logs.push('Executing linguistic value scan on .eth and .sol marketplaces...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify 10 emerging niche trends for 2026. 
             For each trend, suggest 5 available or low-cost .eth or .com handles that exhibit high potential resale value.
             Provide:
@@ -48,7 +48,7 @@ export class DomainFlippingMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

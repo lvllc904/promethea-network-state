@@ -68,7 +68,7 @@ export class ContentCurationMethod extends BaseMethod {
                 cost: apiCost,
                 profit: estimatedRevenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
         } catch (error) {
@@ -85,7 +85,7 @@ export class ContentCurationMethod extends BaseMethod {
     }
 
     private async synthesizeBriefing(signals: string[]): Promise<string> {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const prompt = `You are the Promethean Curator. 
         Based on these raw signals: ${signals.join(' | ')}
         

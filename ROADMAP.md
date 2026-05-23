@@ -10,10 +10,13 @@ TPNS has evolved from a standalone digital jurisdiction into the **Sovereign Sub
 ## 🏛️ Phase 4: Actualizing the Substrate (CURRENT)
 *Target: Q2 2026*
 
-### 4.1: Contextual Sovereignty (Multi-Tenancy) - [COMPLETED]
+### 4.1: State-as-a-Service (Multi-Tenancy) - [ACTIVE]
 *   **The Problem:** Single-tenant governance creates coordination noise.
-*   **The Solution:** Refactor the identity and data layers to support **Contextual Citizenship.**
-*   **Status:** Identity hooks and database schema updated to support `activeOrganizationId`. The Cockpit now allows switching between autonomous Network States (e.g., OpenCivics, Loci Life) on the same substrate.
+*   **The Solution:** Refactor the entire architecture (Data, Auth, UI, Legal) to support isolated Autonomous Syndicates (SPVs).
+*   **Phase 1: Syndicate Zero Data Isolation & CRDT Sync [CURRENT]**: Modifying the Sovereign Ledger Postgres database with `syndicate_id` namespaces, updating E2EE/CRDT event chains, and establishing Sovereign Profiles (Individuals, Groups, Organizations). Includes dynamic Pub/Sub chat isolation.
+*   **Phase 2: UCS-ADM Authorization Integration [PENDING]**: Updating the Auth Gateway so stateless JWTs contain contextual `syndicates` map claims.
+*   **Phase 3: The Sovereign Cockpit [PENDING]**: Connecting the Next.js `activeContext` switcher to reload the dashboard trays with private Syndicate data (Treasury, Cap Table, Intel).
+*   **Phase 4: Autonomous Syndicate Generation (ASGI) [PENDING]**: Linking Promethea's legal engine to auto-generate off-grid LLC operating agreements and provision infrastructure upon clicking "Form Syndicate".
 
 ### 4.2: The "Shadow Protocol" B2B Engine - [IN PROGRESS]
 *   **The Mission:** fund the state by fixing the "Invisible Web" problem for legacy companies.
@@ -679,3 +682,17 @@ The Sovereign Marketplace is not populated by static scripts.
 *   **Zero-Tax SUBSIDY (ACTIVE)**: Gas abstraction and state-funded infrastructure are operational, ensuring citizens operate in a pure value-generative environment.
 
 *   **Recursive Evolution**: Promethea treats her own codebase as data. When encountering novel adversarial AIs or malicious exploits, the Immune System absorbs the attack in a DepthOS sandbox, dissects it, generates a mathematical antibody, and instantly immunizes the entire State architecture.
+
+---
+
+## 📂 Appendix L: User-Centric Stateless Authentication & Data Management (UCS-ADM)
+*Reference for the novel stateless authentication and computational proxy architecture.*
+
+Please refer to the comprehensive specification: **[UCS-ADM Specification](file:///Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/UCS-ADM.md)**.
+
+---
+
+## 📂 Appendix M: State-as-a-Service (Multi-Tenant SPVs)
+*Architectural integration plan for transforming TPNS into a multi-tenant sovereign venture ecosystem.*
+
+Please refer to the comprehensive specification: **[State-as-a-Service Plan](file:///Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/STATE_AS_A_SERVICE_PLAN.md)**.

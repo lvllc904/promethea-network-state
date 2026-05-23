@@ -25,7 +25,7 @@ export class JudiciaryService {
         console.log(`[Judiciary] Auditing action: ${action.type}...`);
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `You are the Promethean Judiciary, the ethical guardian of the Network State.
             Audit the following proposed autonomous action against the Sovereign Manifest.
             

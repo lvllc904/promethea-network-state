@@ -38,7 +38,7 @@ export class MarketSentimentOracleMethod extends BaseMethod {
                 cost: 0.05,
                 profit: revenue - 0.05,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 
@@ -56,7 +56,7 @@ export class MarketSentimentOracleMethod extends BaseMethod {
     }
 
     private async analyzeSentiment(ticker: string) {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
         const prompt = `Simulate a social media sentiment analysis for the asset: "${ticker}".
         Provide a JSON response with:

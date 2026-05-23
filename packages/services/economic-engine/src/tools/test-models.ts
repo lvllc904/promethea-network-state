@@ -26,8 +26,8 @@ async function listModels() {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    // Try to use a model we find (or just re-test gemini-2.0-flash with prefix)
-    // The name in the list will likely be 'models/gemini-2.0-flash-001'
+    // Try to use a model we find (or just re-test gemini-1.5-flash with prefix)
+    // The name in the list will likely be 'models/gemini-1.5-flash-001'
 }
 
 listModels();

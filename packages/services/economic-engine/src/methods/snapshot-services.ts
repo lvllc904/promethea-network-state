@@ -26,7 +26,7 @@ export class SnapshotServiceMethod extends BaseMethod {
         logs.push('Compressing state database for Layer 2 chain archival...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify 3 fast-growing blockchains (e.g., Celestia, EigenLayer AVS, etc.) 
             where node operators struggle to sync from genesis. 
             Describe:
@@ -49,7 +49,7 @@ export class SnapshotServiceMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

@@ -60,7 +60,7 @@ export const SovereignCommandMatrix: React.FC<SovereignCommandMatrixProps> = ({ 
                                 <motion.div 
                                     key={method.methodId}
                                     whileHover={{ scale: 1.02 }}
-                                    className="p-6 bg-gray-900 border border-gray-800 rounded-lg hover:border-cyan-500/50 transition-colors flex flex-col justify-between group relative overflow-hidden"
+                                    className="p-6 glass-panel rim-highlight-reality-ai rounded-lg flex flex-col justify-between group relative overflow-hidden"
                                 >
                                     {/* Background glow effect on hover */}
                                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />

@@ -38,7 +38,7 @@ export class ResearchReportMethod extends BaseMethod {
                 cost: 0.10, // Higher cost due to longer context
                 profit: revenue - 0.10,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 
@@ -56,7 +56,7 @@ export class ResearchReportMethod extends BaseMethod {
     }
 
     private async generateReport(topic: string) {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
         const prompt = `Generate a high-level table of contents and executive summary for a premium research report on: "${topic}".
         Include:

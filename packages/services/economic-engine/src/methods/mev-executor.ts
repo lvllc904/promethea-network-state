@@ -37,7 +37,7 @@ export class MEVExecutorMethod extends BaseMethod {
 
             logs.push(`[Mempool] Detected ${simulatedMempoolEvent.orderSize} SOL order on ${simulatedMempoolEvent.target}.`);
 
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Act as an MEV searcher. A ${simulatedMempoolEvent.orderSize} SOL buy order was just detected on ${simulatedMempoolEvent.target}. 
             Input Data: Pair=${simulatedMempoolEvent.pair}, Slippage=${simulatedMempoolEvent.slippageTolerance}.
             Generate a high-speed Jito bundle strategy to front-run this order. 
@@ -58,7 +58,7 @@ export class MEVExecutorMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

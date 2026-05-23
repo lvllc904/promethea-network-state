@@ -16,14 +16,17 @@ export interface TeamMessage {
     metadata?: Record<string, any>;
 }
 
-export const TEAM_CONVERSATION_TOPIC = 'promethean-team-conversation';
+export const getTeamConversationTopic = (syndicateId: string = 'global') => {
+    return `promethean-team-conversation-${syndicateId}`;
+};
 
 /**
  * Publish a message to the team conversation topic
  */
-export async function publishTeamMessage(message: TeamMessage): Promise<string> {
+export async function publishTeamMessage(message: TeamMessage, syndicateId: string = 'global'): Promise<string> {
     try {
-        const topic = pubsub.topic(TEAM_CONVERSATION_TOPIC);
+        const topicName = getTeamConversationTopic(syndicateId);
+        const topic = pubsub.topic(topicName);
         const dataBuffer = Buffer.from(JSON.stringify(message));
         const messageId = await topic.publishMessage({ data: dataBuffer });
         console.log(`[PubSub] Published message ${messageId} from ${message.sender}`);

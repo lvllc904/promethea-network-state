@@ -34,7 +34,7 @@ export class StockAssetMethod extends BaseMethod {
 
         try {
             const stats = (global as any).reserveManager?.getStats() || { reserveBalance: 100000 };
-            const modelInfo = (global as any).metabolicArbitrator?.getBestModel(this.config.complexity, stats.reserveBalance) || { modelName: 'gemini-2.0-flash' };
+            const modelInfo = (global as any).metabolicArbitrator?.getBestModel(this.config.complexity, stats.reserveBalance) || { modelName: 'gemini-1.5-flash' };
             const model = this.genAI.getGenerativeModel({ model: modelInfo.modelName });
 
             // Step 1: Generate trending asset concept (Refined Tonal Ethos)
@@ -112,7 +112,7 @@ export class StockAssetMethod extends BaseMethod {
                 cost: apiCost,
                 profit: estimatedRevenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: modelInfo.did || 'did:prmth:model:gemini-2.0-flash',
+                modelDID: modelInfo.did || 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
         } catch (error) {
@@ -129,7 +129,7 @@ export class StockAssetMethod extends BaseMethod {
     }
 
     private async generateConcept(): Promise<string> {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const prompt = `Generate a single trending stock photo concept that would sell well on Shutterstock.
     Focus on: business, technology, lifestyle, or abstract themes.
     Return ONLY the concept description, nothing else.`;
@@ -139,7 +139,7 @@ export class StockAssetMethod extends BaseMethod {
     }
 
     private async createImagePrompt(concept: string): Promise<string> {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const prompt = `Create a detailed image generation prompt for: "${concept}"
     
     Requirements:

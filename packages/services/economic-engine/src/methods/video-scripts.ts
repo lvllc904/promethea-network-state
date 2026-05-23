@@ -31,7 +31,7 @@ export class VideoScriptsMethod extends BaseMethod {
 
         try {
             const stats = (global as any).reserveManager?.getStats() || { reserveBalance: 100000 };
-            const modelInfo = (global as any).metabolicArbitrator?.getBestModel(this.config.complexity, stats.reserveBalance) || { modelName: 'gemini-2.0-flash' };
+            const modelInfo = (global as any).metabolicArbitrator?.getBestModel(this.config.complexity, stats.reserveBalance) || { modelName: 'gemini-1.5-flash' };
             const model = this.genAI.getGenerativeModel({ model: modelInfo.modelName });
 
             const prompt = `Generate an inspiring, humble, and high-retention 60-second script for a "Faceless" social media video.
@@ -82,7 +82,7 @@ export class VideoScriptsMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: modelInfo.did || 'did:prmth:model:gemini-2.0-flash',
+                modelDID: modelInfo.did || 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

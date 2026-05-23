@@ -7,7 +7,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "composite": true,
-    "downlevelIteration": true,
+    "downlevelIteration": true, "ignoreDeprecations": "5.0",
     "esModuleInterop": true
   },
   "include": [

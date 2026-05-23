@@ -35,8 +35,9 @@ export function AuthStatusIndicator() {
   return (
     <div
       className={cn(
-        'flex items-center gap-3 rounded-lg border bg-background p-2 transition-opacity duration-500',
-        isVisible ? 'opacity-100' : 'opacity-0'
+        'flex items-center gap-3 rounded-lg border bg-background p-2 transition-opacity duration-500 glass-panel',
+        isVisible ? 'opacity-100' : 'opacity-0',
+        isAuthenticated ? 'rim-highlight-reality-live' : 'rim-highlight-reality-sim'
       )}
     >
         <div className="flex-shrink-0">

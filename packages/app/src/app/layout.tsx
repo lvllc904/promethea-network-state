@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClientProviders } from "@/components/providers/ClientProviders";
+import Script from "next/script";
 
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
@@ -26,6 +27,18 @@ export default function RootLayout({
                 <ClientProviders>
                     {children}
                 </ClientProviders>
+                <Script src="/wasm_exec.js" strategy="beforeInteractive" />
+                <Script id="wasm-loader" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `
+                    if (typeof window !== 'undefined' && window.Go) {
+                        const go = new Go();
+                        WebAssembly.instantiateStreaming(fetch("/sovereign-gateway.wasm"), go.importObject).then((result) => {
+                            go.run(result.instance);
+                            console.log("[UCS-ADM] Sovereign Gateway WASM Module Loaded.");
+                        }).catch(err => {
+                            console.warn("[UCS-ADM] Failed to load WASM module. Are you running 'make copy-wasm'?", err);
+                        });
+                    }
+                `}} />
                 
                 {/* WebMCP: Sovereign Tool Discovery for AI Agents */}
                 <script dangerouslySetInnerHTML={{ __html: `

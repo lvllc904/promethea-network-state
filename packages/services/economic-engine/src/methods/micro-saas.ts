@@ -26,7 +26,7 @@ export class MicroSaaSMethod extends BaseMethod {
         logs.push('Generating code blueprints for single-purpose utilities...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Conceptualize 3 "Micro-SaaS" tools that solve one specific 
             technical problem using AI (e.g., auto-generating unit tests for legacy code, 
             sanitizing PII from datasets).
@@ -50,7 +50,7 @@ export class MicroSaaSMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

@@ -1,0 +1,9 @@
+go 1.25.4
+
+use (
+	./packages/gateway/wasm-engine
+	./packages/services/authentication-service-go
+	./packages/services/labor-ledger-go
+	./packages/services/mcp-server-go
+	./packages/services/sovereign-ledger
+)

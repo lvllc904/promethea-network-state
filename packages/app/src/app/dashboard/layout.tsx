@@ -9,6 +9,7 @@ import { Handshake } from '@/components/auth/Handshake';
 import { MainNav } from '@/components/layout/main-nav';
 import { SovereignHeaderTicker } from '@/components/hud/SovereignHeaderTicker';
 import { SovereignFooterTicker } from '@/components/hud/SovereignFooterTicker';
+import { SovereignHUD } from '@/components/hud/SovereignHUD';
 
 function DashboardSkeleton() {
   return (
@@ -45,7 +46,7 @@ export default function DashboardLayout({
   // Prevent SSG/SSR from executing client-only sovereign hooks found in children
   if (!mounted) return <DashboardSkeleton />;
 
-  const isSubPage = pathname !== '/dashboard' && pathname !== '/dashboard/';
+
 
   return (
     <HUDProvider>
@@ -54,22 +55,9 @@ export default function DashboardLayout({
           <Handshake />
         </Suspense>
         
-        {isSubPage ? (
-          <div className="flex h-screen w-screen bg-black overflow-hidden text-white relative">
-            <MainNav />
-            <div className="flex-1 flex flex-col h-full overflow-hidden">
-              <SovereignHeaderTicker />
-              <main className="flex-1 overflow-y-auto p-8 relative bg-zinc-950">
-                {isAuthStatusLoading ? <DashboardSkeleton /> : children}
-              </main>
-              <SovereignFooterTicker />
-            </div>
-          </div>
-        ) : (
-          <div className="w-full h-screen overflow-hidden bg-black text-white">
-            {isAuthStatusLoading ? <DashboardSkeleton /> : children}
-          </div>
-        )}
+        <div className="w-full h-screen overflow-hidden bg-black text-white">
+          {isAuthStatusLoading ? <DashboardSkeleton /> : <SovereignHUD>{children}</SovereignHUD>}
+        </div>
       </SidebarProvider>
     </HUDProvider>
   );

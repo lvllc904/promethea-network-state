@@ -24,7 +24,7 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
     actions,
     tabs
 }) => {
-    const { executeHandshake, executeIntent, isProcessing } = useBodyHandshake();
+    const { executeIntent, isProcessing } = useBodyHandshake();
     const { layout, isLoading } = useSovereignLayout();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(tabs?.[0]?.id);
@@ -73,15 +73,15 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
                     <div className="flex items-center gap-2 bg-black/40 border border-gray-800 rounded-lg px-3 py-1.5">
                         <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mr-2">Context:</span>
                         <select 
-                            value={user?.activeOrgId}
+                            value={user?.activeOrgId || 'global'}
                             onChange={(e) => (user as any).switchContext?.(e.target.value)}
                             className="bg-transparent text-emerald-400 text-[10px] font-black uppercase tracking-widest outline-none cursor-pointer hover:text-emerald-300 transition-colors"
                         >
-                            <option value="tpns_genesis">Promethean Genesis</option>
+                            <option value="global">Global Nexus</option>
+                            <option value="syndicate_zero">Syndicate Zero (Admin)</option>
                             <option value="opencivics">OpenCivics Hub</option>
                             <option value="locilife">Loci Life Archipelago</option>
                             <option value="network_nations">Network Nations Mesh</option>
-                            <option value="personal_sovereignty">Personal Vault</option>
                         </select>
                     </div>
                 </div>

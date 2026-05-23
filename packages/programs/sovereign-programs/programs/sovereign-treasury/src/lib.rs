@@ -25,9 +25,23 @@ pub mod sovereign_treasury {
     }
 
     pub fn mint_labor_uvt(ctx: Context<MintLaborUVT>, amount_uvt: u64, proof_hash: [u8; 32]) -> Result<()> {
+        // Enforce that only the Go labor-ledger PDA can mint UVT
+        let expected_authority = Pubkey::new_from_array([
+            // Replace with actual PDA pubkey bytes. Using a placeholder for now.
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+            17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+        ]);
+        require!(ctx.accounts.authority.key() == expected_authority, CustomError::UnauthorizedMint);
+
         msg!("LaborCompensated: {} UVT for proof {:?}", amount_uvt, proof_hash);
         Ok(())
     }
+}
+
+#[error_code]
+pub enum CustomError {
+    #[msg("Unauthorized: Only the Go Labor Ledger PDA can mint UVT.")]
+    UnauthorizedMint,
 }
 
 #[derive(Accounts)]

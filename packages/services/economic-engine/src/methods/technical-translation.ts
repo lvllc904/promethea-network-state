@@ -34,7 +34,7 @@ export class TechnicalTranslationMethod extends BaseMethod {
 
             logs.push(`Initiating translation of technical manual to ${targetLang}...`);
 
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Translate the following technical text into professional ${targetLang}. 
             The tone should be formal and technical, suitable for engineering documentation.
             
@@ -68,7 +68,7 @@ export class TechnicalTranslationMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
         } catch (error: any) {

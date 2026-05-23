@@ -11,10 +11,12 @@ interface EclipseTrayProps {
 
 // --- CONTEXT-AWARE CO-PILOT CHAT BOX ---
 const ContextChat = ({ activePillar }: { activePillar: string }) => {
+    const { pendingCoPilotPrompt, setHUDState, activateAssetCanvas } = useHUD();
     const [messages, setMessages] = useState<{ role: 'user' | 'assistant', content: string }[]>([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const handleSendRef = useRef<(customPrompt?: string) => Promise<void>>();
 
     // Dynamic initial message based on active pillar context
     useEffect(() => {
@@ -45,10 +47,13 @@ const ContextChat = ({ activePillar }: { activePillar: string }) => {
         }
     }, [messages]);
 
-    const handleSend = async () => {
-        if (!input.trim() || isTyping) return;
-        const userMsg = input.trim();
-        setInput('');
+    const handleSend = async (customPrompt?: string) => {
+        const promptText = customPrompt !== undefined ? customPrompt : input;
+        if (!promptText.trim() || isTyping) return;
+        const userMsg = promptText.trim();
+        if (customPrompt === undefined) {
+            setInput('');
+        }
         setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
         setIsTyping(true);
 
@@ -63,7 +68,17 @@ const ContextChat = ({ activePillar }: { activePillar: string }) => {
             if ('error' in res) {
                 setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${res.error}` }]);
             } else {
-                setMessages(prev => [...prev, { role: 'assistant', content: res.response }]);
+                let responseText = res.response;
+                // Parse [UI_OVERRIDE: FOCUS_ASSET: <TICKER>]
+                const overrideMatch = responseText.match(/\[UI_OVERRIDE:\s*FOCUS_ASSET:\s*(.*?)\]/i);
+                if (overrideMatch) {
+                    const ticker = overrideMatch[1].trim();
+                    if (ticker) {
+                        activateAssetCanvas(ticker);
+                    }
+                    responseText = responseText.replace(/\[UI_OVERRIDE:\s*FOCUS_ASSET:\s*(.*?)\]/gi, '').trim();
+                }
+                setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
             }
         } catch (e) {
             setMessages(prev => [...prev, { role: 'assistant', content: "Bridge link interrupted. Re-connecting..." }]);
@@ -71,6 +86,20 @@ const ContextChat = ({ activePillar }: { activePillar: string }) => {
             setIsTyping(false);
         }
     };
+
+    // Keep handleSendRef updated
+    useEffect(() => {
+        handleSendRef.current = handleSend;
+    });
+
+    // Automatically trigger co-pilot when pending evaluation prompt is set
+    useEffect(() => {
+        if (pendingCoPilotPrompt) {
+            const prompt = pendingCoPilotPrompt;
+            setHUDState({ pendingCoPilotPrompt: null });
+            handleSendRef.current?.(prompt);
+        }
+    }, [pendingCoPilotPrompt, setHUDState]);
 
     return (
         <div className="border-t border-white/5 bg-black/40 p-3 space-y-2.5 flex flex-col justify-end max-h-[220px]">
@@ -114,7 +143,7 @@ const ContextChat = ({ activePillar }: { activePillar: string }) => {
                     className="flex-1 bg-black/50 border border-white/10 rounded px-2.5 py-1.5 text-[8.5px] font-mono text-white placeholder-zinc-600 focus:outline-none focus:border-cyan-500/40"
                 />
                 <button
-                    onClick={handleSend}
+                    onClick={() => handleSend()}
                     disabled={isTyping}
                     className="px-2.5 bg-cyan-600 hover:bg-cyan-500 disabled:bg-zinc-800 text-black rounded transition-colors flex items-center justify-center"
                 >

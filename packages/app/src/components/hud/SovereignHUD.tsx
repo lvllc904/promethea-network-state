@@ -96,12 +96,16 @@ const SovereignAtlasBackground = ({ isEclipsed }: { isEclipsed: boolean }) => {
     );
 };
 
-import { useRouter } from 'next/navigation';
-import { Terminal, Shield, Cpu, Zap, Power, LogOut } from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
+import { Terminal, Shield, Cpu, Zap, Power, LogOut, X } from 'lucide-react';
 
-export const SovereignHUD = () => {
+import { ethers } from 'ethers';
+
+export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
     const { activePillar, activatePillar, triggerOmniScanner, activateFocusPanel } = useHUD();
     const router = useRouter();
+    const pathname = usePathname();
+    const isSubPage = pathname !== '/dashboard' && pathname !== '/dashboard/';
     const isEclipsed = activePillar !== 'ATLAS';
 
     // Global interceptor for Omni-Scanner
@@ -164,11 +168,27 @@ export const SovereignHUD = () => {
         }
     }, [activePillar]);
 
-    const handleEnterHUD = () => {
-        setBootStage('morphing');
+    const handleEnterHUD = async () => {
+        setBootStage('loading'); // Show loading indicator
+        
+        // Passive Identity Hydration: Check if we have an existing session
+        const existingAuth = localStorage.getItem('authStatus');
+        const existingDID = localStorage.getItem('userDID');
+        
+        if (existingAuth === 'authenticated' && existingDID) {
+            console.log('[SovereignHUD] Passively hydrated identity:', existingDID);
+            // In a full implementation, we'd validate the token here if needed
+        } else {
+            console.log('[SovereignHUD] Proceeding as Anonymous Guest (Radical Transparency)');
+        }
+
+        // Simulate HUD boot sequence
         setTimeout(() => {
-            setBootStage('active');
-        }, 900);
+            setBootStage('morphing');
+            setTimeout(() => {
+                setBootStage('active');
+            }, 900);
+        }, 300); // Brief delay for the loading state
     };
 
     const handleExitHUD = () => {
@@ -312,7 +332,21 @@ export const SovereignHUD = () => {
             <CommandPalette />
 
             {/* Right-wing Detailed Focus Overlay */}
-            <RightFocusTray />
+            {isSubPage && children ? (
+                <div className="fixed inset-y-11 right-0 w-[60vw] min-w-[600px] z-50 bg-black/95 backdrop-blur-2xl border-l border-white/10 shadow-[-30px_0_60px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col slide-hud-right">
+                    <button 
+                        onClick={() => router.push('/dashboard')}
+                        className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors z-50 group"
+                    >
+                        <X className="w-5 h-5 text-zinc-500 group-hover:text-white" />
+                    </button>
+                    <div className="flex-1 overflow-y-auto custom-scrollbar p-10 pt-16">
+                        {children}
+                    </div>
+                </div>
+            ) : (
+                <RightFocusTray />
+            )}
 
             {/* Cmd+K & Exit controls — below header ticker */}
             <div className="fixed top-11 right-6 z-50 flex items-center gap-3">

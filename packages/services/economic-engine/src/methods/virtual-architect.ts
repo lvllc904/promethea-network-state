@@ -26,7 +26,7 @@ export class VirtualArchitectMethod extends BaseMethod {
         logs.push('Executing procedural design scan for meta-territory infrastructure...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify 3 high-demand virtual architectural styles for 2026 
             (e.g., Solar-punk Data Centers, Minimalist Sovereignty Nodes).
             For each:
@@ -49,7 +49,7 @@ export class VirtualArchitectMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

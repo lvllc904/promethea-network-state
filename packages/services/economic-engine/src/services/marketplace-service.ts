@@ -79,7 +79,7 @@ export class MarketplaceService {
     async ingestProposal(proposalText: string, providerId: string, genAI: any): Promise<string> {
         console.log(`[Marketplace] AI Ingestion triggered for provider: ${providerId}`);
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const prompt = `
         Analyze the following Barter/Investment Proposal and extract a structured Sovereign Marketplace Listing.
         Proposal: "${proposalText}"

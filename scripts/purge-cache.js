@@ -2,7 +2,7 @@ const https = require('https');
 
 const zoneId = process.env.CLOUDFLARE_ZONE_ID || 'dfcd262799ad2839371eafbf1df230b5';
 const email = process.env.CLOUDFLARE_EMAIL || 'lvllc@lvhllc.org';
-const apiKey = process.env.CLOUDFLARE_API_KEY;
+const apiKey = process.env.CLOUDFLARE_API_KEY ? process.env.CLOUDFLARE_API_KEY.trim() : undefined;
 
 if (!apiKey) {
   console.error('❌ Error: CLOUDFLARE_API_KEY is not defined in the environment.');

@@ -61,7 +61,7 @@ export class LandScannerMethod extends BaseMethod {
                 cost: 0.01, // API Cost
                 profit: -0.01,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

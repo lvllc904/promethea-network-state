@@ -196,7 +196,7 @@ export default function PulsePage() {
                                 <p className="text-[10px] text-gray-300 font-mono group-hover:text-cyan-400 transition-colors">{(log.payload?.observation || log.payload?.title || 'Relaying Sovereign Narrative...').substring(0, 80)}...</p>
                              </div>
                           </div>
-                          <Badge className="bg-cyan-900/20 text-cyan-500 text-[7px] border-cyan-500/20">LIVE</Badge>
+                          <span className="bg-cyan-900/20 text-cyan-500 text-[7px] border border-cyan-500/20 px-1.5 py-0.5 rounded-md font-mono">LIVE</span>
                        </div>
                     ))}
                  </div>

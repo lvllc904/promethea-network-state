@@ -26,7 +26,7 @@ export class DePINStorageMethod extends BaseMethod {
         logs.push('Auditing storage deal availability on Arweave/Filecoin gateways...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Analyze current demand for decentralized storage. 
             Identify which DePIN platform is currently offering the best ROI for 
             1TB of storage provided. 
@@ -50,7 +50,7 @@ export class DePINStorageMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

@@ -87,7 +87,7 @@ export class NewsletterMethod extends BaseMethod {
                 cost: apiCost,
                 profit: dailyRevenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
         } catch (error) {
@@ -132,7 +132,7 @@ Requirements:
 - Professional, graceful tone.
 Write the newsletter now:`;
 
-        return await sovereignAI.generateContent('gemini-2.0-flash', prompt);
+        return await sovereignAI.generateContent('gemini-1.5-flash', prompt);
     }
 
     private async sendNewsletter(subject: string, content: string): Promise<{ recipientCount: number }> {

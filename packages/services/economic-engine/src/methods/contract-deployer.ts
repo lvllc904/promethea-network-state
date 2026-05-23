@@ -26,7 +26,7 @@ export class ContractDeployerMethod extends BaseMethod {
         logs.push('Executing bytecode verification for standardized contract templates...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Identify 3 "common-need" smart contracts for 2026. 
             For each:
             1. Contract type (e.g., Cross-chain NFT bridge, Recursive Staking Vault).
@@ -48,7 +48,7 @@ export class ContractDeployerMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

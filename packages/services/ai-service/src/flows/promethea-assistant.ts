@@ -25,7 +25,7 @@ export type PrometheaAssistantOutput = z.infer<typeof PrometheaAssistantOutputSc
 
 // ─── Sovereign Config ──────────────────────────────────────────────────────────
 
-const PRIMARY_MODEL = 'gemini-2.0-flash';
+const PRIMARY_MODEL = 'gemini-1.5-flash';
 
 // ─── Prompt builder ────────────────────────────────────────────────────────────
 

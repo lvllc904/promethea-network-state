@@ -26,7 +26,7 @@ export class LiquidationBotMethod extends BaseMethod {
         logs.push('Executing Health Factor scan on large lending positions...');
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             const prompt = `Act as a DeFi Liquidator. 
             Identify 3 lending protocols where liquidation competition is lowest 
             but volume is high. 
@@ -50,7 +50,7 @@ export class LiquidationBotMethod extends BaseMethod {
                 cost: apiCost,
                 profit: revenue - apiCost,
                 timestamp: Date.now(),
-                modelDID: 'did:prmth:model:gemini-2.0-flash',
+                modelDID: 'did:prmth:model:gemini-1.5-flash',
                 logs,
             };
 

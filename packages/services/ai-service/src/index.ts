@@ -2,8 +2,10 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { publishTeamMessage, TeamMessage } from '@promethea/pubsub';
-import { PubSub } from '@google-cloud/pubsub';
+import { PubSub, v1 } from '@google-cloud/pubsub';
 import { askPrometheaFlow } from './flows/promethea-assistant';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const app = express();
 const port = Number(process.env.PORT) || 8080;
@@ -13,14 +15,45 @@ const PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT || 'studio-9105849211-9ba48'
 app.use(cors()); // Enable CORS for all origins (DAC frontend)
 app.use(express.json({ limit: '10mb' }));
 
+// ─── Middleware: UCS-ADM Authorization ─────────────────────────────────────────
+const JWT_SECRET = process.env.JWT_SECRET || 'promethea-sovereign-intelligence-v5';
+
+const ucsAdmMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const syndicateId = (req.query.syndicate_id as string) || 'global';
+    
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Missing or invalid Authorization header' });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET) as any;
+        const syndicates = decoded.syndicates || {};
+
+        if (!syndicates[syndicateId]) {
+            console.warn(`[UCS-ADM] Unauthorized access attempt by DID: ${decoded.did} for syndicate: ${syndicateId}`);
+            return res.status(403).json({ error: 'Forbidden: You are not authorized for this syndicate' });
+        }
+
+        // Pass user context if needed
+        (req as any).user = decoded;
+        next();
+    } catch (error) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+};
+
 // ─── Pub/Sub Client ────────────────────────────────────────────────────────────
 const pubsub = new PubSub({ projectId: PROJECT_ID });
 
 // ─── Team Chat Routes (Body 2 ← Pub/Sub ← Discord) ───────────────────────────
-app.post('/api/team-chat', async (req, res) => {
+app.post('/api/team-chat', ucsAdmMiddleware, async (req, res) => {
     try {
         const message: TeamMessage = req.body;
-        const messageId = await publishTeamMessage(message);
+        const syndicateId = (req.query.syndicate_id as string) || 'global';
+        const messageId = await publishTeamMessage(message, syndicateId);
 
         // Mirror to Discord if configured
         const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
@@ -46,16 +79,37 @@ app.post('/api/team-chat', async (req, res) => {
     }
 });
 
-app.get('/api/team-chat', async (req, res) => {
+app.get('/api/team-chat', ucsAdmMiddleware, async (req, res) => {
     try {
-        const subscription = pubsub.subscription('user-sub') as any;
-        const [messages] = await subscription.pull({ maxMessages: 50 });
-
-        const teamMessages: TeamMessage[] = messages.map((msg: any) => {
-            const data = JSON.parse(msg.data.toString());
-            msg.ack();
-            return data;
+        const syndicateId = (req.query.syndicate_id as string) || 'global';
+        const subscriberClient = new v1.SubscriberClient();
+        const subscriptionName = `user-sub-${syndicateId}`;
+        const formattedSubscription = subscriberClient.subscriptionPath(PROJECT_ID, subscriptionName);
+        const [response] = await subscriberClient.pull({
+            subscription: formattedSubscription,
+            maxMessages: 50,
         });
+
+        const teamMessages: TeamMessage[] = [];
+        const ackIds: string[] = [];
+
+        if (response.receivedMessages) {
+            for (const msg of response.receivedMessages) {
+                if (msg.message && msg.message.data) {
+                    teamMessages.push(JSON.parse(msg.message.data.toString() as string));
+                }
+                if (msg.ackId) {
+                    ackIds.push(msg.ackId);
+                }
+            }
+        }
+
+        if (ackIds.length > 0) {
+            await subscriberClient.acknowledge({
+                subscription: formattedSubscription,
+                ackIds: ackIds,
+            });
+        }
 
         res.json({ success: true, messages: teamMessages });
     } catch (error) {
@@ -212,6 +266,37 @@ app.post('/api/allocate-rwa-tasks', async (req, res) => {
     } catch (error: any) {
         console.error('Error in /api/allocate-rwa-tasks:', error);
         res.status(500).json({ error: error.message || 'Task allocation failed' });
+    }
+});
+
+app.post('/api/form-syndicate', ucsAdmMiddleware, async (req, res) => {
+    try {
+        const { name, type, jurisdiction, members, objective } = req.body;
+        const { invokeFormSyndicate } = await import('@promethea/ai');
+        
+        // 1. Generate new syndicate_id
+        const syndicateId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + crypto.randomBytes(4).toString('hex');
+        
+        // 2. Call AI Flow
+        const legalDocs = await invokeFormSyndicate({ name, type, jurisdiction, members, objective });
+        
+        // 3. Call Auth Service to grant user admin role
+        const uid = (req as any).user.uid;
+        const did = (req as any).user.did;
+        const AUTH_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:3001';
+        
+        const authRes = await fetch(`${AUTH_URL}/auth/add-syndicate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ uid, did, syndicate_id: syndicateId, role: 'admin' })
+        });
+        
+        const authData = await authRes.json();
+        
+        res.json({ success: true, syndicate_id: syndicateId, legalDocs, token: authData.token });
+    } catch (error: any) {
+        console.error('Error in /api/form-syndicate:', error);
+        res.status(500).json({ error: error.message || 'Form syndicate failed' });
     }
 });
 

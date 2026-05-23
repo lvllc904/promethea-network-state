@@ -29,7 +29,7 @@ export class DiscordClient {
         });
         this.rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN || '');
         this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-        this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // Fast conversational model
+        this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Fast conversational model
 
         // debug events
         this.client.on('error', (err) => console.error('[DiscordClient] Connection Error:', err));
