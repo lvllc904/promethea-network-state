@@ -49,7 +49,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         tilt: startTilt,
                         heading: startHeading,
                         mapTypeId: 'satellite',
-                        disableDefaultUI: true,
+                        disableDefaultUI: false, // Turn controls back on for the user
                         backgroundColor: '#000000',
                         gestureHandling: 'greedy',
                         mapId: 'aa43c9e9e082ca1d8d1fc65d'

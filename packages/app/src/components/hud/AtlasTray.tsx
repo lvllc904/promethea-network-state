@@ -34,6 +34,7 @@ export const AtlasTray = () => {
     const { data: liveAssets, refetch: refetchAssets } = useBFFData<any[]>('/api/assets', []);
     const { data: refineries } = useBFFData<any[]>('/api/refineries', []);
     const { data: intelligence } = useBFFData<any[]>('/api/engine/intelligence', []);
+    const { data: institutions } = useBFFData<any[]>('/api/institutions', []);
     
     const [extraAssets, setExtraAssets] = useState<any[]>([]);
 
@@ -195,7 +196,13 @@ export const AtlasTray = () => {
                                             <span className="text-[7px] text-zinc-500 font-bold uppercase">{asset.type}</span>
                                             <h4 className="text-[10px] font-black uppercase text-white truncate max-w-[200px]">{asset.name}</h4>
                                         </div>
-                                        <span className="text-[8px] font-black px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 uppercase font-mono">Simulated</span>
+                                        <span className={`text-[8px] font-black px-1.5 py-0.5 rounded border uppercase font-mono ${
+                                            asset.status === 'ACTUALIZED' || asset.status === 'ACTIVE' 
+                                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+                                                : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
+                                        }`}>
+                                            {asset.status || 'SIMULATED'}
+                                        </span>
                                     </div>
                                     <div className="flex justify-between text-[9px] font-mono">
                                         <span className="text-zinc-500">Valuation:</span>
@@ -221,31 +228,32 @@ export const AtlasTray = () => {
                         <Building2 className="w-3 h-3 text-cyan-400" /> Institutional Mappings
                     </p>
 
-                    {[
-                        { name: 'Promethean Society DAO', type: 'DAO', stake: '50,000 UVT', status: 'ACTUALIZED' },
-                        { name: 'Archipelago Holdings LLC', type: 'LLC', stake: '12,500 UVT', status: 'STAKED' }
-                    ].map((org, idx) => (
+                    {institutions && institutions.length > 0 ? institutions.map((org: any, idx: number) => (
                         <div key={idx} className="p-3 bg-black/40 border border-white/5 rounded-lg space-y-2">
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <span className="text-[7px] text-zinc-600 font-bold uppercase">{org.type}</span>
+                                    <span className="text-[7px] text-zinc-600 font-bold uppercase">{org.type || 'ORG'}</span>
                                     <h4 className="text-[10px] font-black uppercase text-zinc-200 leading-tight">{org.name}</h4>
                                 </div>
                                 <span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase font-mono ${
-                                    org.status === 'ACTUALIZED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                                }`}>{org.status}</span>
+                                    org.status === 'ACTUALIZED' || org.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                                }`}>{org.status || 'STAKED'}</span>
                             </div>
                             <div className="flex justify-between items-end text-[8px]">
                                 <div>
                                     <span className="text-zinc-500 block">Reputation Stake</span>
-                                    <span className="font-mono text-emerald-400 font-bold">{org.stake}</span>
+                                    <span className="font-mono text-emerald-400 font-bold">{org.stake || '0 UVT'}</span>
                                 </div>
                                 <button className="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-500 hover:text-zinc-300 rounded text-[7px] font-black uppercase tracking-wider transition-colors">
                                     Charter
                                 </button>
                             </div>
                         </div>
-                    ))}
+                    )) : (
+                        <div className="p-4 text-center text-zinc-500 text-[9px] uppercase tracking-widest border border-white/5 border-dashed rounded">
+                            No Mapped Entities Found
+                        </div>
+                    )}
                 </div>
             )}
 
