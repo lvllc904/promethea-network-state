@@ -173,3 +173,25 @@ export interface Task {
   assigneeId?: string;
   compensationChoice?: CompensationChoice;
 }
+
+export type BiologicalPowSource = 'LIDAR' | 'IOT_SENSOR' | 'PHOTO' | 'VIDEO' | 'AUDIO';
+
+export interface BiologicalPowPayload {
+  id: string;
+  citizenId: string;
+  taskId: string;
+  syndicateId: string;
+  sourceType: BiologicalPowSource;
+  mediaUrl: string; // URL to the raw file in S3/Firebase Storage
+  fileSizeCents: number;
+  metadata: {
+    lat?: number;
+    lng?: number;
+    deviceModel?: string;
+    durationSeconds?: number;
+    entropyScore?: number;
+  };
+  hash: string; // Cryptographic hash of the payload
+  status: 'PENDING_EVALUATION' | 'VERIFIED' | 'REJECTED';
+  createdAt: string;
+}
