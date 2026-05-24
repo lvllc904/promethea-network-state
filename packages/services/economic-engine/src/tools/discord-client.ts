@@ -47,7 +47,11 @@ export class DiscordClient {
             this.registerCommands();
         });
 
-        await this.client.login(process.env.DISCORD_BOT_TOKEN);
+        try {
+            await this.client.login(process.env.DISCORD_BOT_TOKEN);
+        } catch (error) {
+            console.error('[DiscordClient] 🛑 BOOT FAILURE: Discord Login Failed. Proceeding without Discord Bot.', error);
+        }
     }
 
     private async registerCommands() {

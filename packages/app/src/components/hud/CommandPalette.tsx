@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 export const CommandPalette = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState('');
+    const [isParsing, setIsParsing] = useState(false);
     const { activatePillar } = useHUD();
     const router = useRouter();
 
@@ -28,7 +29,20 @@ export const CommandPalette = () => {
 
     if (!isOpen) return null;
 
-    const executeCommand = (command: string) => {
+    const executeCommand = async (command: string) => {
+        // Natural language parsing simulation (Genkit Intent Router)
+        if (command.includes('propose') || command.includes('threshold') || command.includes('change')) {
+            setIsParsing(true);
+            // Simulate AI parsing delay
+            await new Promise(resolve => setTimeout(resolve, 800));
+            setIsParsing(false);
+            setIsOpen(false);
+            setQuery('');
+            // Pre-fill the governance proposal form or simply open the tray
+            activatePillar('GOVERNANCE');
+            return;
+        }
+
         setIsOpen(false);
         setQuery('');
         
@@ -51,6 +65,9 @@ export const CommandPalette = () => {
                 break;
             case 'close':
                 activatePillar('ATLAS');
+                break;
+            case 'settings':
+                activatePillar('SETTINGS');
                 break;
             default:
                 // Global search fallback
@@ -76,6 +93,7 @@ export const CommandPalette = () => {
                         }}
                     />
                     <div className="flex items-center gap-2">
+                        {isParsing && <span className="text-[10px] font-mono text-cyan-400 animate-pulse">PARSING INTENT...</span>}
                         <span className="text-[10px] font-mono bg-white/10 px-2 py-1 rounded text-zinc-400">ESC</span>
                     </div>
                 </div>
@@ -107,6 +125,14 @@ export const CommandPalette = () => {
                         <div className="flex items-center gap-3">
                             <Terminal className="w-4 h-4 text-purple-400" />
                             <span className="text-zinc-300 group-hover:text-white">Stream <span className="text-purple-400">Universal Intel Feed</span></span>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
+                    </button>
+
+                    <button onClick={() => executeCommand('settings')} className="w-full flex items-center justify-between px-3 py-3 hover:bg-white/5 rounded-lg text-left group">
+                        <div className="flex items-center gap-3">
+                            <Terminal className="w-4 h-4 text-zinc-400" />
+                            <span className="text-zinc-300 group-hover:text-white">Configure <span className="text-zinc-400">Sovereign Settings</span></span>
                         </div>
                         <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
                     </button>

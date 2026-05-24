@@ -17,6 +17,7 @@ import { CommandPalette } from './CommandPalette';
 import { SovereignHeaderTicker } from './SovereignHeaderTicker';
 import { SovereignFooterTicker } from './SovereignFooterTicker';
 import { RightFocusTray } from './RightFocusTray';
+import { SettingsTray } from './SettingsTray';
 
 // Fetch atlas layers from the same-origin BFF proxy (avoids CORS entirely)
 function useAtlasLayers() {
@@ -324,6 +325,7 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
                         {activePillar === 'NARRATIVE'  && <div className="slide-hud-left"><NarrativeTray /></div>}
                         {activePillar === 'DIPLOMATIC' && <div className="slide-hud-left"><DiplomaticTray /></div>}
                         {activePillar === 'PULSE'      && <div className="slide-hud-left"><PulseTray /></div>}
+                        {activePillar === 'SETTINGS'   && <div className="slide-hud-left"><SettingsTray /></div>}
                     </EclipseTray>
                 </div>
             </div>

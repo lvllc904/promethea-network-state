@@ -69,6 +69,7 @@ class SQLiteAdapter implements StorageAdapter {
             CREATE TABLE IF NOT EXISTS wallet (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS narrative (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS votes (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS sovereign_settings (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
         `);
 
         // Schema Migration: Ensure all tables have the orgId column to prevent seeding/query failures
@@ -78,7 +79,7 @@ class SQLiteAdapter implements StorageAdapter {
             'uvt_transactions', 'infrastructure', 'grant_opportunities', 'api_metrics',
             'sovereign_intelligence', 'labor_records', 'quests', 'citizens', 'diplomatic_sessions',
             'hardware_jobs', 'acquisitions', 'content_archive', 'marketplace', 'ledger',
-            'waterfall', 'wallet', 'narrative', 'votes'
+            'waterfall', 'wallet', 'narrative', 'votes', 'sovereign_settings'
         ];
         for (const table of tables) {
             try {
@@ -342,5 +343,6 @@ export const COLLECTIONS = {
     SECURITY_TELEMETRY: 'security_telemetry',
     OMNI_VECTORS: 'omni_vectors',
     VOTES: 'votes',
-    NARRATIVE: 'narrative'
+    NARRATIVE: 'narrative',
+    SOVEREIGN_SETTINGS: 'sovereign_settings'
 };

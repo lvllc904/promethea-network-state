@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useHUD } from '@/lib/hud-store';
-import { CircleDollarSign, Landmark, BookOpen, Fingerprint, Globe, Activity, BrainCircuit } from 'lucide-react';
+import { CircleDollarSign, Landmark, BookOpen, Fingerprint, Globe, Activity, BrainCircuit, MessageSquare, MoreHorizontal } from 'lucide-react';
 
 const PILLARS = [
     {
@@ -80,6 +80,35 @@ export const TacticalRibbon = () => {
                     </button>
                 );
             })}
+            
+            {/* Horizontal separator */}
+            <div className="w-8 h-px bg-white/10 mx-auto" />
+
+            {/* Omni-Input Toggle Button */}
+            <button
+                onClick={() => {
+                    // Trigger the CommandPalette/Omni-Router via a custom event
+                    const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
+                    document.dispatchEvent(event);
+                }}
+                title="Omni-Input Router"
+                className="p-2.5 rounded-full transition-all duration-300 text-gray-500 hover:text-cyan-300 group"
+            >
+                <MessageSquare size={20} strokeWidth={1.5} className="group-hover:scale-110 transition-transform" />
+            </button>
+
+            {/* Settings Kabob Menu */}
+            <button
+                onClick={() => activatePillar('SETTINGS' as any)} // Will create this pillar next
+                title="Sovereign Settings"
+                className={`p-2.5 rounded-full transition-all duration-300 ${
+                    activePillar === 'SETTINGS'
+                        ? `bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.4)]`
+                        : `text-gray-500 hover:text-white`
+                }`}
+            >
+                <MoreHorizontal size={20} strokeWidth={isActive ? 2.5 : 1.5} />
+            </button>
         </div>
     );
 };

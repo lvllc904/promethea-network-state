@@ -48,8 +48,8 @@ export interface WaterfallStatus {
     infrastructureCostUsd?: number; // Phase 5: Tracking cloud substrate overhead
 }
 
-// Ring thresholds (in SOL) to unlock the next ring
-const RING_THRESHOLDS: Record<string, { threshold: number; next: string; description: string }> = {
+// Default Ring thresholds (in SOL) to unlock the next ring
+let RING_THRESHOLDS: Record<string, { threshold: number; next: string; description: string }> = {
     RING0_LAUNCH:    { threshold: 0.01,  next: 'YIELD_ORCA',    description: 'Fair Launch / Pump.fun / Meteora Curve' },
     YIELD_ORCA:      { threshold: 0.05,  next: 'YIELD_RAYDIUM', description: 'Orca Whirlpool Concentrated LP' },
     YIELD_RAYDIUM:   { threshold: 0.15,  next: 'YIELD_UNISWAP', description: 'Raydium CPMM — Jupiter Aggregation' },
@@ -67,8 +67,8 @@ export class WaterfallProtocol {
     private lastSwept: Date = new Date(0);
     private sweepIntervalMs: number = 60 * 60 * 1000; // Sweep every hour
 
-    // Treasury Synthesis thresholds (USD) — Appendix I Phase 4
-    private static readonly SYNTHESIS_THRESHOLDS = [
+    // Default Treasury Synthesis thresholds (USD) — Appendix I Phase 4
+    private static SYNTHESIS_THRESHOLDS = [
         {
             usd: 1_000,
             label: 'BLM_MINERAL_CLAIM',
@@ -168,6 +168,22 @@ export class WaterfallProtocol {
         this.lastSwept = now;
 
         console.log('[Waterfall] 🌊 Running sweep cycle...');
+
+        // Fetch Dynamic Thresholds
+        try {
+            const settingsDoc = await db.collection(COLLECTIONS.SOVEREIGN_SETTINGS).doc('thresholds').get();
+            if (settingsDoc.exists) {
+                const data = settingsDoc.data();
+                if (data.ringThresholds) {
+                    RING_THRESHOLDS = { ...RING_THRESHOLDS, ...data.ringThresholds };
+                }
+                if (data.synthesisThresholds) {
+                    WaterfallProtocol.SYNTHESIS_THRESHOLDS = data.synthesisThresholds;
+                }
+            }
+        } catch (e) {
+            console.warn('[Waterfall] Failed to fetch dynamic thresholds, using defaults.', e);
+        }
 
         const sweepOrder = [
             'RING0_LAUNCH',

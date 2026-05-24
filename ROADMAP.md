@@ -28,6 +28,10 @@ TPNS has evolved from a standalone digital jurisdiction into the **Sovereign Sub
 *   **The Vision:** "Draft-to-Deed" flow. A proposal is a tokenized instruction set.
 *   **Action:** Finalizing the automated link between governance consensus (+10 net votes) and physical/legal execution.
 
+### 4.4: The Universal Marketplace Matrix & Intent Engine (Fractal Governance) [NEW]
+*   **The Vision:** A fully integrated "Intent Engine" where any user (or AI) can express a natural language intent that is automatically routed to the correct sub-system.
+*   **Action:** Building the Genkit Intent Parser, unifying the data structures, and implementing a customizable, hybrid UI cockpit (Conversational "Omni-Input" + Manual Trays) that scales to multi-planetary latency via Local-First CRDTs.
+
 ---
 
 ## [Sovereign Source of Truth SOP]

@@ -17,7 +17,7 @@ function useBFFData<T>(path: string, defaultValue: T): { data: T; refetch: () =>
 
 import { useHUD } from '@/lib/hud-store';
 
-const PROPOSAL_TYPES = ['CONSTITUTIONAL', 'ECONOMIC', 'DIPLOMATIC', 'OPERATIONAL', 'TERRITORIAL'] as const;
+const PROPOSAL_TYPES = ['CONSTITUTIONAL', 'ECONOMIC', 'DIPLOMATIC', 'OPERATIONAL', 'TERRITORIAL', 'THRESHOLD'] as const;
 
 // ─── Inline Proposal Creation Form ──────────────────────────────────────────
 const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess: () => void }) => {
@@ -54,6 +54,15 @@ const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess:
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleAutoDraft = async () => {
+        setIsSubmitting(true);
+        // Simulate Genkit AI drafting based on a short title intent
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        setNarrative(`[AUTO-DRAFTED VIA INTENT ENGINE]\n\nBased on the stated intent: "${title}", this proposal mandates the necessary adjustments to sovereign state parameters to fulfill the directive. \n\nExecution of this proposal will result in the reallocation of necessary resources or threshold modifications as required by the 3-Body system boundaries.`);
+        if (!type) setType('OPERATIONAL');
+        setIsSubmitting(false);
     };
 
     return (
@@ -96,12 +105,23 @@ const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess:
                 {/* Title */}
                 <div>
                     <label className="block text-[8px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Proposal Title</label>
-                    <input
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
-                        placeholder="State the sovereign intent..."
-                        className="w-full bg-black/60 border border-white/10 rounded px-3 py-2 text-[11px] text-white placeholder-zinc-700 focus:outline-none focus:border-cyan-500/40 transition-colors"
-                    />
+                    <div className="flex gap-2">
+                        <input
+                            value={title}
+                            onChange={e => setTitle(e.target.value)}
+                            placeholder="State the sovereign intent..."
+                            className="flex-1 bg-black/60 border border-white/10 rounded px-3 py-2 text-[11px] text-white placeholder-zinc-700 focus:outline-none focus:border-cyan-500/40 transition-colors"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleAutoDraft}
+                            disabled={!title || isSubmitting}
+                            className="px-3 py-2 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 text-purple-400 rounded text-[9px] font-black uppercase tracking-widest disabled:opacity-50 transition-all"
+                            title="Auto-draft Narrative with Promethea"
+                        >
+                            AI Draft
+                        </button>
+                    </div>
                 </div>
 
                 {/* Narrative */}

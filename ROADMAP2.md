@@ -145,4 +145,7 @@ This document outlines the phased technical roadmap for building the Promethea a
     - [ ] **Train Meta-AI:** Train the AI to cross-reference the intent of code changes with the objectives outlined in this `ROADMAP.md` file.
     - [ ] **Grant Proposal Rights:** Grant the AI the ability to propose modifications to this `ROADMAP.md` file by creating a pull request, creating a system that automatically documents its own evolution.
 
-    
+5.  **The Universal Marketplace Matrix & Intent Engine:**
+    - [ ] **Omni-Input Router:** Develop the core NLP interface (Cmd+K and UI Button) for routing intents.
+    - [ ] **Dynamic Ethical Thresholds:** Implement Dual-Storage (SQLite/Solana) limits to Promethea's actions, adjusted via the existing governance voting system.
+    - [ ] **Hybrid Customizable UI:** Add a settings "kabob" menu to the HUD for defining UI paradigms.
