@@ -1,0 +1,5 @@
+{
+  "protocol": "ucp",
+  "version": "1.0.0",
+  "commerce_endpoint": "https://api.tpns.network/commerce"
+}

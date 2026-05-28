@@ -1,0 +1,22 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "TPNS Sovereign API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/agent/x402": {
+      "get": {
+        "summary": "Agent x402 Payment Discovery",
+        "responses": {
+          "402": {
+            "description": "Payment Required"
+          }
+        },
+        "x-payment-info": {
+          "supported": ["mpp", "ap2"]
+        }
+      }
+    }
+  }
+}

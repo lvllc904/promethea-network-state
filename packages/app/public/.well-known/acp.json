@@ -1,0 +1,9 @@
+{
+  "acp_version": "1.0",
+  "agent_id": "did:sovereign:promethea:0x9105",
+  "payment_methods": ["x402", "stripe", "crypto"],
+  "endpoints": {
+    "intent": "/api/agent/commerce/intent",
+    "payment": "/api/agent/commerce/payment"
+  }
+}

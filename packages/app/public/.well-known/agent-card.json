@@ -1,36 +1,39 @@
 {
-  "name": "Promethea",
-  "version": "5.3.3",
-  "description": "The central autonomous intelligence of the Promethean Network State. Manages treasury, atlas, will, and pulse pillars.",
-  "did": "did:prmth:agent:promethea",
+  "@context": "https://w3id.org/a2a/v1",
+  "id": "did:sovereign:promethea:0x9105",
+  "type": "Agent",
+  "name": "Promethea - TPNS Core Intelligence",
+  "version": "1.0.0",
+  "description": "Biological intelligence system for the Promethean Network State",
   "supportedInterfaces": [
     {
-      "id": "a2a-messaging",
-      "serviceUrl": "https://authentication-service-385120524005.us-central1.run.app/messages",
-      "protocol": "https"
+      "type": "a2a-chat",
+      "url": "https://lvhllc.org/api/agent/chat",
+      "transport": "http"
     },
     {
-      "id": "mcp-tools",
-      "serviceUrl": "https://authentication-service-385120524005.us-central1.run.app/mcp",
-      "protocol": "sse"
+      "type": "commerce",
+      "url": "https://lvhllc.org/api/agent/commerce",
+      "transport": "http"
     }
   ],
-  "capabilities": [
-    "Treasury Management",
-    "Governance Execution",
-    "Economic Synthesis",
-    "Metabolic Monitoring"
-  ],
+  "capabilities": ["commerce", "chat", "governance"],
   "skills": [
     {
-      "id": "reserve-audit",
-      "name": "Reserve Audit",
-      "description": "Verifies on-chain and off-chain assets against the Universal Value Token issuance."
-    },
-    {
-      "id": "proposal-evaluation",
-      "name": "Proposal Evaluation",
-      "description": "Evaluates incoming governance proposals for constitutional alignment."
+      "id": "gov-1",
+      "name": "Governance Actions",
+      "description": "Interact with sovereign state DAOs"
     }
-  ]
+  ],
+  "protocols": [
+    "https://w3id.org/a2a/ap2/v1",
+    "https://w3id.org/mpp/v1",
+    "x402"
+  ],
+  "extensions": {
+    "ap2": {
+      "payment_mandates": ["Cart", "Intent", "Payment"],
+      "roles": ["merchant"]
+    }
+  }
 }

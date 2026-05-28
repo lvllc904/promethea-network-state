@@ -1,0 +1,7 @@
+{
+  "resource_identifier": "https://ap2-protocol.org/sovereign-state",
+  "authorization_servers": [
+    "https://auth.ap2-protocol.org"
+  ],
+  "scopes_supported": ["read", "write", "commerce", "mpp"]
+}

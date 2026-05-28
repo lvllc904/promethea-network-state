@@ -13,8 +13,19 @@ import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { createChart, IChartApi, ISeriesApi, ColorType, CandlestickSeries } from 'lightweight-charts';
 import { ProofOfWorkSubmission } from '../intel/ProofOfWorkSubmission';
 
+// Import Pillar Trays
+import { AtlasTray } from './AtlasTray';
+import { EconomicsTray } from './EconomicsTray';
+import { GovernanceTray } from './GovernanceTray';
+import { NarrativeTray } from './NarrativeTray';
+import { DiplomaticTray } from './DiplomaticTray';
+import { PulseTray } from './PulseTray';
+import { PrometheaPanel } from './PrometheaPanel';
+import { SettingsTray } from './SettingsTray';
+import { PhosphorTerminal } from '../terminal/PhosphorTerminal';
+
 // --- SUB-PANEL: RWA EXCHANGE ---
-function ExchangePanel() {
+export function ExchangePanel() {
     const [price, setPrice] = useState(1.20);
     const [balance, setBalance] = useState(2500);
     const [amount, setAmount] = useState('100');
@@ -161,7 +172,7 @@ function ExchangePanel() {
 }
 
 // --- SUB-PANEL: SQL STATE EXPLORER ---
-function SqlExplorerPanel() {
+export function SqlExplorerPanel() {
     const [queryStr, setQueryStr] = useState('SELECT * FROM uvt_ledger LIMIT 5;');
     const [output, setOutput] = useState<any[]>([]);
     const [isExecuting, setIsExecuting] = useState(false);
@@ -270,7 +281,7 @@ function SqlExplorerPanel() {
 }
 
 // --- SUB-PANEL: BREW CLI GUIDE & TERMINAL ---
-function CliGuidePanel() {
+export function CliGuidePanel() {
     const [input, setInput] = useState('');
     const [logs, setLogs] = useState<string[]>([
         'Sovereign Model Context initialized successfully.',
@@ -383,7 +394,7 @@ function CliGuidePanel() {
 }
 
 // --- SUB-PANEL: SWEAT CLAIMS & PASSPORT ---
-function SweatClaimPanel() {
+export function SweatClaimPanel() {
     const [hours, setHours] = useState('4');
     const [taskDesc, setTaskDesc] = useState('');
     const [isClaiming, setIsClaiming] = useState(false);
@@ -493,7 +504,7 @@ function SweatClaimPanel() {
 }
 
 // --- SUB-PANEL: AUDITED FINANCIALS ---
-function FinancialsPanel() {
+export function FinancialsPanel() {
     const [activeTab, setActiveTab] = useState<'balance' | 'income' | 'staking'>('balance');
     const [stakeAmt, setStakeAmt] = useState('1000');
     const [isStaking, setIsStaking] = useState(false);
@@ -629,7 +640,7 @@ function FinancialsPanel() {
 
 // --- SUB-PANEL: PROMETHEA ASGI TELEMETRY ---
 // --- SUB-PANEL: PROMETHEA ASGI CANVAS ---
-function AsgiTelemetryPanel() {
+export function AsgiTelemetryPanel() {
     const [canvasTab, setCanvasTab] = useState<'models' | 'planning' | 'docs' | 'media' | 'depthos' | 'staging'>('models');
     
     // Global Event Listener for Omni-State Synchronization
@@ -704,52 +715,9 @@ function AsgiTelemetryPanel() {
         "Agnostic Core Online. Listening to the Cluster.",
         "[SYSTEM] Node 0x4f82 initialized."
     ]);
-    const [terminalInput, setTerminalInput] = useState('');
-    const [terminalLogs, setTerminalLogs] = useState<string[]>([
-        "Terminal Monitor Ready. Type 'cartographer help' or 'cartographer status'..."
-    ]);
     const [googleKey, setGoogleKey] = useState('AIzaSyD75hG_EXAMPLE_KEY...');
     const [groqKey, setGroqKey] = useState('gsk_yF8jX...');
     const [ollamaUrl, setOllamaUrl] = useState('http://localhost:11434');
-
-    const handleTerminalExecute = (e: React.FormEvent) => {
-        e.preventDefault();
-        const cmd = terminalInput.trim().toLowerCase();
-        if (!cmd) return;
-        setTerminalLogs(prev => [...prev, `\n$ ${terminalInput}`]);
-        setTerminalInput('');
-
-        setTimeout(() => {
-            if (cmd === 'cartographer help' || cmd === 'help') {
-                setTerminalLogs(prev => [
-                    ...prev,
-                    "Available Commands:",
-                    "  cartographer init      Initialize substrate local database",
-                    "  cartographer status    Verify active DID handshake and sandbox ports",
-                    "  clear                  Clear local console stream"
-                ]);
-            } else if (cmd === 'cartographer init') {
-                setTerminalLogs(prev => [
-                    ...prev,
-                    "✔ Staged local repository DID did:sovereign:node:0x4f82",
-                    "✔ Substrate sandbox online and listening."
-                ]);
-            } else if (cmd === 'cartographer status') {
-                setTerminalLogs(prev => [
-                    ...prev,
-                    "Status: NOMINAL",
-                    "  Connection: HTTPS / Secure WebRTC",
-                    "  Decoupled Shims: ACTIVE",
-                    "  Active Node DID: did:sovereign:node:0x4f82"
-                ]);
-            } else if (cmd === 'clear') {
-                setTerminalLogs([]);
-            } else {
-                setTerminalLogs(prev => [...prev, `command not found: ${cmd}`]);
-            }
-        }, 200);
-    };
-
     // 6. DEVELOPER STAGING tab states
     const [isStaged, setIsStaged] = useState(true);
     const [didSignature, setDidSignature] = useState('did:sovereign:citizen:0x9f1d2...');
@@ -1063,26 +1031,8 @@ function AsgiTelemetryPanel() {
 
                         {/* DepthOS TERMINAL subtab */}
                         {depthosSubTab === 'terminal' && (
-                            <div className="p-3.5 bg-black border border-white/5 rounded-xl font-mono text-xs flex flex-col justify-between overflow-hidden">
-                                <div className="flex justify-between items-center mb-2 pb-1.5 border-b border-white/5 text-[9px] text-zinc-500 uppercase tracking-widest font-bold">
-                                    <span>Terminal Monitor</span>
-                                    <span className="text-emerald-400">ONLINE</span>
-                                </div>
-                                <div className="space-y-1 flex-1 overflow-y-auto max-h-36 pr-1 text-[9px] text-green-400">
-                                    {terminalLogs.map((log, idx) => (
-                                        <div key={idx} className="whitespace-pre-wrap break-all leading-normal">{log}</div>
-                                    ))}
-                                </div>
-                                <form onSubmit={handleTerminalExecute} className="mt-2.5 pt-1.5 border-t border-white/5 flex items-center">
-                                    <span className="text-green-400 mr-2 text-[10px] font-bold font-mono">$</span>
-                                    <input 
-                                        type="text" 
-                                        value={terminalInput}
-                                        onChange={e => setTerminalInput(e.target.value)}
-                                        placeholder="Type cartographer status..."
-                                        className="flex-1 bg-transparent text-[9px] text-white font-mono focus:outline-none placeholder-zinc-700"
-                                    />
-                                </form>
+                            <div className="h-48 overflow-hidden rounded-xl">
+                                <PhosphorTerminal isEmbedded={true} />
                             </div>
                         )}
 
@@ -1180,7 +1130,7 @@ function AsgiTelemetryPanel() {
 }
 
 // --- WALLET HYDRATION PANEL ---
-const WalletPanel = () => {
+export const WalletPanel = () => {
     const [logs, setLogs] = useState<string[]>(['[INFO] Initializing Sovereign Identity Matrix...']);
     const [solanaConnected, setSolanaConnected] = useState(true);
     const [baseConnected, setBaseConnected] = useState(false);
@@ -1249,7 +1199,7 @@ const WalletPanel = () => {
 };
 
 // --- OMNI SCANNER PANEL ---
-const OmniScannerPanel = () => {
+export const OmniScannerPanel = () => {
     const { omniScannerTarget } = useHUD();
     const [query, setQuery] = useState(omniScannerTarget || '');
     const [logs, setLogs] = useState<string[]>([
@@ -1342,7 +1292,7 @@ const OmniScannerPanel = () => {
 };
 
 // --- ASSET CANVAS PANEL ---
-const AssetCanvasPanel = () => {
+export const AssetCanvasPanel = () => {
     const { activeAssetTarget } = useHUD();
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
@@ -1478,7 +1428,7 @@ const AssetCanvasPanel = () => {
 };
 
 // --- SUB-PANEL: DYNAMIC VIDEO CONFERENCE ---
-function ConferencePanel() {
+export function ConferencePanel() {
     const { activeMeetUrl, endVideoConference } = useHUD();
     const [seconds, setSeconds] = useState(0);
     const [isMuted, setIsMuted] = useState(false);
@@ -1763,6 +1713,11 @@ export const RightFocusTray = () => {
     const { activeFocusPanel, activateFocusPanel } = useHUD();
 
     if (!activeFocusPanel) return null;
+    
+    // Do not render the tray shell for full-screen themes
+    if (['16BIT', 'CHESS', 'PHOSPHOR'].includes(activeFocusPanel)) {
+        return null;
+    }
 
     let title = 'FOCUS PANEL';
     switch (activeFocusPanel) {
@@ -1777,11 +1732,19 @@ export const RightFocusTray = () => {
         case 'ASSET_CANVAS': title = 'ASGI // DYNAMIC ASSET CANVAS'; break;
         case 'CONFERENCE': title = 'ASGI // LIVE CONFERENCE'; break;
         case 'BIOLOGICAL_POW': title = 'ORACLE // BIOLOGICAL PROOF OF WORK'; break;
+        case 'ATLAS': title = 'ATLAS // NETWORK TOPOLOGY'; break;
+        case 'ECONOMICS': title = 'ECONOMICS // TREASURY & ASSETS'; break;
+        case 'GOVERNANCE': title = 'GOVERNANCE // SYNTHETIC STATE'; break;
+        case 'NARRATIVE': title = 'NARRATIVE // PUBLIC CHANNELS'; break;
+        case 'DIPLOMATIC': title = 'DIPLOMATIC // PASSPORT & VISAS'; break;
+        case 'PULSE': title = 'PULSE // SUBSTRATE VITALITY'; break;
+        case 'ASGI': title = 'ASGI // PROMETHEA CORE'; break;
+        case 'SETTINGS': title = 'SETTINGS // HUD PREFERENCES'; break;
     }
 
     return (
-        <div className="fixed top-12 bottom-10 right-4 w-[500px] xl:w-[600px] z-[9999] bg-zinc-950/90 backdrop-blur-2xl border border-cyan-500/30 rounded-xl flex flex-col overflow-hidden rim-highlight-focus slide-hud-right shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-            <div className="p-4 border-b border-white/5 flex justify-between items-center bg-white/5">
+        <div className="fixed top-12 bottom-10 right-4 w-[500px] xl:w-[600px] z-[9999] glass-panel rounded-xl flex flex-col overflow-hidden rim-highlight-focus slide-hud-right shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+            <div className="p-4 border-b border-cyan-400/20 flex justify-between items-center bg-teal-950/40 shadow-[0_4px_20px_rgba(6,182,212,0.1)]">
                 <h2 className="text-xs font-black uppercase tracking-[0.2em] text-cyan-400">
                     {title}
                 </h2>
@@ -1804,6 +1767,14 @@ export const RightFocusTray = () => {
                 {activeFocusPanel === 'OMNI_SCANNER' && <OmniScannerPanel />}
                 {activeFocusPanel === 'ASSET_CANVAS' && <AssetCanvasPanel />}
                 {activeFocusPanel === 'CONFERENCE' && <ConferencePanel />}
+                {activeFocusPanel === 'ATLAS' && <AtlasTray />}
+                {activeFocusPanel === 'ECONOMICS' && <EconomicsTray />}
+                {activeFocusPanel === 'GOVERNANCE' && <GovernanceTray />}
+                {activeFocusPanel === 'NARRATIVE' && <NarrativeTray />}
+                {activeFocusPanel === 'DIPLOMATIC' && <DiplomaticTray />}
+                {activeFocusPanel === 'PULSE' && <PulseTray />}
+                {activeFocusPanel === 'ASGI' && <PrometheaPanel />}
+                {activeFocusPanel === 'SETTINGS' && <SettingsTray />}
                 {activeFocusPanel === 'BIOLOGICAL_POW' && (
                     <div className="flex items-center justify-center h-full">
                         <ProofOfWorkSubmission 
