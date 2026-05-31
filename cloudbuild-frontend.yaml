@@ -10,6 +10,7 @@ steps:
       - --build-arg=NEXT_PUBLIC_LEDGER_URL=${_LEDGER_URL}
       - --build-arg=NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${_MAPS_KEY}
       - --build-arg=NEXT_PUBLIC_DISABLE_FIREBASE=${_DISABLE_FIREBASE}
+      - --build-arg=NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID=${_DYNAMIC_ENV_ID}
       - --build-arg=CACHE_BUSTER=$BUILD_ID
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -55,4 +56,5 @@ substitutions:
   _LEDGER_URL: 'https://sovereign-ledger-385120524005.us-central1.run.app'
   _MAPS_KEY: ''
   _DISABLE_FIREBASE: 'true'
+  _DYNAMIC_ENV_ID: 'c4599934-a538-4829-b3d9-001b28d6faad'
 
