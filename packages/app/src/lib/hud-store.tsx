@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-export type PillarCategory = 'ATLAS' | 'ECONOMICS' | 'GOVERNANCE' | 'NARRATIVE' | 'PASSPORT' | 'DIPLOMATIC' | 'PULSE' | 'ASGI';
+export type PillarCategory = 'ATLAS' | 'ECONOMICS' | 'GOVERNANCE' | 'NARRATIVE' | 'PASSPORT' | 'DIPLOMATIC' | 'PULSE' | 'ASGI' | 'SETTINGS';
 
 export interface Watchlist {
     name: string;
@@ -27,6 +27,20 @@ export interface ChatThread {
     avatar?: string;
 }
 
+export interface OSWindowData {
+    id: string;
+    type: string;
+    title: string;
+    x: number;
+    y: number;
+    width: number | string;
+    height: number | string;
+    zIndex: number;
+    isMinimized: boolean;
+    isMaximized: boolean;
+    isPoppedOut: boolean;
+}
+
 export interface HUDState {
     activePillar: PillarCategory;
     activeTab: string | null;
@@ -46,11 +60,21 @@ export interface HUDState {
     activeThreadId: string;
     activeMeetUrl: string | null;
     userDid: string;
+
+    // OS Windows
+    osWindows: OSWindowData[];
+
+    // Accessibility & UX
+    reduceAnimations: boolean;
+
+    // Economics State
+    globalVix: number;
 }
 
 interface HUDContextType extends HUDState {
     setHUDState: (state: Partial<HUDState>) => void;
     toggleView: () => void;
+    toggleAnimations: () => void;
     activatePillar: (pillar: PillarCategory, defaultTab?: string) => void;
     activateFocusPanel: (panel: string | null) => void;
     triggerOmniScanner: (target: string) => void;
@@ -70,6 +94,15 @@ interface HUDContextType extends HUDState {
     setActiveThread: (threadId: string) => void;
     startVideoConference: (threadId: string) => void;
     endVideoConference: () => void;
+
+    // OS Window Actions
+    openOSWindow: (id: string, type: string, title: string) => void;
+    closeOSWindow: (id: string) => void;
+    updateOSWindow: (id: string, updates: Partial<OSWindowData>) => void;
+    focusOSWindow: (id: string) => void;
+    popOutOSWindow: (id: string) => void;
+    syncHUDState: (state: Partial<HUDState>) => void;
+    setGlobalVix: (val: number) => void;
 }
 
 const defaultWatchlists: Watchlist[] = [
@@ -161,6 +194,9 @@ const defaultState: HUDState = {
     activeThreadId: 'general-council',
     activeMeetUrl: null,
     userDid: 'did:sovereign:citizen:0x9f1d2b8a3e1c0d4f',
+    osWindows: [],
+    reduceAnimations: false,
+    globalVix: 15.0,
 };
 
 const HUDContext = createContext<HUDContextType | undefined>(undefined);
@@ -175,13 +211,16 @@ export const HUDProvider = ({ children }: { children: ReactNode }) => {
             const savedActive = localStorage.getItem('promethea-active-watchlist');
             const savedThreads = localStorage.getItem('promethea-chat-threads');
             const savedActiveThread = localStorage.getItem('promethea-active-thread-id');
+            const savedOSWindows = localStorage.getItem('promethea-os-windows');
             
             setState(prev => ({
                 ...prev,
                 watchlists: savedWatchlists ? JSON.parse(savedWatchlists) : defaultWatchlists,
                 activeWatchlistName: savedActive || 'Default Watchlist',
                 chatThreads: savedThreads ? JSON.parse(savedThreads) : defaultThreads,
-                activeThreadId: savedActiveThread || 'general-council'
+                activeThreadId: savedActiveThread || 'general-council',
+                osWindows: savedOSWindows ? JSON.parse(savedOSWindows) : [],
+                reduceAnimations: localStorage.getItem('promethea-reduce-animations') === 'true'
             }));
         }
     }, []);
@@ -197,21 +236,76 @@ export const HUDProvider = ({ children }: { children: ReactNode }) => {
                 if (newState.activeWatchlistName) {
                     localStorage.setItem('promethea-active-watchlist', newState.activeWatchlistName);
                 }
+                if (newState.osWindows) {
+                    localStorage.setItem('promethea-os-windows', JSON.stringify(newState.osWindows));
+                }
             }
             return updated;
         });
+    };
+
+    const syncHUDState = (newState: Partial<HUDState>) => {
+        setState((prev) => ({ ...prev, ...newState }));
     };
 
     const toggleView = () => {
         setState((prev) => ({ ...prev, isMacroView: !prev.isMacroView }));
     };
 
-    const activatePillar = (pillar: PillarCategory, defaultTab: string | null = null) => {
-        setState((prev) => ({ ...prev, activePillar: pillar, activeTab: defaultTab, activeFocusPanel: null }));
+    const toggleAnimations = () => {
+        setState((prev) => {
+            const newVal = !prev.reduceAnimations;
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('promethea-reduce-animations', String(newVal));
+            }
+            return { ...prev, reduceAnimations: newVal };
+        });
+    };
+
+    const activatePillar = (pillar: PillarCategory | null, defaultTab: string | null = null) => {
+        setState((prev) => {
+            // Toggle off if clicking the same pillar
+            if (prev.activePillar === pillar) {
+                return { ...prev, activePillar: null as any, activeFocusPanel: null, activeTab: null };
+            }
+            // Otherwise, open left and right trays in tandem
+            return { 
+                ...prev, 
+                activePillar: pillar as any, 
+                activeFocusPanel: pillar, // Map the pillar directly to the focus panel
+                activeTab: defaultTab 
+            };
+        });
     };
 
     const activateFocusPanel = (panel: string | null) => {
-        setState((prev) => ({ ...prev, activeFocusPanel: panel }));
+        if (!panel) return;
+        
+        let title = 'FOCUS PANEL';
+        switch (panel) {
+            case 'EXCHANGE': title = 'ASGI // RWA EXCHANGE'; break;
+            case 'SQL_EXPLORER': title = 'SUBSTRATE // SQL STATE EXPLORER'; break;
+            case 'CLI_GUIDE': title = 'DEVELOPERS // CLI HOOK'; break;
+            case 'SWEAT_CLAIM': title = 'PASSPORT // SWEAT-EQUITY CLAIMS'; break;
+            case 'FINANCIALS': title = 'TREASURY // FINANCIAL AUDIT STATEMENT'; break;
+            case 'PROMETHEA_ASGI': title = 'PROMETHEA ASGI // COGNITIVE MONITORS'; break;
+            case 'WALLET': title = 'IDENTITY // SOVEREIGN WALLET'; break;
+            case 'OMNI_SCANNER': title = 'PROMETHEA // OMNI-SCANNER'; break;
+            case 'ASSET_CANVAS': title = 'ASGI // DYNAMIC ASSET CANVAS'; break;
+            case 'CONFERENCE': title = 'ASGI // LIVE CONFERENCE'; break;
+            case 'BIOLOGICAL_POW': title = 'ORACLE // BIOLOGICAL PROOF OF WORK'; break;
+            case '16BIT': 
+                setState((prev) => ({ ...prev, activeFocusPanel: '16BIT' }));
+                return; // 16bit is full screen, keep old logic
+            case 'CHESS':
+                setState((prev) => ({ ...prev, activeFocusPanel: 'CHESS' }));
+                return; // chess is full screen, keep old logic
+            case 'PHOSPHOR':
+                setState((prev) => ({ ...prev, activeFocusPanel: 'PHOSPHOR' }));
+                return; // Phosphor is full screen, keep old logic
+        }
+
+        openOSWindow(`focus-${panel.toLowerCase()}`, panel, title);
     };
 
     const triggerOmniScanner = (target: string) => {
@@ -465,11 +559,104 @@ export const HUDProvider = ({ children }: { children: ReactNode }) => {
         }));
     };
 
+    // --- OS Window Actions ---
+    const openOSWindow = (id: string, type: string, title: string) => {
+        setState((prev) => {
+            const existing = prev.osWindows.find(w => w.id === id);
+            let updatedOSWindows;
+            
+            if (existing) {
+                // Just focus and un-minimize
+                const highestZ = Math.max(0, ...prev.osWindows.map(w => w.zIndex));
+                updatedOSWindows = prev.osWindows.map(w => 
+                    w.id === id ? { ...w, zIndex: highestZ + 1, isMinimized: false, isPoppedOut: false } : w
+                );
+            } else {
+                // Create new
+                const highestZ = Math.max(0, ...prev.osWindows.map(w => w.zIndex));
+                const newWindow: OSWindowData = {
+                    id, type, title,
+                    x: 100 + (prev.osWindows.length * 40),
+                    y: 100 + (prev.osWindows.length * 40),
+                    width: 500, height: 600,
+                    zIndex: highestZ + 1,
+                    isMinimized: false,
+                    isMaximized: false,
+                    isPoppedOut: false
+                };
+                updatedOSWindows = [...prev.osWindows, newWindow];
+            }
+
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('promethea-os-windows', JSON.stringify(updatedOSWindows));
+            }
+            return { ...prev, osWindows: updatedOSWindows };
+        });
+    };
+
+    const closeOSWindow = (id: string) => {
+        setState((prev) => {
+            const updated = prev.osWindows.filter(w => w.id !== id);
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('promethea-os-windows', JSON.stringify(updated));
+            }
+            return { ...prev, osWindows: updated };
+        });
+    };
+
+    const updateOSWindow = (id: string, updates: Partial<OSWindowData>) => {
+        setState((prev) => {
+            const updated = prev.osWindows.map(w => w.id === id ? { ...w, ...updates } : w);
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('promethea-os-windows', JSON.stringify(updated));
+            }
+            return { ...prev, osWindows: updated };
+        });
+    };
+
+    const focusOSWindow = (id: string) => {
+        setState((prev) => {
+            const target = prev.osWindows.find(w => w.id === id);
+            if (!target) return prev;
+            
+            const highestZ = Math.max(0, ...prev.osWindows.map(w => w.zIndex));
+            if (target.zIndex === highestZ) return prev; // Already focused
+            
+            const updated = prev.osWindows.map(w => w.id === id ? { ...w, zIndex: highestZ + 1 } : w);
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('promethea-os-windows', JSON.stringify(updated));
+            }
+            return { ...prev, osWindows: updated };
+        });
+    };
+
+    const popOutOSWindow = (id: string) => {
+        setState((prev) => {
+            const target = prev.osWindows.find(w => w.id === id);
+            if (!target) return prev;
+
+            // Mark as popped out in state
+            const updated = prev.osWindows.map(w => w.id === id ? { ...w, isPoppedOut: true } : w);
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('promethea-os-windows', JSON.stringify(updated));
+                // Open new browser window
+                window.open(`/dashboard/popout/${target.type}`, `popout-${target.id}`, `width=${target.width},height=${target.height},left=${window.screenX + target.x},top=${window.screenY + target.y}`);
+            }
+            
+            return { ...prev, osWindows: updated };
+        });
+    };
+
+    const setGlobalVix = (val: number) => {
+        setState(prev => ({ ...prev, globalVix: val }));
+    };
+
     return (
         <HUDContext.Provider value={{ 
             ...state, 
             setHUDState, 
             toggleView, 
+            toggleAnimations,
             activatePillar, 
             activateFocusPanel, 
             triggerOmniScanner, 
@@ -484,7 +671,14 @@ export const HUDProvider = ({ children }: { children: ReactNode }) => {
             createGroupThread,
             setActiveThread,
             startVideoConference,
-            endVideoConference
+            endVideoConference,
+            openOSWindow,
+            closeOSWindow,
+            updateOSWindow,
+            focusOSWindow,
+            popOutOSWindow,
+            syncHUDState,
+            setGlobalVix
         }}>
             {children}
         </HUDContext.Provider>

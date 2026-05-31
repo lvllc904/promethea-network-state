@@ -23,6 +23,7 @@ import { Skeleton } from '@promethea/ui';
 import { RealityBadge } from '@promethea/components';
 import { useToast } from '@promethea/hooks';
 import { useLocalProfile } from '@promethea/hooks/use-local-profile';
+import { useSolanaCitizen } from '@promethea/hooks';
 
 export default function PassportPage() {
   const { user, isUserLoading } = useUser();
@@ -30,6 +31,20 @@ export default function PassportPage() {
   const { toast } = useToast();
   const { localProfile } = useLocalProfile();
   const [uvtBalance, setUvtBalance] = React.useState<number | null>(null);
+  
+  const { walletAddress, solBalance, signMessage } = useSolanaCitizen();
+  const [signatureResult, setSignatureResult] = React.useState<string | null>(null);
+
+  const handleSignGenesis = async () => {
+    const signature = await signMessage("I confirm my sovereign identity within the Promethean Network State.");
+    if (signature) {
+      setSignatureResult(signature);
+      toast({
+        title: "Signature Successful",
+        description: "Your sovereign vault has cryptographically signed the message."
+      });
+    }
+  };
 
   const citizenRef = useSovereignMemo(
     () => (firestore && user && user.uid !== 'anonymous' ? doc(firestore, 'citizens', user.uid) : null) as DocumentReference<Citizen> | null,
@@ -155,6 +170,37 @@ export default function PassportPage() {
                 <Button variant="ghost" size="icon" onClick={() => handleCopy(user.did || '')}>
                   <Copy className="h-4 w-4" />
                 </Button>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground mb-2">
+                Sovereign Vault Address (Solana)
+              </h3>
+              <div className="flex items-center justify-between rounded-md border bg-muted/50 p-3 mb-2">
+                <code className="text-sm font-mono truncate">{walletAddress || "Provisioning..."}</code>
+                <Button variant="ghost" size="icon" onClick={() => handleCopy(walletAddress || '')}>
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="flex items-center justify-between mt-2">
+                 <p className="text-sm font-medium">Network Balance (SOL)</p>
+                 <p className="font-mono text-lg font-bold">{solBalance !== null ? `${solBalance.toFixed(4)} SOL` : "..."}</p>
+              </div>
+              <div className="mt-4">
+                 <Button onClick={handleSignGenesis} variant="outline" className="w-full bg-primary/10 hover:bg-primary/20">
+                   Sign Genesis Protocol Message
+                 </Button>
+                 {signatureResult && (
+                   <div className="mt-2 p-2 bg-muted rounded border border-primary/20">
+                     <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider">Cryptographic Signature</p>
+                     <p className="text-xs font-mono text-green-500 break-all">
+                       {signatureResult}
+                     </p>
+                   </div>
+                 )}
               </div>
             </div>
 

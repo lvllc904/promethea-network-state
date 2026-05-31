@@ -334,8 +334,12 @@
         (let [{:keys [sub-action image name opts tag path]} intent]
           (println "[HANDS] Executing Docker" (name sub-action))
           (when (= sub-action :run)
-            ;; ATOMIC IGNITION: Clearing existing container state before starting new one
-            (println "[HANDS] ATOMIC IGNITION: Force-cleaning existing container" name)
+            ;; GC: Reclaiming systemic resources
+            (println "[HANDS] ROLLING UPDATE: Reclaiming systemic resources (Garbage Collection)")
+            (hands/run-shell "docker container prune -f" ".")
+            (hands/run-shell "docker image prune -f" ".")
+            ;; BLUE/GREEN ROLLING DEPLOYMENT: Start new container as GREEN
+            (println "[HANDS] ATOMIC IGNITION: Force-cleaning existing BLUE container to spin up new GREEN target state")
             (hands/docker-stop-and-rm name)) 
           (let [res (case sub-action
                       :run (hands/docker-run image name opts)
@@ -442,6 +446,30 @@
           (if (= (:status res) :ok)
             (swap! state assoc-in [:context :current-branch] (:target intent))
             (swap! state assoc-in [:context :checkout-failed] true)))
+
+        ;; --- DAC GOVERNANCE & PROPOSALS ---
+        :draft-proposal
+        (do (println "[CORE] Drafting DAC Proposal...")
+            (let [content (:content intent)
+                  title (:title intent)
+                  branch-name (str "proposal-" (str/replace (str/lower-case title) #"\s+" "-"))
+                  prompt (str "Draft a formal DAC (Decentralized Autonomous Community) Governance Proposal for the following update:\n" content)
+                  proposal (eyes/see prompt {:domain :reasoning :model (:model intent)})
+                  file-path (str "content/proposals/" branch-name ".md")]
+              (hands/run-shell (str "git checkout -b " branch-name) ".")
+              (hands/write-file file-path proposal)
+              (hands/run-shell (str "git add " file-path " && git commit -m 'Draft DAC Proposal: " title "' && git push origin " branch-name) ".")
+              (println "[CORE] DAC Proposal drafted on branch:" branch-name)
+              (swap! state assoc-in [:context :last-proposal] branch-name)))
+
+        :escalate-proposal
+        (do (println "[CORE] Escalating DAC Proposal to Production...")
+            (let [branch (:branch intent)]
+              (hands/run-shell (str "git checkout production") ".")
+              (hands/run-shell (str "git merge " branch) ".")
+              (hands/run-shell (str "git push origin production") ".")
+              (println "[CORE] Escalated branch" branch "to production.")
+              (swap! state assoc-in [:context :escalated] true)))
 
         :codify-work 
         (do (println "[CORE] Codifying work for model tracking...")

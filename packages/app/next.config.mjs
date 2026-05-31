@@ -18,6 +18,7 @@ const nextConfig = {
     output: 'standalone',
     experimental: {
         outputFileTracingRoot: path.join(__dirname, '../../'),
+        serverComponentsExternalPackages: ['@opentelemetry/sdk-node', 'require-in-the-middle', '@opentelemetry/api', '@opentelemetry/instrumentation'],
     },
     images: {
         remotePatterns: [

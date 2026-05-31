@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ClientProviders } from "@/components/providers/ClientProviders";
 import Script from "next/script";
@@ -6,6 +6,13 @@ import Script from "next/script";
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 export const revalidate = 0;
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+};
 
 export const metadata: Metadata = {
     title: "Promethean Network State",
@@ -40,17 +47,16 @@ export default function RootLayout({
                     }
                 `}} />
                 
-                {/* WebMCP: Sovereign Tool Discovery for AI Agents */}
+                {/* WebMCP: Sovereign Tool Discovery via CustomEvent (Zero Polling) */}
                 <script dangerouslySetInnerHTML={{ __html: `
-                    if (window.navigator && !window.navigator.modelContext) {
-                        console.log('[WebMCP] Initializing Sovereign Model Context...');
-                        window.navigator.modelContext = {
-                            registerTool: (tool) => {
-                                console.log('[WebMCP] Registered Tool:', tool.name);
-                                if (!window._pns_tools) window._pns_tools = [];
-                                window._pns_tools.push(tool);
+                    if (typeof window !== 'undefined') {
+                        console.log('[WebMCP] Broadcasting Agent-Native Readiness...');
+                        window.dispatchEvent(new CustomEvent('WEBMCP_READY', {
+                            detail: {
+                                protocol: '1.0',
+                                capabilities: ['mcp_server', 'oauth_discovery', 'a2a_commerce']
                             }
-                        };
+                        }));
                     }
                 `}} />
             </body>

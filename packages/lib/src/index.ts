@@ -7,3 +7,5 @@ export * from './conviction-engine';
 export * from './depthos-bridge';
 export * from './pow-oracle';
 export * from './types';
+export * from './utils';
+export * from './placeholder-images';

@@ -60,7 +60,7 @@ export const TacticalRibbon = () => {
     const { activePillar, activatePillar } = useHUD();
 
     return (
-        <div className="fixed left-4 top-1/2 transform -translate-y-1/2 z-50 flex flex-col gap-4 p-3 bg-black/40 backdrop-blur border border-white/5 rounded-full">
+        <div className="flex flex-col gap-4 p-2 w-full items-center">
             {PILLARS.map((pillar) => {
                 const Icon = pillar.icon;
                 const isActive = activePillar === pillar.id;
@@ -107,7 +107,7 @@ export const TacticalRibbon = () => {
                         : `text-gray-500 hover:text-white`
                 }`}
             >
-                <MoreHorizontal size={20} strokeWidth={isActive ? 2.5 : 1.5} />
+                <MoreHorizontal size={20} strokeWidth={activePillar === 'SETTINGS' ? 2.5 : 1.5} />
             </button>
         </div>
     );

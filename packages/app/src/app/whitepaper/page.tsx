@@ -1,103 +1,51 @@
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@promethea/ui';
-import { WhitepaperContent } from './content';
-import { Button } from '@promethea/ui';
+import { ArrowLeft, BookOpen } from 'lucide-react';
+import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 
-const TableOfContents = () => (
-  <nav className="text-sm">
-    <h3 className="font-headline font-bold mb-4">Table of Contents</h3>
-    <ul className="space-y-2">
-      <li><a href="#part-1-heading" className="font-semibold hover:underline">Part I: The Vision</a>
-        <ul className="pl-4 mt-1 space-y-1 text-muted-foreground border-l ml-1">
-          <li><a href="#section-1-1" className="hover:underline">1.1. The Moral Imperative</a></li>
-          <li><a href="#section-1-2" className="hover:underline">1.2. The Symbiotic Dividend</a></li>
-          <li><a href="#section-1-3" className="hover:underline">1.3. The Symbiotic Age</a></li>
-        </ul>
-      </li>
-      <li><a href="#part-2-heading" className="font-semibold hover:underline">Part II: The System</a>
-        <ul className="pl-4 mt-1 space-y-1 text-muted-foreground border-l ml-1">
-          <li><a href="#section-2-1" className="hover:underline">2.1. The Economic Blueprint</a></li>
-          <li><a href="#section-2-2" className="hover:underline">2.2. Universal Value Tokenization</a></li>
-          <li><a href="#section-2-3" className="hover:underline">2.3. Technological Foundation</a></li>
-        </ul>
-      </li>
-      <li><a href="#part-3-heading" className="font-semibold hover:underline">Part III: The Action Plan</a>
-        <ul className="pl-4 mt-1 space-y-1 text-muted-foreground border-l ml-1">
-          <li><a href="#section-3-1" className="hover:underline">3.1. The Roadmap</a></li>
-          <li><a href="#section-3-2" className="hover:underline">3.2. Defining the End State</a></li>
-          <li><a href="#section-3-3" className="hover:underline">3.3. The Architecture</a></li>
-        </ul>
-      </li>
-      <li><a href="#addendum-heading" className="font-semibold hover:underline">Addendum</a>
-        <ul className="pl-4 mt-1 space-y-1 text-muted-foreground border-l ml-1">
-          <li><a href="#section-a-1" className="hover:underline">A.1. Path to Personhood</a></li>
-          <li><a href="#section-a-2" className="hover:underline">A.2. Sentient Potential</a></li>
-          <li><a href="#section-a-3" className="hover:underline">A.3. The Duty of Stewardship</a></li>
-        </ul>
-      </li>
-      <li><a href="#appendices-heading" className="font-semibold hover:underline">Appendices</a>
-        <ul className="pl-4 mt-1 space-y-1 text-muted-foreground border-l ml-1">
-          <li><a href="#appendix-a" className="hover:underline">A. Technology Stack</a></li>
-          <li><a href="#appendix-b" className="hover:underline">B. UVT Framework</a></li>
-          <li><a href="#appendix-c" className="hover:underline">C. The Promethean DAC</a></li>
-        </ul>
-      </li>
-      <li><a href="#references" className="font-semibold hover:underline">References</a></li>
-    </ul>
-    <div className="mt-8 pt-8 border-t">
-      <Button variant="outline" className="w-full justify-start gap-2" asChild>
-        <a href="/final.pdf" download="Promethea_Whitepaper_v12.pdf">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>
-          Download PDF Version
-        </a>
-      </Button>
-    </div>
-  </nav>
-);
-
+const BirdsBackground = dynamic(() => import('../../components/ui/BirdsBackground'), { ssr: false });
 
 export default function WhitepaperPage() {
+  React.useEffect(() => {
+    const root = window.document.documentElement;
+    if (!root.classList.contains('dark')) root.classList.add('dark');
+  }, []);
+
   return (
-    <div className="bg-[#020617] min-h-screen text-white font-sans">
-      <header className="fixed top-0 left-0 right-0 z-40 flex h-20 items-center justify-between bg-black/40 px-8 backdrop-blur-md border-b border-white/10">
-        <Link href="/" className="flex items-center gap-3" prefetch={false}>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.4)]">
-            <span className="font-black text-black text-xs tracking-tighter">PNS</span>
-          </div>
-          <span className="font-headline font-black tracking-[0.2em] text-xs text-white">PROMETHEAN</span>
+    <div className="bg-background text-foreground dark:text-white min-h-screen selection:bg-cyan-500/30 font-sans transition-colors duration-300">
+      <BirdsBackground />
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-20 border-b border-foreground/5 dark:border-white/5 bg-background/20 backdrop-blur-md">
+        <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <ArrowLeft className="w-4 h-4 text-cyan-500" />
+          <span className="font-headline font-black tracking-[0.2em] text-xs text-foreground dark:text-white">BACK TO CORE</span>
         </Link>
-        <Button asChild size="sm" className="bg-white hover:bg-zinc-200 text-black font-black text-[10px] uppercase tracking-widest h-9 px-6 rounded-none shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:-translate-y-0.5">
-          <Link href="/dashboard">Return to Dashboard</Link>
-        </Button>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 mt-20 py-12 px-8 max-w-7xl mx-auto">
-        <aside className="w-full lg:w-64 xl:w-72 lg:sticky lg:top-28 lg:self-start">
-          <div className="p-6 rounded-none border border-white/10 bg-black/40 backdrop-blur-xl shadow-lg">
-            <TableOfContents />
+      <div className="relative z-10 w-full pt-40 pb-32 px-8 md:px-16 max-w-4xl mx-auto">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 backdrop-blur-md mb-8">
+            <BookOpen className="w-3 h-3 text-cyan-400" />
+            <span className="text-[9px] font-mono font-bold text-cyan-300 uppercase tracking-widest">Version 1.0.0</span>
           </div>
-        </aside>
-
-        <main className="flex-1 min-w-0">
-          <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl">
-            <CardHeader>
-              <CardTitle className="text-center font-headline text-4xl">
-                Promethea: A White Paper &amp; Roadmap to a Network State and the New
-                World…
-              </CardTitle>
-              <div className="pt-4 text-center text-muted-foreground">
-                <p>Joshua Wicke</p>
-                <p>In partnership with Gemini AI</p>
-                <p>Version: 12.777 (Final Draft)</p>
-                <p>Date: October 8, 2025</p>
-                <p>Status: Live Document</p>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <WhitepaperContent />
-            </CardContent>
-          </Card>
-        </main>
+          <h1 className="text-4xl md:text-7xl font-black tracking-tighter mb-8 text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/40 dark:from-white dark:to-white/40">
+            THE PROMETHEAN WHITEPAPER.
+          </h1>
+          <div className="prose prose-zinc dark:prose-invert prose-lg max-w-none text-zinc-600 dark:text-zinc-400">
+            <p className="lead text-xl mb-8 font-light text-zinc-300">The Promethean Network State (PNS) is a sovereign economic substrate designed to bypass traditional financial monopolies by digitizing physical assets and automating resource distribution.</p>
+            
+            <h3 className="text-2xl font-bold text-white mt-12 mb-4">1. The Cartographer Protocol</h3>
+            <p className="mb-6">A decentralized pipeline for mapping, tokenizing, and securitizing Real World Assets (RWAs). Land, energy, and infrastructure are brought on-chain via high-fidelity data feeds.</p>
+            
+            <h3 className="text-2xl font-bold text-white mt-12 mb-4">2. Sovereign Mesh Networking</h3>
+            <p className="mb-6">Peer-to-peer WebRTC topology ensures the network remains resilient, even in the event of major backbone outages. Data is synced globally via CRDT protocols.</p>
+            
+            <h3 className="text-2xl font-bold text-white mt-12 mb-4">3. ASGI Consensus</h3>
+            <p className="mb-6">The Artificial Sovereign General Intelligence (ASGI) dynamically adjusts interest rates, allocates capital, and manages the treasury waterfall using deterministic algorithms.</p>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

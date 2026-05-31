@@ -95,7 +95,9 @@ export class Cartographer {
             { id: 'pulse', selector: "button[title='Pulse']", text: 'Pulse', role: 'button', x: 33, y: 621, isClickable: true },
             { id: 'cmd_k', selector: 'Cmd+K Hint', text: '⌘ K', role: 'hint', x: 748, y: 48, isClickable: false },
             { id: 'header_ticker', selector: 'Header Ticker', text: 'Financial Ticker', role: 'ticker', x: 748, y: 16, isClickable: true },
-            { id: 'footer_ticker', selector: 'Footer Ticker', text: 'State Ticker', role: 'ticker', x: 748, y: 802, isClickable: true }
+            { id: 'footer_ticker', selector: 'Footer Ticker', text: 'State Ticker', role: 'ticker', x: 748, y: 802, isClickable: true },
+            { id: 'glass_tray_container', selector: '.glass-panel', text: 'Active Pillar Tray', role: 'dialog', x: 96, y: 48, w: 384, h: 720, isClickable: false },
+            { id: 'tray_copilot_chat', selector: '.bg-teal-950\\/30', text: 'Co-Pilot Chat', role: 'log', x: 96, y: 560, w: 384, h: 220, isClickable: true }
         ];
 
         // Parse custom HTML inputs to extract dynamic links/buttons if present

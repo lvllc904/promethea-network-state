@@ -146,8 +146,8 @@ export function SovereignFooterTicker() {
             </div>
             <div className="flex-1 overflow-hidden relative">
                 <div
-                    className="flex items-center h-full whitespace-nowrap"
-                    style={{ animation: 'state-scroll 80s linear infinite' }}
+                    className="flex items-center h-full whitespace-nowrap animate-ticker"
+                    style={{ animation: 'state-scroll 20s linear infinite' }}
                 >
                     {doubled.map((item, i) => <StateItem key={i} item={item} />)}
                 </div>

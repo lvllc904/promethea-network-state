@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const r = await fetch(`${ENGINE_URL}/api/governance/vote`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body), signal: AbortSignal.timeout(5000)
+      body: JSON.stringify(body), signal: AbortSignal.timeout(30000)
     });
     if (r.ok) return NextResponse.json(await r.json());
   } catch (_) {}

@@ -16,6 +16,7 @@ function useBFFData<T>(path: string, defaultValue: T): { data: T; refetch: () =>
 }
 
 import { useHUD } from '@/lib/hud-store';
+import { useSolanaCitizen, useToast } from '@promethea/hooks';
 
 const PROPOSAL_TYPES = ['CONSTITUTIONAL', 'ECONOMIC', 'DIPLOMATIC', 'OPERATIONAL', 'TERRITORIAL', 'THRESHOLD'] as const;
 
@@ -190,17 +191,35 @@ export const GovernanceTray = () => {
     const combinedProposals = [...extraProposals, ...proposals];
 
 
+    const { signMessage, walletAddress } = useSolanaCitizen();
+    const { toast } = useToast();
+
     const handleVote = async (proposalId: string, vote: 'FOR' | 'AGAINST') => {
+        if (!walletAddress) {
+            toast({ title: 'Authentication Required', description: 'Please connect your Solana wallet to vote.' });
+            return;
+        }
+
         setIsVoting(proposalId);
         try {
+            const message = `[Promethean Network State]\nAction: Cast Vote\nProposal ID: ${proposalId}\nVote: ${vote}\nTimestamp: ${new Date().toISOString()}`;
+            const signature = await signMessage(message);
+            
+            if (!signature) {
+                toast({ title: 'Signature Rejected', description: 'Vote cancelled by user.' });
+                return;
+            }
+
             await fetch('/api/governance/vote', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ proposalId, vote })
+                body: JSON.stringify({ proposalId, vote, signature, walletAddress, message })
             });
             refetchProposals();
+            toast({ title: 'Vote Cast Successfully', description: `Your ${vote} vote has been recorded on-chain.` });
         } catch (e) {
             console.error(e);
+            toast({ title: 'Vote Failed', description: 'There was an error recording your vote.' });
         } finally {
             setIsVoting(null);
         }

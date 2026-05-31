@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
 const app = express();
-const port = Number(process.env.PORT) || 8080;
+const port = Number(process.env.PORT) || 4002;
 const PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT || 'studio-9105849211-9ba48';
 
 // Middleware
@@ -53,7 +53,7 @@ app.post('/api/team-chat', ucsAdmMiddleware, async (req, res) => {
     try {
         const message: TeamMessage = req.body;
         const syndicateId = (req.query.syndicate_id as string) || 'global';
-        const messageId = await publishTeamMessage(message, syndicateId);
+        const messageId = await publishTeamMessage(message);
 
         // Mirror to Discord if configured
         const discordWebhook = process.env.DISCORD_WEBHOOK_URL;

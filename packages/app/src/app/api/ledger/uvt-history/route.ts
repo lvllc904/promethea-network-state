@@ -5,7 +5,7 @@ const ENGINE_URL = process.env.ECONOMIC_ENGINE_URL || 'https://economic-engine-3
 
 export async function GET() {
   try {
-    const r = await fetch(`${ENGINE_URL}/api/state/tpns_genesis/ledger/uvt_history`, { cache: 'no-store', signal: AbortSignal.timeout(5000) });
+    const r = await fetch(`${ENGINE_URL}/api/state/tpns_genesis/ledger/uvt_history`, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
     if (r.ok) { const d = await r.json(); if (Array.isArray(d)) return NextResponse.json(d); }
   } catch (_) {}
   // Return synthetic history data so charts always render

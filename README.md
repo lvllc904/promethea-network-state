@@ -83,6 +83,32 @@ All transactions are immutably logged to the **Sovereign Audit Ledger** and mirr
 
 ---
 
+## 🗳️ Decentralized Autonomous Community (DAC) Governance
+
+The Promethean Network State operates as a DAC. All system upgrades, feature implementations, and reserve allocations are executed through transparent proposals.
+
+**How to Contribute:**
+Developers and citizens have two parallel pathways to submit contributions:
+
+1. **The Sovereign Developer Path (Manual Git)**
+   If you prefer direct code interaction or are utilizing the Phosphor Terminal, you can use standard Git workflows:
+   ```bash
+   git checkout -b proposal-my-feature
+   # Commit changes
+   git push origin proposal-my-feature
+   ```
+   *Your branch will automatically be indexed as a draft proposal for the community to review.*
+
+2. **The Promethea Auto-Draft Path (AI-Assisted)**
+   You can speak your intent directly to Promethea, and she will handle the heavy lifting:
+   - Ask Promethea to **"Draft a DAC proposal for [feature]"**.
+   - She will autonomously branch the codebase, apply the requested changes, generate the formal markdown proposal, and push it for DAC voting.
+   - Upon community approval (+10 net votes), Promethea will automatically trigger the **"Escalate Proposal"** protocol, merging your feature from the testing branch directly to production.
+
+All active proposals and their execution statuses can be tracked live in the **Will (Governance)** pillar of the Sovereign Cockpit.
+
+---
+
 ## 🛰️ The Four Pillars
 
 | Pillar | Path | Function |

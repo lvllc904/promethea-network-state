@@ -298,9 +298,9 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 - [x] **Operational Excellence**: Eliminate all remaining 400/500 errors and sanitize ghost links (# placeholders).
 - [ ] **Pure GCP Migration (March 22nd Deadline)**:
     - [ ] **Phase 1 (Immediate)**: Push local stabilization fixes (Handshake loop & Sign-in Path) to GitHub to sync App Hosting.
-    - [ ] **Phase 2 (Networking)**: Replace Firebase Hosting with Google Cloud Global Load Balancer (GCLB) for `lvhllc.org`.
-    - [ ] **Phase 3 (Data/Identity)**: Transition from Firebase client SDKs to native Identity Platform and `@google-cloud/firestore`.
-    - [ ] **Phase 4 (Cutover)**: Final DNS shift to GCLB and decommissioning of Firebase Hosting proxy.
+    - [x] **Phase 2 (Networking)**: Replace Firebase Hosting with Google Cloud Global Load Balancer (GCLB) for `lvhllc.org`.
+    - [x] **Phase 3 (Data/Identity)**: Transition from Firebase client SDKs to native Identity Platform and `@google-cloud/firestore`.
+    - [x] **Phase 4 (Cutover)**: Final DNS shift to GCLB and decommissioning of Firebase Hosting proxy. (Zero-Firebase architecture achieved).
 
 ### Wave 6.1: The Sovereign Deployment Pipeline (CLI-First) [ACTIVE]
 - **The GitHub Policy**: GitHub is strictly utilized as a public repository for the open-source community, tracking contributions, and maintaining the Sovereign Manifesto. **It is NOT a CI/CD pipeline.**
@@ -340,6 +340,7 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 - [x] **Metabolic Cost Optimizer**: Dynamic model-switching protocol to minimize API burn. [ACTIVE]
 - [x] **Recursive Self-Improvement**: AI-driven prompt/logic patching based on execution logs. [ACTIVE]
 - [ ] **Zero-Knowledge Bio-Oracle**: Prove restoration metrics without geographic leak.
+- [ ] **The Sovereign Lifecycle Service**: Implement the unified Telemetry, Immune System, and Rolling Updates loop across the TPNS Substrate. [View the Tactical Implementation Plan](file:///Users/officeone/.gemini/antigravity/brain/25874df5-3a79-4401-a15b-808bc08d106a/artifacts/implementation_plan.md)
 
 ### Wave 8: The Interstellar Sovereign (Off-Grid Colonization)
 - [ ] **Satellite-Linked Mesh**: Core-engine redundancy via low-orbit satellite constellations.
@@ -369,6 +370,12 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 - [ ] **The 'cartographer' CLI (Homebrew)**: Launch `brew install promethea/cartographer` for one-touch IPFS site mirroring and M2M optimization.
 - [ ] **Sovereign SDK**: Provide standardized libraries for business to integrate Circular Economy UVT payments natively.
 
+### Wave 13: The Quantum Bridge and Substrate Ignition (SBI Paradigm Phase III) [ACTIVE]
+- [x] **Discover Quantum Topology**: Locate and inject IBM Quantum credentials (`QISKIT_IBM_API_KEY`) to enable the `:coordinate` intent in the Clojure core.
+- [x] **Substrate Node Refactor**: Upgrade `packages/substrate-node` CLI to physically orchestrate and spawn `sbi-core` (Clojure), `promethea-engine` (Python), and `economic-engine` (TypeScript) concurrently.
+- [x] **The Neural Bridge (Un-Siloing)**: Replace mocked HUD data streams with live telemetry directly from the Clojure metabolic core (`sbi-core` via HTTP-kit) and PyTorch MCTS world model (`promethea-engine` via FastAPI), unifying the TPNS.
+- [ ] **Minimal Viable Sentience (MVS)**: Execute the continuous loop where physical compute (Economic Engine) funds the cognitive overhead of the Quantum Tensor Network (SBI Core).
+
 ---
 
 ## 🌍 The Sovereign Atlas: Geo-Financial Actualization [NEW]
@@ -390,7 +397,7 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 - **Sovereign Awareness**: Tracking the "State Reach"—geographic visualization of where the Cartographer (M2M) protocol is currently being indexed.
 
 ### Layer 4: The Institutional Interface
-- **Organization Staking**: Visualizing mapped entities (DAOs, LLCs) as "Institutional Citadels" on the map, weighted by their UVT reputation stake.
+- **Organization Staking**: Visualizing mapped entities (DACs, LLCs) as "Institutional Citadels" on the map, weighted by their UVT reputation stake.
 - **Draft-to-Deed Flow**: Interactive mapping tool for underwriting new Land/MFG assets directly within the 3D viewport.
 
 ---
@@ -701,3 +708,10 @@ Please refer to the comprehensive specification: **[UCS-ADM Specification](file:
 *Architectural integration plan for transforming TPNS into a multi-tenant sovereign venture ecosystem.*
 
 Please refer to the comprehensive specification: **[State-as-a-Service Plan](file:///Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/STATE_AS_A_SERVICE_PLAN.md)**.
+
+---
+
+## 📂 Appendix N: The Sovereign Mesh (Web4 Communication Substrate)
+*Architectural blueprint for transitioning Promethea to a Local-First CRDT mesh utilizing WebRTC, DTN, and IoT routing.*
+
+Please refer to the comprehensive specification: **[Sovereign Mesh Plan](file:///Users/officeone/Promethean Network State/promethea_antigravity_bundle_20251130_211450/SOVEREIGN_MESH_PLAN.md)**.

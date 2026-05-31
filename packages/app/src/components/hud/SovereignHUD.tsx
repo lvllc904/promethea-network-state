@@ -4,20 +4,20 @@ import React, { useState, useEffect } from 'react';
 import { useHUD } from '@/lib/hud-store';
 import { TacticalRibbon } from './TacticalRibbon';
 import { EclipseTray } from './EclipseTray';
+import { ChatTray } from './ChatTray';
 import { SovereignMap } from '@/components/SovereignMap';
-
-import { EconomicsTray } from './EconomicsTray';
-import { GovernanceTray } from './GovernanceTray';
-import { NarrativeTray } from './NarrativeTray';
-import { DiplomaticTray } from './DiplomaticTray';
-import { PulseTray } from './PulseTray';
-import { PrometheaPanel } from './PrometheaPanel';
-import { AtlasTray } from './AtlasTray';
+import { RightFocusTray } from './RightFocusTray';
 import { CommandPalette } from './CommandPalette';
+import { OmniButton } from './OmniButton';
+import dynamic from 'next/dynamic';
+
+const PhosphorTerminal = dynamic(() => import('../terminal/PhosphorTerminal').then(mod => mod.PhosphorTerminal), { ssr: false });
+const SixteenBitArcade = dynamic(() => import('../terminal/SixteenBitArcade').then(mod => mod.SixteenBitArcade), { ssr: false });
+const ChessGame = dynamic(() => import('../terminal/Chess').then(mod => mod.ChessGame), { ssr: false });
+
+import { NotificationCenter } from './NotificationCenter';
 import { SovereignHeaderTicker } from './SovereignHeaderTicker';
 import { SovereignFooterTicker } from './SovereignFooterTicker';
-import { RightFocusTray } from './RightFocusTray';
-import { SettingsTray } from './SettingsTray';
 
 // Fetch atlas layers from the same-origin BFF proxy (avoids CORS entirely)
 function useAtlasLayers() {
@@ -34,7 +34,7 @@ function useAtlasLayers() {
 }
 
 
-const SovereignAtlasBackground = ({ isEclipsed }: { isEclipsed: boolean }) => {
+const SovereignAtlasBackground = ({ isEclipsed, globalVix }: { isEclipsed: boolean, globalVix: number }) => {
     const layers = useAtlasLayers();
     const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
 
@@ -48,50 +48,36 @@ const SovereignAtlasBackground = ({ isEclipsed }: { isEclipsed: boolean }) => {
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, []);
 
-    // If Atlas layers have loaded, show the real Google Map
-    if (layers.length > 0) {
-        return (
-            <div className={`absolute inset-0 z-0 transition-[filter] duration-700 ease-out ${isEclipsed ? 'brightness-[0.3] saturate-50' : 'brightness-100'}`}>
-                <SovereignMap
-                    layers={layers}
-                    center={{ lat: 42.8252, lng: -108.7513 }}
-                />
-                {/* Vignette overlay for depth */}
-                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.7)_100%)]" />
-            </div>
-        );
-    }
+    // Calculate fear tint based on VIX
+    // Baseline is 15. As VIX goes up towards 30, the red tint increases
+    const fearIntensity = Math.max(0, Math.min(1, (globalVix - 15) / 20)); // Maxes out around VIX 35
 
-    // Fallback: rich animated background while Atlas layers load
+    // Always render the SovereignMap natively using the provided Cloud Gateway API key.
+    // The "eclipsed" effect darkens the map natively when trays are open.
     return (
-        <div className={`absolute inset-0 z-0 bg-zinc-950 transition-[filter] duration-700 ease-out overflow-hidden ${isEclipsed ? 'brightness-[0.3]' : ''}`}>
-            {/* Parallax radial gradient */}
-            <div
-                className="absolute inset-[-50px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-black opacity-80"
-                style={{ transform: `translate(${-mousePos.x * 0.5}px, ${-mousePos.y * 0.5}px)` }}
+        <div className={`absolute inset-0 z-0 transition-[filter] duration-700 ease-out ${isEclipsed ? 'brightness-[0.3] saturate-50' : 'brightness-100'}`}>
+            <SovereignMap
+                layers={layers}
+                // Center will be managed by SovereignMap internally using Geolocation
             />
-            {/* Dot grid */}
-            <div
-                className="absolute inset-[-50px] opacity-20"
-                style={{
-                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px)',
-                    backgroundSize: '40px 40px',
-                    transform: `translate(${mousePos.x}px, ${mousePos.y}px)`
-                }}
+            
+            {/* Vignette overlay for depth */}
+            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.7)_100%)]" />
+            
+            {/* VIX Atmospheric Fear Tint */}
+            <div 
+                className="absolute inset-0 pointer-events-none transition-colors duration-[2000ms] ease-in-out mix-blend-overlay"
+                style={{ backgroundColor: `rgba(255, 0, 0, ${fearIntensity * 0.4})` }} 
             />
-            {/* Sovereignty watermark */}
+
+            {/* Ambient sovereignty watermark, slightly reacting to mouse for depth */}
             <div
-                className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                className="absolute inset-0 flex items-center justify-center pointer-events-none mix-blend-overlay opacity-10"
                 style={{ transform: `translate(${mousePos.x * 2}px, ${mousePos.y * 2}px)` }}
             >
-                <h1 className="text-[10vw] font-black uppercase tracking-tighter text-white/5 mix-blend-overlay select-none">
+                <h1 className="text-[10vw] font-black uppercase tracking-tighter text-white select-none">
                     PROMETHEA
                 </h1>
-            </div>
-            {/* Atlas loading indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 text-[9px] font-mono text-zinc-600 uppercase tracking-widest">
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
-                Synchronizing Atlas Substrate...
             </div>
         </div>
     );
@@ -103,7 +89,7 @@ import { Terminal, Shield, Cpu, Zap, Power, LogOut, X } from 'lucide-react';
 import { ethers } from 'ethers';
 
 export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
-    const { activePillar, activatePillar, triggerOmniScanner, activateFocusPanel } = useHUD();
+    const { activePillar, activatePillar, triggerOmniScanner, activeFocusPanel, activateFocusPanel, reduceAnimations, toggleAnimations } = useHUD();
     const router = useRouter();
     const pathname = usePathname();
     const isSubPage = pathname !== '/dashboard' && pathname !== '/dashboard/';
@@ -140,27 +126,49 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
     }, [bootStage]);
 
     useEffect(() => {
+        let isMounted = true;
         if (bootStage === 'telemetry') {
-            const logs = [
-                '🔑 DEPTHOS SOVEREIGN KEYS: SYNCHRONIZING...',
-                '🔌 PORT BINDINGS: did:sovereign:genesis-node',
-                '🧠 ASGI LISP MCTS ENSEMBLE: RUNNING SIMULATION MATRICES...',
-                '🛡️ IMMUNE GLIA CONSERVATION: LEVEL 4 HOMEOCONTROL...',
-                '💰 TREASURY WATERFALL: SOVEREIGN ROUTER ACTIVE...',
-                '🌐 SOVEREIGN ATLAS GRID MAP: BUFFERING SATELLITE TILES...'
-            ];
-            let current = 0;
-            const interval = setInterval(() => {
-                if (current < logs.length) {
-                    setTelemetryLogs(prev => [...prev, logs[current]]);
-                    current++;
-                } else {
-                    clearInterval(interval);
-                    setBootStage('ready_prompt');
+            const fetchRealTelemetry = async () => {
+                const defaultLogs = [
+                    '🔑 DEPTHOS SOVEREIGN KEYS: SYNCHRONIZING...',
+                    '🔌 PORT BINDINGS: did:sovereign:genesis-node',
+                    '🧠 ASGI LISP MCTS ENSEMBLE: RUNNING SIMULATION MATRICES...',
+                    '🛡️ IMMUNE GLIA CONSERVATION: LEVEL 4 HOMEOCONTROL...',
+                    '💰 TREASURY WATERFALL: SOVEREIGN ROUTER ACTIVE...',
+                    '🌐 SOVEREIGN ATLAS GRID MAP: BUFFERING SATELLITE TILES...'
+                ];
+                
+                let dynamicLogs = [...defaultLogs];
+                try {
+                    const res = await fetch('/api/engine/intelligence');
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && Array.isArray(data) && data.length > 0) {
+                            // Extract up to 6 real intel items for boot display
+                            dynamicLogs = data.slice(0, 6).map((item: any) => `[LIVE] OMNILAKE NODE: ${item.title || item.type || JSON.stringify(item).substring(0, 40)}`);
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Could not fetch OmniLake telemetry, falling back to static sequence.");
                 }
-            }, 300);
-            return () => clearInterval(interval);
+
+                if (!isMounted) return;
+
+                let current = 0;
+                const interval = setInterval(() => {
+                    if (current < dynamicLogs.length) {
+                        setTelemetryLogs(prev => [...prev, dynamicLogs[current]]);
+                        current++;
+                    } else {
+                        clearInterval(interval);
+                        setBootStage('ready_prompt');
+                    }
+                }, 300);
+            };
+            
+            fetchRealTelemetry();
         }
+        return () => { isMounted = false; };
     }, [bootStage]);
 
     React.useEffect(() => {
@@ -199,7 +207,6 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
         }, 800);
     };
 
-    // Pre-flight Boot/Morph overlays
     if (bootStage !== 'active' || isExiting) {
         return (
             <div className="fixed inset-0 bg-zinc-950 flex flex-col items-center justify-center font-mono overflow-hidden z-[9999] selection:bg-cyan-500/20 text-white select-none">
@@ -285,6 +292,8 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
         );
     }
 
+
+
     return (
         <div className="fixed inset-0 bg-black overflow-hidden font-body text-white">
             {/* Embedded transitional slide layouts for drawers */}
@@ -306,34 +315,22 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
 
             {/* Background Layer (Z-0) — offset top/bottom for tickers */}
             <div className="absolute inset-0 top-8 bottom-7">
-                <SovereignAtlasBackground isEclipsed={isEclipsed} />
+                <SovereignAtlasBackground isEclipsed={isEclipsed} globalVix={useHUD().globalVix} />
             </div>
 
-            {/* Tactical Navigation (Z-50) — offset for header ticker */}
-            <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50">
-                <TacticalRibbon />
-            </div>
+            {/* Tactical Navigation is now integrated into EclipseTray */}
 
-            {/* Slide-out Data Trays (Z-40) — inset for tickers */}
-            <div className="fixed inset-0 top-8 bottom-7 pointer-events-none z-40">
-                <div className="relative w-full h-full pointer-events-none [&>*]:pointer-events-auto">
-                    <EclipseTray>
-                        {activePillar === 'ATLAS'      && <div className="slide-hud-left"><AtlasTray /></div>}
-                        {activePillar === 'ECONOMICS'  && <div className="slide-hud-left"><EconomicsTray /></div>}
-                        {activePillar === 'GOVERNANCE' && <div className="slide-hud-left"><GovernanceTray /></div>}
-                        {activePillar === 'ASGI'       && <div className="slide-hud-left"><PrometheaPanel /></div>}
-                        {activePillar === 'NARRATIVE'  && <div className="slide-hud-left"><NarrativeTray /></div>}
-                        {activePillar === 'DIPLOMATIC' && <div className="slide-hud-left"><DiplomaticTray /></div>}
-                        {activePillar === 'PULSE'      && <div className="slide-hud-left"><PulseTray /></div>}
-                        {activePillar === 'SETTINGS'   && <div className="slide-hud-left"><SettingsTray /></div>}
-                    </EclipseTray>
-                </div>
-            </div>
+            {/* Left Hand Resizable Data Tray */}
+            <EclipseTray />
 
+            {/* Right Hand Resizable Chat Tray */}
+            <ChatTray />
+            
             {/* Global Command Palette */}
             <CommandPalette />
+            <OmniButton />
 
-            {/* Right-wing Detailed Focus Overlay */}
+            {/* Right-wing Detailed Focus Overlay / Active Pillar Router */}
             {isSubPage && children ? (
                 <div className="fixed inset-y-11 right-0 w-[60vw] min-w-[600px] z-50 bg-black/95 backdrop-blur-2xl border-l border-white/10 shadow-[-30px_0_60px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col slide-hud-right">
                     <button 
@@ -346,9 +343,29 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
                         {children}
                     </div>
                 </div>
-            ) : (
-                <RightFocusTray />
-            )}
+            ) : activeFocusPanel === '16BIT' ? (
+                <div className="fixed inset-y-11 right-0 w-full z-[100] bg-black slide-hud-right">
+                    <SixteenBitArcade />
+                </div>
+            ) : activeFocusPanel === 'CHESS' ? (
+                <div className="fixed inset-y-11 right-0 w-full z-[100] bg-black slide-hud-right">
+                    <ChessGame />
+                </div>
+            ) : activeFocusPanel === 'PHOSPHOR' ? (
+                <div className="fixed inset-0 z-[9999] bg-black overflow-hidden">
+                    <PhosphorTerminal />
+                    <div className="fixed top-4 right-4 z-[10000] opacity-30 hover:opacity-100 transition-opacity">
+                        <div className="px-3 py-1 bg-red-900/20 border border-red-500/20 rounded text-[10px] font-mono text-red-400 flex items-center gap-2">
+                            <span>EXIT CLI</span>
+                            <span className="bg-red-500/20 px-1.5 py-0.5 rounded text-red-300">⌘ K</span>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
+
+            {/* Unified Left-Hand/Right-Hand Tray Architecture is handled above */}
+            
+            <NotificationCenter />
 
             {/* Cmd+K & Exit controls — below header ticker */}
             <div className="fixed top-11 right-6 z-50 flex items-center gap-3">
@@ -356,6 +373,17 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
                     <span>Command</span>
                     <span className="font-mono bg-white/10 px-1 py-0.5 rounded">⌘ K</span>
                 </div>
+                <button
+                    onClick={toggleAnimations}
+                    className={`px-3 py-1.5 border rounded text-[9px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+                        reduceAnimations 
+                            ? 'bg-zinc-900/50 border-zinc-700/50 text-zinc-400 hover:bg-zinc-800' 
+                            : 'bg-cyan-900/20 border-cyan-500/20 text-cyan-400 hover:bg-cyan-900/40 hover:border-cyan-400/50'
+                    }`}
+                >
+                    <Zap className="w-3 h-3" />
+                    <span>ANIMATIONS: {reduceAnimations ? 'OFF' : 'ON'}</span>
+                </button>
                 <button
                     onClick={handleExitHUD}
                     className="p-1.5 bg-red-950/20 hover:bg-red-500/20 border border-red-500/20 hover:border-red-400/50 rounded text-red-400 transition-all flex items-center gap-1 text-[9px] font-black uppercase tracking-wider cursor-pointer"

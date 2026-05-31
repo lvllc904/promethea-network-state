@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { useSolanaCitizen } from '@promethea/hooks';
 
 interface TickerItem {
     label: string;
@@ -37,6 +38,18 @@ export function SovereignHeaderTicker() {
         { label: 'Net Yield', value: '14.2', prefix: '' },
         { label: 'RWA Value', value: '1,452,000', change: 0, prefix: '$' },
     ]);
+
+    const { solBalance } = useSolanaCitizen();
+
+    useEffect(() => {
+        // Update SOL balance if available
+        if (solBalance !== null) {
+            setItems(prev => prev.map(item => {
+                if (item.label === 'SOL') return { ...item, value: solBalance.toFixed(4) };
+                return item;
+            }));
+        }
+    }, [solBalance]);
 
     useEffect(() => {
         // Fetch live financials
@@ -75,7 +88,7 @@ export function SovereignHeaderTicker() {
             <div className="flex-1 overflow-hidden relative">
                 <div
                     className="flex items-center h-full animate-ticker whitespace-nowrap"
-                    style={{ animation: 'ticker-scroll 60s linear infinite' }}
+                    style={{ animation: 'ticker-scroll 20s linear infinite' }}
                 >
                     {doubled.map((item, i) => <TickerItem key={i} item={item} />)}
                 </div>

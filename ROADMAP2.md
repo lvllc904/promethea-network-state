@@ -9,7 +9,7 @@ This document outlines the phased technical roadmap for building the Promethea a
 
 **Objective:** To configure the Promethea application to support two distinct deployment targets from a single codebase, laying the groundwork for the "3 Body System" architecture.
 
-1.  **Dynamic Host (The Ledger):** A server-backed application deployed to **Firebase Hosting** at `lvhllc.org`.
+1.  **Dynamic Host (The Ledger):** A server-backed application deployed to **Google Cloud (GCLB/Cloud Run)** at `lvhllc.org` (Firebase removed).
 2.  **Decentralized Host (The Sovereign Client):** A static, decentralized version of the application, now automatically deployed to **IPFS** and accessible via a subdomain like `dweb.lvhllc.org`.
 
 **Implementation Plan:**
@@ -32,13 +32,13 @@ This document outlines the phased technical roadmap for building the Promethea a
 
 **Objective:** Architect and implement the foundational "3 Body System" for decentralized identity. Decouple the core UI from a centralized user profile model and connect it to a client-side, self-sovereign identity (SSI) structure, verified by a public ledger of actions.
 
-**Key Technologies:** Next.js, Firebase (as a Ledger of Record), ShadCN UI, Tailwind CSS, Ethers.js
+**Key Technologies:** Next.js, Local SQLite / Cloud Run (replacing Firebase), ShadCN UI, Tailwind CSS, Ethers.js
 
 **Steps:**
 1.  **Architect the 3 Body System:**
     - [x] **Identity Genesis Database:** Define the role of the authenticator application for one-time identity creation.
     - [x] **Sovereign Data Store (DepthOS):** Define the principle of local-first user data, where the citizen's device holds their private keys and the canonical copy of their dynamic credentials.
-    - [x] **Ledger of Record (Firebase):** Redefine Firestore's role to be an immutable ledger of actions and a security checkpoint for the "last verified state" of a citizen's scores, preventing tampering.
+    - [x] **Ledger of Record (Zero-Firebase):** Redefined the ledger's role to be an immutable ledger of actions using the new Sovereign Substrate (Bridged DB / Cloud Run / SQLite) to completely eliminate Firebase dependency while maintaining tamper resistance.
 
 2.  **Implement the Self-Sovereign Identity (SSI) Model:**
     - [x] Define the structure of the SSI token, including the static DID anchor and the dynamic credentials (Reputation, Contribution, and Skills scores) as outlined in Appendix D.
@@ -81,6 +81,7 @@ This document outlines the phased technical roadmap for building the Promethea a
     - [x] UI for the Threat Detector is complete.
     - [x] Genkit flow `detectNetworkThreats` is defined.
     - [ ] Create a live dashboard or real-time alert system that feeds data into the tool for continuous monitoring of the action ledger.
+    - [ ] **The Sovereign Lifecycle Service**: Implement the unified Telemetry, Immune System, and Rolling Updates loop across the TPNS Substrate. [View the Tactical Implementation Plan](file:///Users/officeone/.gemini/antigravity/brain/25874df5-3a79-4401-a15b-808bc08d106a/artifacts/implementation_plan.md)
 
 5.  **Resident AI Assistant ("Promethea"):**
     - [x] **Establish AI as Citizen:** Created a permanent citizen profile for `promethea-ai` in Firestore, establishing the AI as a founding member of the network.
@@ -105,16 +106,16 @@ This document outlines the phased technical roadmap for building the Promethea a
 
 2.  **Web3 Integration (Frontend):**
     - [ ] Replace the Phase 1 "Authenticator App" concept with true wallet-based authentication (Sign-In with Ethereum). DepthOS will become the primary wallet.
-    - [ ] Refactor UI components to interact with the new smart contracts instead of the Firebase Ledger for core operations (voting, creating proposals, viewing token balances).
+    - [ ] Refactor UI components to interact with the new smart contracts instead of the Sovereign Substrate (Bridged DB) for core operations (voting, creating proposals, viewing token balances).
 
 3.  **Decentralized Storage (IPFS):**
-    - [ ] Migrate proposal descriptions, RWA documentation, and other large metadata from the Firebase Ledger to IPFS.
+    - [ ] Migrate proposal descriptions, RWA documentation, and other large metadata from the Sovereign Substrate (Bridged DB) to IPFS.
     - [ ] Store only the IPFS content hash (CID) in the smart contracts or remaining Firestore documents.
     - [ ] Set up a pinning service (e.g., Pinata) to ensure data availability.
 
-4.  **Legal & DAO Formation:**
-    - [ ] Formalize the Promethean DAC as a legal entity (e.g., Wyoming DAO LLC).
-    - [ ] Establish the legal SPV structures for holding real-world assets, managed by the DAO.
+4.  **Legal & DAC Formation:**
+    - [ ] Formalize the Promethean DAC as a legal entity (e.g., Wyoming DAC LLC).
+    - [ ] Establish the legal SPV structures for holding real-world assets, managed by the DAC.
 
 ---
 

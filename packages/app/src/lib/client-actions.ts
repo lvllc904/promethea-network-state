@@ -1,7 +1,7 @@
 // Body 1 Lobotomy: Transition to Solana Smart Contracts
 import { type Firestore, writeBatch, doc, collection, increment, updateDoc } from "@promethea/identity";
 import { Connection, PublicKey, Keypair } from "@solana/web3.js";
-import { Program, AnchorProvider, Wallet } from "@coral-xyz/anchor";
+import { Program, AnchorProvider } from "@coral-xyz/anchor";
 import { SovereignGovernanceIDL } from "./idls/sovereign-governance";
 
 // RPC URL: Use localnet or Helius Mainnet based on env
@@ -16,11 +16,28 @@ const RWA_REGISTRY_ID = new PublicKey(process.env.NEXT_PUBLIC_RWA_REGISTRY_ID ||
  * to the citizen's browser wallet (Phantom/DepthOS). For MVP simulation parity, 
  * we use a randomly generated keypair if body 3 wallet isn't injected.
  */
+class MockWallet {
+  constructor(readonly payer: Keypair) {}
+  async signTransaction(tx: any) {
+    tx.partialSign(this.payer);
+    return tx;
+  }
+  async signAllTransactions(txs: any[]) {
+    return txs.map((tx) => {
+      tx.partialSign(this.payer);
+      return tx;
+    });
+  }
+  get publicKey() {
+    return this.payer.publicKey;
+  }
+}
+
 function getSovereignProvider() {
     const connection = new Connection(RPC_URL, "confirmed");
     // TODO: Connect window.solana from browser wallet adapter
     const dummyKeypair = Keypair.generate();
-    const provider = new AnchorProvider(connection, new Wallet(dummyKeypair), AnchorProvider.defaultOptions());
+    const provider = new AnchorProvider(connection, new MockWallet(dummyKeypair) as any, AnchorProvider.defaultOptions());
     return provider;
 }
 

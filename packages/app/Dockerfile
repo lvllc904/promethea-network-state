@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Copy manifests
 COPY package.json package-lock.json ./
+# We must copy all package.jsons to satisfy the workspace lockfile
 COPY packages/app/package.json ./packages/app/
 COPY packages/lib/package.json ./packages/lib/
 COPY packages/ui/package.json ./packages/ui/
@@ -12,6 +13,17 @@ COPY packages/identity/package.json ./packages/identity/
 COPY packages/hooks/package.json ./packages/hooks/
 COPY packages/sovereign-store/package.json ./packages/sovereign-store/
 COPY packages/ai/package.json ./packages/ai/
+COPY packages/cartographer/package.json ./packages/cartographer/
+COPY packages/mesh-daemon/package.json ./packages/mesh-daemon/
+COPY packages/substrate-node/package.json ./packages/substrate-node/
+COPY packages/services/ai-service/package.json ./packages/services/ai-service/
+COPY packages/services/authentication-service/package.json ./packages/services/authentication-service/
+COPY packages/services/economic-engine/package.json ./packages/services/economic-engine/
+COPY packages/services/mcp-server/package.json ./packages/services/mcp-server/
+COPY packages/services/mcp-subscriber/package.json ./packages/services/mcp-subscriber/
+COPY packages/services/paperclip/package.json ./packages/services/paperclip/
+COPY packages/services/promethea-guardian/package.json ./packages/services/promethea-guardian/
+COPY packages/services/pubsub/package.json ./packages/services/pubsub/
 
 # Install dependencies
 RUN npm install --legacy-peer-deps

@@ -49,7 +49,7 @@ export async function GET() {
     // Attempt to fetch live layers from the Economic Engine
     const response = await fetch(`${ENGINE_URL}/api/atlas/layers`, {
       cache: 'no-store',
-      signal: AbortSignal.timeout(5000), // 5 second timeout to avoid hanging
+      signal: AbortSignal.timeout(30000), // 5 second timeout to avoid hanging
     });
 
     if (response.ok) {

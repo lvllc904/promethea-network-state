@@ -1,53 +1,47 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { syncEngine, intentLogger } from '@promethea/sovereign-store';
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
 export function Handshake() {
-    const searchParams = useSearchParams();
-    const router = useRouter();
     const pathname = usePathname();
+    const { isLoggedIn, primaryWallet, user } = useDynamicContext();
+    const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {
-        const did = searchParams.get('did');
-        const token = searchParams.get('token');
-        const uid = searchParams.get('uid');
+        if (isLoggedIn && user && primaryWallet && !hydrated) {
+            const did = user.userId;
+            const uid = user.email || user.userId;
 
-        if (did) {
-            console.log('[Handshake] Identity detected:', { did, uid });
+            console.log('[Handshake] Identity detected from Dynamic:', { did, uid, wallet: primaryWallet.address });
+            
+            // Still set these for backward compatibility with other parts of the app if needed
             localStorage.setItem('authStatus', 'authenticated');
             localStorage.setItem('userDID', did);
-
-            if (uid) {
-                localStorage.setItem('userUID', uid);
-            }
-
-            if (token) {
-                localStorage.setItem('pns_sovereign_token', token);
-            }
+            localStorage.setItem('userUID', uid);
+            localStorage.setItem('walletAddress', primaryWallet.address);
 
             // Body 3 Hydration
             console.log('[Handshake] Hydrating Sovereign Datastore for', did);
-            intentLogger.init().catch(err => console.error("IntentLogger failed to init", err));
-            syncEngine.init(did).catch(err => console.error("SyncEngine failed to init", err));
+            intentLogger.init().catch((err: any) => console.error("IntentLogger failed to init", err));
+            syncEngine.init(did).catch((err: any) => console.error("SyncEngine failed to init", err));
 
-            // Clean up the URL without triggering a full Next.js transition loop
-            const newParams = new URLSearchParams(searchParams.toString());
-            newParams.delete('did');
-            newParams.delete('token');
-            newParams.delete('uid'); // Also clean up uid if present
-
-            const searchString = newParams.toString();
-            const newUrl = pathname + (searchString ? '?' + searchString : '');
-            
-            // Use native history to avoid Next.js routing overhead/loops during hydration
-            window.history.replaceState({}, '', newUrl);
+            setHydrated(true);
 
             // Force a one-time synchronization of the internal auth hook state
             window.dispatchEvent(new Event('storage'));
+        } else if (!isLoggedIn && hydrated) {
+            // Handle logout
+            setHydrated(false);
+            localStorage.removeItem('authStatus');
+            localStorage.removeItem('userDID');
+            localStorage.removeItem('userUID');
+            localStorage.removeItem('walletAddress');
+            window.dispatchEvent(new Event('storage'));
         }
-    }, [searchParams, pathname]);
+    }, [isLoggedIn, user, primaryWallet, hydrated]);
 
     return null;
 }

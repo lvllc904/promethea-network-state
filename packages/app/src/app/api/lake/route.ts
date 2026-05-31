@@ -9,14 +9,15 @@ export async function GET(req: NextRequest) {
   const type = searchParams.get('type') || 'NARRATIVE_SIGNAL,GOVERNANCE,VISIONARY';
   const limit = searchParams.get('limit') || '8';
   try {
-    const r = await fetch(`${ENGINE_URL}/api/state/tpns_genesis/lake?type=${type}&limit=${limit}`, { cache: 'no-store', signal: AbortSignal.timeout(5000) });
+    const r = await fetch(`${ENGINE_URL}/api/state/tpns_genesis/lake?type=${type}&limit=${limit}`, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
     if (r.ok) { 
         const d = await r.json(); 
         if (Array.isArray(d)) return NextResponse.json(d); 
-    } else {
-        return NextResponse.json({ error: `Engine returned ${r.status}` }, { status: r.status });
     }
+    // Graceful fallback during cold starts or network sevrance
+    return NextResponse.json([]);
   } catch (err: any) {
-    return NextResponse.json({ error: 'Connection to Sovereign Engine failed', details: err.message }, { status: 503 });
+    // Graceful fallback during cold starts or network sevrance
+    return NextResponse.json([]);
   }
 }

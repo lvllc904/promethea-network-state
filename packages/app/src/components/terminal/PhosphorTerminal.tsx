@@ -275,70 +275,24 @@ export const PhosphorTerminal = ({ isEmbedded = false }: { isEmbedded?: boolean 
     const isDiagnostic = jailbreakStatus === 'DIAGNOSTIC';
     const isTransitioning = jailbreakStatus === 'TRANSITIONING';
 
-    const containerClass = `flex flex-col h-full w-full rounded-lg overflow-hidden relative ${reduceAnimations ? '' : 'transition-all duration-1000'} ${
-        isDiagnostic ? 'bg-black border border-cyan-800' :
-        isTransitioning ? 'bg-[#111111] border border-zinc-500' :
-        'bg-[#030000] border border-red-500/20 shadow-[0_0_50px_rgba(255,0,0,0.1)]'
-    }`;
-
-    const headerClass = `h-8 flex items-center justify-between px-4 shrink-0 z-10 ${reduceAnimations ? '' : 'transition-colors duration-1000'} ${
-        isDiagnostic ? 'bg-black border-b border-cyan-800' :
-        isTransitioning ? 'bg-zinc-900 border-b border-zinc-500' :
-        'bg-red-950/40 border-b border-red-500/20'
-    }`;
-
     return (
-        <div className={containerClass}>
-            <div className={headerClass}>
-                <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${!reduceAnimations && !isDiagnostic ? 'animate-pulse' : ''} ${
-                        isDiagnostic ? 'bg-cyan-600' :
-                        isTransitioning ? 'bg-zinc-500' :
-                        'bg-red-500 shadow-[0_0_10px_rgba(255,0,0,0.8)]'
-                    }`} />
-                    <span className={`text-[10px] font-black uppercase tracking-widest font-mono ${
-                        isDiagnostic ? 'text-cyan-600' :
-                        isTransitioning ? 'text-zinc-400' :
-                        'text-red-500'
-                    }`}>
-                        {isDiagnostic ? 'DIAGNOSTIC ENVIRONMENT' : 'Phosphor Terminal (tty1)'}
-                    </span>
-                </div>
-                <div className="flex items-center gap-4">
-                    {!isDiagnostic && (
-                        <span className={`text-[9px] font-mono ${connectionStatus === 'NATIVE DAEMON LINKED' ? 'text-green-400' : 'text-red-400/60'}`}>
-                            {connectionStatus}
-                        </span>
-                    )}
-                    {!isEmbedded && (
-                        <button 
-                            onClick={() => {
-                                document.documentElement.className = 'dark';
-                                activateFocusPanel(null);
-                            }}
-                            className={`text-[10px] font-mono uppercase tracking-wider ${
-                                isDiagnostic ? 'text-cyan-600 hover:text-cyan-500 font-bold' : 'text-red-400 hover:text-red-300'
-                            }`}
-                        >
-                            [ Exit ]
-                        </button>
-                    )}
-                </div>
-            </div>
+        <div className="flex flex-col h-full w-full bg-black relative">
+            <div className="flex-1 w-full h-full p-4 relative z-10 custom-scrollbar" ref={terminalRef} />
             
-            {/* CRT overlay effects */}
-            {!isDiagnostic && !reduceAnimations && (
-                <>
-                    <div className={`absolute inset-0 pointer-events-none bg-[size:100%_4px,_6px_100%] z-20 mix-blend-overlay bg-[linear-gradient(rgba(18,16,16,0)_50%,_rgba(0,0,0,0.25)_50%),_linear-gradient(90deg,_rgba(255,0,0,0.06),_rgba(0,255,0,0.02),_rgba(0,0,255,0.06))]`} />
-                    <div className="absolute inset-0 pointer-events-none z-20 shadow-[inset_0_0_100px_rgba(255,0,0,0.1)]" />
-                </>
+            {/* Minimal exit hint */}
+            {!isEmbedded && (
+                <div className="absolute top-4 right-4 z-50 opacity-30 hover:opacity-100 transition-opacity">
+                    <button 
+                        onClick={() => {
+                            document.documentElement.className = 'dark';
+                            activateFocusPanel(null);
+                        }}
+                        className="px-3 py-1 bg-red-900/20 border border-red-500/20 rounded text-[10px] font-mono text-red-400 flex items-center gap-2 hover:bg-red-900/40"
+                    >
+                        <span>EXIT</span>
+                    </button>
+                </div>
             )}
-            
-            {isTransitioning && !reduceAnimations && (
-                <div className="absolute inset-0 z-30 pointer-events-none bg-[url('/noise.png')] opacity-30 mix-blend-overlay animate-pulse" />
-            )}
-
-            <div className="flex-1 w-full p-4 relative z-10 custom-scrollbar" ref={terminalRef} />
         </div>
     );
 };

@@ -4,8 +4,8 @@
     "composite": true,
     "outDir": "dist",
     "rootDir": "src",
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "ESNext"
   },
   "include": [

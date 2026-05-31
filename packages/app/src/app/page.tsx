@@ -67,11 +67,12 @@ export default function LandingPage() {
           </div>
           <span className="font-headline font-black tracking-[0.2em] text-xs text-foreground dark:text-white transition-colors">PROMETHEAN</span>
         </div>
-        <div className="flex items-center gap-6">
-          <div className="hidden md:flex items-center gap-6 text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
-            <Link href="#manifesto" className="hover:text-cyan-400 transition-colors">Manifesto</Link>
-            <Link href="/roadmap" className="hover:text-cyan-400 transition-colors">Roadmap</Link>
+        <div className="flex items-center gap-2 sm:gap-6">
+          <div className="flex flex-wrap justify-end items-center gap-3 sm:gap-6 text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+            <Link href="/about" className="hover:text-cyan-400 transition-colors">About</Link>
+            <Link href="/constitution" className="hover:text-cyan-400 transition-colors">Constitution</Link>
             <Link href="#architecture" className="hover:text-cyan-400 transition-colors">Architecture</Link>
+            <Link href="#ecosystem" className="hover:text-cyan-400 transition-colors">Ecosystem</Link>
           </div>
           
           <button 
@@ -121,7 +122,7 @@ export default function LandingPage() {
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="bg-background/40 dark:bg-black/40 hover:bg-foreground/5 dark:hover:bg-white/5 border-foreground/10 dark:border-white/10 text-foreground dark:text-white font-bold text-[11px] uppercase tracking-widest h-14 px-8 rounded-none backdrop-blur-md">
-                <Link href="#manifesto">
+                <Link href="/constitution">
                   Read The Constitution
                 </Link>
               </Button>
@@ -188,6 +189,68 @@ export default function LandingPage() {
           </motion.div>
         </section>
 
+        {/* ECOSYSTEM SECTION */}
+        <section id="ecosystem" className="mt-40 px-8 md:px-16 max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-foreground dark:text-white mb-4">THE ECOSYSTEM.</h2>
+            <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl">A suite of enterprise-grade developer tools designed to build, secure, and visualize sovereign digital territories.</p>
+          </motion.div>
+ 
+          <motion.div 
+            variants={staggerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            <Link href="/products/cartographer">
+              <motion.div variants={itemVariants} className="p-8 bg-card/40 backdrop-blur-xl border border-emerald-500/20 flex flex-col justify-between group hover:bg-emerald-500/10 hover:border-emerald-500/50 transition-all cursor-pointer h-full">
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center justify-between">Cartographer <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-emerald-400 transition-opacity" /></h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">CLI and SDK for digitizing and securitizing Real-World Assets (RWAs) on-chain.</p>
+                <div className="font-mono text-[10px] text-emerald-400 bg-black/40 px-2 py-1 rounded inline-block w-fit">npm install @promethean/cartographer</div>
+              </motion.div>
+            </Link>
+            
+            <Link href="/products/mesh">
+              <motion.div variants={itemVariants} className="p-8 bg-card/40 backdrop-blur-xl border border-blue-500/20 flex flex-col justify-between group hover:bg-blue-500/10 hover:border-blue-500/50 transition-all cursor-pointer h-full">
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center justify-between">Sovereign Mesh <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-blue-400 transition-opacity" /></h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">P2P WebRTC data synchronization and signaling daemon for censorship-resistant state.</p>
+                <div className="font-mono text-[10px] text-blue-400 bg-black/40 px-2 py-1 rounded inline-block w-fit">npx @promethea/mesh start</div>
+              </motion.div>
+            </Link>
+
+            <Link href="/products/asgi">
+              <motion.div variants={itemVariants} className="p-8 bg-card/40 backdrop-blur-xl border border-purple-500/20 flex flex-col justify-between group hover:bg-purple-500/10 hover:border-purple-500/50 transition-all cursor-pointer h-full">
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center justify-between">ASGI Consensus <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-purple-400 transition-opacity" /></h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">Deterministic LISP-based economic AI engine for treasury and liquidity management.</p>
+                <div className="font-mono text-[10px] text-purple-400 bg-black/40 px-2 py-1 rounded inline-block w-fit">npm install @promethean/asgi</div>
+              </motion.div>
+            </Link>
+
+            <Link href="/products/atlas">
+              <motion.div variants={itemVariants} className="p-8 bg-card/40 backdrop-blur-xl border border-amber-500/20 flex flex-col justify-between group hover:bg-amber-500/10 hover:border-amber-500/50 transition-all cursor-pointer h-full">
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center justify-between">Atlas Substrate <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-amber-400 transition-opacity" /></h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">High-performance 3D WebGL mapping components for sovereign telemetry.</p>
+                <div className="font-mono text-[10px] text-amber-400 bg-black/40 px-2 py-1 rounded inline-block w-fit">npm install @promethean/atlas-ui</div>
+              </motion.div>
+            </Link>
+
+            <Link href="/products/depthos">
+              <motion.div variants={itemVariants} className="p-8 bg-card/40 backdrop-blur-xl border border-pink-500/20 flex flex-col justify-between group hover:bg-pink-500/10 hover:border-pink-500/50 transition-all cursor-pointer h-full">
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center justify-between">DepthOS Bridge <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-pink-400 transition-opacity" /></h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">Secure local-first data store for managing dynamic credentials and private keys.</p>
+                <div className="font-mono text-[10px] text-pink-400 bg-black/40 px-2 py-1 rounded inline-block w-fit">npm install @promethean/depthos-bridge</div>
+              </motion.div>
+            </Link>
+          </motion.div>
+        </section>
+
         {/* MANIFESTO / CONSTITUTION CALLOUT */}
         <section id="manifesto" className="mt-40 px-8 md:px-16 max-w-7xl mx-auto">
           <div className="p-12 md:p-20 bg-gradient-to-br from-cyan-500/10 dark:from-cyan-950/40 to-background/80 dark:to-black/80 backdrop-blur-2xl border border-cyan-500/20 relative overflow-hidden">
@@ -203,6 +266,11 @@ export default function LandingPage() {
                 <Button asChild className="bg-foreground dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200 text-background dark:text-black font-black text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">
                   <Link href="/whitepaper">
                     Read Whitepaper
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="bg-transparent hover:bg-foreground/5 dark:hover:bg-white/5 border-foreground/20 dark:border-white/20 text-foreground dark:text-white font-bold text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">
+                  <Link href="/nspi-whitepaper">
+                    Read NSPI Whitepaper
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="bg-transparent hover:bg-foreground/5 dark:hover:bg-white/5 border-foreground/20 dark:border-white/20 text-foreground dark:text-white font-bold text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">

@@ -117,7 +117,7 @@ export function useComputeManifest<T = any>(manifest: any) {
             let rawDataStr = "{}";
             try {
                 // Fetch the encrypted blob from the new Go Sovereign Ledger (Phase 1)
-                const ledgerUrl = process.env.NEXT_PUBLIC_LEDGER_URL || 'http://localhost:4001';
+                const ledgerUrl = '';
                 const syndicateId = localStorage.getItem('activeOrganizationId') || 'global';
                 const token = localStorage.getItem('pns_sovereign_token') || '';
                 

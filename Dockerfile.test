@@ -1,0 +1,15 @@
+FROM node:20-alpine AS builder
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY packages/app/package.json ./packages/app/
+COPY packages/lib/package.json ./packages/lib/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/components/package.json ./packages/components/
+COPY packages/identity/package.json ./packages/identity/
+COPY packages/hooks/package.json ./packages/hooks/
+COPY packages/sovereign-store/package.json ./packages/sovereign-store/
+COPY packages/ai/package.json ./packages/ai/
+
+RUN npm install --legacy-peer-deps

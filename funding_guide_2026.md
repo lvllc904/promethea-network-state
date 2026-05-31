@@ -45,11 +45,11 @@ This directory provides the administrative and strategic data required to apply 
     *   **Tech Stack**: Utilizing V2G (Vehicle-to-Grid) protocols and [Specific Tech] to stabilize local energy markets.
 *   **Readiness**: Must be registered in SAM.gov (UEI required).
 
-## 2. DeFi, DAOs, & Autonomous Governance
+## 2. DeFi, DACs, & Autonomous Governance
 
 ### 🟢 Arbitrum Foundation Grant Program
 *   **Application Link**: [Arbitrum Grant Hub](https://arbitrum.foundation/grants)
-*   **Expanded Context**: Arbitrum is currently focused on "Gaming" and "Governance Tooling." They want DAOs to be easier to manage and protocols to be stickier for users.
+*   **Expanded Context**: Arbitrum is currently focused on "Gaming" and "Governance Tooling." They want DACs to be easier to manage and protocols to be stickier for users.
 *   **Generic Template Suggestion**:
     *   **Abstract**: [Project Name] is a [Tool/dApp] that increases ARB utility by [Function].
     *   **Technical Rationale**: Leveraging Stylus (WASM) to enable high-performance [Feature] on-chain.

@@ -1,3 +1,5 @@
+import { VixSimulator } from '../terminal/VixSimulator';
+
 import React, { useState } from 'react';
 import { Settings, Shield, Cpu, Sliders, ToggleLeft, ToggleRight, Server, Cloud } from 'lucide-react';
 
@@ -82,6 +84,11 @@ export const SettingsTray = () => {
                         </span>
                     </div>
                 </div>
+            </section>
+
+            {/* VIX Market Volatility Section */}
+            <section className="flex flex-col gap-4 pt-4 border-t border-white/10">
+                <VixSimulator />
             </section>
 
             {/* Security Section (Placeholder for future settings) */}

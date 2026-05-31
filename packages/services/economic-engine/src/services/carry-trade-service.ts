@@ -1,3 +1,5 @@
+import { vixService } from './vix-service';
+
 import { db } from '../db';
 import { reserveManager } from '../treasury/reserve-manager';
 import { personaSubstrate } from '../tools/persona-substrate';
@@ -26,6 +28,7 @@ export class CarryTradeService {
         console.log('[CarryTrade] 📡 Initiating Multi-Chain Yield Sweep via DefiLlama...');
         
         const candidates: CarryTradeOpportunity[] = [];
+        const volatilityMultiplier = vixService.getVolatilityMultiplier();
 
         try {
             const res = await fetch('https://yields.llama.fi/pools');
@@ -45,7 +48,7 @@ export class CarryTradeService {
                     targetAsset: `${p.symbol} (${p.project})`,
                     targetYield: p.apy,
                     netYield: p.apy,
-                    volatilityScore: 0.1,
+                    volatilityScore: 0.1 * volatilityMultiplier, // Scale volatility score by market VIX
                     liquidityDepth: p.tvlUsd,
                     reflexivityScore: 0.5,
                     status: 'OPPORTUNITY'
@@ -63,7 +66,7 @@ export class CarryTradeService {
             targetAsset: 'SPY (S&P 500)',
             targetYield: 9.2, 
             netYield: 9.1,
-            volatilityScore: 0.15,
+            volatilityScore: 0.15 * volatilityMultiplier, // Scale volatility score by market VIX
             liquidityDepth: 5000000000,
             reflexivityScore: 0.3,
             status: 'OPPORTUNITY'
@@ -71,8 +74,13 @@ export class CarryTradeService {
 
         // Apply Tiers 1-4 (The Funnel)
         const qualified = candidates.filter(c => {
-            const isProfitable = c.netYield > 5; 
-            const isStable = c.volatilityScore < 0.3;
+            // In high fear environments (VIX > 20, multiplier > 1.33), we require higher net yields to compensate for risk
+            const adjustedYieldTarget = 5 * Math.max(1, volatilityMultiplier * 0.8);
+            
+            const isProfitable = c.netYield > adjustedYieldTarget; 
+            // In high fear environments, we shrink the acceptable stability band
+            const adjustedStabilityTarget = 0.3 / Math.max(1, volatilityMultiplier * 0.5);
+            const isStable = c.volatilityScore < adjustedStabilityTarget;
             const isLiquid = c.liquidityDepth > 1000000;
             const isNotCrowded = c.reflexivityScore < 0.9;
             

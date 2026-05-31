@@ -1,18 +1,40 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { StateBroadcastOverlay } from './ui/StateBroadcastOverlay';
 
 interface SovereignMapProps {
     layers: any[];
     center?: { lat: number; lng: number };
 }
 
-export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { lat: 42.8252, lng: -108.7513 } }) => {
+export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { lat: 30.3322, lng: -81.6557 } }) => {
     const mapRef = useRef<HTMLDivElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const mapInstanceRef = useRef<any>(null);
     const rafRef = useRef<number | null>(null);
+    const particleRafRef = useRef<number | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
+
+    // Fetch user geolocation on mount
+    useEffect(() => {
+        if (typeof window !== 'undefined' && 'geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    });
+                },
+                (err) => {
+                    console.warn('[SovereignMap] Geolocation access denied or unavailable.', err.message);
+                },
+                { timeout: 10000, maximumAge: 60000 }
+            );
+        }
+    }, []);
 
     // Map initialization — runs ONCE only. Layer updates handled separately.
     useEffect(() => {
@@ -20,19 +42,42 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
 
         const initMap = async () => {
             try {
-                const { setOptions, importLibrary } = await import('@googlemaps/js-api-loader');
+                // We manually inject the maps script tag because the latest googlemaps/js-api-loader 
+                // removed the Loader class and doesn't easily support overriding the base URL.
+                await new Promise((resolve, reject) => {
+                    if ((window as any).google && (window as any).google.maps) {
+                        resolve(true);
+                        return;
+                    }
+                    
+                    const SCRIPT_ID = 'sovereign-map-proxy-script';
+                    if (document.getElementById(SCRIPT_ID)) {
+                        // Already injecting, wait for it
+                        const checkInterval = setInterval(() => {
+                            if ((window as any).google && (window as any).google.maps) {
+                                clearInterval(checkInterval);
+                                resolve(true);
+                            }
+                        }, 50);
+                        return;
+                    }
 
-                try {
-                    await setOptions({
-                        key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-                        v: 'weekly',
-                        libraries: ['maps', 'marker']
-                    });
-                } catch (e) {
-                    // Safe ignore: loader already initialized by other map instance
-                }
+                    // Define a global callback for Google Maps JSONP
+                    (window as any).__googleMapsProxyCallback = () => {
+                        resolve(true);
+                    };
 
-                const { Map } = await importLibrary('maps') as any;
+                    const script = document.createElement('script');
+                    script.id = SCRIPT_ID;
+                    // Load natively from Cloud Gateway using our unrestricted key
+                    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}&loading=async&v=weekly&libraries=maps,marker&callback=__googleMapsProxyCallback`;
+                    script.async = true;
+                    script.defer = true;
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                });
+
+                const { Map } = await (window as any).google.maps.importLibrary('maps');
 
                 if (!mapRef.current || cancelled) return;
 
@@ -48,18 +93,21 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         zoom: startZoom,
                         tilt: startTilt,
                         heading: startHeading,
-                        mapTypeId: 'satellite',
+                        mapTypeId: 'terrain',
                         disableDefaultUI: false, // Turn controls back on for the user
                         backgroundColor: '#000000',
-                        gestureHandling: 'greedy',
-                        mapId: 'aa43c9e9e082ca1d8d1fc65d'
+                        gestureHandling: 'greedy', // Ensure scroll wheel works
+                        // mapId is required for advanced markers and tilt/rotation vector maps
+                        mapId: 'aa43c9e9e082ca1d8d1fc65d',
+                        isFractionalZoomEnabled: true,
                     });
                     mapInstanceRef.current = map;
 
                     // Cinematic Fly-In — ONE-SHOT, self-terminating animation
-                    const isDefaultCenter = Math.abs(center.lat - 42.8252) < 0.01 && Math.abs(center.lng - -108.7513) < 0.01;
-                    const targetZoom = isDefaultCenter ? 6 : 14;
-                    const targetTilt = isDefaultCenter ? 30 : 45;
+                    const targetCenter = userLocation || center;
+                    const isDefaultCenter = Math.abs(targetCenter.lat - 30.3322) < 0.01 && Math.abs(targetCenter.lng - -81.6557) < 0.01;
+                    const targetZoom = isDefaultCenter && !userLocation ? 6 : 14;
+                    const targetTilt = isDefaultCenter && !userLocation ? 30 : 45;
                     const targetHeading = 0;
                     const duration = 1800; // Snappy 1.8 seconds space descent to unlock interaction instantly
                     const startTime = performance.now();
@@ -72,8 +120,8 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         // Ease-out quartic for terminal glide deceleration
                         const ease = 1 - (1 - progress) ** 4;
 
-                        const currentLat = startLat + (center.lat - startLat) * ease;
-                        const currentLng = startLng + (center.lng - startLng) * ease;
+                        const currentLat = startLat + (targetCenter.lat - startLat) * ease;
+                        const currentLng = startLng + (targetCenter.lng - startLng) * ease;
                         const currentZoom = startZoom + (targetZoom - startZoom) * ease;
 
                         try {
@@ -93,11 +141,11 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                             // Animation complete — lock onto target coordinates
                             try {
                                 map.moveCamera({
-                                    center: { lat: center.lat, lng: center.lng },
+                                    center: { lat: targetCenter.lat, lng: targetCenter.lng },
                                     zoom: targetZoom
                                 });
                             } catch (_) {
-                                map.setCenter({ lat: center.lat, lng: center.lng });
+                                map.setCenter({ lat: targetCenter.lat, lng: targetCenter.lng });
                                 map.setZoom(targetZoom);
                             }
                             rafRef.current = null;
@@ -130,23 +178,65 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
         };
     }, []); // CRITICAL: empty deps — map initializes exactly once
 
-    // Separate effect to smoothly pan map when center changes dynamically (e.g. user selects a different asset or tab)
-    useEffect(() => {
-        const map = mapInstanceRef.current;
-        if (!map || !isLoaded || !center) return;
+    // Map center updates removed to allow free panning
 
-        map.panTo(center);
-        
-        // Adjust zoom level smoothly if moving to a specific node vs home base
-        const isDefaultCenter = Math.abs(center.lat - 42.8252) < 0.01 && Math.abs(center.lng - -108.7513) < 0.01;
-        const currentZoom = map.getZoom();
-        
-        if (isDefaultCenter) {
-            if (currentZoom !== 6) map.setZoom(6);
-        } else {
-            if (currentZoom < 12) map.setZoom(12);
+    // Ambient Particle Data Streams
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const handleResize = () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', handleResize);
+
+        const particles: {x: number, y: number, speed: number, length: number, opacity: number}[] = [];
+        for (let i = 0; i < 50; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                speed: 1 + Math.random() * 3,
+                length: 10 + Math.random() * 40,
+                opacity: 0.1 + Math.random() * 0.4
+            });
         }
-    }, [center, isLoaded]);
+
+        const animateParticles = () => {
+            ctx.clearRect(0, 0, width, height);
+            
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(6, 182, 212, ${p.opacity})`;
+                ctx.lineWidth = 1;
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p.x, p.y + p.length);
+                ctx.stroke();
+
+                p.y += p.speed;
+                if (p.y > height) {
+                    p.y = -p.length;
+                    p.x = Math.random() * width;
+                }
+            });
+
+            particleRafRef.current = requestAnimationFrame(animateParticles);
+        };
+
+        animateParticles();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            if (particleRafRef.current !== null) {
+                cancelAnimationFrame(particleRafRef.current);
+            }
+        };
+    }, []);
 
     // Separate effect for layer overlays — updates when layers change without re-creating the map
     useEffect(() => {
@@ -155,14 +245,14 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
 
         const addLayers = async () => {
             try {
-                const { importLibrary } = await import('@googlemaps/js-api-loader');
-                const { Circle, Polyline } = await importLibrary('maps') as any;
+                // Use the globally injected google object to ensure we use the proxy-loaded library
+                const { Circle, Polyline } = await (window as any).google.maps.importLibrary('maps');
                 const SymbolPath = (window as any).google?.maps?.SymbolPath;
 
                 // Use AdvancedMarkerElement if available, else legacy Marker
                 let AdvancedMarkerElement: any = null;
                 try {
-                    const markerLib = await importLibrary('marker') as any;
+                    const markerLib = await (window as any).google.maps.importLibrary('marker');
                     AdvancedMarkerElement = markerLib.AdvancedMarkerElement;
                 } catch (_) {}
 
@@ -213,15 +303,18 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
     }, [layers, isLoaded]); // Layer effect runs when layers update — map is already stable
 
     return (
-        <div className="relative w-full h-full rounded-lg overflow-hidden border border-gray-800">
+        <div className="relative w-full h-full overflow-hidden">
+            {/* Map Substrate */}
             <div ref={mapRef} className="w-full h-full" />
+            
+            {/* Ambient Data Stream Overlay */}
+            <canvas 
+                ref={canvasRef} 
+                className="absolute inset-0 w-full h-full pointer-events-none mix-blend-screen opacity-60" 
+            />
+
             {!isLoaded && !error && (
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-xs font-black uppercase tracking-[0.3em] text-cyan-400">Synchronizing Atlas...</span>
-                    </div>
-                </div>
+                <StateBroadcastOverlay label="SYNCHRONIZING ATLAS..." />
             )}
             {error && (
                 <div className="absolute inset-0 bg-gray-950 flex flex-col items-center justify-center p-8 text-center gap-4">

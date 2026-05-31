@@ -8,11 +8,17 @@ import { ThemeController } from "@/components/ui/ThemeController";
 import { HUDProvider } from '@/lib/hud-store';
 import { HUDStateSync } from '@/lib/useBroadcastChannel';
 import { TelemetryNode } from './telemetry-node';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { triggerNotification } from '../hud/NotificationCenter';
+import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
+import { SolanaWalletConnectors } from '@dynamic-labs/solana';
+import { BitcoinWalletConnectors } from '@dynamic-labs/bitcoin';
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
+    const [mounted, setMounted] = useState(false);
+
     useEffect(() => {
+        setMounted(true);
         if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js').then((registration) => {
@@ -39,39 +45,34 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
                 });
             });
             
-            // WebMCP Agent Registry
-            if ((navigator as any).modelContext) {
-                try {
-                    (navigator as any).modelContext.registerTool({
-                        name: 'query_sovereign_stats',
-                        description: 'Fetch current TPNS global statistics and network health',
-                        execute: async () => {
-                            return {
-                                status: 'NOMINAL',
-                                activeNodes: 42,
-                                liquidity: '$2.4M',
-                                sovereignCitizens: 1205
-                            };
-                        }
-                    });
-                } catch (e) {
-                    console.warn('[WebMCP] Failed to register tools:', e);
-                }
-            }
+            // WebMCP Agent Registry (Migrated to Edge Discovery & CustomEvents)
+            // Tools are now declared statically in /public/.well-known/agent-skills.json
+            // and advertised to crawling agents via the WebMCP Server Card.
         }
     }, []);
 
+    if (!mounted) {
+        return null;
+    }
+
     return (
-        <HUDProvider>
-            <HUDStateSync />
-            <MeshProvider>
-                <TelemetryNode>
-                    {children}
-                </TelemetryNode>
-                <AIAssistant />
-                <Toaster />
-                <ThemeController />
-            </MeshProvider>
-        </HUDProvider>
+        <DynamicContextProvider
+            settings={{
+                environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID || 'DYNAMIC_ENVIRONMENT_ID_PLACEHOLDER',
+                walletConnectors: [SolanaWalletConnectors, BitcoinWalletConnectors],
+            }}
+        >
+            <HUDProvider>
+                {/* <HUDStateSync /> Disabled to prevent BroadcastChannel looping and extension crashes */}
+                <MeshProvider>
+                    <TelemetryNode>
+                        {children}
+                    </TelemetryNode>
+                    <AIAssistant />
+                    <Toaster />
+                    <ThemeController />
+                </MeshProvider>
+            </HUDProvider>
+        </DynamicContextProvider>
     );
 }

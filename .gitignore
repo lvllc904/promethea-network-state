@@ -71,3 +71,4 @@ scratch/lake_seeder.ts
 docker-compose.ibkr.yaml
 mirror_snapshot/
 
+gcloud-key.json

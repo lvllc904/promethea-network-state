@@ -9,7 +9,7 @@ export const CommandPalette = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState('');
     const [isParsing, setIsParsing] = useState(false);
-    const { activatePillar } = useHUD();
+    const { activatePillar, activateFocusPanel } = useHUD();
     const router = useRouter();
 
     useEffect(() => {
@@ -68,6 +68,20 @@ export const CommandPalette = () => {
                 break;
             case 'settings':
                 activatePillar('SETTINGS');
+                break;
+            case 'citadel':
+                document.documentElement.className = 'dark';
+                activateFocusPanel(null);
+                break;
+            case '16bit':
+                document.documentElement.className = 'theme-16bit';
+                activatePillar(null); // Clear left tray
+                activateFocusPanel('16BIT');
+                break;
+            case 'phosphor':
+                document.documentElement.className = 'theme-phosphor';
+                activatePillar(null); // Clear left tray
+                activateFocusPanel('PHOSPHOR');
                 break;
             default:
                 // Global search fallback
@@ -133,6 +147,22 @@ export const CommandPalette = () => {
                         <div className="flex items-center gap-3">
                             <Terminal className="w-4 h-4 text-zinc-400" />
                             <span className="text-zinc-300 group-hover:text-white">Configure <span className="text-zinc-400">Sovereign Settings</span></span>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
+                    </button>
+                    
+                    <button onClick={() => executeCommand('16bit')} className="w-full flex items-center justify-between px-3 py-3 hover:bg-white/5 rounded-lg text-left group">
+                        <div className="flex items-center gap-3">
+                            <Terminal className="w-4 h-4 text-fuchsia-400" />
+                            <span className="text-zinc-300 group-hover:text-white">Enter <span className="text-fuchsia-400">16-Bit Arcade</span></span>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
+                    </button>
+
+                    <button onClick={() => executeCommand('phosphor')} className="w-full flex items-center justify-between px-3 py-3 hover:bg-white/5 rounded-lg text-left group">
+                        <div className="flex items-center gap-3">
+                            <Terminal className="w-4 h-4 text-red-500" />
+                            <span className="text-zinc-300 group-hover:text-white">Access <span className="text-red-500">Phosphor Terminal</span></span>
                         </div>
                         <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
                     </button>

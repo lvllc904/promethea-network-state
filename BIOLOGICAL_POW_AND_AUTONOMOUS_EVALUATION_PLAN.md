@@ -46,10 +46,10 @@ Once verified by the multi-modal AI auditor, the physical labor is processed thr
 
 ---
 
-## 3. State-as-a-Service (DAO-in-a-Box)
+## 3. State-as-a-Service (DAC-in-a-Box)
 
 ### 3.1 The Cartographer / DepthOS Bridge
-*   The Autonomous PoW Oracle will be packaged as a middleware service (`@promethea/shadow-gate` or via Cartographer) available to external DAOs, startups, and open-source projects.
+*   The Autonomous PoW Oracle will be packaged as a middleware service (`@promethea/shadow-gate` or via Cartographer) available to external DACs, startups, and open-source projects.
 *   **Generous Free Tier:** External projects can use the engine to analyze a limited number of PRs per month to generate a "Suggested Equity/Value Allocation" report.
 *   **Monetization & Network Tax:** If organizations want to *mint* the actual tokens on the Sovereign Ledger or use TPNS's automated legal structuring, a small network fee (1-3%) is applied, directly feeding the global TPNS Treasury.
 

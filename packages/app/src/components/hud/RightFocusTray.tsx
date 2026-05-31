@@ -22,7 +22,8 @@ import { DiplomaticTray } from './DiplomaticTray';
 import { PulseTray } from './PulseTray';
 import { PrometheaPanel } from './PrometheaPanel';
 import { SettingsTray } from './SettingsTray';
-import { PhosphorTerminal } from '../terminal/PhosphorTerminal';
+import dynamic from 'next/dynamic';
+const PhosphorTerminal = dynamic(() => import('../terminal/PhosphorTerminal').then(mod => mod.PhosphorTerminal), { ssr: false });
 
 // --- SUB-PANEL: RWA EXCHANGE ---
 export function ExchangePanel() {
@@ -1743,20 +1744,9 @@ export const RightFocusTray = () => {
     }
 
     return (
-        <div className="fixed top-12 bottom-10 right-4 w-[500px] xl:w-[600px] z-[9999] glass-panel rounded-xl flex flex-col overflow-hidden rim-highlight-focus slide-hud-right shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-            <div className="p-4 border-b border-cyan-400/20 flex justify-between items-center bg-teal-950/40 shadow-[0_4px_20px_rgba(6,182,212,0.1)]">
-                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-cyan-400">
-                    {title}
-                </h2>
-                <button 
-                    onClick={() => activateFocusPanel(null)}
-                    className="text-gray-500 hover:text-white transition-colors"
-                >
-                    <X size={16} />
-                </button>
-            </div>
-            
-            <div className="flex-1 overflow-hidden p-4">
+        <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Redundant header removed per unified tray design */}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 custom-scrollbar">
                 {activeFocusPanel === 'EXCHANGE' && <ExchangePanel />}
                 {activeFocusPanel === 'SQL_EXPLORER' && <SqlExplorerPanel />}
                 {activeFocusPanel === 'CLI_GUIDE' && <CliGuidePanel />}

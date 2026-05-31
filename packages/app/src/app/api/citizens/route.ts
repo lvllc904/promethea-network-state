@@ -5,14 +5,15 @@ const ENGINE_URL = process.env.ECONOMIC_ENGINE_URL || 'https://economic-engine-3
 
 export async function GET() {
   try {
-    const r = await fetch(`${ENGINE_URL}/api/citizens`, { cache: 'no-store', signal: AbortSignal.timeout(5000) });
+    const r = await fetch(`${ENGINE_URL}/api/citizens`, { cache: 'no-store', signal: AbortSignal.timeout(15000) });
     if (r.ok) { 
         const d = await r.json(); 
         if (Array.isArray(d)) return NextResponse.json(d); 
-    } else {
-        return NextResponse.json({ error: `Engine returned ${r.status}` }, { status: r.status });
     }
+    // Fallback: return empty array instead of crashing UI if backend is cold/dead
+    return NextResponse.json([]);
   } catch (err: any) {
-    return NextResponse.json({ error: 'Connection to Sovereign Engine failed', details: err.message }, { status: 503 });
+    // Graceful fallback for 503/timeout scenarios
+    return NextResponse.json([]);
   }
 }

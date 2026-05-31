@@ -1,0 +1,153 @@
+{
+    "url": "http://localhost:3000/dashboard",
+    "timestamp": "2026-05-25T03:11:28.423Z",
+    "elements": [
+        {
+            "id": "atlas",
+            "selector": "button[title='Atlas']",
+            "text": "Atlas",
+            "role": "button",
+            "coordinates": {
+                "x": 33,
+                "y": 341,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": true
+        },
+        {
+            "id": "economics",
+            "selector": "button[title='Economics']",
+            "text": "Economics",
+            "role": "button",
+            "coordinates": {
+                "x": 33,
+                "y": 397,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": true
+        },
+        {
+            "id": "governance",
+            "selector": "button[title='Governance']",
+            "text": "Governance",
+            "role": "button",
+            "coordinates": {
+                "x": 33,
+                "y": 453,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": true
+        },
+        {
+            "id": "narrative",
+            "selector": "button[title='Narrative']",
+            "text": "Narrative",
+            "role": "button",
+            "coordinates": {
+                "x": 33,
+                "y": 509,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": true
+        },
+        {
+            "id": "passport",
+            "selector": "button[title='Passport']",
+            "text": "Passport",
+            "role": "button",
+            "coordinates": {
+                "x": 33,
+                "y": 565,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": true
+        },
+        {
+            "id": "pulse",
+            "selector": "button[title='Pulse']",
+            "text": "Pulse",
+            "role": "button",
+            "coordinates": {
+                "x": 33,
+                "y": 621,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": true
+        },
+        {
+            "id": "cmd_k",
+            "selector": "Cmd+K Hint",
+            "text": "⌘ K",
+            "role": "hint",
+            "coordinates": {
+                "x": 748,
+                "y": 48,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": false
+        },
+        {
+            "id": "header_ticker",
+            "selector": "Header Ticker",
+            "text": "Financial Ticker",
+            "role": "ticker",
+            "coordinates": {
+                "x": 748,
+                "y": 16,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": true
+        },
+        {
+            "id": "footer_ticker",
+            "selector": "Footer Ticker",
+            "text": "State Ticker",
+            "role": "ticker",
+            "coordinates": {
+                "x": 748,
+                "y": 802,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": true
+        },
+        {
+            "id": "glass_tray_container",
+            "selector": ".glass-panel",
+            "text": "Active Pillar Tray",
+            "role": "dialog",
+            "coordinates": {
+                "x": 96,
+                "y": 48,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": false
+        },
+        {
+            "id": "tray_copilot_chat",
+            "selector": ".bg-teal-950\\/30",
+            "text": "Co-Pilot Chat",
+            "role": "log",
+            "coordinates": {
+                "x": 96,
+                "y": 560,
+                "w": 40,
+                "h": 40
+            },
+            "isClickable": true
+        }
+    ],
+    "resolution": {
+        "width": 1496,
+        "height": 816
+    }
+}
