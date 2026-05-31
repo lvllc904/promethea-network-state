@@ -55,18 +55,7 @@ export default function DashboardLayout({
         </Suspense>
         
         <div className="w-full h-screen overflow-hidden bg-black text-white flex flex-col">
-          {!isLoggedIn ? (
-            <div className="flex-1 flex flex-col items-center justify-center gap-8 relative z-10">
-                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-cyan-500/10 blur-[150px] rounded-full pointer-events-none" />
-                <h1 className="text-2xl md:text-4xl font-black font-mono tracking-widest text-center">INITIALIZE<br/>SOVEREIGN VAULT</h1>
-                <p className="text-zinc-500 font-mono text-sm max-w-md text-center mb-4">Authenticate to provision your non-custodial wallet and generate your Decentralized Identifier.</p>
-                <div className="scale-125">
-                  <DynamicWidget />
-                </div>
-            </div>
-          ) : (
-            <SovereignHUD>{children}</SovereignHUD>
-          )}
+          <SovereignHUD>{children}</SovereignHUD>
         </div>
       </SidebarProvider>
   );

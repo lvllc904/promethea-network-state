@@ -10,6 +10,7 @@ import { RightFocusTray } from './RightFocusTray';
 import { CommandPalette } from './CommandPalette';
 import { OmniButton } from './OmniButton';
 import dynamic from 'next/dynamic';
+import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
 
 const PhosphorTerminal = dynamic(() => import('../terminal/PhosphorTerminal').then(mod => mod.PhosphorTerminal), { ssr: false });
 const SixteenBitArcade = dynamic(() => import('../terminal/SixteenBitArcade').then(mod => mod.SixteenBitArcade), { ssr: false });
@@ -369,6 +370,9 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
 
             {/* Cmd+K & Exit controls — below header ticker */}
             <div className="fixed top-11 right-6 z-50 flex items-center gap-3">
+                <div className="scale-[0.8] origin-right">
+                    <DynamicWidget />
+                </div>
                 <div className="px-4 py-1.5 bg-black/40 backdrop-blur border border-white/5 rounded text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-1.5 opacity-60">
                     <span>Command</span>
                     <span className="font-mono bg-white/10 px-1 py-0.5 rounded">⌘ K</span>
