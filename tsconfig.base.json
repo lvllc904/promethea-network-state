@@ -87,6 +87,12 @@
 
       "@promethea/guardian": [
         "packages/guardian/src"
+      ],
+      "@promethea/sovereign-store": [
+        "packages/sovereign-store/src"
+      ],
+      "@promethea/sovereign-store/*": [
+        "packages/sovereign-store/src/*"
       ]
     }
   },
