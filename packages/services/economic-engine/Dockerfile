@@ -20,7 +20,6 @@ COPY packages/app/package.json ./packages/app/
 COPY packages/lib/package.json ./packages/lib/
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/components/package.json ./packages/components/
-COPY packages/identity/package.json ./packages/identity/
 COPY packages/hooks/package.json ./packages/hooks/
 COPY packages/sovereign-store/package.json ./packages/sovereign-store/
 COPY packages/services/ai-service/package.json ./packages/services/ai-service/
