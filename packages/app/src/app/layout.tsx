@@ -29,7 +29,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning className="dark">
+        <html lang="en" suppressHydrationWarning>
             <body className="antialiased font-sans">
                 <ClientProviders>
                     {children}
@@ -38,17 +38,56 @@ export default function RootLayout({
                 <Script id="wasm-loader" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `
                     if (typeof window !== 'undefined' && window.Go) {
                         const go = new Go();
-                        WebAssembly.instantiateStreaming(fetch("/sovereign-gateway.wasm"), go.importObject).then((result) => {
-                            go.run(result.instance);
-                            console.log("[UCS-ADM] Sovereign Gateway WASM Module Loaded.");
-                        }).catch(err => {
-                            console.warn("[UCS-ADM] Failed to load WASM module. Are you running 'make copy-wasm'?", err);
-                        });
+                        const loadWasm = async () => {
+                            try {
+                                const wasmUrl = "/sovereign-gateway.wasm?v=4.0.1";
+                                const response = await fetch(wasmUrl);
+                                
+                                // Always-on safeguard: do not pass HTML/errors to WebAssembly
+                                if (!response.ok) {
+                                    throw new Error("Server returned status " + response.status);
+                                }
+                                
+                                const contentType = response.headers.get("content-type") || "";
+                                if (contentType.includes("text/html") || contentType.includes("text/plain")) {
+                                    throw new Error("Invalid content-type: '" + contentType + "'. Server likely returned a 503/404 HTML page.");
+                                }
+
+                                const responseClone = response.clone();
+                                
+                                if (typeof WebAssembly.instantiateStreaming === 'function') {
+                                    try {
+                                        const result = await WebAssembly.instantiateStreaming(responseClone, go.importObject);
+                                        go.run(result.instance);
+                                        console.log("[UCS-ADM] Sovereign Gateway WASM Module Loaded (streaming).");
+                                        return;
+                                    } catch (streamErr) {
+                                        console.warn("[UCS-ADM] WASM streaming instantiation failed, trying arrayBuffer fallback:", streamErr);
+                                    }
+                                }
+                                
+                                const bytes = await response.arrayBuffer();
+                                
+                                // Additional safeguard: verify magic number (\0asm)
+                                const uint8 = new Uint8Array(bytes.slice(0, 4));
+                                if (uint8[0] !== 0 || uint8[1] !== 97 || uint8[2] !== 115 || uint8[3] !== 109) {
+                                    throw new Error("Invalid WebAssembly binary magic number.");
+                                }
+
+                                const result = await WebAssembly.instantiate(bytes, go.importObject);
+                                go.run(result.instance);
+                                console.log("[UCS-ADM] Sovereign Gateway WASM Module Loaded (arrayBuffer).");
+                            } catch (err) {
+                                console.warn("[UCS-ADM] Graceful Fallback: Sovereign Gateway WASM failed to load.", err.message);
+                                window.__SOVEREIGN_WASM_MOCK__ = true;
+                            }
+                        };
+                        loadWasm();
                     }
                 `}} />
                 
                 {/* WebMCP: Sovereign Tool Discovery via CustomEvent (Zero Polling) */}
-                <script dangerouslySetInnerHTML={{ __html: `
+                <Script id="webmcp-loader" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `
                     if (typeof window !== 'undefined') {
                         console.log('[WebMCP] Broadcasting Agent-Native Readiness...');
                         window.dispatchEvent(new CustomEvent('WEBMCP_READY', {

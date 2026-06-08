@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@promethea/ui';
-import { ArrowRight, HardHat, Lightbulb, Building, Landmark, Recycle, ArrowUpRight, Activity, BookOpen, ChevronDown, Compass, FileText, Info } from 'lucide-react';
+import { ArrowRight, HardHat, Lightbulb, Building, Landmark, Recycle, ArrowUpRight, Activity, BookOpen, ChevronDown, Compass, FileText, Info, Radio, ShieldAlert, Scale, Zap, Fingerprint, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { ThemeController } from '@/components/ui/ThemeController';
@@ -32,6 +32,22 @@ const itemVariants = {
 
 export default function LandingPage() {
   const [isExploreOpen, setIsExploreOpen] = useState(false);
+  const [signals, setSignals] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [hoveredSignal, setHoveredSignal] = useState<any | null>(null);
+
+  useEffect(() => {
+    fetch('/api/lake')
+      .then(res => res.json())
+      .then(data => {
+        setSignals(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('[Lake] Hydration error:', err);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div className="bg-background text-foreground dark:text-white min-h-screen selection:bg-amber-500/30 font-sans transition-colors duration-300">
@@ -184,6 +200,226 @@ export default function LandingPage() {
               </Button>
             </div>
           </motion.div>
+        </section>
+
+        {/* OMNI-SPECTRUM NETWORK STATE FEED */}
+        <section className="px-8 md:px-16 max-w-7xl mx-auto mt-12 mb-24">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Radio className="w-4 h-4 text-amber-500 animate-pulse animate-duration-[2s]" />
+                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-400">Omni-Spectrum Network State Feed</span>
+              </div>
+              <h2 className="text-3xl font-black tracking-tighter text-foreground dark:text-white uppercase leading-none">The Live Narrative Stream.</h2>
+            </div>
+            <Link 
+              href="/news" 
+              className="text-[11px] font-mono font-bold text-amber-500 hover:text-amber-300 transition-colors uppercase tracking-wider flex items-center gap-1 border border-amber-500/20 bg-amber-500/5 px-4 py-2 hover:bg-amber-500/10"
+            >
+              Open Full News Hub <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Horizontal Marquee / Stream Panel */}
+            <div className="lg:col-span-2 overflow-hidden relative border border-foreground/5 dark:border-white/5 bg-background/10 backdrop-blur-lg p-6 rounded-none">
+              <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-background/80 to-transparent pointer-events-none z-10 hidden sm:block" />
+              <div className="absolute top-0 left-0 w-8 h-full bg-gradient-to-r from-background/80 to-transparent pointer-events-none z-10 hidden sm:block" />
+              
+              <div className="flex gap-6 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent snap-x snap-mandatory">
+                {loading ? (
+                  Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="snap-center shrink-0 w-80 bg-black/40 backdrop-blur-md border border-white/5 p-6 animate-pulse flex flex-col justify-between h-56">
+                      <div>
+                        <div className="h-4 bg-zinc-800 w-1/3 mb-4 rounded" />
+                        <div className="h-6 bg-zinc-800 w-3/4 mb-3 rounded" />
+                        <div className="h-3 bg-zinc-800 w-full mb-2 rounded" />
+                        <div className="h-3 bg-zinc-800 w-5/6 rounded" />
+                      </div>
+                      <div className="h-4 bg-zinc-800 w-1/2 rounded" />
+                    </div>
+                  ))
+                ) : signals.length === 0 ? (
+                  <div className="w-full text-center py-12 text-zinc-500 font-mono text-xs uppercase tracking-widest">
+                    No active narrative streams detected.
+                  </div>
+                ) : (
+                  signals.map((signal) => (
+                    <motion.div
+                      key={signal.id}
+                      className={`snap-center shrink-0 w-80 bg-black/40 backdrop-blur-md border hover:border-amber-500/30 p-6 transition-all duration-300 cursor-pointer h-60 flex flex-col justify-between relative group ${
+                        hoveredSignal?.id === signal.id ? 'border-amber-500/40 bg-zinc-950/40' : 'border-white/5'
+                      }`}
+                      onMouseEnter={() => setHoveredSignal(signal)}
+                      onClick={() => setHoveredSignal(signal)}
+                    >
+                      {/* Top Badges */}
+                      <div>
+                        <div className="flex justify-between items-start gap-2 mb-4">
+                          <span className="text-[8px] font-mono font-bold tracking-widest text-zinc-400 bg-white/5 border border-white/5 px-2 py-0.5 uppercase">
+                            {signal.category}
+                          </span>
+                          <span className={`text-[8px] font-mono font-bold tracking-widest border px-2 py-0.5 uppercase ${
+                            signal.type.includes('VIDEO') ? 'text-red-400 border-red-500/20 bg-red-500/5' :
+                            signal.type.includes('AUDIO') ? 'text-purple-400 border-orange-500/20 bg-orange-500/5' :
+                            signal.type.includes('GOVERNANCE') ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' :
+                            'text-green-400 border-green-500/20 bg-green-500/5'
+                          }`}>
+                            {signal.type.replace('_', ' ')}
+                          </span>
+                        </div>
+
+                        <h3 className="text-sm font-bold tracking-tight text-white group-hover:text-amber-400 transition-colors line-clamp-2 uppercase mb-2 leading-snug">
+                          {signal.payload.title}
+                        </h3>
+                        <p className="text-xs text-zinc-400 font-light leading-relaxed line-clamp-3">
+                          {signal.payload.content}
+                        </p>
+                      </div>
+
+                      {/* Footer Info */}
+                      <div className="flex justify-between items-center border-t border-white/5 pt-3 text-[9px] font-mono text-zinc-500 mt-2">
+                        <span className="truncate max-w-[120px]">{signal.payload.author || 'Citizen Edge'}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span>{signal.timestamp}</span>
+                          <span className="text-zinc-700">•</span>
+                          <span className="text-amber-500/80 font-bold">FEE: {(signal.metrics?.feePaid ?? 0.15).toFixed(2)}%</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Vetting Panel Drawer */}
+            <div className="p-6 border border-amber-500/20 bg-amber-500/[0.02] backdrop-blur-xl flex flex-col justify-between h-full relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 blur-[50px] rounded-full pointer-events-none" />
+              
+              <AnimatePresence mode="wait">
+                {hoveredSignal ? (
+                  <motion.div
+                    key={hoveredSignal.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex flex-col justify-between h-full"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
+                        <div className="flex items-center gap-1.5 text-amber-400">
+                          <Fingerprint className="w-3.5 h-3.5" />
+                          <span className="text-[10px] font-mono font-bold uppercase tracking-widest">Sovereign Bias Vetting Drawer</span>
+                        </div>
+                        <span className={`text-[8px] font-mono font-black border px-2 py-0.5 ${
+                          hoveredSignal.reality === 'REALITY' ? 'text-green-400 border-green-500/30 bg-green-500/10' : 'text-orange-400 border-orange-500/30 bg-orange-500/10'
+                        }`}>
+                          {hoveredSignal.reality}
+                        </span>
+                      </div>
+
+                      <h3 className="text-base font-black tracking-tight text-white mb-4 uppercase leading-tight">
+                        {hoveredSignal.payload.title}
+                      </h3>
+
+                      {/* Vetting Lens Matrix */}
+                      <div className="space-y-4">
+                        {/* Propaganda rating */}
+                        <div>
+                          <div className="flex justify-between text-[10px] font-mono mb-1">
+                            <span className="text-zinc-400">PROPAGANDA INDEX:</span>
+                            <span className={hoveredSignal.biasGrading.propaganda > 30 ? 'text-red-400 font-bold' : 'text-green-400'}>
+                              {hoveredSignal.biasGrading.propaganda}%
+                            </span>
+                          </div>
+                          <div className="h-1 w-full bg-zinc-800">
+                            <motion.div 
+                              className={`h-full ${hoveredSignal.biasGrading.propaganda > 30 ? 'bg-red-500' : 'bg-green-500'}`}
+                              initial={{ width: 0 }}
+                              animate={{ width: `${hoveredSignal.biasGrading.propaganda}%` }}
+                              transition={{ duration: 0.4 }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Source trust */}
+                        <div>
+                          <div className="flex justify-between text-[10px] font-mono mb-1">
+                            <span className="text-zinc-400">SOURCE TRUST RATING:</span>
+                            <span className="text-amber-400 font-bold">{hoveredSignal.biasGrading.sourceTrust}%</span>
+                          </div>
+                          <div className="h-1 w-full bg-zinc-800">
+                            <motion.div 
+                              className="h-full bg-amber-500"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${hoveredSignal.biasGrading.sourceTrust}%` }}
+                              transition={{ duration: 0.4, delay: 0.1 }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Swarm consensus */}
+                        <div>
+                          <div className="flex justify-between text-[10px] font-mono mb-1">
+                            <span className="text-zinc-400">SWARM CONSENSUS SCORE:</span>
+                            <span className="text-orange-400 font-bold">{hoveredSignal.biasGrading.consensusScore}%</span>
+                          </div>
+                          <div className="h-1 w-full bg-zinc-800">
+                            <motion.div 
+                              className="h-full bg-orange-500"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${hoveredSignal.biasGrading.consensusScore}%` }}
+                              transition={{ duration: 0.4, delay: 0.2 }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Leaning */}
+                        <div className="flex justify-between items-center text-[10px] font-mono border-t border-white/5 pt-3">
+                          <span className="text-zinc-400">GEOPOLITICAL LEANING:</span>
+                          <span className="text-white border border-white/10 px-2 py-0.5 bg-white/5 uppercase font-bold">
+                            {hoveredSignal.biasGrading.leaning}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Transcript first snippet */}
+                      {hoveredSignal.payload.transcript && (
+                        <div className="mt-4 border border-zinc-800 bg-zinc-950/60 p-3">
+                          <div className="flex items-center gap-1 mb-1.5 text-[8px] font-mono text-zinc-500 uppercase tracking-widest">
+                            <Scale className="w-3 h-3 text-amber-500" />
+                            <span>Transcript Analysis Block</span>
+                          </div>
+                          <p className="text-[10px] text-zinc-400 leading-relaxed font-light italic line-clamp-3">
+                            "{hoveredSignal.payload.transcript}"
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="mt-6 flex flex-col gap-2">
+                      <div className="flex justify-between text-[9px] font-mono text-zinc-500 uppercase border-t border-white/5 pt-3 mb-1">
+                        <span>On-Chain Audit:</span>
+                        <span className="text-amber-500">GAAP COMPLIANT (0.15% max fee)</span>
+                      </div>
+                      <Link 
+                        href={`/news?id=${hoveredSignal.id}`}
+                        className="inline-flex items-center gap-1.5 justify-center py-2 bg-amber-500 hover:bg-amber-400 text-black text-[10px] font-mono font-bold uppercase tracking-wider rounded-none transition-colors"
+                      >
+                        Deep inspect Signal <ArrowUpRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-center py-12 text-zinc-500">
+                    <Fingerprint className="w-8 h-8 text-zinc-700 mb-3 animate-pulse" />
+                    <p className="text-[11px] font-mono uppercase tracking-widest">Hover over any stream card to trigger the dynamic neuro-symbolic vetting drawer.</p>
+                  </div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
         </section>
 
         {/* METRICS INJECTION (Glassmorphic Data Cards) */}
@@ -395,6 +631,7 @@ export default function LandingPage() {
                 </h3>
                 <div className="space-y-6">
                   {[
+                    { version: "v1.6.0-Alpha", title: "Always-On Progressive Hydration & WASM Gating Hardening", desc: "Enforcing rapid 3-second timeouts, fail-silent high-fidelity mock fallbacks, GCLB HTML payload rejection, and magic-number validation to prevent gateway 503 errors." },
                     { version: "v1.5.0-Alpha", title: "Scholarly Theme Alignment & Premium Citadel Dark Theme Upgrades", desc: "Integrating the LaTeX Light Parchment theme, borderless Citadel Dark theme with dynamic chromatic underglows, and 400 micro-boid multi-flock Canvas simulation." },
                     { version: "v1.4.0-Alpha", title: "Micro-Cognitive Hive-Mind & sbi-core v4.0 Published", desc: "Operationalizing SNN LIF membrane gating, scale-to-zero astrocytes/microglia, and GRAG grounding over active Clojure layers." },
                     { version: "v1.3.0-Alpha", title: "Osiris Planetary Telemetry Live", desc: "Real-time spatial tracking of aviation vectors and thermal forest fires synchronized directly into the 3D Atlas viewport." },
