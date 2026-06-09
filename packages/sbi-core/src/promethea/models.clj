@@ -8,7 +8,7 @@
 ;; "A village that grows and defines itself."
 
 (defonce registry (atom []))
-(defonce active-model (atom "gemini-2.0-flash-exp"))
+(defonce active-model (atom "gemini-1.5-flash"))
 
 (defn get-registry []
   @registry)
