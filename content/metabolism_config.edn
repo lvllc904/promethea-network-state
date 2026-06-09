@@ -1,0 +1,17 @@
+{:active-preset :developer
+ :presets
+ {:citadel
+  {:sensory-weight 1.0
+   :economic-weight 2.0
+   :fire-threshold -55.0
+   :leak-factor 0.9}
+  :developer
+  {:sensory-weight 15.0
+   :economic-weight 15.0
+   :fire-threshold -55.0
+   :leak-factor 0.95}
+  :custom
+  {:sensory-weight 5.0
+   :economic-weight 5.0
+   :fire-threshold -55.0
+   :leak-factor 0.9}}}
