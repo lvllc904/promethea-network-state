@@ -390,15 +390,19 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
                         50% { filter: drop-shadow(0 0 8px #f59e0b); }
                         100% { filter: drop-shadow(0 0 2px #f59e0b); }
                     }
-                    .animate-ring { animation: pulse-ring 3s infinite ease-in-out; }
-                    .animate-scan { animation: scanline 6s infinite linear; }
+                    .animate-ring {
+                        animation: pulse-ring 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                    }
+                    .animate-scan {
+                        animation: scanline 8s linear infinite;
+                    }
                     .animate-trace {
                         stroke-dasharray: 500;
                         stroke-dashoffset: 500;
-                        animation: trace-path 4.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+                        animation: trace-path 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
                     }
                     .animate-glow-pulse {
-                        animation: glow-pulse 3s infinite ease-in-out;
+                        animation: glow-pulse 3s ease-in-out infinite;
                     }
                 `}} />
 

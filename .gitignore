@@ -57,6 +57,9 @@ tmp/
 *.production.yaml
 sa.json
 sa_new.json
+sa_clean.json
+sa_new_clean.json
+tmp_sa_clean.json
 tmp_json.txt
 service-account.json
 tmp_sa.json
