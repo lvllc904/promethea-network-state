@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHUD } from '@/lib/hud-store';
 import { useMesh } from '@/components/providers/mesh-provider';
 import { TacticalRibbon } from './TacticalRibbon';
@@ -133,7 +133,7 @@ const SovereignAtlasBackground = ({ isEclipsed, globalVix }: { isEclipsed: boole
 };
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { Terminal, Shield, Cpu, Zap, Power, LogOut, X, AlertCircle } from 'lucide-react';
+import { Terminal, Shield, Cpu, Zap, Power, LogOut, X, AlertCircle, Sliders } from 'lucide-react';
 
 import { ethers } from 'ethers';
 
@@ -215,6 +215,20 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
     const { isUnlocked, unlock, lock } = useSovereignStore();
     const { walletAddress } = useSolanaCitizen();
     const searchParams = useSearchParams();
+
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const settingsRef = useRef<HTMLDivElement>(null);
+
+    // Auto-close settings dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+                setIsSettingsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     // The Hydration Handshake: Listen for verification hash from Body 2 Auth Gateway
     useEffect(() => {
@@ -629,45 +643,88 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
             
             <NotificationCenter />
 
-            {/* Cmd+K & Exit controls — below header ticker */}
-            <div className="fixed top-11 right-6 z-50 flex items-center gap-3">
-                {!isUnlocked ? (
-                    <button 
-                        onClick={() => {
-                            window.location.href = 'http://localhost:3001';
-                        }}
-                        className="px-4 py-1.5 bg-emerald-950/20 hover:bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em] rounded transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)] flex items-center gap-1.5 cursor-pointer">
-                        <Shield className="w-3 h-3" />
-                        <span>Hydrate Cockpit</span>
-                    </button>
-                ) : (
-                    <div className="px-4 py-1.5 bg-emerald-950/20 border border-emerald-500/30 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em] rounded flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-                        <Shield className="w-3 h-3" />
-                        <span>Sovereign Link Active</span>
+            {/* Cmd+K & Exit controls — consolidated dropdown */}
+            <div ref={settingsRef} className="fixed top-11 right-6 z-50 flex flex-col items-end">
+                <button
+                    onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                    className="px-4 py-1.5 bg-black/40 backdrop-blur border border-emerald-500/30 hover:border-emerald-400/60 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em] rounded transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)] flex items-center gap-2 cursor-pointer group"
+                >
+                    <Sliders className={`w-3 h-3 transition-transform duration-300 ${isSettingsOpen ? 'rotate-90 text-emerald-300' : 'group-hover:rotate-12'}`} />
+                    <span>HUD OPTIONS</span>
+                </button>
+
+                {isSettingsOpen && (
+                    <div className="mt-2 w-64 bg-black/95 backdrop-blur-md border border-emerald-500/30 rounded shadow-[0_0_30px_rgba(16,185,129,0.2)] p-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-150">
+                        <div className="flex flex-col gap-1 border-b border-white/5 pb-2">
+                            <span className="text-[8px] font-black text-emerald-500/70 tracking-widest uppercase">System Core Status</span>
+                            {walletAddress ? (
+                                <span className="text-[9px] text-zinc-400 font-mono truncate">{walletAddress}</span>
+                            ) : (
+                                <span className="text-[9px] text-zinc-500">Unregistered Guest</span>
+                            )}
+                        </div>
+
+                        {/* Hydrate Cockpit */}
+                        <div className="flex flex-col gap-1.5">
+                            <span className="text-[8px] font-bold text-zinc-500 tracking-wider uppercase">Authentication</span>
+                            {!isUnlocked ? (
+                                <button 
+                                    onClick={() => {
+                                        window.location.href = 'http://localhost:3001';
+                                    }}
+                                    className="w-full px-3 py-2 bg-emerald-950/20 hover:bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-[9px] font-black uppercase tracking-[0.15em] rounded transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                                >
+                                    <Shield className="w-3 h-3" />
+                                    <span>Hydrate Cockpit</span>
+                                </button>
+                            ) : (
+                                <div className="w-full px-3 py-2 bg-emerald-950/20 border border-emerald-500/30 text-emerald-400 text-[9px] font-black uppercase tracking-[0.15em] rounded flex items-center justify-center gap-1.5">
+                                    <Shield className="w-3 h-3" />
+                                    <span>Sovereign Link Active</span>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Command Helper */}
+                        <div className="flex flex-col gap-1.5">
+                            <span className="text-[8px] font-bold text-zinc-500 tracking-wider uppercase">Quick Search</span>
+                            <div className="px-3 py-2 bg-zinc-950/40 border border-white/5 rounded text-[9px] font-black uppercase tracking-[0.15em] text-gray-400 flex items-center justify-between opacity-80">
+                                <span>Command Menu</span>
+                                <span className="font-mono bg-white/10 px-1 py-0.5 rounded text-[8px]">⌘ K</span>
+                            </div>
+                        </div>
+
+                        {/* Toggle Animations */}
+                        <div className="flex flex-col gap-1.5">
+                            <span className="text-[8px] font-bold text-zinc-500 tracking-wider uppercase">Aesthetics</span>
+                            <button
+                                onClick={toggleAnimations}
+                                className={`w-full px-3 py-2 border rounded text-[9px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 ${
+                                    reduceAnimations 
+                                        ? 'bg-zinc-900/50 border-zinc-700/50 text-zinc-400 hover:bg-zinc-800' 
+                                        : 'bg-emerald-950/20 border-emerald-500/20 text-emerald-400 hover:bg-emerald-950/40 hover:border-emerald-400/50'
+                                }`}
+                            >
+                                <Zap className="w-3 h-3" />
+                                <span>Animations: {reduceAnimations ? 'OFF' : 'ON'}</span>
+                            </button>
+                        </div>
+
+                        {/* Exit Button */}
+                        <div className="border-t border-white/5 pt-3">
+                            <button
+                                onClick={() => {
+                                    setIsSettingsOpen(false);
+                                    handleExitHUD();
+                                }}
+                                className="w-full px-3 py-2 bg-red-950/20 hover:bg-red-500/20 border border-red-500/20 hover:border-red-400/50 rounded text-red-400 transition-all flex items-center justify-center gap-1.5 text-[9px] font-black uppercase tracking-wider cursor-pointer"
+                            >
+                                <LogOut className="w-3 h-3" />
+                                <span>Exit HUD</span>
+                            </button>
+                        </div>
                     </div>
                 )}
-                <div className="px-4 py-1.5 bg-black/40 backdrop-blur border border-white/5 rounded text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-1.5 opacity-60">
-                    <span>Command</span>
-                    <span className="font-mono bg-white/10 px-1 py-0.5 rounded">⌘ K</span>
-                </div>
-                <button
-                    onClick={toggleAnimations}
-                    className={`px-3 py-1.5 border rounded text-[9px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 ${
-                        reduceAnimations 
-                            ? 'bg-zinc-900/50 border-zinc-700/50 text-zinc-400 hover:bg-zinc-800' 
-                            : 'bg-emerald-950/20 border-emerald-500/20 text-emerald-400 hover:bg-emerald-950/40 hover:border-emerald-400/50'
-                    }`}
-                >
-                    <Zap className="w-3 h-3" />
-                    <span>ANIMATIONS: {reduceAnimations ? 'OFF' : 'ON'}</span>
-                </button>
-                <button
-                    onClick={handleExitHUD}
-                    className="p-1.5 bg-red-950/20 hover:bg-red-500/20 border border-red-500/20 hover:border-red-400/50 rounded text-red-400 transition-all flex items-center gap-1 text-[9px] font-black uppercase tracking-wider cursor-pointer"
-                >
-                    <LogOut className="w-3 h-3" />
-                    <span>Exit</span>
-                </button>
             </div>
 
             {/* Persistent State Footer Ticker (Z-60) */}

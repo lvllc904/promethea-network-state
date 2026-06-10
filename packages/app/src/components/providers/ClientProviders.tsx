@@ -10,39 +10,21 @@ import { HUDStateSync } from '@/lib/useBroadcastChannel';
 import { TelemetryNode } from './telemetry-node';
 import { useEffect, useState } from 'react';
 import { triggerNotification } from '../hud/NotificationCenter';
-import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
-import { SolanaWalletConnectors } from '@dynamic-labs/solana';
-import { BitcoinWalletConnectors } from '@dynamic-labs/bitcoin';
+import { usePathname } from 'next/navigation';
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
     const [mounted, setMounted] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         setMounted(true);
         if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then((registration) => {
-                    registration.onupdatefound = () => {
-                        const installingWorker = registration.installing;
-                        if (installingWorker == null) {
-                            return;
-                        }
-                        installingWorker.onstatechange = () => {
-                            if (installingWorker.state === 'installed') {
-                                if (navigator.serviceWorker.controller) {
-                                    // New update available
-                                    triggerNotification({
-                                        title: 'TPNS System Update',
-                                        message: 'A rolling update has been deployed. New Sovereign content is pre-cached. Refresh to align with the active timeline.',
-                                        type: 'update'
-                                    });
-                                }
-                            }
-                        };
-                    };
-                }).catch(err => {
-                    console.warn('[SW] Registration failed:', err);
-                });
+            navigator.serviceWorker.getRegistrations().then((registrations) => {
+                for (let registration of registrations) {
+                    registration.unregister().then(
+                        (boolean) => console.log('Unregistered SW to clear bad cache: ', boolean)
+                    );
+                }
             });
             
             // WebMCP Agent Registry (Migrated to Edge Discovery & CustomEvents)
@@ -56,23 +38,16 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <DynamicContextProvider
-            settings={{
-                environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID || 'DYNAMIC_ENVIRONMENT_ID_PLACEHOLDER',
-                walletConnectors: [SolanaWalletConnectors, BitcoinWalletConnectors],
-            }}
-        >
-            <HUDProvider>
-                {/* <HUDStateSync /> Disabled to prevent BroadcastChannel looping and extension crashes */}
-                <MeshProvider>
-                    <TelemetryNode>
-                        {children}
-                    </TelemetryNode>
-                    <AIAssistant />
-                    <Toaster />
-                    <ThemeController />
-                </MeshProvider>
-            </HUDProvider>
-        </DynamicContextProvider>
+        <HUDProvider>
+            {/* <HUDStateSync /> Disabled to prevent BroadcastChannel looping and extension crashes */}
+            <MeshProvider>
+                <TelemetryNode>
+                    {children}
+                </TelemetryNode>
+                <AIAssistant />
+                <Toaster />
+                {pathname !== '/' && !pathname.startsWith('/dashboard') && <ThemeController />}
+            </MeshProvider>
+        </HUDProvider>
     );
 }
