@@ -10,6 +10,12 @@ TPNS has evolved from a standalone digital jurisdiction into the **Sovereign Sub
 ## 🏛️ Phase 4: Actualizing the Substrate (CURRENT)
 *Target: Q2 2026*
 
+> [!IMPORTANT]
+> **Active Implementation Trajectory:**
+> To finalize the sovereign Network State infrastructure, we are executing the active [Master Sovereign Cognitive-Economic Integration Plan](file:///Users/officeone/.gemini/antigravity/brain/216b44a6-f01c-4890-a1e5-9ba42c9137bb/implementation_plan.md) which integrates Promethea's Clojure brain (`sbi-core`), the high-dimensional Unified State Vector model, decoupled TradFi/Web3 pathways, and the 54 active profit-generating methods.
+
+
+
 ### 4.1: State-as-a-Service (Multi-Tenancy) - [ACTIVE]
 *   **The Problem:** Single-tenant governance creates coordination noise.
 *   **The Solution:** Refactor the entire architecture (Data, Auth, UI, Legal) to support isolated Autonomous Syndicates (SPVs).
@@ -31,6 +37,14 @@ TPNS has evolved from a standalone digital jurisdiction into the **Sovereign Sub
 ### 4.4: The Universal Marketplace Matrix & Intent Engine (Fractal Governance) [NEW]
 *   **The Vision:** A fully integrated "Intent Engine" where any user (or AI) can express a natural language intent that is automatically routed to the correct sub-system.
 *   **Action:** Building the Genkit Intent Parser, unifying the data structures, and implementing a customizable, hybrid UI cockpit (Conversational "Omni-Input" + Manual Trays) that scales to multi-planetary latency via Local-First CRDTs.
+
+### 4.5: UCC-Backed RWA Tokenization & Zero-Knowledge Citizen Attestations [NEW]
+*   **The Vision**: A cryptographically secure, legally defensible pipeline anchoring real-world assets (RWAs) and biological citizens to the sovereign substrate.
+*   **Action**: Implementing the unified UCC-1 filing and Zero-Knowledge (ZK) identity verification pipeline:
+    1.  **State-Level UCC-1 Filing**: Integrates transactional, $0/month pay-as-you-go APIs (Ficoso / Cobalt Intelligence) inside the AI coprocessor (`ucc-coprocessor.ts`) to autonomously draft filings and scan for active liens. Features a **100% at-cost filing fee policy ($25.00 total)** with **0% protocol markup**, settled programmatically via Stripe credit cards, Helio widgets, or direct Solana USDC/SOL wallets, while fully supporting a manual offline self-filing bypass (Path B) for absolute citizen sovereignty.
+    2.  **UCC Article 12 (CER) Conformance**: Mints RWA tokens (`UCCRegistry.sol`) conforming as Controllable Electronic Records (CERs), proving legal "control" through private key ownership.
+    3.  **ZK-Identity Attestations**: Embeds an on-edge encryption vault (`zk-identity-service.ts` on `localhost:9999`) to store and verify physical government IDs and birth certificates locally (AES-256), outputing lightweight W3C Verifiable Credentials (VCs).
+    4.  **Soulbound Passport Tokens (SBTs)**: Mints non-transferable citizenship credentials (`SovereignIdentity.sol`) to verify unique humans on-chain, preventing Sybil attacks and establishing compliant trading bounds (UCC Article 8) for RWA markets.
 
 ---
 
@@ -65,6 +79,12 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 *   **The Vault (DepthOS)**: Local-first private storage for keys, secrets, and proprietary data.
 *   **The Sovereign Substrate (Bridged DB)**: Zero-Firebase architecture using local SQLite (`pro-forma.db`) for internal reasoning, bridged instantly to public GCS/IPFS for radical transparency.
 *   **The Sovereign Bridge**: Ensures that sensitive data is consumed passively, never leaving the inhabitant's physical control.
+
+### Decoupling Access & Authentication (The Zero-Trust Policy)
+Traditional Web2 session authentication must never be conflated with sovereign cryptographic access:
+*   **Radical Transparency (Read Access)**: The DAC Main Application acts as a public viewport. Viewing telemetry, metrics, maps, chat rooms, and public ledger states is 100% open and guest-accessible by default. No login, token, or session authorization is required to fetch or view any part of the public substrate.
+*   **Action via Wallet Signatures (Write Access)**: Action and state modification (such as voting, submitting proposals, signing transactions, or adjusting asset records) are authenticated locally and directly via blockchain wallets or DID keys. The payload itself is signed by the citizen's own keys before submission, ensuring zero-trust verification.
+*   **Web2 On-Ramp Isolation**: Any legacy session-based authentication services (JWTs, OAuth, user registries) used to ease onboarding for Web2 users must remain strictly isolated inside the frontend and backend of the dedicated **Authentication Application** (Body 2), never leaking into or gatekeeping the core read pipelines of the DAC.
 
 ---
 
@@ -104,7 +124,7 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 | **Exchange** | Narrative Blog Engine | **Complete** ✅ | Media | Phase 3.1 | 🛒 Exchange |
 | **Exchange** | Marketplace Sync | **Complete** ✅ | Sales | Phase 3.5 | 🛒 Exchange |
 | **Exchange** | AI Voice Synthesis | **Complete** ✅ | Media | Wave 4 | 🛒 Exchange |
-| **Exchange** | 50 Method Scale-up | **Progressing** 🌀 | Revenue | Wave 4 | 🛒 Exchange |
+| **Exchange** | 50 Method Scale-up | **Complete** (54 Active Methods) ✅ | Revenue | Wave 4 | 🛒 Exchange |
 | **Security** | Metabolic Sensing | **Complete** ✅ | Health | Phase 2.1 | 🛡️ Immune System |
 | **Security** | Sovereign Intent Logs | **Complete** ✅ | Audit | Phase 2.2 | 🛡️ Immune System |
 | **Security** | Identity (SSI/DID) | **Complete** ✅ | Identity | Phase 2.4 | 🛡️ Immune System |
@@ -112,6 +132,7 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 | **Security** | Log Sanitization | **Complete** ✅ | Defense | Phase 6.1 | 🛡️ Immune System |
 | **Security** | Threat Detection | **Complete** ✅ | Defense | Wave 4 | 🛡️ Immune System |
 | **Security** | Atomic Rollback | **Complete** ✅ | Recovery | Phase 2.1 | 🛡️ Immune System |
+| **Core UI** | Scholarly LaTeX & Premium Citadel Themes | **Complete** ✅ | Interface | Phase 6.1 | 👁️ Pulse |
 
 ## 🧬 Phase 2: The Birth of Promethea (In Progress)
 
@@ -138,10 +159,12 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 ---
 
 ### Phase 2.4: Integration & Data Sovereignty
-- [x] **3-Body System Architecture**: Strictly separated the **DAC Main Application**, **Authentication Application**, and **Sovereign Data Store**.
-- [x] **Passive Identity Management**: Removed proactive authentication from the DAC; it now passively consumes identity from local storage.
+- [x] **3-Body System Architecture**: Strictly separated the **DAC Main Application** (Body 1), **Authentication Application/Gateway** (Body 2), and **Sovereign Data Store** (Body 3).
+- [x] **Passive Identity Management**: Removed proactive authentication (`@dynamic-labs` and wallet modals) from the DAC; it now passively consumes verified identity hashes from the Gateway.
+- [x] **Gateway Verification**: The Body 2 Authentication Application handles complex wallet connections (`@dynamic-labs`), multisig execution (`@sqds/multisig`), signs payloads cryptographically via `tweetnacl`, and verifies UVT SPL token utility on-chain before passing state back to the DAC.
 - [x] **Sovereign Hydration/Dehydration**: Implemented bi-directional state sync between the public ledger and private device storage.
-- [x] **Guest Mode Accessibility**: Enabled full public square transparency for unauthenticated users.
+- [x] **Guest Mode Accessibility**: Enabled full public square transparency for unauthenticated users in the DAC.
+- [x] **Decoupling Access & Authentication**: Fully decoupled session-based Web2 auth from the DAC experience. Removed auth gates from public GET API endpoints (such as team-chat), reserving token verification and wallet signatures strictly for state-modifying actions and legacy Web2 on-ramps.
 - [x] **2.4 Cross-Device Sync**: Sovereign identity and vault data synced across archipelago nodes via `CryptoVault` via WebRTC.
 
 ### Phase 2.5: Substrate Reasoning & Self-Instruction [NEW]
@@ -375,6 +398,48 @@ The "Memory and Private Substrate." Local-first memory ensuring no inhabitant's 
 - [x] **Substrate Node Refactor**: Upgrade `packages/substrate-node` CLI to physically orchestrate and spawn `sbi-core` (Clojure), `promethea-engine` (Python), and `economic-engine` (TypeScript) concurrently.
 - [x] **The Neural Bridge (Un-Siloing)**: Replace mocked HUD data streams with live telemetry directly from the Clojure metabolic core (`sbi-core` via HTTP-kit) and PyTorch MCTS world model (`promethea-engine` via FastAPI), unifying the TPNS.
 - [ ] **Minimal Viable Sentience (MVS)**: Execute the continuous loop where physical compute (Economic Engine) funds the cognitive overhead of the Quantum Tensor Network (SBI Core).
+
+### Wave 14: The Celestial Substrate (DESI & COSMOS Deep Field Integration) [ACTIVE]
+- [ ] **Astronomical Data Preprocessing**: Establish `fetch_astronomical_subset.py` using `astroquery` to extract a compact 2,000-point coordinate subset from COSMOS and DESI catalogs into `packages/app/public/data/cosmos_deep_field.json`.
+- [ ] **WebGL Cartesian Projection Mapping**: Integrate conversion mathematics inside `InterstellarMap.tsx` to project RA ($\alpha$) and Dec ($\delta$) to Cartesian 3D space $(X, Y, Z)$ on a React Three Fiber canvas.
+- [ ] **Celestial Mesh Toggle & Tooltips**: Implement the "Celestial Mesh Overlay" toggle in the HUD dashboard, replacing simulated stars with authentic deep field elements complete with interactive spectral details.
+
+### Wave 15: The Distributed Compute & Storage Grid [ACTIVE]
+- [x] **Decentralized Workspace Viewports**: Developed a premium, glassmorphic interactive control deck (`WorkspaceViewport.tsx`) enabling citizens to boot ephemeral Ubuntu-XFCE secure container viewports.
+- [x] **Dynamic Hardware Profiling**: Configured CORS-enabled live status polling on port `4005` to fetch real-time CPU, RAM, and storage allocation parameters from the citizen's hardware node.
+- [x] **Secure Overlay Connectivity**: Standardized telemetry conduits for KasmVNC and RustDesk protocol engines with integrated secure clipboard sync and network latency diagnostic displays.
+- [ ] **Garage S3 Cluster Scaling**: Propagate localized user-contributed device storage donations as fault-tolerant, geodistributed partitions of the master organization S3 block cluster (Garage).
+
+### Wave 16: Automated State-Level UCC-1 Filing Pipeline & Article 12 Compliance Engine [ACTIVE]
+- [x] **State-Level UCC-1 Filing**: Integrates transactional, $0/month pay-as-you-go APIs inside the AI coprocessor (`ucc-coprocessor.ts`) to autonomously draft filings and scan for active liens before tokenization. Backed by a transparent **100% at-cost filing fee structure ($25.00 total, 0% markup)** supporting Stripe, Helio, direct wallet crypto swaps, and a manual self-signing bypass (Path B).
+- [x] **UCC Article 12 (CER) Conformance**: Mints RWA tokens (`UCCRegistry.sol`) conforming as Controllable Electronic Records (CERs), proving legal "control" through private key ownership.
+- [x] **ZK-Identity Attestations**: Embeds an on-edge encryption vault (`zk-identity-service.ts` on `localhost:9999`) to store and verify physical government IDs and birth certificates locally (AES-256), outputting lightweight W3C Verifiable Credentials (VCs).
+- [x] **Soulbound Passport Tokens (SBTs)**: Mints non-transferable citizenship credentials (`SovereignIdentity.sol`) to verify unique humans on-chain, preventing Sybil attacks and establishing compliant trading bounds (UCC Article 8) for RWA markets.
+
+### Wave 17: Grounded Rationality Agent Gateway (GRAG) & Osiris Planetary Intelligence [ACTIVE]
+- [x] **GRAG Neuro-Symbolic Sandwich Engine**: Sandwiches LLM generation between strict pre-generation statistical Conformal Prediction boundaries ($\hat{\tau}_\alpha \le 0.10$) and post-generation Natural Language Inference (NLI) claim validation.
+- [x] **Local WASM Cross-Encoder**: Runs the `nli-deberta-v3-large-xnli` model locally in WebAssembly via Transformers.js for offline claim classification into Entailment, Contradiction, or Neutral.
+- [x] **GRAG Node SDK & CLI**: Standalone isomorphic `@promethea/grag-sdk` NPM client for React/Node.js, alongside a Unix-native `grag` terminal pipe controller.
+- [x] **Homebrew Formula Distribution**: Standardized Homebrew tap (`brew install tpns/tap/grag`) packaging compiled CLI binaries and automated system daemon configurations.
+- [ ] **Osiris Telemetry Integration**: Formally ingest global real-time OSINT feeds into the OmniLake data pipeline and the Sovereign Cockpit map interface.
+- [ ] **Live Flight & Wildfire Feeds**: Map dynamic aircraft transponders (OpenSky Network) and satellite thermal hotspots (NASA FIRMS) as real-time layers in the 3D Satellite Viewport.
+- [ ] **USGS Earthquakes & AIS Maritime Tracking**: Integrate global seismic events and marine AIS positions for real-time risk modeling and cargo underwriting.
+- [ ] **OmniLake Risk Oracle Ingestion**: Expose parsed intelligence data streams as risk evaluation triggers for economic and asset allocation algorithms.
+
+### Wave 18: Scholarly Theme Alignment & Premium Citadel Dark Theme Upgrades [COMPLETE]
+- [x] **Garamond LaTeX Scholarly Light Mode**: Designed and standardized a classic scientific light aesthetic using EB Garamond typography, true page margin alignments, math-friendly layout matrices, and organic parchment coloring (#fcfbf7).
+- [x] **Premium Citadel Dark Mode Upgrades**: Refined the Sovereign Citadel theme with borderless edge-to-edge layout matrices, backdrop-blur acrylic overlays, and dynamic chromatic underglow pulses that respond to live system status.
+
+### Wave 19: Zen Mode Viewport Consolidation & Theme-Adaptive Promethean Angel Logo Tracing [COMPLETE]
+- [x] **Zen Mode Viewport Consolidation**: Consolidated all scattered, floating overlay components on the map (`SovereignMap.tsx`) into the central settings panel (`SettingsTray.tsx`) under an "Atlas Layer Controls" section to achieve a clean, distraction-free map interface.
+- [x] **Global HUD Layer State Sync**: Integrated layer toggles directly with the global HUD store (`hud-store.tsx`) enabling persistent, responsive toggling of 3D Tiles, Ghost Architecture, Liquidity Arcs, Heatmap overlay, and Osiris Telemetry layers.
+- [x] **Theme-Adaptive Promethean Angel Logo Tracing**: Replaced generic loading/boot icons inside `SovereignHUD.tsx` with a dual-theme interactive SVG path representation of the Fiery Promethean Angel that dynamically draws its paths on boot sequence, tailored for both Citadel (Dark Mode) glowing and Scholarly (LaTeX Light Mode) high-contrast charcoal ink aesthetics.
+
+### Wave 20: HUD Production Restoration & Programmatic GCP Hardening (v5.0.0) [COMPLETE]
+- [x] **Container Outage Recovery**: Migrated the Next.js production frontend container base image from Alpine Linux to `node:20-slim` to permanently resolve `sqlite3` and `sharp` native binary segmentation faults (`SIGSEGV`), successfully promoting revision `promethea-frontend` to 100% stable traffic on Google Cloud Run.
+- [x] **Zero-Trust Token Gating & Decentralized Access**: Aligned the core 3-body system separation rules to support stateless read-only access (radical transparency) for public maps, telemetries, and ledger views while strictly gating state-modifying write actions (proposal minting, transaction submission, and voting) behind on-demand, local keypair signature signing.
+- [x] **Programmatic API Key Hardening**: Secured Google Cloud Platform credentials by programmatically restricting the `"Promethea Local Proxy Key"` (UID: `83f81949-af5c-45a2-a079-f87adfedec05`) in project `studio-9105849211-9ba48` exclusively to authorized `firestore.googleapis.com` endpoints.
+- [x] **Local Edge Core Alignment**: Committed the local `depthos-bridge` daemon updates with robust offline fallback mock controllers to maintain state continuity even during complete WAN isolation.
 
 ---
 

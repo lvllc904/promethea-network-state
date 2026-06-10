@@ -631,6 +631,7 @@ export default function LandingPage() {
                 </h3>
                 <div className="space-y-6">
                   {[
+                    { version: "v5.0.0", title: "HUD Restoration & Programmatic GCP Hardening", desc: "Standardized on-demand transactional signature gating, restricted GCP proxy keys, migrated production runner base to node:20-slim to resolve native SIGSEGV container crashes, and committed local edge daemons with fallback mocks." },
                     { version: "v1.6.0-Alpha", title: "Always-On Progressive Hydration & WASM Gating Hardening", desc: "Enforcing rapid 3-second timeouts, fail-silent high-fidelity mock fallbacks, GCLB HTML payload rejection, and magic-number validation to prevent gateway 503 errors." },
                     { version: "v1.5.0-Alpha", title: "Scholarly Theme Alignment & Premium Citadel Dark Theme Upgrades", desc: "Integrating the LaTeX Light Parchment theme, borderless Citadel Dark theme with dynamic chromatic underglows, and 400 micro-boid multi-flock Canvas simulation." },
                     { version: "v1.4.0-Alpha", title: "Micro-Cognitive Hive-Mind & sbi-core v4.0 Published", desc: "Operationalizing SNN LIF membrane gating, scale-to-zero astrocytes/microglia, and GRAG grounding over active Clojure layers." },
