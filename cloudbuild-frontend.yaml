@@ -37,6 +37,7 @@ steps:
         echo "========================================="
         echo "BUILD PHASE ON HIGH-CPU HOST"
         echo "========================================="
+        echo "Cache buster token: ${_CACHE_BUSTER}"
         echo "Running npm install..."
         npm install --legacy-peer-deps
         
