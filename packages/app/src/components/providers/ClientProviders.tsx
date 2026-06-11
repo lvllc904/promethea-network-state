@@ -33,6 +33,30 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
+    // Preload Google Maps SDK script in the background
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+            if (apiKey) {
+                const SCRIPT_ID = 'sovereign-map-proxy-script';
+                if (!document.getElementById(SCRIPT_ID)) {
+                    (window as any).__googleMapsProxyCallback = () => {
+                        console.log('[ClientProviders] Google Maps SDK preloaded.');
+                    };
+                    const script = document.createElement('script');
+                    script.id = SCRIPT_ID;
+                    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async&v=weekly&libraries=maps,marker,places&callback=__googleMapsProxyCallback`;
+                    script.async = true;
+                    script.defer = true;
+                    script.onerror = () => {
+                        console.warn('[ClientProviders] Google Maps SDK preloading failed.');
+                    };
+                    document.head.appendChild(script);
+                }
+            }
+        }
+    }, []);
+
     if (!mounted) {
         return null;
     }

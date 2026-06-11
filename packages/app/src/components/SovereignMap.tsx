@@ -95,7 +95,7 @@ interface SovereignMapProps {
     center?: { lat: number; lng: number };
 }
 
-export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { lat: 30.3322, lng: -81.6557 } }) => {
+export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { lat: 42.8252, lng: -108.7513 } }) => {
     const { themeState } = useMesh();
     const { 
         activePOI, 
@@ -122,8 +122,135 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
     const [is3DReady, setIs3DReady] = useState(false);
     const [is3DLoading, setIs3DLoading] = useState(false);
     const [fallbackNotice, setFallbackNotice] = useState<string | null>(null);
+    const [geoFallbackAlert, setGeoFallbackAlert] = useState<string | null>(null);
 
     const hasMapIdRef = useRef(false);
+
+    const lastCentered2DPOIKeyRef = useRef<string | null>(null);
+    const lastCentered3DPOIKeyRef = useRef<string | null>(null);
+
+    // Interaction lock and Offline Substrate controls
+    const isUserPanningRef = useRef(false);
+
+    const [offlinePan, setOfflinePan] = useState({ x: 0, y: 0 });
+    const [offlineZoom, setOfflineZoom] = useState(1);
+    const [isOfflineDragging, setIsOfflineDragging] = useState(false);
+    const [offlineDragStart, setOfflineDragStart] = useState({ x: 0, y: 0 });
+    
+    const offlineDragMovedRef = useRef(false);
+    const lastTouchDistRef = useRef<number | null>(null);
+
+    const handleResetOfflineViewport = () => {
+        setOfflinePan({ x: 0, y: 0 });
+        setOfflineZoom(1);
+    };
+
+    const handleOfflineMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
+        if (e.button !== 0) return; // Only left click drags
+        setIsOfflineDragging(true);
+        setOfflineDragStart({ x: e.clientX - offlinePan.x, y: e.clientY - offlinePan.y });
+        offlineDragMovedRef.current = false;
+    };
+
+    const handleOfflineMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+        if (!isOfflineDragging) return;
+        const newX = e.clientX - offlineDragStart.x;
+        const newY = e.clientY - offlineDragStart.y;
+        const dx = newX - offlinePan.x;
+        const dy = newY - offlinePan.y;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+            offlineDragMovedRef.current = true;
+        }
+        setOfflinePan({ x: newX, y: newY });
+    };
+
+    const handleOfflineMouseUp = () => {
+        setIsOfflineDragging(false);
+    };
+
+    const handleOfflineMouseLeave = () => {
+        setIsOfflineDragging(false);
+    };
+
+    const handleOfflineWheel = (e: React.WheelEvent<SVGSVGElement>) => {
+        e.preventDefault();
+        const zoomIntensity = 0.1;
+        const scale = e.deltaY < 0 ? 1 + zoomIntensity : 1 - zoomIntensity;
+        const newZoom = Math.min(20, Math.max(0.5, offlineZoom * scale));
+        
+        const svgRect = e.currentTarget.getBoundingClientRect();
+        const clientX = e.clientX - svgRect.left;
+        const clientY = e.clientY - svgRect.top;
+        
+        const newPanX = clientX - (clientX - offlinePan.x) * (newZoom / offlineZoom);
+        const newPanY = clientY - (clientY - offlinePan.y) * (newZoom / offlineZoom);
+        
+        setOfflineZoom(newZoom);
+        setOfflinePan({ x: newPanX, y: newPanY });
+    };
+
+    const handleOfflineTouchStart = (e: React.TouchEvent<SVGSVGElement>) => {
+        if (e.touches.length === 1) {
+            const touch = e.touches[0];
+            setIsOfflineDragging(true);
+            setOfflineDragStart({ x: touch.clientX - offlinePan.x, y: touch.clientY - offlinePan.y });
+            offlineDragMovedRef.current = false;
+            lastTouchDistRef.current = null;
+        } else if (e.touches.length === 2) {
+            setIsOfflineDragging(false);
+            const t1 = e.touches[0];
+            const t2 = e.touches[1];
+            const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+            lastTouchDistRef.current = dist;
+        }
+    };
+
+    const handleOfflineTouchMove = (e: React.TouchEvent<SVGSVGElement>) => {
+        if (isOfflineDragging && e.touches.length === 1) {
+            const touch = e.touches[0];
+            const newX = touch.clientX - offlineDragStart.x;
+            const newY = touch.clientY - offlineDragStart.y;
+            const dx = newX - offlinePan.x;
+            const dy = newY - offlinePan.y;
+            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+                offlineDragMovedRef.current = true;
+            }
+            setOfflinePan({ x: newX, y: newY });
+        } else if (e.touches.length === 2 && lastTouchDistRef.current !== null) {
+            const t1 = e.touches[0];
+            const t2 = e.touches[1];
+            const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+            const lastDist = lastTouchDistRef.current;
+            lastTouchDistRef.current = dist;
+
+            const scaleFactor = dist / lastDist;
+            if (scaleFactor > 0.9 && scaleFactor < 1.1) {
+                const newZoom = Math.min(20, Math.max(0.5, offlineZoom * scaleFactor));
+                
+                const svgRect = e.currentTarget.getBoundingClientRect();
+                const midX = (t1.clientX + t2.clientX) / 2;
+                const midY = (t1.clientY + t2.clientY) / 2;
+                const clientX = midX - svgRect.left;
+                const clientY = midY - svgRect.top;
+
+                const newPanX = clientX - (clientX - offlinePan.x) * (newZoom / offlineZoom);
+                const newPanY = clientY - (clientY - offlinePan.y) * (newZoom / offlineZoom);
+
+                setOfflineZoom(newZoom);
+                setOfflinePan({ x: newPanX, y: newPanY });
+            }
+        }
+    };
+
+    const handleOfflineTouchEnd = () => {
+        setIsOfflineDragging(false);
+        lastTouchDistRef.current = null;
+    };
+
+    const getPOIKey = (poi: any) => {
+        if (!poi || !poi.coordinates) return 'none';
+        return `${poi.name || ''}_${poi.coordinates.lat}_${poi.coordinates.lng}_${poi.referenceFrame || 'EARTH'}`;
+    };
 
     const [telemetryFeatures, setTelemetryFeatures] = useState<any[]>([]);
 
@@ -237,6 +364,10 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                 },
                 (err) => {
                     console.warn('[SovereignMap] Geolocation access denied or unavailable.', err.message);
+                    setGeoFallbackAlert('SECURE GEOLOCATION RESTRICTED. INITIALIZING LOCAL DUAL-SUBSTRATE AT WYOMING CITADEL COORDS.');
+                    setTimeout(() => {
+                        setGeoFallbackAlert(null);
+                    }, 5000);
                 },
                 { timeout: 10000, maximumAge: 60000 }
             );
@@ -356,6 +487,9 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
 
                     // Attach spatial click listeners to synchronize both trays dynamically
                     map.addListener('click', async (event: any) => {
+                        isUserPanningRef.current = false;
+                        lastCentered2DPOIKeyRef.current = null;
+                        lastCentered3DPOIKeyRef.current = null;
                         if (event.placeId) {
                             event.stop(); // Prevent standard popup
 
@@ -456,7 +590,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
 
                     // Cinematic Fly-In — ONE-SHOT, self-terminating animation
                     const targetCenter = userLocation || center;
-                    const isDefaultCenter = Math.abs(targetCenter.lat - 30.3322) < 0.01 && Math.abs(targetCenter.lng - -81.6557) < 0.01;
+                    const isDefaultCenter = Math.abs(targetCenter.lat - 42.8252) < 0.01 && Math.abs(targetCenter.lng - -108.7513) < 0.01;
                     const targetZoom = isDefaultCenter && !userLocation ? 6 : 14;
                     const targetTilt = isDefaultCenter && !userLocation ? 30 : 45;
                     const targetHeading = 0;
@@ -531,9 +665,46 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
 
     const is3DActive = is3DTilesEnabled && activePOI?.referenceFrame === 'EARTH';
 
+    // Track direct user physical inputs on container elements to activate interaction guards
+    useEffect(() => {
+        const handleUserInteraction = () => {
+            isUserPanningRef.current = true;
+        };
+
+        const options = { passive: true };
+        const el2d = mapRef.current;
+        const el3d = map3DRef.current;
+
+        if (el2d) {
+            el2d.addEventListener('mousedown', handleUserInteraction, options);
+            el2d.addEventListener('wheel', handleUserInteraction, options);
+            el2d.addEventListener('touchstart', handleUserInteraction, options);
+        }
+
+        if (el3d) {
+            el3d.addEventListener('mousedown', handleUserInteraction, options);
+            el3d.addEventListener('wheel', handleUserInteraction, options);
+            el3d.addEventListener('touchstart', handleUserInteraction, options);
+        }
+
+        return () => {
+            if (el2d) {
+                el2d.removeEventListener('mousedown', handleUserInteraction);
+                el2d.removeEventListener('wheel', handleUserInteraction);
+                el2d.removeEventListener('touchstart', handleUserInteraction);
+            }
+            if (el3d) {
+                el3d.removeEventListener('mousedown', handleUserInteraction);
+                el3d.removeEventListener('wheel', handleUserInteraction);
+                el3d.removeEventListener('touchstart', handleUserInteraction);
+            }
+        };
+    }, []);
+
     // Center map on user location once fetched
     useEffect(() => {
         if (!userLocation) return;
+        if (isUserPanningRef.current) return;
         const map = mapInstanceRef.current;
         if (map && isLoaded) {
             try {
@@ -545,11 +716,13 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                 map.setCenter(userLocation);
                 map.setZoom(14);
             }
+            lastCentered2DPOIKeyRef.current = 'user_location';
         }
         if (map3DInstanceRef.current && is3DActive) {
             const map3d = map3DInstanceRef.current;
             map3d.center = { lat: userLocation.lat, lng: userLocation.lng, altitude: 0 };
             map3d.range = 20000;
+            lastCentered3DPOIKeyRef.current = 'user_location';
         }
     }, [userLocation, isLoaded, is3DActive]);
 
@@ -598,9 +771,9 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         return;
                     }
 
-                    const startLat = activePOI?.coordinates?.lat || 30.3322;
-                    const startLng = activePOI?.coordinates?.lng || -81.6557;
-                    const isDefault = Math.abs(startLat - 30.3322) < 0.01 && Math.abs(startLng - -81.6557) < 0.01;
+                    const startLat = activePOI?.coordinates?.lat || 42.8252;
+                    const startLng = activePOI?.coordinates?.lng || -108.7513;
+                    const isDefault = Math.abs(startLat - 42.8252) < 0.01 && Math.abs(startLng - -108.7513) < 0.01;
                     const rangeVal = isDefault ? 12000000 : 20000;
 
                     const map3d = new Map3DElement({
@@ -667,8 +840,17 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
     useEffect(() => {
         if (!map3DInstanceRef.current || !is3DActive || !activePOI?.coordinates) return;
 
+        const poiKey = getPOIKey(activePOI);
+        if (lastCentered3DPOIKeyRef.current !== poiKey) {
+            isUserPanningRef.current = false; // Reset lock on explicit change
+        }
+
+        if (isUserPanningRef.current) return; // Guard flight centering!
+
+        if (lastCentered3DPOIKeyRef.current === poiKey) return;
+
         const coords = activePOI.coordinates;
-        const isDefault = Math.abs(coords.lat - 30.3322) < 0.01 && Math.abs(coords.lng - -81.6557) < 0.01;
+        const isDefault = Math.abs(coords.lat - 42.8252) < 0.01 && Math.abs(coords.lng - -108.7513) < 0.01;
         const rangeVal = isDefault ? 12000000 : (activePOI.placeId ? 5000 : 20000);
 
         const map3d = map3DInstanceRef.current;
@@ -685,6 +867,8 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
             map3d.range = rangeVal;
             map3d.tilt = 45;
         }
+
+        lastCentered3DPOIKeyRef.current = poiKey;
     }, [activePOI?.coordinates?.lat, activePOI?.coordinates?.lng, is3DActive]);
 
     // Dynamically update map style and coordinate focus whenever activePOI or is3DTilesEnabled changes
@@ -714,26 +898,36 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
         (window as any).__sovereignPlanetFrame = activePOI.referenceFrame;
 
         // Smooth flight centering action
-        const coords = activePOI.coordinates;
-        try {
-            const cameraOptions: any = {
-                center: coords,
-                zoom: activePOI.placeId ? 16 : 14
-            };
-            // Only apply 3D camera angles if the map supports vector rendering at runtime
-            const currentMapTypeId = map.getMapTypeId();
-            const currentRenderingType = typeof map.getRenderingType === 'function' ? map.getRenderingType() : null;
-            const isVectorMap = currentRenderingType === 'VECTOR' || ((window as any).google?.maps?.RenderingType?.VECTOR && currentRenderingType === (window as any).google.maps.RenderingType.VECTOR);
-            
-            const isVectorRoadmap = currentMapTypeId === 'roadmap' && isVectorMap;
-            if (isVectorRoadmap) {
-                cameraOptions.tilt = 45;
-                cameraOptions.heading = 45;
+        const poiKey = getPOIKey(activePOI);
+        if (lastCentered2DPOIKeyRef.current !== poiKey) {
+            isUserPanningRef.current = false; // Reset lock on explicit change
+        }
+
+        if (isUserPanningRef.current) return; // Guard flight centering!
+
+        if (lastCentered2DPOIKeyRef.current !== poiKey) {
+            const coords = activePOI.coordinates;
+            try {
+                const cameraOptions: any = {
+                    center: coords,
+                    zoom: activePOI.placeId ? 16 : 14
+                };
+                // Only apply 3D camera angles if the map supports vector rendering at runtime
+                const currentMapTypeId = map.getMapTypeId();
+                const currentRenderingType = typeof map.getRenderingType === 'function' ? map.getRenderingType() : null;
+                const isVectorMap = currentRenderingType === 'VECTOR' || ((window as any).google?.maps?.RenderingType?.VECTOR && currentRenderingType === (window as any).google.maps.RenderingType.VECTOR);
+                
+                const isVectorRoadmap = currentMapTypeId === 'roadmap' && isVectorMap;
+                if (isVectorRoadmap) {
+                    cameraOptions.tilt = 45;
+                    cameraOptions.heading = 45;
+                }
+                map.moveCamera(cameraOptions);
+            } catch (_) {
+                map.panTo(coords);
+                map.setZoom(14);
             }
-            map.moveCamera(cameraOptions);
-        } catch (_) {
-            map.panTo(coords);
-            map.setZoom(14);
+            lastCentered2DPOIKeyRef.current = poiKey;
         }
     }, [activePOI?.coordinates?.lat, activePOI?.coordinates?.lng, activePOI?.referenceFrame, isLoaded, is3DTilesEnabled]);
 
@@ -1311,6 +1505,8 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
     };
 
     const handleCitadelClick = (node: any) => {
+        lastCentered2DPOIKeyRef.current = null;
+        lastCentered3DPOIKeyRef.current = null;
         const hashVal = Math.abs(Math.sin(node.lat * 12.9898 + node.lng * 78.233)) * 43758.5453;
         const solar = Math.floor(55 + (hashVal % 45));
         const wind = Math.floor(15 + ((hashVal * 1.5) % 75));
@@ -1349,7 +1545,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
             const { y } = convertLatLngToSVG(lat, 0);
             gridLines.push(
                 <g key={`lat-${lat}`}>
-                    <line x1="0" y1={y} x2="1000" y2={y} stroke={themeColor} strokeOpacity={0.15} strokeDasharray="5,5" />
+                    <line x1="0" y1={y} x2="1000" y2={y} stroke={themeColor} strokeOpacity={0.15} strokeDasharray="5,5" vectorEffect="non-scaling-stroke" />
                     <text x="10" y={y - 4} fill={themeColor} fillOpacity="0.4" className="font-mono text-[8px]">{lat}°</text>
                 </g>
             );
@@ -1359,7 +1555,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
             const { x } = convertLatLngToSVG(0, lng);
             gridLines.push(
                 <g key={`lng-${lng}`}>
-                    <line x1={x} y1="0" x2={x} y2="500" stroke={themeColor} strokeOpacity={0.15} strokeDasharray="5,5" />
+                    <line x1={x} y1="0" x2={x} y2="500" stroke={themeColor} strokeOpacity={0.15} strokeDasharray="5,5" vectorEffect="non-scaling-stroke" />
                     <text x={x + 4} y="490" fill={themeColor} fillOpacity="0.4" className="font-mono text-[8px]">{lng}°</text>
                 </g>
             );
@@ -1372,8 +1568,16 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                 {/* SVG viewbox */}
                 <svg 
                     viewBox="0 0 1000 500" 
-                    className="w-full h-full select-none"
+                    className={`w-full h-full select-none ${isOfflineDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
                     style={{ backgroundColor: bgColor }}
+                    onMouseDown={handleOfflineMouseDown}
+                    onMouseMove={handleOfflineMouseMove}
+                    onMouseUp={handleOfflineMouseUp}
+                    onMouseLeave={handleOfflineMouseLeave}
+                    onWheel={handleOfflineWheel}
+                    onTouchStart={handleOfflineTouchStart}
+                    onTouchMove={handleOfflineTouchMove}
+                    onTouchEnd={handleOfflineTouchEnd}
                 >
                     <defs>
                         <filter id="glow-offline" x="-20%" y="-20%" width="140%" height="140%">
@@ -1400,134 +1604,143 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         </radialGradient>
                     </defs>
 
-                    {/* Background Grids */}
-                    {gridLines}
+                    {/* Transform Group wrapping all inner map elements */}
+                    <g transform={`translate(${offlinePan.x}, ${offlinePan.y}) scale(${offlineZoom})`}>
+                        {/* Background Grids */}
+                        {gridLines}
 
-                    {/* Heatmaps */}
-                    {activeWorldData.heatmaps.map((hm, idx) => {
-                        const { x, y } = convertLatLngToSVG(hm.lat, hm.lng);
-                        const gradId = `heatmap-grad-${refFrame.toLowerCase()}`;
-                        return (
-                            <g key={`hm-${idx}`} className="opacity-70">
-                                <circle 
-                                    cx={x} 
-                                    cy={y} 
-                                    r={60 * hm.intensity} 
-                                    fill={`url(#${gradId})`} 
-                                />
-                                <circle 
-                                    cx={x} 
-                                    cy={y} 
-                                    r="2" 
-                                    fill={themeColor} 
-                                    opacity="0.6" 
-                                />
-                                <text 
-                                    x={x + 6} 
-                                    y={y + 3} 
-                                    fill={themeColor} 
-                                    fillOpacity="0.6" 
-                                    className="text-[7px] font-mono font-bold"
-                                >
-                                    {hm.name} ({hm.val})
-                                </text>
-                            </g>
-                        );
-                    })}
-
-                    {/* Arcs (Curved Bezier Paths) */}
-                    {activeWorldData.arcs.map((arc, idx) => {
-                        const p1 = convertLatLngToSVG(arc.from.lat, arc.from.lng);
-                        const p2 = convertLatLngToSVG(arc.to.lat, arc.to.lng);
-                        const cx = (p1.x + p2.x) / 2;
-                        const cy = Math.min(p1.y, p2.y) - 60; // Curve upward
-
-                        const pathD = `M ${p1.x} ${p1.y} Q ${cx} ${cy} ${p2.x} ${p2.y}`;
-
-                        return (
-                            <g key={`arc-${idx}`}>
-                                {/* The curved path */}
-                                <path 
-                                    d={pathD} 
-                                    fill="none" 
-                                    stroke={themeColor} 
-                                    strokeWidth="1.5" 
-                                    strokeOpacity="0.3" 
-                                    strokeDasharray="4,4" 
-                                />
-                                {/* Packet Animating along path */}
-                                <circle r="3" fill={themeColor} filter="url(#glow-offline)">
-                                    <animateMotion 
-                                        dur="4s" 
-                                        repeatCount="indefinite" 
-                                        path={pathD} 
+                        {/* Heatmaps */}
+                        {activeWorldData.heatmaps.map((hm, idx) => {
+                            const { x, y } = convertLatLngToSVG(hm.lat, hm.lng);
+                            const gradId = `heatmap-grad-${refFrame.toLowerCase()}`;
+                            return (
+                                <g key={`hm-${idx}`} className="opacity-70">
+                                    <circle 
+                                        cx={x} 
+                                        cy={y} 
+                                        r={60 * hm.intensity} 
+                                        fill={`url(#${gradId})`} 
                                     />
-                                </circle>
-                                {/* Text label at midpoint */}
-                                <text 
-                                    x={cx} 
-                                    y={cy + 15} 
-                                    textAnchor="middle" 
-                                    fill={themeColor} 
-                                    fillOpacity="0.5" 
-                                    className="text-[7px]"
-                                >
-                                    {arc.label}
-                                </text>
-                            </g>
-                        );
-                    })}
-
-                    {/* Citadel Nodes */}
-                    {activeWorldData.nodes.map((node, idx) => {
-                        const { x, y } = convertLatLngToSVG(node.lat, node.lng);
-                        const isActive = activePOI?.name === node.name;
-
-                        return (
-                            <g 
-                                key={`node-${idx}`} 
-                                className="cursor-pointer"
-                                onClick={() => handleCitadelClick(node)}
-                            >
-                                {/* Pulsing outer circle */}
-                                <circle 
-                                    cx={x} 
-                                    cy={y} 
-                                    r={isActive ? 14 : 9} 
-                                    fill="none" 
-                                    stroke={themeColor} 
-                                    strokeWidth={isActive ? 2 : 1} 
-                                    strokeOpacity={isActive ? 0.9 : 0.5}
-                                >
-                                    <animate 
-                                        attributeName="r" 
-                                        values={isActive ? "10;18;10" : "6;12;6"} 
-                                        dur="3s" 
-                                        repeatCount="indefinite" 
+                                    <circle 
+                                        cx={x} 
+                                        cy={y} 
+                                        r="2" 
+                                        fill={themeColor} 
+                                        opacity="0.6" 
                                     />
-                                </circle>
-                                {/* Core circle */}
-                                <circle 
-                                    cx={x} 
-                                    cy={y} 
-                                    r="4" 
-                                    fill={themeColor} 
-                                    filter="url(#glow-offline)" 
-                                />
-                                {/* Label */}
-                                <text 
-                                    x={x} 
-                                    y={y - 14} 
-                                    textAnchor="middle" 
-                                    fill={isActive ? "#ffffff" : themeColor} 
-                                    fontWeight={isActive ? "bold" : "normal"}
-                                    className="text-[8px]"
+                                    <text 
+                                        x={x + 6} 
+                                        y={y + 3} 
+                                        fill={themeColor} 
+                                        fillOpacity="0.6" 
+                                        className="text-[7px] font-mono font-bold"
+                                    >
+                                        {hm.name} ({hm.val})
+                                    </text>
+                                </g>
+                            );
+                        })}
+
+                        {/* Arcs (Curved Bezier Paths) */}
+                        {activeWorldData.arcs.map((arc, idx) => {
+                            const p1 = convertLatLngToSVG(arc.from.lat, arc.from.lng);
+                            const p2 = convertLatLngToSVG(arc.to.lat, arc.to.lng);
+                            const cx = (p1.x + p2.x) / 2;
+                            const cy = Math.min(p1.y, p2.y) - 60; // Curve upward
+
+                            const pathD = `M ${p1.x} ${p1.y} Q ${cx} ${cy} ${p2.x} ${p2.y}`;
+
+                            return (
+                                <g key={`arc-${idx}`}>
+                                    {/* The curved path */}
+                                    <path 
+                                        d={pathD} 
+                                        fill="none" 
+                                        stroke={themeColor} 
+                                        strokeWidth="1.5" 
+                                        strokeOpacity="0.3" 
+                                        strokeDasharray="4,4" 
+                                        vectorEffect="non-scaling-stroke"
+                                    />
+                                    {/* Packet Animating along path */}
+                                    <circle r="3" fill={themeColor} filter="url(#glow-offline)">
+                                        <animateMotion 
+                                            dur="4s" 
+                                            repeatCount="indefinite" 
+                                            path={pathD} 
+                                        />
+                                    </circle>
+                                    {/* Text label at midpoint */}
+                                    <text 
+                                        x={cx} 
+                                        y={cy + 15} 
+                                        textAnchor="middle" 
+                                        fill={themeColor} 
+                                        fillOpacity="0.5" 
+                                        className="text-[7px]"
+                                    >
+                                        {arc.label}
+                                    </text>
+                                </g>
+                            );
+                        })}
+
+                        {/* Citadel Nodes */}
+                        {activeWorldData.nodes.map((node, idx) => {
+                            const { x, y } = convertLatLngToSVG(node.lat, node.lng);
+                            const isActive = activePOI?.name === node.name;
+
+                            return (
+                                <g 
+                                    key={`node-${idx}`} 
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        if (!offlineDragMovedRef.current) {
+                                            handleCitadelClick(node);
+                                        }
+                                    }}
                                 >
-                                    {node.name.toUpperCase()}
-                                </text>
-                            </g>
-                        );
-                    })}
+                                    {/* Pulsing outer circle */}
+                                    <circle 
+                                        cx={x} 
+                                        cy={y} 
+                                        r={isActive ? 14 : 9} 
+                                        fill="none" 
+                                        stroke={themeColor} 
+                                        strokeWidth={isActive ? 2 : 1} 
+                                        strokeOpacity={isActive ? 0.9 : 0.5}
+                                        vectorEffect="non-scaling-stroke"
+                                    >
+                                        <animate 
+                                            attributeName="r" 
+                                            values={isActive ? "10;18;10" : "6;12;6"} 
+                                            dur="3s" 
+                                            repeatCount="indefinite" 
+                                        />
+                                    </circle>
+                                    {/* Core circle */}
+                                    <circle 
+                                        cx={x} 
+                                        cy={y} 
+                                        r="4" 
+                                        fill={themeColor} 
+                                        filter="url(#glow-offline)" 
+                                    />
+                                    {/* Label */}
+                                    <text 
+                                        x={x} 
+                                        y={y - 14} 
+                                        textAnchor="middle" 
+                                        fill={isActive ? "#ffffff" : themeColor} 
+                                        fontWeight={isActive ? "bold" : "normal"}
+                                        className="text-[8px]"
+                                    >
+                                        {node.name.toUpperCase()}
+                                    </text>
+                                </g>
+                            );
+                        })}
+                    </g>
                 </svg>
 
                 {/* Top Overlay Badge */}
@@ -1537,6 +1750,15 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         <span className="font-bold">OFFLINE SUBSTRATE FALLBACK (SECURE CACHE SECURED)</span>
                     </div>
                 </div>
+
+                {geoFallbackAlert && (
+                    <div className="absolute top-24 left-6 z-30 pointer-events-none transition-all duration-1000 ease-out animate-pulse">
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-amber-500/20 bg-amber-500/[0.03] backdrop-blur-sm text-amber-500/60 font-mono text-[8px] uppercase tracking-widest shadow-lg">
+                            <span className="w-1 h-1 rounded-full bg-amber-500/60 animate-ping" />
+                            <span>{geoFallbackAlert}</span>
+                        </div>
+                    </div>
+                )}
 
                 {/* Info HUD */}
                 <div className="absolute bottom-6 left-6 z-10 bg-black/90 border border-white/10 rounded-lg p-3 font-mono text-[9px] text-zinc-400 select-none w-56 shadow-[0_20px_50px_rgba(0,0,0,0.85)]">
@@ -1563,6 +1785,12 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                             <span>LONGITUDE</span>
                             <span className="text-white">{activePOI?.coordinates?.lng.toFixed(4) || '0.0000'}</span>
                         </div>
+                        <button 
+                            onClick={handleResetOfflineViewport}
+                            className="mt-3 w-full py-1.5 bg-red-500/10 hover:bg-red-500/20 active:bg-red-500/30 border border-red-500/30 hover:border-red-500/50 rounded text-red-400 font-bold transition-all text-center tracking-wider text-[8px]"
+                        >
+                            RESET VIEWPORT
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1584,8 +1812,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                 .sovereign-map-viewport img,
                 .sovereign-map-viewport canvas,
                 .sovereign-map-3d img,
-                .sovereign-map-3d canvas,
-                gmp-map-3d {
+                .sovereign-map-3d canvas {
                     filter: var(--map-theme-filter) !important;
                     will-change: filter;
                 }
@@ -1603,6 +1830,15 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                     background: ${themeState?.theme === 'theme-latex' ? '#fdfcf7' : '#000000'} !important;
                 }
             `}} />
+
+            {geoFallbackAlert && (
+                <div className="absolute top-24 left-6 z-30 pointer-events-none transition-all duration-1000 ease-out animate-pulse">
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-amber-500/20 bg-amber-500/[0.03] backdrop-blur-sm text-amber-500/60 font-mono text-[8px] uppercase tracking-widest shadow-lg">
+                        <span className="w-1 h-1 rounded-full bg-amber-500/60 animate-ping" />
+                        <span>{geoFallbackAlert}</span>
+                    </div>
+                </div>
+            )}
 
             {/* Centered Glassmorphic Loading / Fallback Badge */}
             {(is3DLoading || fallbackNotice) && (
