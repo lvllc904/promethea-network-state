@@ -78,6 +78,7 @@
        :verify-alignment (assoc-in state [:context :alignment-verified-at] (:tick state))
        :fetch-roadmap (assoc-in state [:context :roadmap-synced-at] (:tick state))
        :pre-flight-check (assoc-in state [:context :platform-stable] true)
+       :validate-fix (assoc-in state [:context :fix-validated] true)
        :sync-web-roadmap (assoc-in state [:context :web-synced-at] (:tick state))
        :coordinate (assoc-in state [:context :coordinates_active] true)
        :deep-sleep (assoc-in state [:alive] false)
@@ -210,9 +211,13 @@
        (conj {:action :pre-flight-check})
 
        (and (:platform-stable ctx)
+            (not (:fix-validated ctx)))
+       (conj {:action :validate-fix})
+
+       (and (:platform-stable ctx)
             (>= (get ctx :build-health 0) 90) 
             (or (not (:web-synced-at ctx))
-                (>= (- (:tick state) (:roadmap-synced-at ctx)) 1000)))
+                (>= (- (:tick state) (:web-synced-at ctx)) 1000)))
        (conj {:action :sync-web-roadmap})
 
        ;; 11. SENTINEL COORDINATION (Quantum Bridge)

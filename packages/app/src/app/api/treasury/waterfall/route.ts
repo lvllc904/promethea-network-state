@@ -1,35 +1,18 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
+import { getLocalDB } from '@/lib/server/sqlite';
 
 export async function GET() {
-  const ENGINE_URL = process.env.ECONOMIC_ENGINE_URL || 'https://economic-engine-ijda67gvaq-uc.a.run.app';
-  
   try {
-    const response = await fetch(`${ENGINE_URL}/api/treasury/waterfall`, {
-      cache: 'no-store',
-    });
-    
-    if (!response.ok) {
-      // Fallback data if engine is down/unreachable to prevent dashboard breaking
-      return NextResponse.json({
-        totalTvlUsd: 0,
-        infrastructureCostUsd: 0,
-        activeRings: 0,
-        nextUnlock: 'System Warming Up...',
-        rings: Array.from({ length: 10 }).map((_, i) => ({
-          name: `Ring ${i}`,
-          thresholdSol: 10 * Math.pow(10, i),
-          balanceSol: 0,
-          isActive: i === 0,
-          address: 'Fe9cYeJEHswbyeTfrHGLgJocYnTA1gpND6H2LNXXHHwb'
-        }))
-      });
+    const db = await getLocalDB();
+    const row = await db.get("SELECT data FROM waterfall WHERE id = 'status'");
+    if (row) {
+      return NextResponse.json(JSON.parse(row.data));
     }
-    
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Waterfall Proxy Error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Waterfall status not found' }, { status: 404 });
+  } catch (error: any) {
+    console.error('Waterfall API Error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+

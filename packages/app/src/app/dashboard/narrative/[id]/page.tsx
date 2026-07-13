@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
-import { useDoc, useFirestore, useSovereignMemo, doc, type DocumentReference } from '@promethea/identity';
+import { useDoc, useFirestore, useSovereignMemo, doc, type DocumentReference } from '@promethea/sovereign-store';
 import { Card, CardContent, Button, Badge, Separator } from '@promethea/ui';
 import { Newspaper, ArrowLeft, Calendar, User, Share2, ShieldCheck, Lock } from 'lucide-react';
 import Link from 'next/link';
@@ -143,7 +143,7 @@ export default function NarrativePostPage({ params }: { params: { id: string } }
                     </CardContent>
                 </Card>
 
-                {/* Subtle premium hint — not a CTA, just a naturally placed contextual note */}
+                {/* Subtle contextual note — naturally placed contextual note */}
                 <div className="mt-12 py-6 px-6 bg-muted/20 rounded-xl border border-primary/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
                         <p className="text-xs text-muted-foreground/50 uppercase tracking-widest mb-1 font-mono">Promethea Intelligence</p>
@@ -151,9 +151,9 @@ export default function NarrativePostPage({ params }: { params: { id: string } }
                             A cross-market dossier correlating these signals against sovereign land indices and currency defensibility metrics exists in the archive.
                         </p>
                     </div>
-                    <div className="flex items-center gap-2 text-muted-foreground/30 text-xs font-mono whitespace-nowrap">
-                        <Lock className="w-3.5 h-3.5" />
-                        Clearance Required
+                    <div className="flex items-center gap-2 text-amber-500/60 text-xs font-mono whitespace-nowrap">
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        SOVEREIGN_ACCESS: OK
                     </div>
                 </div>
 

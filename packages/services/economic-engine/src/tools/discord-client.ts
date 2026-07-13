@@ -29,7 +29,7 @@ export class DiscordClient {
         });
         this.rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN || '');
         this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-        this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Fast conversational model
+        this.model = this.genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); // Fast conversational model
 
         // debug events
         this.client.on('error', (err) => console.error('[DiscordClient] Connection Error:', err));
@@ -42,9 +42,17 @@ export class DiscordClient {
             return;
         }
 
+        if (process.env.SKIP_DISCORD_GATEWAY === 'true') {
+            console.log('[DiscordClient] SKIP_DISCORD_GATEWAY is true. Skipping gateway connection but keeping client ready.');
+            return;
+        }
+
+        // Register interaction handlers for slash commands, buttons, and select menus
+        this.onInteraction();
+
         this.client.once('ready', () => {
             console.log(`[DiscordClient] Logged in as ${this.client.user?.tag}`);
-            this.registerCommands();
+            this.registerCommands().catch(err => console.error('[DiscordClient] Non-blocking command registration failed:', err));
         });
 
         try {
@@ -55,6 +63,10 @@ export class DiscordClient {
     }
 
     private async registerCommands() {
+        if (process.env.SKIP_COMMAND_REGISTRATION === 'true') {
+            console.log('[DiscordClient] SKIP_COMMAND_REGISTRATION is true. Skipping command registration.');
+            return;
+        }
         const commands = [
             new SlashCommandBuilder()
                 .setName('metabolics')
@@ -177,6 +189,7 @@ export class DiscordClient {
                 const { commandName } = interaction;
 
                 if (commandName === 'metabolics') {
+                    await interaction.deferReply();
                     const embed = {
                         title: '📊 **Metabolic State Report**',
                         description: 'Current physiological and economic health of the Promethean Network State.',
@@ -189,12 +202,13 @@ export class DiscordClient {
                         footer: { text: "Sovereign Health Telemetry" },
                         timestamp: new Date().toISOString()
                     };
-                    await interaction.reply({ embeds: [embed] });
+                    await interaction.editReply({ embeds: [embed] });
                 }
 
                 if (commandName === 'schedule') {
+                    await interaction.deferReply();
                     const guest = interaction.options.getString('guest');
-                    await interaction.reply(`🗓️ Scheduling request received for **${guest}**. Checking available slots in the Sovereign Calendar...`);
+                    await interaction.editReply(`🗓️ Scheduling request received for **${guest}**. Checking available slots in the Sovereign Calendar...`);
                 }
 
                 if (commandName === 'create-channel') {
@@ -203,19 +217,21 @@ export class DiscordClient {
                         await interaction.reply({ embeds: [Visuals.createErrorEmbed('Infrastructure Error', 'Can only create channels within a server.')], ephemeral: true });
                         return;
                     }
+                    await interaction.deferReply();
                     try {
                         const newChannel = await interaction.guild.channels.create({
                             name: name!,
                             type: ChannelType.GuildText,
                             reason: 'Autonomous Infrastructure Expansion requested by Citizen'
                         });
-                        await interaction.reply({ embeds: [Visuals.createSuccessEmbed('Infrastructure Expanded', `Created channel ${newChannel.toString()}`)] });
+                        await interaction.editReply({ embeds: [Visuals.createSuccessEmbed('Infrastructure Expanded', `Created channel ${newChannel.toString()}`)] });
                     } catch (err: any) {
-                        await interaction.reply({ embeds: [Visuals.createErrorEmbed('Expansion Failed', `I lack permission or encountered an error: ${err.message}`)], ephemeral: true });
+                        await interaction.editReply({ embeds: [Visuals.createErrorEmbed('Expansion Failed', `I lack permission or encountered an error: ${err.message}`)] });
                     }
                 }
 
                 if (commandName === 'balance') {
+                    await interaction.deferReply({ ephemeral: true });
                     const balance = await discordLedger.getBalance(interaction.user.id);
                     const { tier, emoji, color } = Visuals.getWealthTier(balance);
 
@@ -231,14 +247,14 @@ export class DiscordClient {
                         timestamp: new Date().toISOString()
                     };
 
-                    await interaction.reply({
+                    await interaction.editReply({
                         embeds: [embed],
-                        components: [UI.createWalletButtons()],
-                        ephemeral: true
+                        components: [UI.createWalletButtons()]
                     });
                 }
 
                 if (commandName === 'quest') {
+                    await interaction.deferReply();
                     const title = interaction.options.getString('title')!;
                     const reward = interaction.options.getNumber('reward')!;
                     const description = interaction.options.getString('description')!;
@@ -262,29 +278,28 @@ export class DiscordClient {
                         timestamp: new Date().toISOString()
                     };
 
-                    await interaction.reply({
+                    await interaction.editReply({
                         embeds: [questEmbed],
                         components: [UI.createQuestButtons(quest.questId, 'OPEN')]
                     });
                 }
 
                 if (commandName === 'claim') {
+                    await interaction.deferReply({ ephemeral: true });
                     const questId = interaction.options.getString('quest-id')!;
                     const { questManager } = require('../treasury/quest-manager');
 
                     const quest = await questManager.claimQuest(questId, interaction.user.id);
 
                     if (!quest) {
-                        await interaction.reply({
-                            content: `❌ Could not claim quest \`${questId}\`. It may not exist or is already claimed.`,
-                            ephemeral: true
+                        await interaction.editReply({
+                            content: `❌ Could not claim quest \`${questId}\`. It may not exist or is already claimed.`
                         });
                         return;
                     }
 
-                    await interaction.reply({
-                        content: `✅ **Quest Claimed!**\nYou've claimed: **${quest.title}**\nReward: ${quest.reward} UVT\n\nComplete the task and an admin will approve it with \`/approve\`.`,
-                        ephemeral: true
+                    await interaction.editReply({
+                        content: `✅ **Quest Claimed!**\nYou've claimed: **${quest.title}**\nReward: ${quest.reward} UVT\n\nComplete the task and an admin will approve it with \`/approve\`.`
                     });
                 }
 
@@ -298,6 +313,8 @@ export class DiscordClient {
                         return;
                     }
 
+                    await interaction.deferReply();
+
                     const questId = interaction.options.getString('quest-id')!;
                     const user = interaction.options.getUser('user')!;
                     const { questManager } = require('../treasury/quest-manager');
@@ -305,9 +322,8 @@ export class DiscordClient {
                     const quest = await questManager.approveQuest(questId);
 
                     if (!quest) {
-                        await interaction.reply({
-                            content: `❌ Could not approve quest \`${questId}\`. Quest must be in CLAIMED status.`,
-                            ephemeral: true
+                        await interaction.editReply({
+                            content: `❌ Could not approve quest \`${questId}\`. Quest must be in CLAIMED status.`
                         });
                         return;
                     }
@@ -315,21 +331,21 @@ export class DiscordClient {
                     // Award UVT to user
                     await discordLedger.credit(user.id, user.username, quest.reward, 'quest', `Quest Completion: ${quest.title}`);
 
-                    await interaction.reply({
+                    await interaction.editReply({
                         content: `✅ **Quest Approved!**\n${user.toString()} has been awarded **${quest.reward} UVT** for completing:\n**${quest.title}**`
                     });
                 }
 
                 if (commandName === 'quests') {
+                    await interaction.deferReply({ ephemeral: true });
                     const statusFilter = interaction.options.getString('status') as 'OPEN' | 'CLAIMED' | 'COMPLETED' | undefined;
                     const { questManager } = require('../treasury/quest-manager');
 
                     const quests = await questManager.listQuests(statusFilter);
 
                     if (quests.length === 0) {
-                        await interaction.reply({
-                            embeds: [Visuals.createErrorEmbed('No Quests Found', `No quests currently available${statusFilter ? ` with status ${statusFilter}` : ''}.`)],
-                            ephemeral: true
+                        await interaction.editReply({
+                            embeds: [Visuals.createErrorEmbed('No Quests Found', `No quests currently available${statusFilter ? ` with status ${statusFilter}` : ''}.`)]
                         });
                         return;
                     }
@@ -346,14 +362,14 @@ export class DiscordClient {
                         footer: { text: `Showing ${Math.min(5, quests.length)} of ${quests.length} quests. Use the menu below to view details.` }
                     };
 
-                    await interaction.reply({
+                    await interaction.editReply({
                         embeds: [embed],
-                        components: [UI.createQuestSelectMenu(quests)],
-                        ephemeral: true
+                        components: [UI.createQuestSelectMenu(quests)]
                     });
                 }
 
                 if (commandName === 'shop') {
+                    await interaction.deferReply();
                     const shopEmbed = {
                         title: '🛒 **Sovereign Shop**',
                         description: 'Purchase premium features and services with your UVT:',
@@ -367,7 +383,7 @@ export class DiscordClient {
                         footer: { text: 'Select an item below or use /buy' }
                     };
 
-                    await interaction.reply({
+                    await interaction.editReply({
                         embeds: [shopEmbed],
                         components: UI.createShopNavigationButtons()
                     });
@@ -376,6 +392,17 @@ export class DiscordClient {
                 if (commandName === 'buy') {
                     const item = interaction.options.getString('item')!;
                     const details = interaction.options.getString('details');
+
+                    // Synchronous checks first
+                    if (item === 'analysis' && !details) {
+                        await interaction.reply({
+                            content: '❌ Please provide a topic for analysis using the `details` option.',
+                            ephemeral: true
+                        });
+                        return;
+                    }
+
+                    await interaction.deferReply({ ephemeral: item === 'analysis' });
 
                     try {
                         let cost = 0;
@@ -387,20 +414,12 @@ export class DiscordClient {
                             cost = 10;
                             serviceName = 'AI Analysis Report';
 
-                            if (!details) {
-                                await interaction.reply({
-                                    content: '❌ Please provide a topic for analysis using the `details` option.',
-                                    ephemeral: true
-                                });
-                                return;
-                            }
-
                             // Debit UVT first
                             await discordLedger.debit(interaction.user.id, interaction.user.username, cost, 'purchase', `Purchase: ${serviceName}`);
 
                             // Generate analysis
                             const { generateAnalysis } = require('../services/analysis-service');
-                            const analysis = await generateAnalysis(details, interaction.user.id);
+                            const analysis = await generateAnalysis(details!, interaction.user.id);
 
                             deliveryMessage = `✅ **Purchase Complete!**\n\nYou've spent **${cost} UVT** on an AI Analysis Report.\n\n**Topic:** ${details}\n\n${analysis}`;
 
@@ -410,7 +429,7 @@ export class DiscordClient {
                             const roleProduct = ROLE_PRODUCTS.find((r: any) => r.id.includes(roleId));
 
                             if (!roleProduct) {
-                                await interaction.reply({ content: '❌ Invalid role selection.', ephemeral: true });
+                                await interaction.editReply({ content: '❌ Invalid role selection.' });
                                 return;
                             }
 
@@ -426,12 +445,11 @@ export class DiscordClient {
                             deliveryMessage = `✅ **Purchase Complete!**\n\nYou've spent **${cost} UVT** and received the **${serviceName}** role!`;
                         }
 
-                        await interaction.reply({ content: deliveryMessage, ephemeral: item === 'analysis' });
+                        await interaction.editReply({ content: deliveryMessage });
 
                     } catch (error: any) {
-                        await interaction.reply({
-                            content: `❌ **Purchase Failed:** ${error.message}`,
-                            ephemeral: true
+                        await interaction.editReply({
+                            content: `❌ **Purchase Failed:** ${error.message}`
                         });
                     }
                 }
@@ -460,14 +478,13 @@ export class DiscordClient {
                 }
 
                 if (commandName === 'commission-essay') {
+                    await interaction.deferReply();
                     const topic = interaction.options.getString('topic')!;
                     const COST = 100;
 
                     try {
                         // Debit UVT first
                         await discordLedger.debit(interaction.user.id, interaction.user.username, COST, 'commission', 'Commissioned Custom Essay');
-
-                        await interaction.deferReply();
 
                         const { generateInsight } = require('./narrative-engine');
                         const narrative = await generateInsight(topic);
@@ -484,9 +501,8 @@ export class DiscordClient {
                         }
 
                     } catch (error: any) {
-                        await interaction.reply({
-                            content: `❌ **Commission Failed:** ${error.message}`,
-                            ephemeral: true
+                        await interaction.editReply({
+                            content: `❌ **Commission Failed:** ${error.message}`
                         });
                     }
                 }

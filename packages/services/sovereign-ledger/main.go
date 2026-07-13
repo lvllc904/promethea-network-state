@@ -85,10 +85,17 @@ func UCSADMMiddleware(next http.Handler) http.Handler {
 			syndicateID = "global"
 		}
 
-		// Allow completely public health checks if we had any, otherwise enforce auth
+		// ZERO-AUTH READS: Allow all GET requests without authorization barriers
+		if r.Method == http.MethodGet {
+			r.Header.Set("X-Sovereign-Syndicates", syndicateID)
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		// For write/cryptographic actions, require and parse JWT
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
-			http.Error(w, "Missing Authorization Header", http.StatusUnauthorized)
+			http.Error(w, "Missing Authorization Header for write actions", http.StatusUnauthorized)
 			return
 		}
 
@@ -135,6 +142,9 @@ func UCSADMMiddleware(next http.Handler) http.Handler {
 			http.Error(w, "Forbidden: You are not authorized for this syndicate", http.StatusForbidden)
 			return
 		}
+
+		// Inject claim into X-Sovereign-Syndicates header for cryptographic write actions
+		r.Header.Set("X-Sovereign-Syndicates", syndicateID)
 
 		// Pass the validated request to the actual handler
 		next.ServeHTTP(w, r)

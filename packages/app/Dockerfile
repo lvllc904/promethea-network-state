@@ -9,6 +9,8 @@ RUN groupadd --system --gid 1001 nodejs && \
     useradd --system --uid 1001 --gid nodejs nextjs
 
 # Copy pre-compiled standalone Next.js server output from Cloud Build host
+ARG CACHE_BUSTER=1
+ENV CACHE_BUSTER=$CACHE_BUSTER
 COPY packages/app/.next/standalone ./
 COPY packages/app/.next/static ./packages/app/.next/static
 COPY packages/app/public ./packages/app/public

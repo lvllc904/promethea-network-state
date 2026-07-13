@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import type { AllocateRWATasksInput } from "@promethea/ai";
-import { useCollection, useFirestore, useSovereignMemo } from '@promethea/identity';
+import { useCollection, useFirestore, useSovereignMemo } from '@promethea/sovereign-store';
 import { Citizen, Query } from '@promethea/lib';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@promethea/ui";
 import { Label } from "@promethea/ui";

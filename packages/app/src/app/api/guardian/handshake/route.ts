@@ -16,13 +16,17 @@ export async function POST(request: NextRequest) {
         
         console.log(`[Guardian] 🛡️ Validating Handshake for action: ${body.action}`);
 
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json'
+        };
+        if (authHeader && authHeader !== 'Bearer null' && authHeader !== 'Bearer ') {
+            headers['Authorization'] = authHeader;
+        }
+
         // Forward the intent to the Sovereign Engine
         const response = await fetch(`${ENGINE_URL}/execute`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': authHeader || ''
-            },
+            headers,
             body: JSON.stringify({
                 methodId: body.action,
                 params: body.params

@@ -74,17 +74,26 @@ export const OSWindow = ({ id, type, title, children }: OSWindowProps) => {
                 onMouseDown={() => focusOSWindow(id)}
             >
                 {/* Title Bar */}
-                <div className="p-2 border-b border-cyan-400/20 flex justify-between items-center bg-teal-950/80 cursor-default select-none">
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 ml-2">
+                <div className="p-2 border-b border-amber-400/20 flex justify-between items-center bg-amber-950/80 cursor-default select-none">
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-400 ml-2">
                         {title}
                     </h2>
                     <div className="flex items-center gap-2 mr-1">
                         {!isMobile && (
-                            <button onClick={toggleMaximize} className="text-gray-400 hover:text-white transition-colors" title="Restore Down">
+                            <button 
+                                onClick={toggleMaximize} 
+                                onMouseDown={(e) => e.stopPropagation()}
+                                className="text-gray-400 hover:text-white transition-colors" 
+                                title="Restore Down"
+                            >
                                 <Minimize size={12} />
                             </button>
                         )}
-                        <button onClick={close} className="text-gray-400 hover:text-red-400 transition-colors">
+                        <button 
+                            onClick={close} 
+                            onMouseDown={(e) => e.stopPropagation()}
+                            className="text-gray-400 hover:text-red-400 transition-colors"
+                        >
                             <X size={14} />
                         </button>
                     </div>
@@ -112,21 +121,41 @@ export const OSWindow = ({ id, type, title, children }: OSWindowProps) => {
             className={`glass-panel rounded-xl flex flex-col overflow-hidden ${pillarColorClass} shadow-[0_0_30px_rgba(0,0,0,0.6)]`}
         >
             {/* Title Bar */}
-            <div className="os-titlebar p-2 border-b border-cyan-400/20 flex justify-between items-center bg-teal-950/80 cursor-move select-none">
-                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 ml-2 pointer-events-none">
+            <div className="os-titlebar p-2 border-b border-amber-400/20 flex justify-between items-center bg-amber-950/80 cursor-move select-none">
+                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-400 ml-2 pointer-events-none">
                     {title}
                 </h2>
                 <div className="flex items-center gap-3 mr-1">
-                    <button onClick={popOut} className="text-gray-400 hover:text-cyan-400 transition-colors" title="Pop Out">
+                    <button 
+                        onClick={popOut} 
+                        onMouseDown={(e) => e.stopPropagation()}
+                        className="text-gray-400 hover:text-amber-400 transition-colors" 
+                        title="Pop Out"
+                    >
                         <ExternalLink size={12} />
                     </button>
-                    <button onClick={minimize} className="text-gray-400 hover:text-white transition-colors" title="Minimize">
+                    <button 
+                        onClick={minimize} 
+                        onMouseDown={(e) => e.stopPropagation()}
+                        className="text-gray-400 hover:text-white transition-colors" 
+                        title="Minimize"
+                    >
                         <Minus size={12} />
                     </button>
-                    <button onClick={toggleMaximize} className="text-gray-400 hover:text-white transition-colors" title="Maximize">
+                    <button 
+                        onClick={toggleMaximize} 
+                        onMouseDown={(e) => e.stopPropagation()}
+                        className="text-gray-400 hover:text-white transition-colors" 
+                        title="Maximize"
+                    >
                         <Maximize size={12} />
                     </button>
-                    <button onClick={close} className="text-gray-400 hover:text-red-400 transition-colors" title="Close">
+                    <button 
+                        onClick={close} 
+                        onMouseDown={(e) => e.stopPropagation()}
+                        className="text-gray-400 hover:text-red-400 transition-colors" 
+                        title="Close"
+                    >
                         <X size={14} />
                     </button>
                 </div>

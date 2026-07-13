@@ -41,6 +41,95 @@ const MARS_STYLE = [
     { "featureType": "road", "elementType": "labels.text.fill", "stylers": [{ "color": "#ea580c" }] }
 ];
 
+const CELESTIAL_BOUNDARIES = {
+    EARTH: [
+        // North America
+        [
+            { lat: 70, lng: -160 }, { lat: 75, lng: -140 }, { lat: 70, lng: -100 }, { lat: 75, lng: -80 },
+            { lat: 60, lng: -60 }, { lat: 45, lng: -60 }, { lat: 40, lng: -74 }, { lat: 30, lng: -80 },
+            { lat: 25, lng: -80 }, { lat: 25, lng: -82 }, { lat: 29, lng: -84 }, { lat: 27, lng: -90 },
+            { lat: 20, lng: -97 }, { lat: 15, lng: -95 }, { lat: 8, lng: -80 }, { lat: 10, lng: -85 },
+            { lat: 16, lng: -95 }, { lat: 20, lng: -105 }, { lat: 25, lng: -110 }, { lat: 34, lng: -120 },
+            { lat: 45, lng: -125 }, { lat: 55, lng: -135 }, { lat: 60, lng: -145 }, { lat: 60, lng: -165 }
+        ],
+        // South America
+        [
+            { lat: 8, lng: -80 }, { lat: 10, lng: -72 }, { lat: 5, lng: -55 }, { lat: -5, lng: -35 },
+            { lat: -10, lng: -35 }, { lat: -23, lng: -43 }, { lat: -35, lng: -55 }, { lat: -55, lng: -68 },
+            { lat: -55, lng: -73 }, { lat: -45, lng: -74 }, { lat: -30, lng: -72 }, { lat: -15, lng: -75 },
+            { lat: -5, lng: -81 }, { lat: 5, lng: -77 }
+        ],
+        // Eurasia
+        [
+            { lat: 75, lng: 10 }, { lat: 77, lng: 30 }, { lat: 75, lng: 60 }, { lat: 75, lng: 90 },
+            { lat: 75, lng: 120 }, { lat: 70, lng: 160 }, { lat: 60, lng: 170 }, { lat: 50, lng: 140 },
+            { lat: 35, lng: 140 }, { lat: 35, lng: 120 }, { lat: 22, lng: 115 }, { lat: 15, lng: 110 },
+            { lat: 10, lng: 105 }, { lat: 5, lng: 100 }, { lat: 10, lng: 95 }, { lat: 15, lng: 90 },
+            { lat: 10, lng: 80 }, { lat: 20, lng: 70 }, { lat: 25, lng: 60 }, { lat: 12, lng: 45 },
+            { lat: 25, lng: 35 }, { lat: 35, lng: 35 }, { lat: 35, lng: 25 }, { lat: 30, lng: 10 },
+            { lat: 35, lng: -10 }, { lat: 45, lng: -10 }, { lat: 50, lng: -5 }, { lat: 55, lng: 5 },
+            { lat: 60, lng: 5 }, { lat: 65, lng: 15 }
+        ],
+        // Africa
+        [
+            { lat: 35, lng: -5 }, { lat: 37, lng: 10 }, { lat: 32, lng: 30 }, { lat: 30, lng: 32 },
+            { lat: 12, lng: 43 }, { lat: 5, lng: 50 }, { lat: -15, lng: 40 }, { lat: -34, lng: 20 },
+            { lat: -30, lng: 15 }, { lat: -10, lng: 12 }, { lat: 5, lng: 10 }, { lat: 5, lng: -10 },
+            { lat: 15, lng: -17 }, { lat: 30, lng: -10 }
+        ],
+        // Australia
+        [
+            { lat: -12, lng: 130 }, { lat: -10, lng: 142 }, { lat: -25, lng: 153 }, { lat: -38, lng: 150 },
+            { lat: -35, lng: 115 }, { lat: -22, lng: 113 }, { lat: -15, lng: 120 }
+        ],
+        // Greenland
+        [
+            { lat: 80, lng: -60 }, { lat: 83, lng: -40 }, { lat: 80, lng: -20 }, { lat: 70, lng: -20 },
+            { lat: 60, lng: -45 }, { lat: 70, lng: -60 }
+        ],
+        // Japan
+        [
+            { lat: 45, lng: 142 }, { lat: 40, lng: 140 }, { lat: 35, lng: 135 }, { lat: 31, lng: 130 },
+            { lat: 34, lng: 132 }, { lat: 38, lng: 138 }
+        ]
+    ],
+    LUNA: [
+        // Lunar Maria as circular/polygonal craters/regions
+        [
+            { lat: 20, lng: -20 }, { lat: 30, lng: -10 }, { lat: 25, lng: 10 }, { lat: 15, lng: 20 },
+            { lat: 5, lng: 15 }, { lat: 0, lng: -5 }, { lat: 10, lng: -25 }
+        ], // Mare Imbrium
+        [
+            { lat: -10, lng: -40 }, { lat: -5, lng: -30 }, { lat: -15, lng: -15 }, { lat: -25, lng: -25 },
+            { lat: -20, lng: -45 }
+        ], // Mare Nubium
+        [
+            { lat: 10, lng: 30 }, { lat: 15, lng: 45 }, { lat: 5, lng: 55 }, { lat: -5, lng: 50 },
+            { lat: -2, lng: 35 }
+        ], // Mare Tranquillitatis
+        [
+            { lat: -60, lng: -10 }, { lat: -55, lng: 10 }, { lat: -65, lng: 15 }, { lat: -70, lng: -5 }
+        ] // Clavius Basin
+    ],
+    MARS: [
+        // Martian topography: Elysium, Olympus, Hellas, Argyre
+        [
+            { lat: 15, lng: -135 }, { lat: 25, lng: -125 }, { lat: 20, lng: -115 }, { lat: 10, lng: -120 },
+            { lat: 12, lng: -130 }
+        ], // Olympus Mons
+        [
+            { lat: -5, lng: -80 }, { lat: 0, lng: -50 }, { lat: -15, lng: -45 }, { lat: -20, lng: -75 }
+        ], // Valles Marineris
+        [
+            { lat: -45, lng: 70 }, { lat: -35, lng: 80 }, { lat: -40, lng: 95 }, { lat: -50, lng: 90 },
+            { lat: -52, lng: 75 }
+        ], // Hellas Planitia
+        [
+            { lat: -55, lng: -45 }, { lat: -45, lng: -35 }, { lat: -48, lng: -25 }, { lat: -58, lng: -30 }
+        ] // Argyre Planitia
+    ]
+};
+
 const ON_WORLD_DATA = {
     EARTH: {
         arcs: [
@@ -118,6 +207,12 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
     const [error, setError] = useState<string | null>(null);
     const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
     const [isOfflineSubstrateMode, setIsOfflineSubstrateMode] = useState(false);
+    const [isMapTilesLoaded, setIsMapTilesLoaded] = useState(false);
+
+    const activePOIRef = useRef<POIDetails | null>(activePOI);
+    useEffect(() => {
+        activePOIRef.current = activePOI;
+    }, [activePOI]);
 
     const [is3DReady, setIs3DReady] = useState(false);
     const [is3DLoading, setIs3DLoading] = useState(false);
@@ -138,6 +233,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
     const [offlineDragStart, setOfflineDragStart] = useState({ x: 0, y: 0 });
     
     const offlineDragMovedRef = useRef(false);
+    const offlineDragStartCoordsRef = useRef({ x: 0, y: 0 });
     const lastTouchDistRef = useRef<number | null>(null);
 
     const handleResetOfflineViewport = () => {
@@ -145,10 +241,20 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
         setOfflineZoom(1);
     };
 
+    useEffect(() => {
+        const handleResetEvent = () => {
+            setOfflinePan({ x: 0, y: 0 });
+            setOfflineZoom(1);
+        };
+        window.addEventListener('reset-offline-viewport', handleResetEvent);
+        return () => window.removeEventListener('reset-offline-viewport', handleResetEvent);
+    }, []);
+
     const handleOfflineMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
         if (e.button !== 0) return; // Only left click drags
         setIsOfflineDragging(true);
         setOfflineDragStart({ x: e.clientX - offlinePan.x, y: e.clientY - offlinePan.y });
+        offlineDragStartCoordsRef.current = { x: e.clientX, y: e.clientY };
         offlineDragMovedRef.current = false;
     };
 
@@ -156,9 +262,12 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
         if (!isOfflineDragging) return;
         const newX = e.clientX - offlineDragStart.x;
         const newY = e.clientY - offlineDragStart.y;
-        const dx = newX - offlinePan.x;
-        const dy = newY - offlinePan.y;
-        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        
+        const totalDx = e.clientX - offlineDragStartCoordsRef.current.x;
+        const totalDy = e.clientY - offlineDragStartCoordsRef.current.y;
+        const totalDisplacement = Math.sqrt(totalDx * totalDx + totalDy * totalDy);
+        
+        if (totalDisplacement > 5) {
             offlineDragMovedRef.current = true;
         }
         setOfflinePan({ x: newX, y: newY });
@@ -166,10 +275,17 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
 
     const handleOfflineMouseUp = () => {
         setIsOfflineDragging(false);
+        // Delay resetting the drag flag to allow onClick bubble events to resolve cleanly first
+        setTimeout(() => {
+            offlineDragMovedRef.current = false;
+        }, 50);
     };
 
     const handleOfflineMouseLeave = () => {
         setIsOfflineDragging(false);
+        setTimeout(() => {
+            offlineDragMovedRef.current = false;
+        }, 50);
     };
 
     const handleOfflineWheel = (e: React.WheelEvent<SVGSVGElement>) => {
@@ -194,6 +310,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
             const touch = e.touches[0];
             setIsOfflineDragging(true);
             setOfflineDragStart({ x: touch.clientX - offlinePan.x, y: touch.clientY - offlinePan.y });
+            offlineDragStartCoordsRef.current = { x: touch.clientX, y: touch.clientY };
             offlineDragMovedRef.current = false;
             lastTouchDistRef.current = null;
         } else if (e.touches.length === 2) {
@@ -210,9 +327,12 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
             const touch = e.touches[0];
             const newX = touch.clientX - offlineDragStart.x;
             const newY = touch.clientY - offlineDragStart.y;
-            const dx = newX - offlinePan.x;
-            const dy = newY - offlinePan.y;
-            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+            
+            const totalDx = touch.clientX - offlineDragStartCoordsRef.current.x;
+            const totalDy = touch.clientY - offlineDragStartCoordsRef.current.y;
+            const totalDisplacement = Math.sqrt(totalDx * totalDx + totalDy * totalDy);
+            
+            if (totalDisplacement > 5) {
                 offlineDragMovedRef.current = true;
             }
             setOfflinePan({ x: newX, y: newY });
@@ -245,6 +365,9 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
     const handleOfflineTouchEnd = () => {
         setIsOfflineDragging(false);
         lastTouchDistRef.current = null;
+        setTimeout(() => {
+            offlineDragMovedRef.current = false;
+        }, 50);
     };
 
     const getPOIKey = (poi: any) => {
@@ -374,19 +497,96 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
         }
     }, []);
 
-    // Detect Google Maps failure by intercepting window.gm_authFailure
+    // Detect Google Maps failure by intercepting window.gm_authFailure, custom events, and global script load errors
     useEffect(() => {
-        const handleAuthFailure = () => {
-            console.warn('[SovereignMap] Google Maps auth failure detected. Activating Offline Substrate fallback.');
+        const handleAuthFailure = (reason?: string) => {
+            console.warn(`[SovereignMap] Google Maps failure detected (${reason || 'AUTH_FAILURE'}). Activating Offline Substrate fallback.`);
             setIsOfflineSubstrateMode(true);
+            setError(reason === 'SCRIPT_ERROR' ? 'API ACCESS BLOCKED / SCRIPT ERROR' : 'API AUTHORIZATION FAILURE');
         };
-        (window as any).gm_authFailure = handleAuthFailure;
-        return () => {
-            if ((window as any).gm_authFailure === handleAuthFailure) {
-                delete (window as any).gm_authFailure;
+
+        if (typeof window !== 'undefined') {
+            // Clear any stale error state from previous hot-reload cycles or failed sessions
+            // This prevents a single past failure from permanently blocking the map on refresh
+            const preloadError = (window as any).__googleMapsLoadError;
+            if (preloadError) {
+                console.warn('[SovereignMap] Found stale __googleMapsLoadError:', preloadError, '— clearing and retrying fresh.');
+                delete (window as any).__googleMapsLoadError;
+                // Only activate offline mode if it's a definitive auth failure, not a stale reload artifact
+                // Auth failures will be caught again by gm_authFailure if they're real
             }
-        };
+
+            // 2. Bind to global custom event
+            const onAuthFailureEvent = (e: Event) => {
+                const errType = (window as any).__googleMapsLoadError || 'AUTH_FAILURE';
+                handleAuthFailure(errType);
+            };
+            window.addEventListener('google-maps-auth-failure', onAuthFailureEvent);
+
+            // 3. Bind to window.gm_authFailure hook in case it fires later
+            const existingAuthFailure = (window as any).gm_authFailure;
+            (window as any).gm_authFailure = () => {
+                if (existingAuthFailure) {
+                    try { existingAuthFailure(); } catch (e) {}
+                }
+                handleAuthFailure('AUTH_FAILURE');
+            };
+
+            // 4. Intercept network-level script loading blocks in capturing phase
+            const handleGlobalError = (event: ErrorEvent) => {
+                const target = event.target as any;
+                if (target && (target.tagName === 'SCRIPT' || target.tagName === 'LINK')) {
+                    const url = target.src || target.href;
+                    if (url && (url.includes('maps.googleapis.com') || url.includes('ggpht.com'))) {
+                        console.warn('[SovereignMap] Intercepted network-level block/error for:', url);
+                        handleAuthFailure('SCRIPT_ERROR');
+                    }
+                }
+            };
+            window.addEventListener('error', handleGlobalError, true);
+
+            // 5. PerformanceObserver to log resource details
+            let observer: PerformanceObserver | null = null;
+            try {
+                if (window.PerformanceObserver) {
+                    observer = new PerformanceObserver((list) => {
+                        list.getEntries().forEach((entry) => {
+                            const res = entry as PerformanceResourceTiming;
+                            if (res.name.includes('maps.googleapis.com') || res.name.includes('ggpht.com')) {
+                                if (res.duration > 8000) {
+                                    console.warn(`[SovereignMap] Google Maps resource took unusually long: ${res.name} (${res.duration}ms)`);
+                                }
+                            }
+                        });
+                    });
+                    observer.observe({ entryTypes: ['resource'] });
+                }
+            } catch (e) {
+                console.warn('[SovereignMap] PerformanceObserver could not start.', e);
+            }
+
+            return () => {
+                window.removeEventListener('google-maps-auth-failure', onAuthFailureEvent);
+                window.removeEventListener('error', handleGlobalError, true);
+                if (observer) observer.disconnect();
+            };
+        }
     }, []);
+
+    // Universal tile loading watchdog to catch authorization blocks or network freezes
+    useEffect(() => {
+        if (!isLoaded || isOfflineSubstrateMode || isMapTilesLoaded) return;
+
+        const tileWatchdog = setTimeout(() => {
+            if (!isMapTilesLoaded) {
+                console.warn('[SovereignMap] Map tiles failed to load within 15s. Falling back to offline substrate.');
+                setIsOfflineSubstrateMode(true);
+                setError('ATLAS SYNCHRONIZATION TIMEOUT');
+            }
+        }, 15000);
+
+        return () => clearTimeout(tileWatchdog);
+    }, [isLoaded, isOfflineSubstrateMode, isMapTilesLoaded]);
 
 
     // Map initialization — runs ONCE only. Layer updates handled separately.
@@ -410,10 +610,15 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                     const SCRIPT_ID = 'sovereign-map-proxy-script';
                     if (document.getElementById(SCRIPT_ID)) {
                         // Already injecting, wait for it
+                        let attempts = 0;
                         const checkInterval = setInterval(() => {
+                            attempts++;
                             if ((window as any).google && (window as any).google.maps && (window as any).google.maps.places) {
                                 clearInterval(checkInterval);
                                 resolve(true);
+                            } else if (attempts >= 300) { // 15 seconds timeout
+                                clearInterval(checkInterval);
+                                reject(new Error("Preloaded script blocked or timed out"));
                             }
                         }, 50);
                         return;
@@ -464,26 +669,44 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                     const startLng = activePOI?.coordinates?.lng || -95.7129;
                     const startZoom = activePOI?.coordinates?.lat ? 14 : 3;
 
-                    const mapIdValue = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || 'DEMO_MAP_ID';
+                    // Only use mapId if it's a real Cloud Console Map ID (not the literal placeholder)
+                    const rawMapId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || '';
+                    const isValidMapId = rawMapId && rawMapId !== 'DEMO_MAP_ID' && rawMapId.length > 4;
+                    console.log('[SovereignMap] Map ID check:', { rawMapId, isValidMapId });
+
                     const mapOptions: any = {
                         center: { lat: startLat, lng: startLng },
                         zoom: startZoom,
                         mapTypeId: 'roadmap',
-                        disableDefaultUI: false, // Turn controls back on for the user
-                        backgroundColor: '#000000',
-                        gestureHandling: 'greedy', // Ensure scroll wheel works
-                        isFractionalZoomEnabled: true
+                        disableDefaultUI: false, // Keep native controls visible for users
+                        backgroundColor: '#030712',
+                        draggable: true,
+                        scrollwheel: true,
+                        gestureHandling: 'greedy', // Ensure scroll wheel and touch work
+                        isFractionalZoomEnabled: true,
+                        // Always apply dark styles when no valid Cloud Map ID is available
+                        ...(!isValidMapId ? { styles: EARTH_STYLE } : { mapId: rawMapId }),
                     };
-                    if (mapIdValue) {
-                        mapOptions.mapId = mapIdValue;
-                        hasMapIdRef.current = true;
-                    } else {
-                        mapOptions.styles = EARTH_STYLE;
-                        hasMapIdRef.current = false;
-                    }
+                    
+                    hasMapIdRef.current = !!isValidMapId;
+                    console.log('[SovereignMap] Creating map with options:', { center: mapOptions.center, zoom: mapOptions.zoom, hasMapId: !!mapOptions.mapId, hasStyles: !!mapOptions.styles });
 
                     const map = new GoogleMap(mapRef.current, mapOptions);
                     mapInstanceRef.current = map;
+
+                    // Listen for tiles loaded to resolve loading/auth state
+                    map.addListener('tilesloaded', () => {
+                        console.log('[SovereignMap] ✅ 2D map tiles loaded successfully. Restoring live view.');
+                        setIsMapTilesLoaded(true);
+                        setIsOfflineSubstrateMode(false);
+                        setError(null);
+                    });
+
+                    // Diagnostic: listen for projection_changed to confirm map init
+                    map.addListener('projection_changed', () => {
+                        console.log('[SovereignMap] projection_changed — map engine is alive.');
+                    });
+
 
                     // Attach spatial click listeners to synchronize both trays dynamically
                     map.addListener('click', async (event: any) => {
@@ -493,53 +716,63 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         if (event.placeId) {
                             event.stop(); // Prevent standard popup
 
-                            try {
+                             try {
                                 const googleObj = (window as any).google;
-                                const service = new googleObj.maps.places.PlacesService(map);
-                                service.getDetails({
-                                    placeId: event.placeId,
-                                    fields: ['name', 'formatted_address', 'website', 'rating', 'photos', 'geometry']
-                                }, (place: any, status: any) => {
-                                    if (status === googleObj.maps.places.PlacesServiceStatus.OK && place && place.geometry && place.geometry.location) {
-                                        const lat = place.geometry.location.lat();
-                                        const lng = place.geometry.location.lng();
-                                        const hashVal = Math.abs(Math.sin(lat * 12.9898 + lng * 78.233)) * 43758.5453;
-                                        
-                                        const solar = Math.floor(55 + (hashVal % 45));
-                                        const wind = Math.floor(15 + ((hashVal * 1.5) % 75));
-                                        const water = Math.floor(5 + ((hashVal * 2.3) % 90));
-                                        const zoning = Math.floor(20 + ((hashVal * 3.7) % 80));
+                                if (googleObj && googleObj.maps) {
+                                    const fetchPlaceDetails = async () => {
+                                        try {
+                                            const { Place } = await googleObj.maps.importLibrary("places");
+                                            const place = new Place({ id: event.placeId });
+                                            await place.fetchFields({
+                                                fields: ['displayName', 'formattedAddress', 'websiteUri', 'rating', 'photos', 'location']
+                                            });
 
-                                        const refFrame = (window as any).__sovereignPlanetFrame || 'EARTH';
-                                        const mockOwnerName = `Citizen ${Math.floor(100 + (hashVal % 900))}`;
-                                        const mockOwnerDid = `did:sovereign:citizen:0x${Math.floor(hashVal).toString(16).substring(0, 16)}`;
-                                        const mockStaked = Math.floor(4000 + (hashVal % 28000));
-                                        const mockPlan = `Verified ${refFrame} Node location. Proposed zoning details outline a clean-resource capture node harvesting ${solar}% Solar, ${wind}% Wind, and ${water}% Water potential. Staked balance underwrites mesh node connectivity.`;
+                                            if (place.location) {
+                                                const lat = place.location.lat();
+                                                const lng = place.location.lng();
+                                                const hashVal = Math.abs(Math.sin(lat * 12.9898 + lng * 78.233)) * 43758.5453;
+                                                
+                                                const solar = Math.floor(55 + (hashVal % 45));
+                                                const wind = Math.floor(15 + ((hashVal * 1.5) % 75));
+                                                const water = Math.floor(5 + ((hashVal * 2.3) % 90));
+                                                const zoning = Math.floor(20 + ((hashVal * 3.7) % 80));
 
-                                        const updatedPOI: POIDetails = {
-                                            placeId: event.placeId,
-                                            name: place.name || 'Sovereign Point',
-                                            formattedAddress: place.formatted_address,
-                                            website: place.website || `https://${(place.name || 'poi').toLowerCase().replace(/[^a-z0-9]/g, '')}.lvhllc.org`,
-                                            rating: place.rating || 4.5,
-                                            photos: place.photos && place.photos.length > 0 ? [place.photos[0].getUrl({ maxWidth: 600 })] : undefined,
-                                            coordinates: { lat, lng, alt: Math.floor(30 + (hashVal % 400)) },
-                                            referenceFrame: refFrame,
-                                            ownership: {
-                                                ownerDid: mockOwnerDid,
-                                                ownerName: mockOwnerName,
-                                                stakedSovereignUnits: mockStaked
-                                            },
-                                            publicPlans: mockPlan,
-                                            metrics: { solar, wind, water, zoning }
-                                        };
+                                                const refFrame = (window as any).__sovereignPlanetFrame || 'EARTH';
+                                                const mockOwnerName = `Citizen ${Math.floor(100 + (hashVal % 900))}`;
+                                                const mockOwnerDid = `did:sovereign:citizen:0x${Math.floor(hashVal).toString(16).substring(0, 16)}`;
+                                                const mockStaked = Math.floor(4000 + (hashVal % 28000));
+                                                const mockPlan = `Verified ${refFrame} Node location. Proposed zoning details outline a clean-resource capture node harvesting ${solar}% Solar, ${wind}% Wind, and ${water}% Water potential. Staked balance underwrites mesh node connectivity.`;
 
-                                        setActivePOI(updatedPOI);
-                                        if (refFrame === 'EARTH') {
-                                            fetchLiveTelemetry(lat, lng, updatedPOI);
+                                                const updatedPOI: POIDetails = {
+                                                    placeId: event.placeId,
+                                                    name: place.displayName || 'Sovereign Point',
+                                                    formattedAddress: place.formattedAddress || undefined,
+                                                    website: place.websiteUri || `https://${(place.displayName || 'poi').toLowerCase().replace(/[^a-z0-9]/g, '')}.lvhllc.org`,
+                                                    rating: place.rating || 4.5,
+                                                    photos: place.photos && place.photos.length > 0 ? [place.photos[0].getURI({ maxWidth: 600 })] : undefined,
+                                                    coordinates: { lat, lng, alt: Math.floor(30 + (hashVal % 400)) },
+                                                    referenceFrame: refFrame,
+                                                    ownership: {
+                                                        ownerDid: mockOwnerDid,
+                                                        ownerName: mockOwnerName,
+                                                        stakedSovereignUnits: mockStaked
+                                                    },
+                                                    publicPlans: mockPlan,
+                                                    metrics: { solar, wind, water, zoning }
+                                                };
+
+                                                setActivePOI(updatedPOI);
+                                                setHUDStateRef.current({ activePillar: 'ATLAS', activeFocusPanel: 'ATLAS' });
+                                                if (refFrame === 'EARTH') {
+                                                    fetchLiveTelemetry(lat, lng, updatedPOI);
+                                                }
+                                            }
+                                        } catch (innerErr) {
+                                            console.error('[SovereignMap] Error fetching Place fields:', innerErr);
                                         }
-                                    }
-                                });
+                                    };
+                                    fetchPlaceDetails();
+                                }
                             } catch (err) {
                                 console.error('[SovereignMap] Error in Places details querying:', err);
                             }
@@ -576,6 +809,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                             };
 
                             setActivePOI(updatedPOI);
+                            setHUDStateRef.current({ activePillar: 'ATLAS', activeFocusPanel: 'ATLAS' });
                             if (refFrame === 'EARTH') {
                                 fetchLiveTelemetry(lat, lng, updatedPOI);
                             }
@@ -648,6 +882,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                 if (!cancelled) {
                     console.error('[SovereignMap] Initialization failed, falling back to offline substrate:', err);
                     setIsOfflineSubstrateMode(true);
+                    setError(err.message || 'Initialization failed');
                 }
             }
         };
@@ -752,22 +987,31 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                     setIs3DLoading(true);
                     setIs3DReady(false);
 
-                    // 8-second watchdog timer to fade out loading spinner but keep 3D progressive tiles loading
-                    const watchdogTimeout = setTimeout(() => {
-                        if (cancelled) return;
-                        console.warn('[SovereignMap] 3D map loading took longer than 8s, hiding spinner.');
-                        setFallbackNotice('STREAMING OPTIMIZED TILESETS...');
-                        setIs3DLoading(false);
+                    let isLibraryLoaded = false;
 
-                        // Clear fallback notice after 4 seconds
+                    // 15-second library load watchdog to avoid main thread choking and fall back to 2D vector mode gracefully
+                    const libraryWatchdog = setTimeout(() => {
+                        if (cancelled || isLibraryLoaded) return;
+                        console.warn('[SovereignMap] 3D maps3d library import timed out after 15s, falling back to 2D vector mode.');
+                        setFallbackNotice('3D ENGINE TIME-OUT. FALLING BACK TO SMOOTH 2D VECTOR SUBSTRATE.');
+                        setIs3DLoading(false);
+                        
+                        // Cancel the pending 3D setup
+                        cancelled = true;
+                        
+                        // Disable 3D Tiles in store to immediately restore 2D responsiveness
+                        setHUDState({ is3DTilesEnabled: false });
+
                         setTimeout(() => {
-                            if (!cancelled) setFallbackNotice(null);
+                            setFallbackNotice(null);
                         }, 4000);
-                    }, 8000);
+                    }, 15000);
 
                     const { Map3DElement } = await googleObj.maps.importLibrary('maps3d');
+                    isLibraryLoaded = true;
+                    clearTimeout(libraryWatchdog);
+
                     if (cancelled || !map3DRef.current || map3DInstanceRef.current) {
-                        clearTimeout(watchdogTimeout);
                         return;
                     }
 
@@ -800,20 +1044,42 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
 
                     map3d.addEventListener('gmp-rangechange', () => {
                         const range = map3d.range;
-                        if (range && mapInstanceRef.current) {
-                            const map2d = mapInstanceRef.current;
-                            const zoom = Math.max(1, Math.min(20, 25 - Math.log2(range)));
-                            if (Math.abs(map2d.getZoom() - zoom) > 0.5) {
-                                map2d.setZoom(Math.round(zoom));
+                        if (range) {
+                            if (range > 6000000 && isUserPanningRef.current) {
+                                setHUDStateRef.current({ mapMode: 'INTERSTELLAR' });
+                            }
+                            if (mapInstanceRef.current) {
+                                const map2d = mapInstanceRef.current;
+                                const zoom = Math.max(1, Math.min(20, 25 - Math.log2(range)));
+                                if (Math.abs(map2d.getZoom() - zoom) > 0.5) {
+                                    map2d.setZoom(Math.round(zoom));
+                                }
                             }
                         }
                     });
 
+                    // 6-second failure watchdog to roll back to 2D vector mode if 3D Tiles rendering is blocked or failing
+                    const failureWatchdog = setTimeout(() => {
+                        if (cancelled) return;
+                        console.warn('[SovereignMap] 3D tiles rendering failed to stabilize within 6s. Rolling back to 2D...');
+                        setFallbackNotice('3D ENGINE NOT SUPPORTED. SEAMLESSLY ROUTING TO 2D VECTOR ENGINE...');
+                        setIs3DLoading(false);
+                        setIs3DReady(false);
+                        setHUDState({ is3DTilesEnabled: false });
+
+                        setTimeout(() => {
+                            setFallbackNotice(null);
+                        }, 4000);
+                    }, 6000);
+
                     // Google Maps native event listener to resolve loading state once tiles are fully loaded and steady
                     map3d.addEventListener('gmp-steadychange', (event: any) => {
                         if (event.isSteady) {
-                            clearTimeout(watchdogTimeout);
+                            clearTimeout(failureWatchdog);
                             setIs3DLoading(false);
+                            setIsMapTilesLoaded(true);
+                            setIsOfflineSubstrateMode(false);
+                            setError(null);
                         }
                     });
 
@@ -822,9 +1088,13 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                     setIs3DReady(true);
                 } catch (err) {
                     console.error('[SovereignMap] 3D map tile initialization failed:', err);
+                    setFallbackNotice('3D INITIALIZATION FAILED. ROUTING TO 2D ENGINE.');
                     setIs3DLoading(false);
                     setIs3DReady(false);
                     setHUDState({ is3DTilesEnabled: false });
+                    setTimeout(() => {
+                        setFallbackNotice(null);
+                    }, 4000);
                 }
             }
         };
@@ -1458,11 +1728,68 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                         });
                     }
 
-                    const placeMarker = (position: any, color: string) => {
+                    const placeMarker = (item: any, color: string, isProposal?: boolean) => {
                         const MarkerClass = AdvancedMarkerElement || (window as any).google?.maps?.marker?.AdvancedMarkerElement;
                         if (MarkerClass) {
+                            const position = item.coords || (item.lat !== undefined && item.lng !== undefined ? item : null);
+                            if (!position) {
+                                console.warn('[SovereignMap] placeMarker skipped: no valid coords found on item', item);
+                                return;
+                            }
                             const pin = document.createElement('div');
-                            pin.style.cssText = `width:12px;height:12px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 0 8px ${color};`;
+                            pin.style.cssText = `width:12px;height:12px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 0 8px ${color};cursor:pointer;transition:transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;`;
+                            
+                            // Hover visual states
+                            pin.addEventListener('mouseenter', () => {
+                                pin.style.transform = 'scale(1.3)';
+                                pin.style.boxShadow = `0 0 16px ${color}`;
+                            });
+                            pin.addEventListener('mouseleave', () => {
+                                pin.style.transform = 'scale(1)';
+                                pin.style.boxShadow = `0 0 8px ${color}`;
+                            });
+
+                            // Click interactions
+                            pin.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                
+                                const refFrame = activePOIRef.current?.referenceFrame || 'EARTH';
+                                const lat = position.lat;
+                                const lng = position.lng;
+                                
+                                const hashVal = Math.abs(Math.sin(lat * 12.9898 + lng * 78.233)) * 43758.5453;
+                                const solar = Math.floor(55 + (hashVal % 45));
+                                const wind = Math.floor(15 + ((hashVal * 1.5) % 75));
+                                const water = Math.floor(5 + ((hashVal * 2.3) % 90));
+                                const zoning = Math.floor(20 + ((hashVal * 3.7) % 80));
+                                const mockOwnerName = isProposal ? `Proposer ${Math.floor(100 + (hashVal % 900))}` : `Citizen ${Math.floor(100 + (hashVal % 900))}`;
+                                const mockOwnerDid = isProposal ? `did:sovereign:proposer:0x${Math.floor(hashVal).toString(16).substring(0, 16)}` : `did:sovereign:citizen:0x${Math.floor(hashVal).toString(16).substring(0, 16)}`;
+                                const stakeVal = item.stake || item.stakedSovereignUnits || Math.floor(4000 + (hashVal % 28000));
+                                const name = item.name || (isProposal ? `Sovereign Proposal ${item.id || ''}` : `Sovereign Citadel ${item.id || ''}`);
+                                
+                                const updatedPOI: POIDetails = {
+                                    name: name,
+                                    formattedAddress: `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`,
+                                    coordinates: { lat, lng, alt: 100 },
+                                    referenceFrame: refFrame,
+                                    ownership: {
+                                        ownerDid: mockOwnerDid,
+                                        ownerName: mockOwnerName,
+                                        stakedSovereignUnits: stakeVal
+                                    },
+                                    publicPlans: isProposal 
+                                        ? `ACTIVE GOVERNANCE PROPOSAL: Evaluating proposed changes on structural grid layer. Current state: ${item.status || 'PENDING VOTE'}. Staked support: ${stakeVal} units.`
+                                        : `Offline Substrate Secure Telemetry. Node ${name} is fully operational under local encrypted caching. Current Status: ${item.status || 'ACTIVE'}.`,
+                                    metrics: { solar, wind, water, zoning }
+                                };
+                                setActivePOI(updatedPOI);
+                                setHUDStateRef.current({ activePillar: 'ATLAS', activeFocusPanel: 'ATLAS' });
+
+                                if (refFrame === 'EARTH') {
+                                    fetchLiveTelemetry(lat, lng, updatedPOI);
+                                }
+                            });
+
                             new MarkerClass({ position, map, content: pin });
                         } else {
                             console.warn('[SovereignMap] AdvancedMarkerElement not available, skipping marker render.');
@@ -1470,10 +1797,10 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                     };
 
                     if (layer.type === 'INSTITUTION' && Array.isArray(layer.data)) {
-                        layer.data.forEach((inst: any) => placeMarker(inst.coords, '#f59e0b'));
+                        layer.data.forEach((inst: any) => placeMarker(inst, '#f59e0b'));
                     }
                     if (layer.type === 'PROPOSAL' && Array.isArray(layer.data)) {
-                        layer.data.forEach((prop: any) => placeMarker(prop.coords, '#ea580c'));
+                        layer.data.forEach((prop: any) => placeMarker(prop, '#ea580c', true));
                     }
                 });
             } catch (e) { /* layer render failure is non-fatal */ }
@@ -1488,25 +1815,53 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
         return { x, y };
     };
 
-    const getThemeColor = () => {
-        if (themeState?.theme === 'theme-latex') return '#8c1d1d';
-        const refFrame = activePOI?.referenceFrame || 'EARTH';
-        if (refFrame === 'LUNA') return '#a1a1aa';
-        if (refFrame === 'MARS') return '#f97316';
-        return '#f59e0b';
+    const convertSVGToLatLng = (x: number, y: number) => {
+        const lng = (x * 360 / 1000) - 180;
+        const lat = 90 - (y * 180 / 500);
+        return { lat, lng };
     };
 
-    const getBgColor = () => {
-        if (themeState?.theme === 'theme-latex') return '#fdfcf7';
+    const handleCoordinateSelect = (lat: number, lng: number) => {
+        lastCentered2DPOIKeyRef.current = null;
+        lastCentered3DPOIKeyRef.current = null;
         const refFrame = activePOI?.referenceFrame || 'EARTH';
-        if (refFrame === 'LUNA') return '#09090b';
-        if (refFrame === 'MARS') return '#1c0d0a';
-        return '#030712';
+        
+        const hashVal = Math.abs(Math.sin(lat * 12.9898 + lng * 78.233)) * 43758.5453;
+        const solar = Math.floor(55 + (hashVal % 45));
+        const wind = Math.floor(15 + ((hashVal * 1.5) % 75));
+        const water = Math.floor(5 + ((hashVal * 2.3) % 90));
+        const zoning = Math.floor(20 + ((hashVal * 3.7) % 80));
+        
+        const mockOwnerName = `Citizen ${Math.floor(100 + (hashVal % 900))}`;
+        const mockOwnerDid = `did:sovereign:citizen:0x${Math.floor(hashVal).toString(16).substring(0, 16)}`;
+        const mockStaked = Math.floor(4000 + (hashVal % 28000));
+        
+        const updatedPOI: POIDetails = {
+            name: `Grid Segment ${lat.toFixed(2)}N, ${lng.toFixed(2)}E`,
+            formattedAddress: `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`,
+            coordinates: { lat, lng, alt: 0 },
+            referenceFrame: refFrame,
+            ownership: {
+                ownerDid: mockOwnerDid,
+                ownerName: mockOwnerName,
+                stakedSovereignUnits: mockStaked
+            },
+            publicPlans: `Offline Substrate Secure Telemetry. Grid segment selected. Evaluating localized resource potentials under local caching.`,
+            metrics: { solar, wind, water, zoning }
+        };
+        
+        setActivePOI(updatedPOI);
+        setHUDStateRef.current({ activePillar: 'ATLAS', activeFocusPanel: 'ATLAS' });
+        
+        if (refFrame === 'EARTH') {
+            fetchLiveTelemetry(lat, lng, updatedPOI);
+        }
     };
 
     const handleCitadelClick = (node: any) => {
         lastCentered2DPOIKeyRef.current = null;
         lastCentered3DPOIKeyRef.current = null;
+        const refFrame = activePOI?.referenceFrame || 'EARTH';
         const hashVal = Math.abs(Math.sin(node.lat * 12.9898 + node.lng * 78.233)) * 43758.5453;
         const solar = Math.floor(55 + (hashVal % 45));
         const wind = Math.floor(15 + ((hashVal * 1.5) % 75));
@@ -1520,7 +1875,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
             name: node.name,
             formattedAddress: `Lat: ${node.lat.toFixed(4)}, Lng: ${node.lng.toFixed(4)}`,
             coordinates: { lat: node.lat, lng: node.lng, alt: 100 },
-            referenceFrame: activePOI?.referenceFrame || 'EARTH',
+            referenceFrame: refFrame,
             ownership: {
                 ownerDid: mockOwnerDid,
                 ownerName: mockOwnerName,
@@ -1530,13 +1885,76 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
             metrics: { solar, wind, water, zoning }
         };
         setActivePOI(updatedPOI);
+        setHUDStateRef.current({ activePillar: 'ATLAS', activeFocusPanel: 'ATLAS' });
+
+        if (refFrame === 'EARTH') {
+            fetchLiveTelemetry(node.lat, node.lng, updatedPOI);
+        }
     };
 
     const renderOfflineSubstrateMap = () => {
         const refFrame = activePOI?.referenceFrame || 'EARTH';
         const activeWorldData = ON_WORLD_DATA[refFrame as keyof typeof ON_WORLD_DATA] || ON_WORLD_DATA.EARTH;
+
+        const getScaledPolygonPoints = (poly: { lat: number; lng: number }[], scale: number) => {
+            if (poly.length === 0) return '';
+            
+            // Simple average centroid calculation
+            let sumLat = 0;
+            let sumLng = 0;
+            poly.forEach(p => {
+                sumLat += p.lat;
+                sumLng += p.lng;
+            });
+            const centroidLat = sumLat / poly.length;
+            const centroidLng = sumLng / poly.length;
+            
+            return poly.map(p => {
+                const scaledLat = centroidLat + (p.lat - centroidLat) * scale;
+                const scaledLng = centroidLng + (p.lng - centroidLng) * scale;
+                const { x, y } = convertLatLngToSVG(scaledLat, scaledLng);
+                return `${x},${y}`;
+            }).join(' ');
+        };
+
+        const getThemeColor = () => {
+            if (themeState?.theme === 'theme-latex') return '#8c1d1d';
+            if (refFrame === 'LUNA') return '#a1a1aa';
+            if (refFrame === 'MARS') return '#f97316';
+            return '#f59e0b';
+        };
+
+        const getBgColor = () => {
+            if (themeState?.theme === 'theme-latex') return '#fdfcf7';
+            if (refFrame === 'LUNA') return '#09090b';
+            if (refFrame === 'MARS') return '#1c0d0a';
+            return '#030712';
+        };
+
         const themeColor = getThemeColor();
         const bgColor = getBgColor();
+
+        const handleOfflineMapClick = (e: React.MouseEvent<SVGSVGElement>) => {
+            if (offlineDragMovedRef.current) return;
+            
+            const svgElement = e.currentTarget;
+            const svgRect = svgElement.getBoundingClientRect();
+            const clientX = e.clientX - svgRect.left;
+            const clientY = e.clientY - svgRect.top;
+            
+            // Map client pixels to 1000x500 coordinates relative to container
+            const viewBoxX = clientX * (1000 / svgRect.width);
+            const viewBoxY = clientY * (500 / svgRect.height);
+            
+            // Revert transform: translate(panX, panY) scale(zoom)
+            const x = (viewBoxX - offlinePan.x) / offlineZoom;
+            const y = (viewBoxY - offlinePan.y) / offlineZoom;
+            
+            if (x < 0 || x > 1000 || y < 0 || y > 500) return;
+            
+            const { lat, lng } = convertSVGToLatLng(x, y);
+            handleCoordinateSelect(lat, lng);
+        };
 
         // Coordinate grids
         const gridLines: React.ReactNode[] = [];
@@ -1562,7 +1980,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
         }
 
         return (
-            <div className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center font-mono ${
+            <div className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center font-mono overflow-hidden ${
                 themeState?.theme === 'theme-latex' ? 'bg-[#fdfcf7]' : 'bg-black'
             }`}>
                 {/* SVG viewbox */}
@@ -1578,6 +1996,7 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                     onTouchStart={handleOfflineTouchStart}
                     onTouchMove={handleOfflineTouchMove}
                     onTouchEnd={handleOfflineTouchEnd}
+                    onClick={handleOfflineMapClick}
                 >
                     <defs>
                         <filter id="glow-offline" x="-20%" y="-20%" width="140%" height="140%">
@@ -1603,12 +2022,70 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                             <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
                         </radialGradient>
                     </defs>
-
+ 
                     {/* Transform Group wrapping all inner map elements */}
                     <g transform={`translate(${offlinePan.x}, ${offlinePan.y}) scale(${offlineZoom})`}>
                         {/* Background Grids */}
                         {gridLines}
 
+                        {/* Landmass / Topographic Boundaries */}
+                        {(CELESTIAL_BOUNDARIES[refFrame as keyof typeof CELESTIAL_BOUNDARIES] || CELESTIAL_BOUNDARIES.EARTH).map((poly, idx) => {
+                            const basePoints = poly.map(p => {
+                                const { x, y } = convertLatLngToSVG(p.lat, p.lng);
+                                return `${x},${y}`;
+                            }).join(' ');
+                            
+                            // Generate 3 nested topological contours
+                            const contour1 = getScaledPolygonPoints(poly, 0.85);
+                            const contour2 = getScaledPolygonPoints(poly, 0.70);
+                            const contour3 = getScaledPolygonPoints(poly, 0.55);
+
+                            return (
+                                <g key={`land-group-${idx}`}>
+                                    {/* Main Landmass Boundary */}
+                                    <polygon 
+                                        points={basePoints}
+                                        fill={themeColor}
+                                        fillOpacity="0.015"
+                                        stroke={themeColor}
+                                        strokeWidth="1"
+                                        strokeOpacity="0.15"
+                                        vectorEffect="non-scaling-stroke"
+                                    />
+                                    {/* Contour 1 (85% Scale) */}
+                                    <polygon 
+                                        points={contour1}
+                                        fill="none"
+                                        stroke={themeColor}
+                                        strokeWidth="0.75"
+                                        strokeOpacity="0.08"
+                                        strokeDasharray="4,4"
+                                        vectorEffect="non-scaling-stroke"
+                                    />
+                                    {/* Contour 2 (70% Scale) */}
+                                    <polygon 
+                                        points={contour2}
+                                        fill="none"
+                                        stroke={themeColor}
+                                        strokeWidth="0.75"
+                                        strokeOpacity="0.05"
+                                        strokeDasharray="2,4"
+                                        vectorEffect="non-scaling-stroke"
+                                    />
+                                    {/* Contour 3 (55% Scale) */}
+                                    <polygon 
+                                        points={contour3}
+                                        fill="none"
+                                        stroke={themeColor}
+                                        strokeWidth="0.5"
+                                        strokeOpacity="0.03"
+                                        strokeDasharray="1,5"
+                                        vectorEffect="non-scaling-stroke"
+                                    />
+                                </g>
+                            );
+                        })}
+ 
                         {/* Heatmaps */}
                         {activeWorldData.heatmaps.map((hm, idx) => {
                             const { x, y } = convertLatLngToSVG(hm.lat, hm.lng);
@@ -1640,28 +2117,35 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                                 </g>
                             );
                         })}
-
+ 
                         {/* Arcs (Curved Bezier Paths) */}
                         {activeWorldData.arcs.map((arc, idx) => {
                             const p1 = convertLatLngToSVG(arc.from.lat, arc.from.lng);
                             const p2 = convertLatLngToSVG(arc.to.lat, arc.to.lng);
                             const cx = (p1.x + p2.x) / 2;
                             const cy = Math.min(p1.y, p2.y) - 60; // Curve upward
-
+ 
                             const pathD = `M ${p1.x} ${p1.y} Q ${cx} ${cy} ${p2.x} ${p2.y}`;
-
+ 
                             return (
                                 <g key={`arc-${idx}`}>
-                                    {/* The curved path */}
+                                    {/* Curved Path with dynamic scrolling dash array */}
                                     <path 
                                         d={pathD} 
                                         fill="none" 
                                         stroke={themeColor} 
                                         strokeWidth="1.5" 
-                                        strokeOpacity="0.3" 
-                                        strokeDasharray="4,4" 
+                                        strokeOpacity="0.4" 
+                                        strokeDasharray="6,4" 
                                         vectorEffect="non-scaling-stroke"
-                                    />
+                                    >
+                                        <animate 
+                                            attributeName="stroke-dashoffset" 
+                                            values="40;0" 
+                                            dur="3s" 
+                                            repeatCount="indefinite" 
+                                        />
+                                    </path>
                                     {/* Packet Animating along path */}
                                     <circle r="3" fill={themeColor} filter="url(#glow-offline)">
                                         <animateMotion 
@@ -1684,17 +2168,18 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                                 </g>
                             );
                         })}
-
+ 
                         {/* Citadel Nodes */}
                         {activeWorldData.nodes.map((node, idx) => {
                             const { x, y } = convertLatLngToSVG(node.lat, node.lng);
                             const isActive = activePOI?.name === node.name;
-
+ 
                             return (
                                 <g 
                                     key={`node-${idx}`} 
                                     className="cursor-pointer"
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                        e.stopPropagation();
                                         if (!offlineDragMovedRef.current) {
                                             handleCitadelClick(node);
                                         }
@@ -1743,11 +2228,128 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                     </g>
                 </svg>
 
-                {/* Top Overlay Badge */}
-                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none transition-all duration-500">
-                    <div className="flex items-center gap-3 px-4 py-2.5 rounded-full border bg-red-500/10 border-red-500/30 text-red-400 backdrop-blur-md font-mono text-[9px] uppercase tracking-wider shadow-2xl animate-pulse">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
-                        <span className="font-bold">OFFLINE SUBSTRATE FALLBACK (SECURE CACHE SECURED)</span>
+                {/* Offline Map Controls */}
+                <div className="absolute top-6 right-6 z-20 flex flex-col gap-1.5 pointer-events-auto">
+                    <button 
+                        onClick={() => {
+                            setOfflineZoom(z => Math.min(20, z * 1.3));
+                        }}
+                        className="w-8 h-8 flex items-center justify-center bg-black/85 hover:bg-zinc-900 active:bg-zinc-800 border border-white/10 hover:border-white/25 text-white font-mono font-bold text-sm rounded transition-all shadow-xl select-none"
+                        title="ZOOM IN"
+                    >
+                        ＋
+                    </button>
+                    <button 
+                        onClick={() => {
+                            setOfflineZoom(z => Math.max(0.5, z / 1.3));
+                        }}
+                        className="w-8 h-8 flex items-center justify-center bg-black/85 hover:bg-zinc-900 active:bg-zinc-800 border border-white/10 hover:border-white/25 text-white font-mono font-bold text-sm rounded transition-all shadow-xl select-none"
+                        title="ZOOM OUT"
+                    >
+                        －
+                    </button>
+                    <button 
+                        onClick={handleResetOfflineViewport}
+                        className="w-8 h-8 flex items-center justify-center bg-black/85 hover:bg-zinc-900 active:bg-zinc-800 border border-white/10 hover:border-white/25 text-white font-mono font-bold text-xs rounded transition-all shadow-xl select-none"
+                        title="RESET VIEWPORT"
+                    >
+                        ⟲
+                    </button>
+                </div>
+ 
+                {/* Offline Status — discreet bottom-left indicator, not a blocking overlay */}
+                <div className="absolute bottom-4 left-4 z-20 pointer-events-auto flex flex-col items-start gap-1">
+                    <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md font-data text-[8px] uppercase tracking-wider shadow-lg border-0" style={{ boxShadow: 'inset 0 0 0 1px rgba(239,68,68,0.2)' }}>
+                        <span className="w-1 h-1 rounded-full bg-red-400 animate-pulse" />
+                        <span className="text-red-400/80 font-semibold">Substrate Offline</span>
+                        {error && <span className="text-red-300/50">· {error}</span>}
+                    </div>
+                    <button
+                        onClick={() => {
+                            delete (window as any).__googleMapsLoadError;
+                            setIsOfflineSubstrateMode(false);
+                            setError(null);
+                            setIsLoaded(false);
+                            setIsMapTilesLoaded(false);
+                            window.location.reload();
+                        }}
+                        className="px-2 py-0.5 bg-transparent hover:bg-white/5 text-zinc-600 hover:text-zinc-300 font-data text-[7px] uppercase tracking-widest rounded transition-all cursor-pointer"
+                    >
+                        ⟳ retry
+                    </button>
+                </div>
+
+ 
+                {geoFallbackAlert && (
+                    <div className="absolute top-24 left-6 z-30 pointer-events-none transition-all duration-1000 ease-out animate-pulse">
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-amber-500/20 bg-amber-500/[0.03] backdrop-blur-sm text-amber-500/60 font-mono text-[8px] uppercase tracking-widest shadow-lg">
+                            <span className="w-1 h-1 rounded-full bg-amber-500/60 animate-ping" />
+                            <span>{geoFallbackAlert}</span>
+                        </div>
+                    </div>
+                )}
+ 
+            </div>
+        );
+    };
+
+    const show3D = is3DActive && is3DReady;
+
+    return (
+        <div className={`relative w-full h-full overflow-hidden ${
+            themeState?.theme === 'theme-latex' ? 'bg-[#fdfcf7]' : 'bg-black'
+        }`}>
+            {/* Custom scoped style overrides to enforce theme inversion at the child/image/canvas element level */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                .sovereign-map-viewport img,
+                .sovereign-map-viewport canvas {
+                    filter: var(--map-theme-filter) !important;
+                    will-change: filter;
+                }
+                .sovereign-map-3d {
+                    filter: var(--map-theme-filter) !important;
+                    will-change: filter;
+                }
+                gmp-map-3d {
+                    display: block !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+                .sovereign-map-viewport,
+                .sovereign-map-3d,
+                .sovereign-map-viewport iframe,
+                .sovereign-map-3d iframe {
+                    background-color: ${themeState?.theme === 'theme-latex' ? '#fdfcf7' : '#000000'} !important;
+                    background: ${themeState?.theme === 'theme-latex' ? '#fdfcf7' : '#000000'} !important;
+                }
+            `}} />
+
+            {/* Offline Substrate Map Container with smooth cross-fade */}
+            <div 
+                className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
+                    isOfflineSubstrateMode ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                }`}
+            >
+                {renderOfflineSubstrateMap()}
+            </div>
+
+            {/* Live Map Substrate Container with smooth cross-fade */}
+            <div 
+                className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
+                    !isOfflineSubstrateMode ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                }`}
+            >
+                {/* DEBUG BADGE — remove once map confirmed working */}
+                <div className="absolute bottom-12 right-4 z-50 pointer-events-none">
+                    <div className={`px-2 py-1 font-mono text-[8px] uppercase tracking-widest rounded border ${
+                        isMapTilesLoaded 
+                            ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-400'
+                            : isOfflineSubstrateMode
+                                ? 'bg-red-950/80 border-red-500/40 text-red-400'
+                                : 'bg-amber-950/80 border-amber-500/40 text-amber-400 animate-pulse'
+                    }`}>
+                        {isMapTilesLoaded ? '✓ LIVE MAP' : isOfflineSubstrateMode ? '⚠ OFFLINE MODE' : '⟳ LOADING MAP...'}
+                        {error && ` — ${error}`}
                     </div>
                 </div>
 
@@ -1760,153 +2362,74 @@ export const SovereignMap: React.FC<SovereignMapProps> = ({ layers, center = { l
                     </div>
                 )}
 
-                {/* Info HUD */}
-                <div className="absolute bottom-6 left-6 z-10 bg-black/90 border border-white/10 rounded-lg p-3 font-mono text-[9px] text-zinc-400 select-none w-56 shadow-[0_20px_50px_rgba(0,0,0,0.85)]">
-                    <div className="text-[8px] font-black text-red-400 tracking-widest uppercase pb-1.5 border-b border-white/5 flex items-center justify-between">
-                        <span>LOCAL CACHED TELEMETRY</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                {/* Centered Glassmorphic Loading / Fallback Badge */}
+                {(is3DLoading || fallbackNotice) && (
+                    <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none transition-all duration-500 ease-out">
+                        <div className={`flex items-center gap-3 px-4 py-2.5 rounded-full border backdrop-blur-md font-mono text-[9px] uppercase tracking-wider shadow-2xl transition-all duration-300 ${
+                            fallbackNotice ? 'bg-red-500/10 border-red-500/30 text-red-400' : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                        }`}>
+                            {is3DLoading ? (
+                                <>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                                    <span className="font-bold text-amber-400">INITIALIZING PHOTOREALISTIC 3D TILES...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+                                    <span className="font-bold text-red-400">{fallbackNotice}</span>
+                                </>
+                            )}
+                        </div>
                     </div>
-                    <div className="space-y-1.5 pt-1.5">
-                        <div className="flex justify-between">
-                            <span>CELESTIAL</span>
-                            <span className="text-white font-bold">{refFrame}</span>
+                )}
+
+                {/* Dual Substrate Map Viewports */}
+                <div 
+                    ref={mapRef} 
+                    style={{ 
+                        ['--map-theme-filter' as any]: getThemeFilter()
+                    }}
+                    className={`absolute inset-0 w-full h-full sovereign-map-viewport transition-opacity duration-500 ${show3D ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`} 
+                />
+                <div 
+                    ref={map3DRef} 
+                    style={{ 
+                        ['--map-theme-filter' as any]: getThemeFilter()
+                    }}
+                    className={`absolute inset-0 w-full h-full sovereign-map-3d transition-opacity duration-500 ${show3D ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
+                />
+                
+                {/* Ambient Data Stream Overlay */}
+                <canvas 
+                    ref={canvasRef} 
+                    className={`absolute inset-0 w-full h-full pointer-events-none opacity-60 z-10 transition-all duration-500 ${
+                        themeState?.theme === 'theme-latex' ? 'mix-blend-multiply' : 'mix-blend-screen'
+                    }`} 
+                />
+
+                {!isLoaded && !error && (
+                    <StateBroadcastOverlay label="SYNCHRONIZING ATLAS..." />
+                )}
+                {error && (
+                    <div className="absolute inset-0 bg-gray-950 flex flex-col items-center justify-center p-8 text-center gap-4">
+                        <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-full flex items-center justify-center">
+                             <span className="text-red-500 text-2xl">⚠️</span>
                         </div>
-                        <div className="flex justify-between">
-                            <span>ACTIVE POI</span>
-                            <span className="text-white truncate max-w-[120px]" title={activePOI?.name || 'NONE'}>
-                                {activePOI?.name?.toUpperCase() || 'NONE'}
-                            </span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span>LATITUDE</span>
-                            <span className="text-white">{activePOI?.coordinates?.lat.toFixed(4) || '0.0000'}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span>LONGITUDE</span>
-                            <span className="text-white">{activePOI?.coordinates?.lng.toFixed(4) || '0.0000'}</span>
+                        <div>
+                            <h4 className="text-sm font-black uppercase tracking-widest text-white mb-2">Sovereign Substrate Offline</h4>
+                            <p className="text-[10px] text-gray-500 uppercase leading-relaxed max-w-xs">
+                                The external telemetry layer (Google Maps) failed to synchronize. Atlas metadata remains stored in local SQLite substrate.
+                            </p>
                         </div>
                         <button 
-                            onClick={handleResetOfflineViewport}
-                            className="mt-3 w-full py-1.5 bg-red-500/10 hover:bg-red-500/20 active:bg-red-500/30 border border-red-500/30 hover:border-red-500/50 rounded text-red-400 font-bold transition-all text-center tracking-wider text-[8px]"
+                            onClick={() => window.location.reload()}
+                            className="px-4 py-2 bg-gray-900 border border-gray-800 text-[9px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all"
                         >
-                            RESET VIEWPORT
+                            Retry Synchronization
                         </button>
                     </div>
-                </div>
+                )}
             </div>
-        );
-    };
-
-    if (isOfflineSubstrateMode) {
-        return renderOfflineSubstrateMap();
-    }
-
-    const show3D = is3DActive && is3DReady;
-
-    return (
-        <div className={`relative w-full h-full overflow-hidden ${
-            themeState?.theme === 'theme-latex' ? 'bg-[#fdfcf7]' : 'bg-black'
-        }`}>
-            {/* Custom scoped style overrides to enforce theme inversion at the child/image/canvas element level */}
-            <style dangerouslySetInnerHTML={{ __html: `
-                .sovereign-map-viewport img,
-                .sovereign-map-viewport canvas,
-                .sovereign-map-3d img,
-                .sovereign-map-3d canvas {
-                    filter: var(--map-theme-filter) !important;
-                    will-change: filter;
-                }
-                .sovereign-map-viewport,
-                .sovereign-map-3d,
-                .sovereign-map-viewport iframe,
-                .sovereign-map-3d iframe,
-                .sovereign-map-viewport [class*="gm-style"],
-                .sovereign-map-3d [class*="gm-style"],
-                .gm-style,
-                .gm-style-cc,
-                .gm-style > div,
-                gmp-map-3d {
-                    background-color: ${themeState?.theme === 'theme-latex' ? '#fdfcf7' : '#000000'} !important;
-                    background: ${themeState?.theme === 'theme-latex' ? '#fdfcf7' : '#000000'} !important;
-                }
-            `}} />
-
-            {geoFallbackAlert && (
-                <div className="absolute top-24 left-6 z-30 pointer-events-none transition-all duration-1000 ease-out animate-pulse">
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-amber-500/20 bg-amber-500/[0.03] backdrop-blur-sm text-amber-500/60 font-mono text-[8px] uppercase tracking-widest shadow-lg">
-                        <span className="w-1 h-1 rounded-full bg-amber-500/60 animate-ping" />
-                        <span>{geoFallbackAlert}</span>
-                    </div>
-                </div>
-            )}
-
-            {/* Centered Glassmorphic Loading / Fallback Badge */}
-            {(is3DLoading || fallbackNotice) && (
-                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none transition-all duration-500 ease-out">
-                    <div className={`flex items-center gap-3 px-4 py-2.5 rounded-full border backdrop-blur-md font-mono text-[9px] uppercase tracking-wider shadow-2xl transition-all duration-300 ${
-                        fallbackNotice ? 'bg-red-500/10 border-red-500/30 text-red-400' : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-                    }`}>
-                        {is3DLoading ? (
-                            <>
-                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
-                                <span className="font-bold text-amber-400">INITIALIZING PHOTOREALISTIC 3D TILES...</span>
-                            </>
-                        ) : (
-                            <>
-                                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                                <span className="font-bold text-red-400">{fallbackNotice}</span>
-                            </>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {/* Dual Substrate Map Viewports */}
-            <div 
-                ref={mapRef} 
-                style={{ 
-                    ['--map-theme-filter' as any]: getThemeFilter()
-                }}
-                className={`absolute inset-0 w-full h-full sovereign-map-viewport transition-opacity duration-500 ${show3D ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} 
-            />
-            <div 
-                ref={map3DRef} 
-                style={{ 
-                    ['--map-theme-filter' as any]: getThemeFilter()
-                }}
-                className={`absolute inset-0 w-full h-full sovereign-map-3d transition-opacity duration-500 ${show3D ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} 
-            />
-            
-            {/* Ambient Data Stream Overlay */}
-            <canvas 
-                ref={canvasRef} 
-                className={`absolute inset-0 w-full h-full pointer-events-none opacity-60 z-10 transition-all duration-500 ${
-                    themeState?.theme === 'theme-latex' ? 'mix-blend-multiply' : 'mix-blend-screen'
-                }`} 
-            />
-
-            {!isLoaded && !error && (
-                <StateBroadcastOverlay label="SYNCHRONIZING ATLAS..." />
-            )}
-            {error && (
-                <div className="absolute inset-0 bg-gray-950 flex flex-col items-center justify-center p-8 text-center gap-4">
-                    <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-full flex items-center justify-center">
-                         <span className="text-red-500 text-2xl">⚠️</span>
-                    </div>
-                    <div>
-                        <h4 className="text-sm font-black uppercase tracking-widest text-white mb-2">Sovereign Substrate Offline</h4>
-                        <p className="text-[10px] text-gray-500 uppercase leading-relaxed max-w-xs">
-                            The external telemetry layer (Google Maps) failed to synchronize. Atlas metadata remains stored in local SQLite substrate.
-                        </p>
-                    </div>
-                    <button 
-                        onClick={() => window.location.reload()}
-                        className="px-4 py-2 bg-gray-900 border border-gray-800 text-[9px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all"
-                    >
-                        Retry Synchronization
-                    </button>
-                </div>
-            )}
         </div>
     );
 };

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useMesh } from '@/components/providers/mesh-provider';
 import { useHUD } from '@/lib/hud-store';
 import { Monitor, BookOpen, Gamepad2, TerminalSquare, ChevronDown } from 'lucide-react';
+import { AdaptiveThemeController } from './AdaptiveThemeController';
 
 export interface ThemeControllerProps {
     variant?: 'fixed' | 'inline';
@@ -33,6 +34,7 @@ export function ThemeController({ variant = 'fixed' }: ThemeControllerProps) {
         if (!doc) return;
         const ymap = doc.getMap('ui-theme');
         ymap.set('theme', newTheme);
+        ymap.set('isAdaptive', false);
         
         if (newTheme === 'theme-phosphor') {
             activateFocusPanel('PHOSPHOR');
@@ -75,9 +77,9 @@ export function ThemeController({ variant = 'fixed' }: ThemeControllerProps) {
             key: 'theme-phosphor',
             label: 'Phosphor',
             icon: TerminalSquare,
-            title: 'Phosphor Red (Monochrome)',
-            activeStyles: 'bg-red-500/20 text-red-400 border border-red-500/30 shadow-[0_0_12px_rgba(239,68,68,0.25)]',
-            dropdownActiveStyles: 'text-red-400 bg-red-500/10 font-bold',
+            title: 'Phosphor Green (Monochrome)',
+            activeStyles: 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.25)]',
+            dropdownActiveStyles: 'text-emerald-400 bg-emerald-500/10 font-bold',
         },
     ];
 
@@ -106,27 +108,34 @@ export function ThemeController({ variant = 'fixed' }: ThemeControllerProps) {
 
                 {/* Dropdown Card */}
                 {isDropdownOpen && (
-                    <div className="absolute right-0 mt-1 z-50 w-48 bg-black/90 backdrop-blur-xl border border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.8)] rounded-none py-1.5 flex flex-col gap-0.5 animate-in fade-in-0 slide-in-from-top-1 duration-200">
-                        <div className="px-3 py-1 text-[8px] font-mono font-semibold tracking-widest text-zinc-500 uppercase border-b border-white/5 mb-1">
-                            Select Interface Substrate
+                    <div className="absolute right-0 top-full pt-1.5 z-50 w-72 animate-in fade-in-0 slide-in-from-top-1 duration-200">
+                        <div className="bg-black/95 backdrop-blur-xl border border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.8)] rounded-none py-1.5 flex flex-col gap-0.5">
+                            {/* Live Telemetry Block */}
+                            <div className="px-1 py-1 border-b border-white/5 mb-1">
+                                <AdaptiveThemeController />
+                            </div>
+                            
+                            <div className="px-3 py-1 text-[8px] font-mono font-semibold tracking-widest text-zinc-500 uppercase border-b border-white/5 mb-1">
+                                Select Interface Substrate
+                            </div>
+                            {themes.map((t) => {
+                                const Icon = t.icon;
+                                const isActive = currentTheme === t.key;
+                                return (
+                                    <button
+                                        key={t.key}
+                                        onClick={() => changeTheme(t.key)}
+                                        className={`flex items-center gap-2.5 px-3 py-2 text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-all text-left ${
+                                            isActive ? t.dropdownActiveStyles : ''
+                                        }`}
+                                        title={t.title}
+                                    >
+                                        <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-amber-400' : 'text-zinc-500'}`} />
+                                        <span>{t.label}</span>
+                                    </button>
+                                );
+                            })}
                         </div>
-                        {themes.map((t) => {
-                            const Icon = t.icon;
-                            const isActive = currentTheme === t.key;
-                            return (
-                                <button
-                                    key={t.key}
-                                    onClick={() => changeTheme(t.key)}
-                                    className={`flex items-center gap-2.5 px-3 py-2 text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-all text-left ${
-                                        isActive ? t.dropdownActiveStyles : ''
-                                    }`}
-                                    title={t.title}
-                                >
-                                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-amber-400' : 'text-zinc-500'}`} />
-                                    <span>{t.label}</span>
-                                </button>
-                            );
-                        })}
                     </div>
                 )}
             </div>

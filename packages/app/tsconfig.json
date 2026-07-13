@@ -39,9 +39,7 @@
     {
       "path": "../components"
     },
-    {
-      "path": "../identity"
-    },
+
     {
       "path": "../hooks"
     },

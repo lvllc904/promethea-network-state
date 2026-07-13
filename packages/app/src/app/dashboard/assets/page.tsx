@@ -13,7 +13,7 @@ import {
 } from '@promethea/ui';
 import { Button } from '@promethea/ui';
 import { DollarSign, MapPin, ArrowUpRight, Clock, CheckCircle, XCircle, User, PlusCircle } from 'lucide-react';
-import { useCollection, useFirestore, useSovereignMemo, collection, query, where, type Query } from '@promethea/identity';
+import { useCollection, useFirestore, useSovereignMemo, collection, query, where, type Query } from '@promethea/sovereign-store';
 import { RealWorldAsset, Proposal, Vote } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@promethea/ui';
@@ -187,7 +187,7 @@ function ReclamationCard({ target }: { target: any }) {
   const iconMap = {
     BLM_MINERAL: <Target className="w-5 h-5 text-amber-500" />,
     ZOMBIE_ASSET: <ShieldAlert className="w-5 h-5 text-purple-500" />,
-    BROWNFIELD: <Landmark className="w-5 h-5 text-emerald-500" />,
+    BROWNFIELD: <Landmark className="w-5 h-5 text-amber-500" />,
     PHYSICAL_ANCHOR_SIGNAL: <Target className="w-5 h-5 text-amber-500" />
   };
 
@@ -216,7 +216,7 @@ function ReclamationCard({ target }: { target: any }) {
         )}
         {payload.estimatedValuation && (
           <div className="text-xs text-muted-foreground mb-4">
-            Estimated Valuation: <span className="text-emerald-400 font-bold">{payload.estimatedValuation}</span>
+            Estimated Valuation: <span className="text-amber-400 font-bold">{payload.estimatedValuation}</span>
           </div>
         )}
         <div className="flex justify-between items-center text-xs">
@@ -230,10 +230,10 @@ function ReclamationCard({ target }: { target: any }) {
 
 function GrantCard({ grant }: { grant: any }) {
   return (
-    <Card className="border-l-2 border-l-emerald-500 bg-emerald-500/5 flex flex-col">
+    <Card className="border-l-2 border-l-amber-500 bg-amber-500/5 flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-center mb-2">
-          <Badge className="bg-emerald-500 text-white border-none">{grant.agency}</Badge>
+          <Badge className="bg-amber-500 text-white border-none">{grant.agency}</Badge>
           <RealityBadge state={grant.realityState} size="sm" />
         </div>
         <CardTitle className="text-lg font-headline font-bold">{grant.title}</CardTitle>

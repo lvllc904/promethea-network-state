@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@promethea/ui';
-import { ArrowRight, HardHat, Lightbulb, Building, Landmark, Recycle, ArrowUpRight, Activity, BookOpen, ChevronDown, Compass, FileText, Info, Radio, ShieldAlert, Scale, Zap, Fingerprint, RefreshCw } from 'lucide-react';
+import { ArrowRight, HardHat, Lightbulb, Building, Landmark, Recycle, ArrowUpRight, Activity, BookOpen, ChevronDown, Compass, FileText, Info, Radio, ShieldAlert, Scale, Zap, Fingerprint, RefreshCw, Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { ThemeController } from '@/components/ui/ThemeController';
@@ -31,6 +32,7 @@ const itemVariants = {
 };
 
 export default function LandingPage() {
+  const router = useRouter();
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [signals, setSignals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +55,7 @@ export default function LandingPage() {
     <div className="bg-background text-foreground dark:text-white min-h-screen selection:bg-amber-500/30 font-sans transition-colors duration-300">
       
       {/* 3D WebGL Background Centerpiece */}
-      <BirdsBackground />Object;
+      <BirdsBackground />
 
       {/* Top Navigation */}
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-20 border-b border-foreground/5 dark:border-white/5 bg-background/20 backdrop-blur-md transition-colors duration-300">
@@ -114,6 +116,36 @@ export default function LandingPage() {
                     </div>
                   </Link>
 
+                  <Link href="/press" className="flex items-start gap-3 p-2 hover:bg-white/5 group transition-all text-left">
+                    <div className="mt-0.5 p-1 bg-white/5 border border-white/10 group-hover:border-amber-500/50 group-hover:bg-amber-500/10 transition-colors">
+                      <FileText className="w-3.5 h-3.5 text-zinc-400 group-hover:text-amber-400" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 group-hover:text-white transition-colors">Press Kit</div>
+                      <div className="text-[9px] text-zinc-500 leading-tight">Official media resources & profiles.</div>
+                    </div>
+                  </Link>
+
+                  <Link href="/cpp-whitepaper" className="flex items-start gap-3 p-2 hover:bg-white/5 group transition-all text-left">
+                    <div className="mt-0.5 p-1 bg-white/5 border border-white/10 group-hover:border-amber-500/50 group-hover:bg-amber-500/10 transition-colors">
+                      <BookOpen className="w-3.5 h-3.5 text-zinc-400 group-hover:text-amber-400" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 group-hover:text-white transition-colors">CPP Whitepaper</div>
+                      <div className="text-[9px] text-zinc-500 leading-tight">Non-linear chat & DSG mind mapping spec.</div>
+                    </div>
+                  </Link>
+
+                  <Link href="/cpp-integration-pack" className="flex items-start gap-3 p-2 hover:bg-white/5 group transition-all text-left">
+                    <div className="mt-0.5 p-1 bg-white/5 border border-white/10 group-hover:border-amber-500/50 group-hover:bg-amber-500/10 transition-colors">
+                      <Cpu className="w-3.5 h-3.5 text-zinc-400 group-hover:text-amber-400" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 group-hover:text-white transition-colors">CPP Integration Pack</div>
+                      <div className="text-[9px] text-zinc-500 leading-tight">Zustand, Node.js, and WebSocket manual.</div>
+                    </div>
+                  </Link>
+
                   <Link href="#architecture" onClick={() => setIsExploreOpen(false)} className="flex items-start gap-3 p-2 hover:bg-white/5 group transition-all text-left">
                     <div className="mt-0.5 p-1 bg-white/5 border border-white/10 group-hover:border-amber-500/50 group-hover:bg-amber-500/10 transition-colors">
                       <Building className="w-3.5 h-3.5 text-zinc-400 group-hover:text-amber-400" />
@@ -134,20 +166,19 @@ export default function LandingPage() {
                     </div>
                   </Link>
 
-                  <a 
-                    href="https://theorg.com/org/the-promethean-network-state" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
+                  <Link 
+                    href="/org-chart" 
+                    onClick={() => setIsExploreOpen(false)}
                     className="flex items-start gap-3 p-2 hover:bg-white/5 group transition-all text-left border-t border-white/5 mt-1 pt-2"
                   >
                     <div className="mt-0.5 p-1 bg-white/5 border border-white/10 group-hover:border-amber-500/50 group-hover:bg-amber-500/10 transition-colors">
-                      <ArrowUpRight className="w-3.5 h-3.5 text-amber-400 group-hover:text-amber-300" />
+                      <Compass className="w-3.5 h-3.5 text-amber-400 group-hover:text-amber-300" />
                     </div>
                     <div>
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-amber-400 group-hover:text-amber-300 transition-colors flex items-center gap-1">The Org</div>
-                      <div className="text-[9px] text-zinc-500 leading-tight">Verify on-chain credentials & cap table.</div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-amber-400 group-hover:text-amber-300 transition-colors flex items-center gap-1">Org Chart</div>
+                      <div className="text-[9px] text-zinc-500 leading-tight">Verify credentialed offices & stewards.</div>
                     </div>
-                  </a>
+                  </Link>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -251,7 +282,7 @@ export default function LandingPage() {
                         hoveredSignal?.id === signal.id ? 'border-amber-500/40 bg-zinc-950/40' : 'border-white/5'
                       }`}
                       onMouseEnter={() => setHoveredSignal(signal)}
-                      onClick={() => setHoveredSignal(signal)}
+                      onClick={() => router.push(`/news?id=${signal.id}`)}
                     >
                       {/* Top Badges */}
                       <div>
@@ -283,13 +314,63 @@ export default function LandingPage() {
                         <div className="flex items-center gap-1.5">
                           <span>{signal.timestamp}</span>
                           <span className="text-zinc-700">•</span>
-                          <span className="text-amber-500/80 font-bold">FEE: {(signal.metrics?.feePaid ?? 0.15).toFixed(2)}%</span>
+                          <span className="text-green-500 font-bold">FREE</span>
                         </div>
                       </div>
                     </motion.div>
                   ))
                 )}
               </div>
+
+              {/* Most Recent Hero Broadcast Section */}
+              {!loading && signals.length > 0 && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  onClick={() => router.push(`/news?id=${signals[0].id}`)}
+                  className="mt-6 border border-amber-500/15 bg-gradient-to-br from-amber-500/[0.03] to-orange-600/[0.01] hover:from-amber-500/[0.06] hover:to-orange-600/[0.02] p-5 cursor-pointer relative group transition-all duration-500 border-l-[3px] border-l-amber-500 flex flex-col justify-between rounded-none"
+                >
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/[0.02] blur-xl pointer-events-none group-hover:bg-amber-500/[0.04] transition-all duration-500" />
+                  
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                        </span>
+                        <span className="text-[9px] font-mono font-black tracking-widest text-amber-500 uppercase">
+                          LATEST STATE REVELATION
+                        </span>
+                      </div>
+                      <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest bg-white/5 px-2 py-0.5 border border-white/5">
+                        {signals[0].category} • {signals[0].timestamp}
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg font-black tracking-tight text-white group-hover:text-amber-400 transition-colors uppercase leading-snug mb-3">
+                      {signals[0].payload.title}
+                    </h3>
+                    
+                    <p className="text-xs text-zinc-400 font-light leading-relaxed mb-4 line-clamp-2 pr-12">
+                      {signals[0].payload.content}
+                    </p>
+                  </div>
+
+                  <div className="flex justify-between items-center border-t border-white/5 pt-4">
+                    <div className="flex items-center gap-1.5 text-[9px] font-mono text-zinc-500">
+                      <span>Source:</span>
+                      <span className="text-white font-bold">{signals[0].payload.author || 'Citizen Edge'}</span>
+                    </div>
+                    
+                    <div className="text-[10px] font-mono font-black text-amber-500 group-hover:text-amber-300 transition-colors uppercase tracking-wider flex items-center gap-1">
+                      <span>ACCESS BROADCAST FEED</span>
+                      <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform duration-300" />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
             {/* Vetting Panel Drawer */}
@@ -401,7 +482,7 @@ export default function LandingPage() {
                     <div className="mt-6 flex flex-col gap-2">
                       <div className="flex justify-between text-[9px] font-mono text-zinc-500 uppercase border-t border-white/5 pt-3 mb-1">
                         <span>On-Chain Audit:</span>
-                        <span className="text-amber-500">GAAP COMPLIANT (0.15% max fee)</span>
+                        <span className="text-green-500 font-bold">FREE INGESTION (0.15% COCKPIT FEE EXCLUDED)</span>
                       </div>
                       <Link 
                         href={`/news?id=${hoveredSignal.id}`}
@@ -536,7 +617,7 @@ export default function LandingPage() {
             <Link href="/products/depthos">
               <motion.div variants={itemVariants} className="p-8 bg-card/40 backdrop-blur-xl border border-orange-600/20 flex flex-col justify-between group hover:bg-orange-600/10 hover:border-orange-600/50 transition-all cursor-pointer h-full">
                 <h3 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center justify-between">DepthOS Bridge <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-orange-500 transition-opacity" /></h3>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">Secure local-first data store for managing dynamic credentials and private keys.</p>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">Secure local-first data store for keys, identity passports, and the Sovereign Visual-Symbolic Synthesis (SVSS) sensory engine.</p>
                 <div className="font-mono text-[10px] text-orange-500 bg-black/40 px-2 py-1 rounded inline-block w-fit">npm install @promethean/depthos-bridge</div>
               </motion.div>
             </Link>
@@ -546,6 +627,14 @@ export default function LandingPage() {
                 <h3 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center justify-between">GRAG Gateway <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-amber-500 transition-opacity" /></h3>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">Neuro-symbolic zero-hallucination agent gateway sandwiching LLM generation with pre-conformal filtering and post-gen NLI verification.</p>
                 <div className="font-mono text-[10px] text-amber-500 bg-black/40 px-2 py-1 rounded inline-block w-fit">npm install @promethea/grag-sdk</div>
+              </motion.div>
+            </Link>
+
+            <Link href="/cpp-integration-pack">
+              <motion.div variants={itemVariants} className="p-8 bg-card/40 backdrop-blur-xl border border-pink-500/20 flex flex-col justify-between group hover:bg-pink-500/10 hover:border-pink-500/50 transition-all cursor-pointer h-full">
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center justify-between">CPP Integration Pack <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-pink-400 transition-opacity" /></h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">Directed Semantic Graph (DSG) & Halt-and-Splice server engines for multi-threaded dialogue tree orchestration.</p>
+                <div className="font-mono text-[10px] text-pink-400 bg-black/40 px-2 py-1 rounded inline-block w-fit">npm install @promethea/cpp-client</div>
               </motion.div>
             </Link>
           </motion.div>
@@ -583,9 +672,19 @@ export default function LandingPage() {
                     Read Philosophical Whitepaper (v1.0)
                   </Link>
                 </Button>
-                <Button asChild variant="outline" className="bg-transparent hover:bg-foreground/5 dark:hover:bg-white/5 border-amber-500/30 dark:border-amber-500/30 text-amber-400 hover:text-amber-300 font-bold text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">
+                 <Button asChild variant="outline" className="bg-transparent hover:bg-foreground/5 dark:hover:bg-white/5 border-amber-500/30 dark:border-amber-500/30 text-amber-400 hover:text-amber-300 font-bold text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">
                   <Link href="/hivemind-whitepaper">
                     Read Hive-Mind Whitepaper (v4.0) <ArrowUpRight className="ml-2 w-3.5 h-3.5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="bg-transparent hover:bg-foreground/5 dark:hover:bg-white/5 border-pink-500/30 dark:border-pink-500/30 text-pink-400 hover:text-pink-300 font-bold text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">
+                  <Link href="/cpp-whitepaper">
+                    Read CPP Whitepaper (v1.0) <ArrowUpRight className="ml-2 w-3.5 h-3.5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="bg-transparent hover:bg-foreground/5 dark:hover:bg-white/5 border-pink-500/30 dark:border-pink-500/30 text-pink-400 hover:text-pink-300 font-bold text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">
+                  <Link href="/cpp-integration-pack">
+                    CPP Integration Pack <ArrowUpRight className="ml-2 w-3.5 h-3.5" />
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="bg-transparent hover:bg-foreground/5 dark:hover:bg-white/5 border-amber-500/30 dark:border-amber-500/30 text-amber-400 hover:text-amber-300 font-bold text-[11px] uppercase tracking-widest h-12 px-8 rounded-none transition-all">
@@ -631,6 +730,7 @@ export default function LandingPage() {
                 </h3>
                 <div className="space-y-6">
                   {[
+                    { version: "v5.4.0", title: "Conversational Pivot Protocol & DSG Mind Map Canvas", desc: "Migrated conversational state to a Directed Semantic Graph (DSG) supporting asynchronous stream interruption-pivoting, visual parallel branching switchers, and spatial glassmorphism Mind Map Canvas overlays." },
                     { version: "v5.0.0", title: "HUD Restoration & Programmatic GCP Hardening", desc: "Standardized on-demand transactional signature gating, restricted GCP proxy keys, migrated production runner base to node:20-slim to resolve native SIGSEGV container crashes, and committed local edge daemons with fallback mocks." },
                     { version: "v1.6.0-Alpha", title: "Always-On Progressive Hydration & WASM Gating Hardening", desc: "Enforcing rapid 3-second timeouts, fail-silent high-fidelity mock fallbacks, GCLB HTML payload rejection, and magic-number validation to prevent gateway 503 errors." },
                     { version: "v1.5.0-Alpha", title: "Scholarly Theme Alignment & Premium Citadel Dark Theme Upgrades", desc: "Integrating the LaTeX Light Parchment theme, borderless Citadel Dark theme with dynamic chromatic underglows, and 400 micro-boid multi-flock Canvas simulation." },
@@ -787,14 +887,12 @@ export default function LandingPage() {
               </a>
             </div>
 
-            <a 
-              href="https://theorg.com/org/the-promethean-network-state" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <Link 
+              href="/org-chart" 
               className="inline-flex items-center gap-2 px-4 py-2 border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 hover:text-amber-300 text-[10px] font-mono font-bold uppercase tracking-widest transition-all rounded-none hover:shadow-[0_0_15px_rgba(245,158,11,0.25)]"
             >
-              Verify on The Org <ArrowUpRight className="w-3 h-3" />
-            </a>
+              Sovereign Org Chart <ArrowUpRight className="w-3 h-3" />
+            </Link>
           </div>
         </div>
       </footer>

@@ -16,21 +16,22 @@ const StateItem = ({ item }: { item: StateItem }) => {
     let pulseClass = '';
 
     if (item.reality === 'LIVE') {
-        realityColor = 'text-emerald-400';
+        realityColor = 'text-emerald-400 font-extrabold drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]';
+        pulseClass = 'animate-[pulse_3s_infinite]';
     } else if (item.reality === 'CACHED') {
-        realityColor = 'text-teal-400';
+        realityColor = 'text-emerald-500/90';
     } else if (item.reality === 'SIMULATED') {
-        realityColor = 'text-amber-500';
-        pulseClass = 'animate-reality-sim-pulse';
+        realityColor = 'text-teal-400/90';
+        pulseClass = 'animate-[pulse_4s_infinite]';
     } else if (item.reality === 'AI') {
-        realityColor = 'text-cyan-400';
-        pulseClass = 'animate-reality-ai-pulse';
+        realityColor = 'text-indigo-400';
+        pulseClass = 'animate-[pulse_2.5s_infinite]';
     } else if (item.reality === 'M2M') {
         realityColor = 'text-purple-400';
     } else if (item.reality === 'WARNING') {
         realityColor = 'text-rose-400 animate-pulse';
     } else {
-        realityColor = item.status === 'CRITICAL' ? 'text-rose-400' : item.status === 'WARN' ? 'text-amber-400' : 'text-emerald-400';
+        realityColor = item.status === 'CRITICAL' ? 'text-rose-400' : item.status === 'WARN' ? 'text-emerald-500' : 'text-emerald-400';
     }
 
     return (
@@ -139,9 +140,9 @@ export function SovereignFooterTicker() {
     const doubled = [...items, ...items];
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-[99999] h-7 bg-black/80 backdrop-blur-sm border-t border-white/5 overflow-hidden flex items-center">
-            <div className="flex-shrink-0 px-3 flex items-center h-full border-r border-white/10 bg-black/40 gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        <div className="fixed bottom-0 left-0 right-0 z-[99999] h-7 bg-black/80 backdrop-blur-sm border-t border-white/5 overflow-hidden flex items-center pointer-events-none">
+            <div className="flex-shrink-0 px-3 flex items-center h-full border-r border-white/10 bg-black/40 gap-2 pointer-events-auto">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_4px_rgba(16,185,129,0.7)]" />
                 <span className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-500 font-mono">{time}</span>
             </div>
             <div className="flex-1 overflow-hidden relative">

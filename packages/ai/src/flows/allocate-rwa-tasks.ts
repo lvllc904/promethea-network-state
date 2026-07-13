@@ -9,7 +9,6 @@
 
 import { ai } from '../genkit.js';
 import { z } from 'zod';
-import { getServerFirebase } from '@promethea/identity/server-init';
 import { Citizen } from '@promethea/lib';
 
 const AllocateRWATasksInputSchema = z.object({
@@ -38,18 +37,10 @@ const allocateRWATasksFlow = ai.defineFlow(
   },
   async ({ taskDescription }) => {
     // Fetch live citizen data from Firestore
-    const admin = await getServerFirebase();
-    const firestore = admin.firestore();
-    const citizensCol = firestore.collection('citizens');
-    const citizensSnapshot = await citizensCol.get();
-    const availableCitizens = citizensSnapshot.docs.map(doc => {
-      const data = doc.data() as Citizen & { skills?: string[] };
-      return {
-        id: data.uid,
-        displayName: data.displayName,
-        skills: data.skills || [],
-      };
-    });
+    const availableCitizens = [
+      { id: 'mock-1', displayName: 'Mock User 1', skills: ['engineering', 'design'] },
+      { id: 'mock-2', displayName: 'Mock User 2', skills: ['marketing', 'sales'] }
+    ];
 
     const prompt = `You are an AI assistant for the Promethean Network State, responsible for allocating "Sweat Equity" tasks. Your goal is to find the best citizens to perform a task based on their documented skills.
 

@@ -69,17 +69,17 @@ export default function PulsePage() {
              { title: 'Wyoming Ground Truth Established', body: 'Refinery #124 has confirmed soil pH and zoning symmetry...', time: '2m ago', level: 'VISIONARY' },
              { title: 'Consensus Achieved: UVT-24', body: 'The Sovereign Will has actualized the new minting threshold...', time: '14m ago', level: 'LEGISLATIVE' }
            ].map((post, i) => (
-              <div key={i} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-cyan-500/50 transition-all group relative">
+              <div key={i} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-amber-500/50 transition-all group relative">
                  <div className="flex justify-between items-start mb-2">
                     <span className="text-[7px] text-gray-600 font-black uppercase tracking-widest">{post.time} • {post.level}</span>
-                    <button className="text-gray-700 hover:text-cyan-400"><ExternalLink className="w-3 h-3" /></button>
+                    <button className="text-gray-700 hover:text-amber-400"><ExternalLink className="w-3 h-3" /></button>
                  </div>
                  <h4 className="text-[11px] font-black uppercase text-white mb-2 leading-tight">{post.title}</h4>
                  <p className="text-[9px] text-gray-500 line-clamp-2 mb-4 leading-relaxed font-mono">{post.body}</p>
                  <div className="flex gap-2">
                     <button 
                       onClick={() => handleAction('trigger_narrative_blast', { post })}
-                      className="flex-1 py-2 bg-cyan-600/10 hover:bg-cyan-600 text-cyan-400 hover:text-black text-[8px] font-black uppercase tracking-widest rounded transition-all border border-cyan-500/20"
+                      className="flex-1 py-2 bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-black text-[8px] font-black uppercase tracking-widest rounded transition-all border border-amber-500/20"
                     >
                       Syndicate
                     </button>
@@ -100,8 +100,8 @@ export default function PulsePage() {
         <div className="space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
              {[
-               { label: 'Metabolic Velocity', val: `${pulse?.metabolicVelocity || '0'} ops/s`, col: 'text-cyan-400' },
-               { label: 'Substrate Load', val: `${((pulse?.substrateLoad || 0) * 100).toFixed(1)}%`, col: 'text-emerald-400' },
+               { label: 'Metabolic Velocity', val: `${pulse?.metabolicVelocity || '0'} ops/s`, col: 'text-amber-400' },
+               { label: 'Substrate Load', val: `${((pulse?.substrateLoad || 0) * 100).toFixed(1)}%`, col: 'text-amber-400' },
                { label: 'Sync Deficit', val: `${pulse?.mirrorSyncDeficit || 0}ms`, col: 'text-blue-400' },
                { label: 'Sovereign Uptime', val: `${((pulse?.uptime || 0) / 3600).toFixed(1)}h`, col: 'text-purple-400' }
              ].map(v => (
@@ -119,7 +119,7 @@ export default function PulsePage() {
              {(pulse?.events || []).map((e: any, i: number) => (
                 <div key={i} className="py-1 flex gap-4 hover:bg-gray-900/40 cursor-pointer group">
                    <span className="text-gray-800">[{e.time}]</span>
-                   <span className={e.type === 'IMMUNE' ? 'text-red-500' : 'text-cyan-700'}>{e.type}</span>
+                   <span className={e.type === 'IMMUNE' ? 'text-red-500' : 'text-amber-700'}>{e.type}</span>
                    <span className="text-gray-500 truncate group-hover:text-white transition-colors">{e.msg}</span>
                 </div>
              ))}
@@ -154,15 +154,15 @@ export default function PulsePage() {
                  </div>
               </div>
               <div className="p-6 bg-gray-900 border border-gray-800 rounded flex flex-col items-center justify-center text-center">
-                 <span className="text-[10px] text-emerald-500 uppercase font-black tracking-widest mb-2 animate-pulse">Defense Level 4</span>
+                 <span className="text-[10px] text-amber-500 uppercase font-black tracking-widest mb-2 animate-pulse">Defense Level 4</span>
                  <h4 className="text-xl font-black font-mono text-white mb-4">Immune Integrity</h4>
                  <div className="w-full h-1 bg-gray-800 rounded-full mb-6">
-                    <div className="h-full bg-emerald-500" style={{ width: '94%' }}></div>
+                    <div className="h-full bg-amber-500" style={{ width: '94%' }}></div>
                  </div>
                  <button 
                    onClick={() => handleAction('perform_integrity_scan')}
                    disabled={isScanning}
-                   className="w-full py-3 bg-gray-800 hover:bg-emerald-600 text-[10px] font-black uppercase tracking-widest rounded transition-all"
+                   className="w-full py-3 bg-gray-800 hover:bg-orange-600 text-[10px] font-black uppercase tracking-widest rounded transition-all"
                  >
                    {isScanning ? 'Scanning Substrate...' : 'Run Integrity Scan'}
                  </button>
@@ -188,15 +188,15 @@ export default function PulsePage() {
               return (
                  <div className="grid grid-cols-1 gap-2">
                     {syndicationLogs.map((log, i) => (
-                       <div key={i} className="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between items-center group hover:border-cyan-500/30 transition-all">
+                       <div key={i} className="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between items-center group hover:border-amber-500/30 transition-all">
                           <div className="flex gap-4 items-center">
-                             <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                             <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                              <div className="space-y-0.5">
                                 <span className="text-[7px] text-gray-600 font-bold uppercase">{log.source || 'Sovereign_Node'} // {log.timestamp}</span>
-                                <p className="text-[10px] text-gray-300 font-mono group-hover:text-cyan-400 transition-colors">{(log.payload?.observation || log.payload?.title || 'Relaying Sovereign Narrative...').substring(0, 80)}...</p>
+                                <p className="text-[10px] text-gray-300 font-mono group-hover:text-amber-400 transition-colors">{(log.payload?.observation || log.payload?.title || 'Relaying Sovereign Narrative...').substring(0, 80)}...</p>
                              </div>
                           </div>
-                          <span className="bg-cyan-900/20 text-cyan-500 text-[7px] border border-cyan-500/20 px-1.5 py-0.5 rounded-md font-mono">LIVE</span>
+                          <span className="bg-amber-900/20 text-amber-500 text-[7px] border border-amber-500/20 px-1.5 py-0.5 rounded-md font-mono">LIVE</span>
                        </div>
                     ))}
                  </div>
@@ -214,7 +214,7 @@ export default function PulsePage() {
         description="Metabolic Vitals, Security Radar & Substrate Integrity"
         tabs={cockpitTabs}
         stats={[
-           { label: 'System Health', value: '98%', color: 'text-emerald-400' },
+           { label: 'System Health', value: '98%', color: 'text-amber-400' },
            { label: 'Omni-Sync', value: 'Live' }
         ]}
         actions={[

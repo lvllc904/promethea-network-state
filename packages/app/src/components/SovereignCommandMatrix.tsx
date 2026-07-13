@@ -38,7 +38,7 @@ export const SovereignCommandMatrix: React.FC<SovereignCommandMatrixProps> = ({ 
                     <div className="flex justify-between items-center p-8 border-b border-gray-800 bg-gray-950/50">
                         <div>
                             <h2 className="text-3xl font-black uppercase tracking-tighter text-white flex items-center gap-4">
-                                <Terminal className="w-8 h-8 text-cyan-500" />
+                                <Terminal className="w-8 h-8 text-orange-500" />
                                 Sovereign Method Catalog
                             </h2>
                             <p className="text-gray-500 uppercase tracking-widest text-xs mt-2 font-bold">
@@ -63,15 +63,15 @@ export const SovereignCommandMatrix: React.FC<SovereignCommandMatrixProps> = ({ 
                                     className="p-6 glass-panel rim-highlight-reality-ai rounded-lg flex flex-col justify-between group relative overflow-hidden"
                                 >
                                     {/* Background glow effect on hover */}
-                                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
                                     <div>
                                         <div className="flex justify-between items-start mb-4">
-                                            <span className="text-[10px] font-mono text-cyan-400 uppercase font-black bg-cyan-900/30 px-2 py-1 rounded">
+                                            <span className="text-[10px] font-mono text-orange-400 uppercase font-black bg-orange-950/40 px-2 py-1 rounded">
                                                 ID: {method.methodId}
                                             </span>
                                             {method.status === 'ACTIVE' ? (
-                                                <CheckCircle className="w-4 h-4 text-emerald-500" />
+                                                <CheckCircle className="w-4 h-4 text-amber-500" />
                                             ) : (
                                                 <Clock className="w-4 h-4 text-gray-600" />
                                             )}
@@ -91,7 +91,7 @@ export const SovereignCommandMatrix: React.FC<SovereignCommandMatrixProps> = ({ 
                                         <button
                                             onClick={() => handleExecute(method.methodId)}
                                             disabled={executing === method.methodId}
-                                            className="px-6 py-2 bg-gray-800 hover:bg-cyan-600 text-gray-300 hover:text-black text-[10px] font-black uppercase tracking-widest rounded transition-all disabled:opacity-50 flex items-center gap-2"
+                                            className="px-6 py-2 bg-gray-800 hover:bg-orange-500 text-gray-300 hover:text-black text-[10px] font-black uppercase tracking-widest rounded transition-all disabled:opacity-50 flex items-center gap-2"
                                         >
                                             {executing === method.methodId ? 'Executing...' : 'Trigger'}
                                             <Zap className="w-3 h-3" />

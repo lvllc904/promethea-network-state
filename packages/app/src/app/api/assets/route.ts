@@ -8,7 +8,10 @@ export async function GET() {
     const r = await fetch(`${ENGINE_URL}/api/assets`, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
     if (r.ok) { 
         const d = await r.json(); 
-        if (Array.isArray(d)) return NextResponse.json(d); 
+        if (Array.isArray(d)) {
+            return NextResponse.json(d); 
+        }
+        return NextResponse.json({ error: 'Unexpected response format from engine', data: d }, { status: 500 });
     } else {
         return NextResponse.json({ error: `Engine returned ${r.status}` }, { status: r.status });
     }

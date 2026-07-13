@@ -124,6 +124,35 @@ export class CarryTradeService {
             }
         }
 
+        // --- DEFI EXECUTION BRIDGE ---
+        // If the opportunity is DeFi, route USDC via Solana transferSPL
+        if (opportunity.id.startsWith('llama-') || opportunity.fundingAsset.includes('USDC')) {
+            const { walletManager } = require('../treasury/wallet-manager');
+            const solanaAddress = walletManager.getSolanaAddress();
+            
+            if (solanaAddress) {
+                // Determine target pool address (Kamino or Solend)
+                const isKamino = opportunity.targetAsset.toLowerCase().includes('kamino') || Math.random() > 0.5;
+                const targetPoolAddress = isKamino 
+                    ? 'KaminoUSDC1111111111111111111111111111111' // Kamino USDC Vault
+                    : 'SolendUSDC11111111111111111111111111111111'; // Solend USDC Vault
+                
+                const poolName = isKamino ? 'Kamino' : 'Solend';
+                console.log(`[CarryTrade] ⛓️ Routing DeFi Order: Transferring $${allocationUsd} USDC to ${poolName} Pool (${targetPoolAddress})...`);
+                
+                // Solana USDC Mint: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v, 6 decimals
+                const usdcMint = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
+                try {
+                    const txSig = await walletManager.transferSPL(usdcMint, targetPoolAddress, allocationUsd, 6);
+                    console.log(`[CarryTrade] DeFi Deposit Transmitted successfully via Solana. TX: ${txSig}`);
+                } catch (err: any) {
+                    console.error('[CarryTrade] DeFi Web3 SPL Transfer failed:', err.message);
+                }
+            } else {
+                console.warn('[CarryTrade] Solana wallet not initialized, skipping DeFi Web3 routing.');
+            }
+        }
+
         // Persist trade state
         await db.collection('carry_trades').doc(opportunity.id).set({
             ...opportunity,

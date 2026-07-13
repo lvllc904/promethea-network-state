@@ -1,6 +1,6 @@
 "use client";
 
-import { useSovereignData as useIdentitySovereignData } from '@promethea/identity';
+import { useSovereignData as useIdentitySovereignData } from '@promethea/sovereign-store';
 import { useState, useEffect, useCallback, useRef } from 'react';
 export { executeSovereignMethod, addSovereignData } from './sovereign-api';
 
@@ -27,7 +27,54 @@ export function useSovereignData<T>(endpoint: string, interval: number = 30000) 
     try {
       const r = await fetch(endpoint, { cache: 'no-store' });
       if (!r.ok) throw new Error(`BFF ${r.status}`);
-      const d = await r.json();
+      let d = await r.json();
+
+      if (typeof window !== 'undefined') {
+        if (endpoint === '/api/proposals') {
+          const localProposalsStr = localStorage.getItem('promethea-local-proposals');
+          if (localProposalsStr) {
+            try {
+              const localProposals = JSON.parse(localProposalsStr);
+              if (Array.isArray(localProposals)) {
+                const apiIds = new Set((d as any[]).map(p => p.id));
+                const uniqueLocal = localProposals.filter(p => !apiIds.has(p.id));
+                d = [...uniqueLocal, ...(d as any[])];
+              }
+            } catch (err) {
+              console.error("Failed to parse local proposals:", err);
+            }
+          }
+        } else if (endpoint === '/api/votes') {
+          const localVotesStr = localStorage.getItem('promethea-local-votes');
+          if (localVotesStr) {
+            try {
+              const localVotes = JSON.parse(localVotesStr);
+              if (Array.isArray(localVotes)) {
+                const apiIds = new Set((d as any[]).map(v => v.id));
+                const uniqueLocal = localVotes.filter(v => !apiIds.has(v.id));
+                d = [...uniqueLocal, ...(d as any[])];
+              }
+            } catch (err) {
+              console.error("Failed to parse local votes:", err);
+            }
+          }
+        } else if (endpoint === '/api/citizens') {
+          const localCitizensStr = localStorage.getItem('promethea-local-citizens');
+          if (localCitizensStr) {
+            try {
+              const localCitizens = JSON.parse(localCitizensStr);
+              if (Array.isArray(localCitizens)) {
+                const apiIds = new Set((d as any[]).map(c => c.id));
+                const uniqueLocal = localCitizens.filter(c => !apiIds.has(c.id));
+                d = [...uniqueLocal, ...(d as any[])];
+              }
+            } catch (err) {
+              console.error("Failed to parse local citizens:", err);
+            }
+          }
+        }
+      }
+
       setBffData(d as T);
       setBffError(null);
     } catch (e: any) {
@@ -43,14 +90,21 @@ export function useSovereignData<T>(endpoint: string, interval: number = 30000) 
     if (interval > 0) {
       intervalRef.current = setInterval(fetchBFF, interval);
     }
+
+    const handleStoreUpdate = () => {
+      fetchBFF();
+    };
+    window.addEventListener('promethea-store-updated', handleStoreUpdate);
+
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      window.removeEventListener('promethea-store-updated', handleStoreUpdate);
     };
   }, [fetchBFF, interval, isBFF]);
 
   // ── Engine path: delegate to identity hook (non-BFF only) ─────────────────
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const identity = useIdentitySovereignData('STATE', isBFF ? '__noop__' : endpoint);
+  const identity = useIdentitySovereignData();
 
   if (isBFF) {
     return {
@@ -67,8 +121,8 @@ export function useSovereignData<T>(endpoint: string, interval: number = 30000) 
     data: identity.data as T | null,
     loading: identity.isLoading,
     isLoading: identity.isLoading,
-    error: identity.error as Error | null,
-    refetch: identity.refetch,
-    mutate: identity.refetch,
+    error: null,
+    refetch: () => {},
+    mutate: () => {},
   };
 }

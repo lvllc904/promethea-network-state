@@ -59,7 +59,7 @@ export const MeshProvider = ({
       });
 
       // 3. Initialize the WebRTC Provider (Peer-to-Peer Gossip)
-      webrtcProvider = new WebrtcProvider(roomName, ydoc);
+      webrtcProvider = new WebrtcProvider(roomName, ydoc, { signaling: [] });
 
       webrtcProvider.on('synced', (event: { synced: boolean }) => {
         console.log(`[Sovereign Mesh] WebRTC Synced: ${event.synced}`);

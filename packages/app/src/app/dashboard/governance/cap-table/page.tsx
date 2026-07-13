@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useCollection, useFirestore, collection, query, orderBy } from '@promethea/identity';
+import { useCollection, useFirestore, collection, query, orderBy } from '@promethea/sovereign-store';
 import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '@promethea/ui';
 import { Landmark, Users, Briefcase, Info, ShieldCheck, Zap, TrendingUp, BarChart3, PieChart as PieChartIcon, ExternalLink, Activity, Cpu } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
@@ -9,7 +9,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, L
 function RealityStateBadge({ state }: { state: 'ACTUALIZED' | 'SETTLED' | 'SIMULATED' }) {
     const colors = {
         ACTUALIZED: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-        SETTLED: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+        SETTLED: "bg-amber-500/20 text-amber-400 border-amber-500/30",
         SIMULATED: "bg-purple-500/20 text-purple-400 border-purple-500/30",
     };
     const icons = {

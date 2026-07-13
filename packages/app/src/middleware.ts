@@ -9,9 +9,10 @@ const BOT_REGEX = /bot|spider|crawl|slurp|gemini|chatgpt|facebookexternalhit|lin
 export async function middleware(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || '';
     
-    // Enforce HTTPS in production
-    if (process.env.NODE_ENV === 'production' && request.headers.get('x-forwarded-proto') === 'http') {
-        return NextResponse.redirect(`https://${request.headers.get('host')}${request.nextUrl.pathname}`, 301);
+    // Enforce HTTPS in production, except for localhost
+    const host = request.headers.get('host') || '';
+    if (process.env.NODE_ENV === 'production' && request.headers.get('x-forwarded-proto') === 'http' && !host.includes('localhost')) {
+        return NextResponse.redirect(`https://${host}${request.nextUrl.pathname}`, 301);
     }
     
     // Wave 11: The Sovereign Shadow Protocol Bifurcation

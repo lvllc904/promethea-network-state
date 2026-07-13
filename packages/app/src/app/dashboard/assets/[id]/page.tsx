@@ -25,14 +25,14 @@ import { Badge } from '@promethea/ui';
 import { Button } from '@promethea/ui';
 import { DollarSign, MapPin, Wrench, PieChart, Briefcase, Star, Users, Loader2, Key } from 'lucide-react';
 import { TaskAllocationTool } from '@promethea/components';
-import { useDoc, useCollection, useSovereignMemo, useUser, useFirestore, doc, collection, query, where } from '@promethea/identity';
+import { useDoc, useCollection, useSovereignMemo, useUser, useFirestore, doc, collection, query, where } from '@promethea/sovereign-store';
 import { RealWorldAsset, Task, UniversalValueToken } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
 import { handleAllocate } from './actions';
 import { applyForTask, purchaseFractionalShare } from '@/lib/client-actions';
 
 import { Pie, Cell, ResponsiveContainer, PieChart as RechartsPieChart } from 'recharts';
-import { type DocumentReference, type Query } from '@promethea/identity';
+import { type DocumentReference, type Query } from '@promethea/sovereign-store';
 import { Avatar, AvatarFallback } from '@promethea/ui';
 import { useToast } from '@promethea/hooks';
 import { useState, useMemo } from 'react';

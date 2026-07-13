@@ -42,7 +42,16 @@ steps:
         npm install --legacy-peer-deps
         
         echo "Cleaning stale build outputs..."
-        rm -rf packages/*/dist packages/*/tsconfig.tsbuildinfo packages/services/*/dist packages/services/*/tsconfig.tsbuildinfo packages/app/.next
+        if [ "${_CACHE_BUSTER}" != "none" ]; then
+          echo "💥 Cache buster active (${_CACHE_BUSTER}). Busting Next.js build-cache..."
+          rm -rf packages/app/.next
+        else
+          echo "♻️ Next.js cache buster not active. Preserving compiler cache..."
+          if [ -d "packages/app/.next" ]; then
+            find packages/app/.next -mindepth 1 -maxdepth 1 ! -name 'cache' -exec rm -rf {} + 2>/dev/null || true
+          fi
+        fi
+        rm -rf packages/*/dist packages/*/tsconfig.tsbuildinfo packages/services/*/dist packages/services/*/tsconfig.tsbuildinfo
         
         echo "Compiling TS workspaces in structural dependency order..."
         npx tsc --build packages/lib/tsconfig.json
@@ -99,6 +108,7 @@ steps:
       - --cache-ttl=168h
       - --cache-repo=gcr.io/studio-9105849211-9ba48/promethea-frontend/cache
       - --dockerfile=packages/app/Dockerfile
+      - --build-arg=CACHE_BUSTER=${_CACHE_BUSTER}
 
   # 5. Deploy the freshly pushed container image to Google Cloud Run (Vanguard Canary)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'

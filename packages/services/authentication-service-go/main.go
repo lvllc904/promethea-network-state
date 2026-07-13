@@ -75,6 +75,7 @@ func main() {
 	r.POST("/auth/challenge", handleChallenge)
 	r.POST("/auth/verify", handleVerify)
 	r.POST("/auth/register", handleRegister)
+	r.POST("/auth/add-syndicate", handleAddSyndicate)
 
 	port := getEnvOrDefault("PORT", "8080")
 	log.Printf("[Auth Service] Running on port %s", port)
@@ -103,6 +104,12 @@ func initDB(ctx context.Context) error {
 			email VARCHAR(255),
 			reputation REAL DEFAULT 0,
 			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		);
+		CREATE TABLE IF NOT EXISTS citizen_syndicates (
+			uid VARCHAR(255),
+			syndicate_id VARCHAR(255),
+			role VARCHAR(255),
+			PRIMARY KEY (uid, syndicate_id)
 		);
 	`)
 	if err != nil {
@@ -204,15 +211,32 @@ func handleVerify(c *gin.Context) {
 
 	redisClient.Del(c.Request.Context(), "challenge:"+req.DID)
 
+	syndicates := map[string]string{
+		"global":         "citizen",
+		"syndicate_zero": "admin",
+	}
+
+	if dbPool != nil {
+		rows, err := dbPool.Query(c.Request.Context(), "SELECT syndicate_id, role FROM citizen_syndicates WHERE uid = $1", req.UID)
+		if err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				var syndicateID, role string
+				if err := rows.Scan(&syndicateID, &role); err == nil {
+					syndicates[syndicateID] = role
+				}
+			}
+		} else {
+			log.Printf("Warning: Failed to fetch citizen syndicates: %v", err)
+		}
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"uid":     req.UID,
-		"did":     req.DID,
-		"address": address,
-		"exp":     time.Now().Add(24 * time.Hour).Unix(),
-		"syndicates": map[string]string{
-			"global": "citizen",
-			"syndicate_zero": "admin", // Hardcoded for Syndicate Zero test
-		},
+		"uid":        req.UID,
+		"did":        req.DID,
+		"address":    address,
+		"exp":        time.Now().Add(24 * time.Hour).Unix(),
+		"syndicates": syndicates,
 	})
 
 	tokenString, err := token.SignedString(jwtSecret)
@@ -273,4 +297,69 @@ func handleRegister(c *gin.Context) {
 		"uid":     uid,
 		"did":     req.DID,
 	})
+}
+
+type AddSyndicateRequest struct {
+	UID         string `json:"uid" binding:"required"`
+	SyndicateID string `json:"syndicate_id" binding:"required"`
+	Role        string `json:"role" binding:"required"`
+	DID         string `json:"did"`
+}
+
+func handleAddSyndicate(c *gin.Context) {
+	var req AddSyndicateRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "uid, syndicate_id, and role are required"})
+		return
+	}
+
+	if dbPool != nil {
+		_, err := dbPool.Exec(c.Request.Context(),
+			"INSERT INTO citizen_syndicates (uid, syndicate_id, role) VALUES ($1, $2, $3) ON CONFLICT (uid, syndicate_id) DO UPDATE SET role = $3",
+			req.UID, req.SyndicateID, req.Role)
+		if err != nil {
+			log.Printf("Failed to insert or replace citizen syndicate: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add syndicate"})
+			return
+		}
+	} else {
+		log.Println("PostgreSQL not connected. Add syndicate logic skipped.")
+	}
+
+	var refreshedToken string
+	if req.DID != "" {
+		address := strings.TrimPrefix(req.DID, "did:prmth:")
+		syndicates := map[string]string{
+			"global":         "citizen",
+			"syndicate_zero": "admin",
+		}
+		if dbPool != nil {
+			rows, err := dbPool.Query(c.Request.Context(), "SELECT syndicate_id, role FROM citizen_syndicates WHERE uid = $1", req.UID)
+			if err == nil {
+				defer rows.Close()
+				for rows.Next() {
+					var syndicateID, role string
+					if err := rows.Scan(&syndicateID, &role); err == nil {
+						syndicates[syndicateID] = role
+					}
+				}
+			}
+		}
+
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"uid":        req.UID,
+			"did":        req.DID,
+			"address":    address,
+			"exp":        time.Now().Add(24 * time.Hour).Unix(),
+			"syndicates": syndicates,
+		})
+		var err error
+		refreshedToken, err = token.SignedString(jwtSecret)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate refreshed token"})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "token": refreshedToken})
 }

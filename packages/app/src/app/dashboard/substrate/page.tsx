@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Badge, Progress, Button, Skeleton } from '@promethea/ui';
 import { Server, Cpu, Database, Activity, Zap, Shield, TrendingDown, RefreshCw, Layers, ExternalLink, Globe } from 'lucide-react';
 import { RealityBadge, LedgerValue } from '@promethea/components';
-import { useFirestore, useDoc, useCollection, doc, collection } from '@promethea/identity';
+import { useFirestore, useDoc, useCollection, doc, collection } from '@promethea/sovereign-store';
 
 export default function SubstrateMetricsPage() {
     const firestore = useFirestore();

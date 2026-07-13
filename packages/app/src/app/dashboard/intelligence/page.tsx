@@ -92,7 +92,7 @@ export default function IntelligenceTerminalPage() {
                   ${chartData[chartData.length - 1].total.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h2>
               </div>
-              <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 uppercase text-[8px] font-black">
+              <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 uppercase text-[8px] font-black">
                 +24.5% (30D)
               </Badge>
             </div>
@@ -166,7 +166,7 @@ export default function IntelligenceTerminalPage() {
       icon: <BrainCircuit className="w-3 h-3" />,
       content: (
         <div className="flex flex-col items-center justify-center p-12 bg-gray-900 rounded border border-gray-800 text-center">
-           <Network className="w-16 h-16 text-cyan-500/50 mb-6 animate-pulse" />
+           <Network className="w-16 h-16 text-amber-500/50 mb-6 animate-pulse" />
            <h3 className="text-xl font-black text-white uppercase mb-2">Vector Data Integration Pending</h3>
            <p className="text-xs text-gray-500 max-w-md">
              The Semantic Vector Database is currently indexing historical lake snapshots. 
@@ -185,7 +185,7 @@ export default function IntelligenceTerminalPage() {
         tabs={tabs}
         stats={[
            { label: 'Lake Snapshots', value: lakeData ? lakeData.length.toString() : 'Syncing...' },
-           { label: 'Live Substrates', value: '3', color: 'text-cyan-400' }
+           { label: 'Live Substrates', value: '3', color: 'text-amber-400' }
         ]}
         actions={[
            { label: 'Export Dataset (CSV)', action: 'export_lake_data' },

@@ -22,8 +22,8 @@ import { DiplomaticTray } from './DiplomaticTray';
 import { PulseTray } from './PulseTray';
 import { PrometheaPanel } from './PrometheaPanel';
 import { SettingsTray } from './SettingsTray';
-import dynamic from 'next/dynamic';
-const PhosphorTerminal = dynamic(() => import('../terminal/PhosphorTerminal').then(mod => mod.PhosphorTerminal), { ssr: false });
+import { MinerNodePanel, MarketplacePanel } from './PrometheanEcosystemPanels';
+
 
 // --- SUB-PANEL: RWA EXCHANGE ---
 export function ExchangePanel() {
@@ -86,7 +86,7 @@ export function ExchangePanel() {
                     <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-1">RWA Asset Pair</p>
                     <div className="flex justify-between items-center">
                         <h3 className="text-lg font-black text-white">UVT / USDC</h3>
-                        <span className="text-xl font-mono font-bold text-emerald-400">${price.toFixed(2)}</span>
+                        <span className="text-xl font-mono font-bold text-amber-400">${price.toFixed(2)}</span>
                     </div>
                 </div>
 
@@ -94,7 +94,7 @@ export function ExchangePanel() {
                     <div className="flex rounded bg-black/40 p-0.5 border border-white/5">
                         <button 
                             onClick={() => setOrderType('buy')} 
-                            className={`flex-1 py-1.5 text-[9px] font-black uppercase tracking-widest rounded ${orderType === 'buy' ? 'bg-emerald-500/20 text-emerald-400' : 'text-zinc-500 hover:text-white'}`}
+                            className={`flex-1 py-1.5 text-[9px] font-black uppercase tracking-widest rounded ${orderType === 'buy' ? 'bg-amber-500/20 text-amber-400' : 'text-zinc-500 hover:text-white'}`}
                         >
                             Buy Fraction
                         </button>
@@ -116,7 +116,7 @@ export function ExchangePanel() {
                                 type="number" 
                                 value={amount} 
                                 onChange={(e) => setAmount(e.target.value)} 
-                                className="w-full bg-black/60 border border-white/10 rounded px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50" 
+                                className="w-full bg-black/60 border border-white/10 rounded px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-amber-500/50" 
                                 placeholder="0.00"
                             />
                         </div>
@@ -130,7 +130,7 @@ export function ExchangePanel() {
                             type="submit" 
                             className={`w-full py-2.5 rounded text-[10px] font-black uppercase tracking-widest transition-all ${
                                 orderType === 'buy' 
-                                    ? 'bg-emerald-600 hover:bg-emerald-500 text-black' 
+                                    ? 'bg-orange-600 hover:bg-amber-500 text-black' 
                                     : 'bg-red-600 hover:bg-red-500 text-white'
                             }`}
                         >
@@ -155,13 +155,13 @@ export function ExchangePanel() {
                             <div key={o.id} className="grid grid-cols-3 text-[10px] font-mono py-1 border-b border-white/5 hover:bg-white/5 rounded px-1 transition-colors">
                                 <span className="text-zinc-500">{o.time}</span>
                                 <span className="text-center text-zinc-300">{o.amount}</span>
-                                <span className={`text-right font-bold ${o.type === 'buy' ? 'text-emerald-400' : 'text-red-400'}`}>${o.price.toFixed(2)}</span>
+                                <span className={`text-right font-bold ${o.type === 'buy' ? 'text-amber-400' : 'text-red-400'}`}>${o.price.toFixed(2)}</span>
                             </div>
                         ))}
                     </div>
 
-                    <div className="mt-4 p-3 bg-cyan-950/20 border border-cyan-500/20 rounded-lg">
-                        <p className="text-[8px] text-cyan-400 font-black uppercase tracking-widest mb-1">Metabolic Assurance</p>
+                    <div className="mt-4 p-3 bg-amber-950/20 border border-amber-500/20 rounded-lg">
+                        <p className="text-[8px] text-amber-400 font-black uppercase tracking-widest mb-1">Metabolic Assurance</p>
                         <p className="text-[9px] text-zinc-500 leading-relaxed">
                             This asset class is tokenized via ASGI smart contracts, ensuring real-world collateral synchronization under sovereign consensus.
                         </p>
@@ -216,18 +216,18 @@ export function SqlExplorerPanel() {
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
                 <div className="p-4 bg-black/40 border border-white/5 rounded-xl flex-1 flex flex-col">
                     <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        <Terminal className="w-3 h-3 text-cyan-400" /> Substrate Query Console
+                        <Terminal className="w-3 h-3 text-amber-400" /> Substrate Query Console
                     </p>
                     <textarea 
                         value={queryStr} 
                         onChange={(e) => setQueryStr(e.target.value)} 
-                        className="w-full flex-1 bg-black/60 border border-white/10 rounded p-3 text-xs font-mono text-cyan-100 focus:outline-none focus:border-cyan-500/50 resize-none mb-3" 
+                        className="w-full flex-1 bg-black/60 border border-white/10 rounded p-3 text-xs font-mono text-amber-100 focus:outline-none focus:border-amber-500/50 resize-none mb-3" 
                         placeholder="SELECT * FROM table;"
                     />
                     <button 
                         onClick={handleExecute}
                         disabled={isExecuting}
-                        className="py-2 bg-cyan-600 hover:bg-cyan-500 text-black text-[9px] font-black uppercase tracking-widest rounded flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                        className="py-2 bg-amber-600 hover:bg-amber-500 text-black text-[9px] font-black uppercase tracking-widest rounded flex items-center justify-center gap-2 transition-all disabled:opacity-50"
                     >
                         <Play className={`w-3 h-3 ${isExecuting ? 'animate-pulse' : ''}`} />
                         {isExecuting ? 'Querying Engine...' : 'Run Statement (Ctrl+Enter)'}
@@ -265,7 +265,7 @@ export function SqlExplorerPanel() {
             {/* Schema checklist */}
             <div className="p-4 bg-black/40 border border-white/5 rounded-xl space-y-3 h-full overflow-y-auto custom-scrollbar">
                 <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                    <Database className="w-3 h-3 text-cyan-400" /> Database Schema
+                    <Database className="w-3 h-3 text-amber-400" /> Database Schema
                 </p>
                 {MOCK_SCHEMAS.map(s => (
                     <div key={s.table} className="p-2.5 bg-black rounded border border-white/5 hover:border-white/10 transition-colors">
@@ -345,16 +345,16 @@ export function CliGuidePanel() {
                 <div className="space-y-3">
                     <div className="p-3 bg-black rounded border border-white/5">
                         <p className="text-[8px] text-zinc-500 uppercase font-bold mb-1">Step 1: Tap the Repository</p>
-                        <code className="text-[9px] font-mono text-cyan-400 break-all">brew tap tpns/homebrew-tpns</code>
+                        <code className="text-[9px] font-mono text-amber-400 break-all">brew tap tpns/homebrew-tpns</code>
                     </div>
 
                     <div className="p-3 bg-black rounded border border-white/5">
                         <p className="text-[8px] text-zinc-500 uppercase font-bold mb-1">Step 2: Install the Cartographer Binary</p>
-                        <code className="text-[9px] font-mono text-cyan-400 break-all">brew install cartographer</code>
+                        <code className="text-[9px] font-mono text-amber-400 break-all">brew install cartographer</code>
                     </div>
 
-                    <div className="p-3 bg-cyan-950/20 border border-cyan-500/20 rounded-lg">
-                        <p className="text-[8px] text-cyan-400 font-black uppercase tracking-widest mb-1">Secure Sandboxing</p>
+                    <div className="p-3 bg-amber-950/20 border border-amber-500/20 rounded-lg">
+                        <p className="text-[8px] text-amber-400 font-black uppercase tracking-widest mb-1">Secure Sandboxing</p>
                         <p className="text-[9px] text-zinc-500 leading-relaxed">
                             The Cartographer CLI is open source and signed with cryptographic certs, ensuring direct private local replication of the Omni-Lake substrate.
                         </p>
@@ -367,19 +367,19 @@ export function CliGuidePanel() {
                 <div className="p-4 bg-black/80 border border-white/5 rounded-xl flex-1 flex flex-col overflow-hidden font-mono">
                     <div className="flex justify-between items-center pb-2 border-b border-white/5 mb-3">
                         <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                            <Terminal className="w-3.5 h-3.5 text-cyan-400" /> Web Terminal Emulator
+                            <Terminal className="w-3.5 h-3.5 text-amber-400" /> Web Terminal Emulator
                         </span>
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)] animate-pulse" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245, 158, 11,0.5)] animate-pulse" />
                     </div>
 
-                    <div className="flex-1 overflow-y-auto custom-scrollbar text-[10px] text-cyan-100/90 space-y-2 pr-1 select-text">
+                    <div className="flex-1 overflow-y-auto custom-scrollbar text-[10px] text-amber-100/90 space-y-2 pr-1 select-text">
                         {logs.map((log, idx) => (
                             <div key={idx} className="whitespace-pre-wrap leading-relaxed">{log}</div>
                         ))}
                     </div>
 
                     <form onSubmit={handleTerminalSubmit} className="mt-3 flex items-center border-t border-white/5 pt-2">
-                        <span className="text-cyan-400 text-xs mr-2 font-bold font-mono">$</span>
+                        <span className="text-amber-400 text-xs mr-2 font-bold font-mono">$</span>
                         <input 
                             type="text" 
                             value={input} 
@@ -526,7 +526,7 @@ export function FinancialsPanel() {
                             onClick={() => setActiveTab(tab.id as any)}
                             className={`w-full text-left py-2 px-3 text-[9px] font-black uppercase tracking-widest rounded transition-all ${
                                 activeTab === tab.id 
-                                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20' 
+                                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/20' 
                                     : 'text-zinc-500 hover:text-white bg-transparent border border-transparent'
                             }`}
                         >
@@ -541,7 +541,7 @@ export function FinancialsPanel() {
                 {activeTab === 'balance' && (
                     <div className="space-y-3">
                         <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                            <FileText className="w-3.5 h-3.5 text-emerald-400" /> Audited Balance Sheet (Consolidated)
+                            <FileText className="w-3.5 h-3.5 text-amber-400" /> Audited Balance Sheet (Consolidated)
                         </p>
                         <div className="space-y-2 text-[10px] font-mono">
                             {[
@@ -569,7 +569,7 @@ export function FinancialsPanel() {
                 {activeTab === 'income' && (
                     <div className="space-y-3">
                         <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                            <FileText className="w-3.5 h-3.5 text-emerald-400" /> Consolidated Statement of Net Toll Income
+                            <FileText className="w-3.5 h-3.5 text-amber-400" /> Consolidated Statement of Net Toll Income
                         </p>
                         <div className="space-y-2 text-[10px] font-mono">
                             {[
@@ -593,7 +593,7 @@ export function FinancialsPanel() {
                 {activeTab === 'staking' && (
                     <div className="space-y-4">
                         <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                            <TrendingUp className="w-3.5 h-3.5 text-emerald-400" /> Staking Pool Allocator
+                            <TrendingUp className="w-3.5 h-3.5 text-amber-400" /> Staking Pool Allocator
                         </p>
                         
                         <div className="p-3 bg-black/40 border border-white/5 rounded-lg space-y-3">
@@ -606,7 +606,7 @@ export function FinancialsPanel() {
                                     type="number" 
                                     value={stakeAmt} 
                                     onChange={(e) => setStakeAmt(e.target.value)} 
-                                    className="w-full bg-black/60 border border-white/10 rounded px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-emerald-500/50" 
+                                    className="w-full bg-black/60 border border-white/10 rounded px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-amber-500/50" 
                                 />
                             </div>
 
@@ -627,7 +627,7 @@ export function FinancialsPanel() {
                                     }
                                 }}
                                 disabled={isStaking}
-                                className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-black text-[9px] font-black uppercase tracking-widest rounded transition-all disabled:opacity-50"
+                                className="w-full py-2.5 bg-orange-600 hover:bg-amber-500 text-black text-[9px] font-black uppercase tracking-widest rounded transition-all disabled:opacity-50"
                             >
                                 {isStaking ? 'Staking Assets...' : 'Deposit to Yield Pool →'}
                             </button>
@@ -768,7 +768,7 @@ export function AsgiTelemetryPanel() {
                         onClick={() => setCanvasTab(tab.id as any)}
                         className={`py-2 px-1 text-[8px] font-black uppercase tracking-widest text-center border rounded transition-all ${
                             canvasTab === tab.id
-                                ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30'
+                                ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
                                 : 'bg-black/40 text-zinc-500 border-transparent hover:text-white'
                         }`}
                     >
@@ -786,9 +786,9 @@ export function AsgiTelemetryPanel() {
                         {/* Models Compare */}
                         <div className="grid grid-cols-3 gap-2">
                             {[
-                                { name: "Gemini 2.5 Pro", rate: "124 t/s", load: "Active MCTS", color: "border-cyan-500/30 text-cyan-400" },
+                                { name: "Gemini 2.5 Pro", rate: "124 t/s", load: "Active MCTS", color: "border-amber-500/30 text-amber-400" },
                                 { name: "Claude 3.5 Sonnet", rate: "84 t/s", load: "Audit Loop", color: "border-purple-500/20 text-purple-400" },
-                                { name: "Local Mistral 7B", rate: "42 t/s", load: "Offline Sandbox", color: "border-emerald-500/20 text-emerald-400" }
+                                { name: "Local Mistral 7B", rate: "42 t/s", load: "Offline Sandbox", color: "border-amber-500/20 text-amber-400" }
                             ].map(m => (
                                 <div key={m.name} className={`p-2 bg-black border rounded-lg ${m.color}`}>
                                     <p className="text-[7px] text-zinc-500 font-bold uppercase tracking-wider">Model</p>
@@ -803,12 +803,12 @@ export function AsgiTelemetryPanel() {
 
                         {/* MCTS LISP Decision tree visualizer */}
                         <div className="p-3 bg-black/40 border border-white/5 rounded-xl space-y-2 font-mono">
-                            <p className="text-[9px] text-cyan-400 font-black uppercase tracking-widest">Clojure LISP MCTS Path Tree (Decoupled Ensemble)</p>
+                            <p className="text-[9px] text-amber-400 font-black uppercase tracking-widest">Clojure LISP MCTS Path Tree (Decoupled Ensemble)</p>
                             <div className="p-3 bg-black rounded border border-white/5 text-[9px] leading-relaxed text-zinc-400 space-y-1">
-                                <p className="text-cyan-400 font-bold">Root (Agnostic Consensus Node)</p>
+                                <p className="text-amber-400 font-bold">Root (Agnostic Consensus Node)</p>
                                 <p>├── [val: 94.2] :verify-signature (sign: valid)</p>
                                 <p>├── [val: 88.0] :compile-sandbox-targets (compiling: true)</p>
-                                <p className="text-emerald-400">│     └── [val: 100.0] :underwrite-rwa-claim [SUCCESS]</p>
+                                <p className="text-amber-400">│     └── [val: 100.0] :underwrite-rwa-claim [SUCCESS]</p>
                                 <p>└── [val: 12.4] :idle-metabolic-homeostasis</p>
                             </div>
                         </div>
@@ -835,13 +835,13 @@ export function AsgiTelemetryPanel() {
                                     <div 
                                         key={item.id}
                                         onClick={() => setChecklist(prev => prev.map(c => c.id === item.id ? { ...c, done: !c.done } : c))}
-                                        className="flex items-center gap-2.5 p-2 bg-black rounded border border-white/5 hover:border-cyan-500/20 cursor-pointer select-none"
+                                        className="flex items-center gap-2.5 p-2 bg-black rounded border border-white/5 hover:border-amber-500/20 cursor-pointer select-none"
                                     >
                                         <input 
                                             type="checkbox" 
                                             checked={item.done} 
                                             readOnly 
-                                            className="rounded border-white/10 bg-black text-cyan-500 focus:ring-0 w-3 h-3"
+                                            className="rounded border-white/10 bg-black text-amber-500 focus:ring-0 w-3 h-3"
                                         />
                                         <span className={`text-[10px] ${item.done ? 'line-through text-zinc-600' : 'text-zinc-300'}`}>{item.text}</span>
                                     </div>
@@ -851,7 +851,7 @@ export function AsgiTelemetryPanel() {
 
                         {/* Integrated Real-Time Dispatch Log */}
                         <div className="p-4 bg-black/40 border border-white/5 rounded-xl space-y-2">
-                            <p className="text-[9px] text-cyan-400 font-black uppercase tracking-widest">Sovereign Omni-State Event Stream</p>
+                            <p className="text-[9px] text-amber-400 font-black uppercase tracking-widest">Sovereign Omni-State Event Stream</p>
                             <div className="space-y-1 font-mono text-[8px] text-zinc-400 max-h-28 overflow-y-auto">
                                 {omniLogs.map((log, idx) => (
                                     <div key={idx} className="border-b border-white/5 py-0.5">{log}</div>
@@ -867,14 +867,14 @@ export function AsgiTelemetryPanel() {
                         <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Generated Files & Staged Manifestos</p>
                         <div className="grid grid-cols-2 gap-2.5">
                             {documents.map(doc => (
-                                <div key={doc.name} className="p-3 bg-black border border-white/5 rounded-xl flex flex-col justify-between hover:border-cyan-500/20 transition-all">
+                                <div key={doc.name} className="p-3 bg-black border border-white/5 rounded-xl flex flex-col justify-between hover:border-amber-500/20 transition-all">
                                     <div>
                                         <p className="text-[10px] font-bold text-white font-mono break-all">{doc.name}</p>
                                         <p className="text-[8px] text-zinc-500 uppercase mt-0.5">{doc.type}</p>
                                     </div>
                                     <div className="flex justify-between items-center mt-3 pt-2 border-t border-white/5 text-[8px] font-mono text-zinc-400">
                                         <span>{doc.size}</span>
-                                        <button className="text-cyan-400 hover:underline">Read →</button>
+                                        <button className="text-amber-400 hover:underline">Read →</button>
                                     </div>
                                 </div>
                             ))}
@@ -892,7 +892,7 @@ export function AsgiTelemetryPanel() {
                                     key={sub}
                                     onClick={() => setMediaSubTab(sub)}
                                     className={`flex-1 py-1 text-[8px] font-black uppercase tracking-widest rounded ${
-                                        mediaSubTab === sub ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-white'
+                                        mediaSubTab === sub ? 'bg-amber-500/20 text-amber-400' : 'text-zinc-500 hover:text-white'
                                     }`}
                                 >
                                     {sub}
@@ -903,15 +903,15 @@ export function AsgiTelemetryPanel() {
                         {/* Sub tab 1: VIDEO */}
                         {mediaSubTab === 'video' && (
                             <div className="p-4 bg-black/80 border border-white/5 rounded-xl aspect-video flex flex-col justify-between relative overflow-hidden">
-                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(6,182,212,0.1)_0%,_transparent_70%)] animate-pulse" />
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(245, 158, 11,0.1)_0%,_transparent_70%)] animate-pulse" />
                                 <div className="flex justify-between items-center z-10">
-                                    <span className="text-[8px] font-mono font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-1">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" /> Live Telemetry Orbit Feed
+                                    <span className="text-[8px] font-mono font-bold text-amber-400 uppercase tracking-widest flex items-center gap-1">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> Live Telemetry Orbit Feed
                                     </span>
                                     <span className="text-[8px] font-mono text-zinc-500">PEERS: 12 SYNCED</span>
                                 </div>
                                 <div className="flex-1 flex items-center justify-center z-10">
-                                    <svg className="w-full h-24 text-cyan-500/40" viewBox="0 0 200 100">
+                                    <svg className="w-full h-24 text-amber-500/40" viewBox="0 0 200 100">
                                         <circle cx="100" cy="50" r="30" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
                                         <circle cx="100" cy="50" r="15" fill="none" stroke="currentColor" strokeWidth="1.5" />
                                         <path d="M 20,50 L 180,50" stroke="currentColor" strokeWidth="0.5" strokeDasharray="5 5" />
@@ -928,7 +928,7 @@ export function AsgiTelemetryPanel() {
                             <div className="p-4 bg-black/80 border border-white/5 rounded-xl space-y-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-[8px] font-mono font-bold text-purple-400 uppercase tracking-widest">vocal synthesis telemetry</span>
-                                    <span className="text-[8px] font-mono text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded">ACTIVE STREAM</span>
+                                    <span className="text-[8px] font-mono text-amber-400 bg-amber-500/10 px-1 py-0.5 rounded">ACTIVE STREAM</span>
                                 </div>
                                 <div className="h-16 flex items-end gap-1 px-4 border-b border-white/5 pb-2">
                                     {audioWave.map((h, i) => (
@@ -959,7 +959,7 @@ export function AsgiTelemetryPanel() {
                                                 setBrowserLogs(prev => [...prev, `[INFO] Requesting secure proxy to URL: ${browserUrl}`]);
                                             }
                                         }}
-                                        className="flex-1 bg-black border border-white/10 rounded px-2 py-0.5 text-[9px] font-mono text-cyan-100 focus:outline-none"
+                                        className="flex-1 bg-black border border-white/10 rounded px-2 py-0.5 text-[9px] font-mono text-amber-100 focus:outline-none"
                                     />
                                     <button onClick={() => setBrowserLogs(l => [...l, `[INFO] Reloading frame`])} className="text-[10px] px-1.5">🔄</button>
                                 </div>
@@ -969,7 +969,7 @@ export function AsgiTelemetryPanel() {
                                     <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_#fff_1px,_transparent_1px)] bg-[size:10px_10px]" />
                                     <span className="text-[18px] mb-1">🌐</span>
                                     <p className="text-[10px] font-mono text-zinc-300 font-bold">{browserUrl}</p>
-                                    <p className="text-[8px] text-emerald-400 font-mono mt-1 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Proxy sandbox active (CORS bypassed)</p>
+                                    <p className="text-[8px] text-amber-400 font-mono mt-1 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" /> Proxy sandbox active (CORS bypassed)</p>
                                 </div>
 
                                 {/* Browser execution logs */}
@@ -993,7 +993,7 @@ export function AsgiTelemetryPanel() {
                                     key={sub}
                                     onClick={() => setDepthosSubTab(sub)}
                                     className={`flex-1 py-1 text-[8px] font-black uppercase tracking-widest rounded ${
-                                        depthosSubTab === sub ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-white'
+                                        depthosSubTab === sub ? 'bg-amber-500/20 text-amber-400' : 'text-zinc-500 hover:text-white'
                                     }`}
                                 >
                                     {sub}
@@ -1005,13 +1005,13 @@ export function AsgiTelemetryPanel() {
                         {depthosSubTab === 'chat' && (
                             <div className="p-4 bg-black/60 border border-white/5 rounded-xl space-y-4">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-[9px] text-cyan-400 font-black uppercase tracking-widest">DepthOS Agnostic core</span>
-                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
+                                    <span className="text-[9px] text-amber-400 font-black uppercase tracking-widest">DepthOS Agnostic core</span>
+                                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shadow-[0_0_6px_rgba(245, 158, 11,0.5)]" />
                                 </div>
                                 <div className="p-3 bg-zinc-950/60 border border-white/5 rounded-lg font-mono text-[9px] text-zinc-300 space-y-1">
                                     <p className="text-zinc-500">// Agnostic Core Online. Listening to the Cluster.</p>
-                                    <p className="text-emerald-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> transport: SSE / HTTP</p>
-                                    <p className="text-cyan-400 font-bold mt-2">Target Cluster: did:sovereign:genesis-node:0x9105</p>
+                                    <p className="text-amber-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> transport: SSE / HTTP</p>
+                                    <p className="text-amber-400 font-bold mt-2">Target Cluster: did:sovereign:genesis-node:0x9105</p>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                     <button 
@@ -1032,8 +1032,8 @@ export function AsgiTelemetryPanel() {
 
                         {/* DepthOS TERMINAL subtab */}
                         {depthosSubTab === 'terminal' && (
-                            <div className="h-48 overflow-hidden rounded-xl">
-                                <PhosphorTerminal isEmbedded={true} />
+                            <div className="h-48 overflow-hidden rounded-xl bg-black/60 border border-white/5 flex items-center justify-center">
+                                <span className="text-zinc-600 font-mono text-xs uppercase">Terminal Offline</span>
                             </div>
                         )}
 
@@ -1046,7 +1046,7 @@ export function AsgiTelemetryPanel() {
                                         type="password" 
                                         value={groqKey} 
                                         onChange={e => setGroqKey(e.target.value)}
-                                        className="w-full bg-zinc-950 border border-white/10 rounded px-2.5 py-1 text-[9px] font-mono text-cyan-100 focus:outline-none focus:border-cyan-500/50"
+                                        className="w-full bg-zinc-950 border border-white/10 rounded px-2.5 py-1 text-[9px] font-mono text-amber-100 focus:outline-none focus:border-amber-500/50"
                                     />
                                 </div>
                                 <div>
@@ -1055,7 +1055,7 @@ export function AsgiTelemetryPanel() {
                                         type="password" 
                                         value={googleKey} 
                                         onChange={e => setGoogleKey(e.target.value)}
-                                        className="w-full bg-zinc-950 border border-white/10 rounded px-2.5 py-1 text-[9px] font-mono text-cyan-100 focus:outline-none focus:border-cyan-500/50"
+                                        className="w-full bg-zinc-950 border border-white/10 rounded px-2.5 py-1 text-[9px] font-mono text-amber-100 focus:outline-none focus:border-amber-500/50"
                                     />
                                 </div>
                                 <div>
@@ -1064,7 +1064,7 @@ export function AsgiTelemetryPanel() {
                                         type="text" 
                                         value={ollamaUrl} 
                                         onChange={e => setOllamaUrl(e.target.value)}
-                                        className="w-full bg-zinc-950 border border-white/10 rounded px-2.5 py-1 text-[9px] font-mono text-cyan-100 focus:outline-none focus:border-cyan-500/50"
+                                        className="w-full bg-zinc-950 border border-white/10 rounded px-2.5 py-1 text-[9px] font-mono text-amber-100 focus:outline-none focus:border-amber-500/50"
                                     />
                                 </div>
                             </div>
@@ -1085,7 +1085,7 @@ export function AsgiTelemetryPanel() {
                             <div className="p-2.5 bg-black rounded border border-white/5 font-mono text-[8px] text-zinc-400 space-y-1 select-text">
                                 <p className="text-zinc-500">diff --git a/sovereign-treasury.rs b/sovereign-treasury.rs</p>
                                 <p className="text-red-400">- let symbiotic_dividend_ratio = 0.30;</p>
-                                <p className="text-emerald-400">+ let symbiotic_dividend_ratio = 0.35;</p>
+                                <p className="text-amber-400">+ let symbiotic_dividend_ratio = 0.35;</p>
                                 <p className="text-zinc-600">  let regulatory_audit_ticks = 100;</p>
                             </div>
                         </div>
@@ -1094,26 +1094,26 @@ export function AsgiTelemetryPanel() {
                         <div className="grid grid-cols-2 gap-2">
                             <div className="p-2.5 bg-black/60 border border-white/5 rounded-lg space-y-1">
                                 <span className="text-[7px] text-zinc-500 font-mono uppercase tracking-widest block">Signature ID</span>
-                                <span className="text-[9px] font-mono text-cyan-400 truncate block">{didSignature}</span>
+                                <span className="text-[9px] font-mono text-amber-400 truncate block">{didSignature}</span>
                             </div>
                             <div className="p-2.5 bg-black/60 border border-white/5 rounded-lg space-y-1">
                                 <span className="text-[7px] text-zinc-500 font-mono uppercase tracking-widest block">Staging Sandbox</span>
-                                <span className="text-[9px] font-mono text-emerald-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> PASSING</span>
+                                <span className="text-[9px] font-mono text-amber-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> PASSING</span>
                             </div>
                         </div>
 
                         {/* One Click GitHub PR Button */}
-                        <div className="p-4 bg-cyan-950/20 border border-cyan-500/20 rounded-xl space-y-3">
+                        <div className="p-4 bg-amber-950/20 border border-amber-500/20 rounded-xl space-y-3">
                             <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Sovereign staging deployment pipeline</p>
                             <button
                                 onClick={handleCreateGithubPR}
                                 disabled={isSubmittingPr}
-                                className="w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 disabled:bg-zinc-800 text-black text-[9px] font-black uppercase tracking-widest rounded transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] disabled:opacity-50"
+                                className="w-full py-2.5 bg-amber-600 hover:bg-amber-500 disabled:bg-zinc-800 text-black text-[9px] font-black uppercase tracking-widest rounded transition-all shadow-[0_0_15px_rgba(245, 158, 11,0.2)] hover:shadow-[0_0_15px_rgba(245, 158, 11,0.4)] disabled:opacity-50"
                             >
                                 {isSubmittingPr ? "Drafting Pull Request..." : "🚀 PROPOSE REVISION (ONE-CLICK PR) →"}
                             </button>
                             {prStatus && (
-                                <p className="text-[8px] font-mono text-cyan-400 animate-pulse text-center">{prStatus}</p>
+                                <p className="text-[8px] font-mono text-amber-400 animate-pulse text-center">{prStatus}</p>
                             )}
                         </div>
                     </div>
@@ -1124,7 +1124,7 @@ export function AsgiTelemetryPanel() {
             {/* Bottom Event Status indicator */}
             <div className="p-2 bg-black/40 border border-white/5 rounded-lg flex justify-between items-center text-[8px] font-mono text-zinc-500">
                 <span>DID Handshake Status: did:sovereign:0x9f...</span>
-                <span className="text-emerald-400 font-bold flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-emerald-400" /> SYNCED</span>
+                <span className="text-amber-400 font-bold flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-amber-400" /> SYNCED</span>
             </div>
         </div>
     );
@@ -1152,7 +1152,7 @@ export const WalletPanel = () => {
                 <div className="p-3 bg-black/60 border border-white/5 rounded-xl space-y-2">
                     <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center justify-between">
                         <span>Solana Anchor</span>
-                        <span className={solanaConnected ? "text-emerald-400" : "text-zinc-600"}>{solanaConnected ? "CONNECTED" : "OFFLINE"}</span>
+                        <span className={solanaConnected ? "text-amber-400" : "text-zinc-600"}>{solanaConnected ? "CONNECTED" : "OFFLINE"}</span>
                     </p>
                     <p className="text-xl font-black text-white">45.2 SOL</p>
                     <p className="text-[8px] text-zinc-500 break-all">Fe9cYeJEHswbyeTfrHGLgJocYnTA1gpND6H2LNXXHHwb</p>
@@ -1160,13 +1160,13 @@ export const WalletPanel = () => {
                 <div className="p-3 bg-black/60 border border-white/5 rounded-xl space-y-2">
                     <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center justify-between">
                         <span>Base L2</span>
-                        <span className={baseConnected ? "text-emerald-400" : "text-zinc-600"}>{baseConnected ? "CONNECTED" : "OFFLINE"}</span>
+                        <span className={baseConnected ? "text-amber-400" : "text-zinc-600"}>{baseConnected ? "CONNECTED" : "OFFLINE"}</span>
                     </p>
                     <p className="text-xl font-black text-white">0.00 ETH</p>
                     {baseConnected ? (
                         <p className="text-[8px] text-zinc-500 break-all">0x71C...9B34</p>
                     ) : (
-                        <button onClick={() => setBaseConnected(true)} className="text-[8px] px-2 py-1 bg-cyan-500/10 text-cyan-400 rounded hover:bg-cyan-500/20">Connect EVM Wallet</button>
+                        <button onClick={() => setBaseConnected(true)} className="text-[8px] px-2 py-1 bg-amber-500/10 text-amber-400 rounded hover:bg-amber-500/20">Connect EVM Wallet</button>
                     )}
                 </div>
             </div>
@@ -1176,11 +1176,11 @@ export const WalletPanel = () => {
                 <div className="space-y-2">
                     <div className="flex justify-between items-center p-2 bg-black/60 rounded border border-white/5">
                         <span className="text-[10px] font-mono text-zinc-300">Total Asset Value (Local)</span>
-                        <span className="text-sm font-black text-emerald-400">$1,452,000</span>
+                        <span className="text-sm font-black text-amber-400">$1,452,000</span>
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 mt-2">
-                    <button onClick={handleHydrate} className="py-2 bg-cyan-900/40 hover:bg-cyan-900/60 border border-cyan-500/30 text-cyan-400 text-[8px] font-bold uppercase rounded">
+                    <button onClick={handleHydrate} className="py-2 bg-amber-900/40 hover:bg-amber-900/60 border border-amber-500/30 text-amber-400 text-[8px] font-bold uppercase rounded">
                         ↓ HYDRATE (PULL)
                     </button>
                     <button onClick={handleDehydrate} className="py-2 bg-amber-900/40 hover:bg-amber-900/60 border border-amber-500/30 text-amber-400 text-[8px] font-bold uppercase rounded">
@@ -1192,7 +1192,7 @@ export const WalletPanel = () => {
             <div className="flex-1 p-3 bg-black border border-white/5 rounded-xl overflow-hidden flex flex-col">
                 <p className="text-[8px] text-zinc-500 font-bold uppercase tracking-widest mb-2 border-b border-white/5 pb-1">Hydration Logs</p>
                 <div className="flex-1 overflow-y-auto space-y-1 text-[8px] text-zinc-400">
-                    {logs.map((l, i) => <div key={i} className={l.includes('SUCCESS') ? 'text-emerald-400' : ''}>{l}</div>)}
+                    {logs.map((l, i) => <div key={i} className={l.includes('SUCCESS') ? 'text-amber-400' : ''}>{l}</div>)}
                 </div>
             </div>
         </div>
@@ -1256,7 +1256,7 @@ export const OmniScannerPanel = () => {
     return (
         <div className="h-full flex flex-col space-y-3 font-mono">
             <div className="flex bg-zinc-950 border border-white/10 rounded-lg p-1.5 items-center">
-                <span className="text-cyan-500 font-bold px-2">❯</span>
+                <span className="text-amber-500 font-bold px-2">❯</span>
                 <input 
                     type="text" 
                     value={query}
@@ -1268,21 +1268,21 @@ export const OmniScannerPanel = () => {
                 <button 
                     onClick={() => handleScan(query)}
                     disabled={isScanning}
-                    className="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-black text-[9px] font-black uppercase rounded disabled:opacity-50"
+                    className="px-3 py-1 bg-amber-600 hover:bg-amber-500 text-black text-[9px] font-black uppercase rounded disabled:opacity-50"
                 >
                     Audit
                 </button>
             </div>
             
             <div className="flex-1 bg-black border border-white/5 rounded-xl p-4 overflow-hidden flex flex-col relative">
-                <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-cyan-500/5 to-transparent pointer-events-none" />
+                <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-amber-500/5 to-transparent pointer-events-none" />
                 <p className="text-[8px] text-zinc-500 font-bold uppercase tracking-widest mb-3 flex items-center justify-between">
                     <span>Promethea // Due Diligence Terminal</span>
-                    {isScanning && <span className="text-cyan-400 animate-pulse">ANALYZING...</span>}
+                    {isScanning && <span className="text-amber-400 animate-pulse">ANALYZING...</span>}
                 </p>
-                <div className="flex-1 overflow-y-auto space-y-1.5 text-[10px] text-cyan-100/70">
+                <div className="flex-1 overflow-y-auto space-y-1.5 text-[10px] text-amber-100/70">
                     {logs.map((l, i) => (
-                        <div key={i} className={`whitespace-pre-wrap ${l.includes('[SUCCESS]') ? 'text-emerald-400 font-bold' : l.includes('[PROMETHEA]') ? 'text-cyan-400' : l.includes('>') ? 'text-white font-bold' : ''}`}>
+                        <div key={i} className={`whitespace-pre-wrap ${l.includes('[SUCCESS]') ? 'text-amber-400 font-bold' : l.includes('[PROMETHEA]') ? 'text-amber-400' : l.includes('>') ? 'text-white font-bold' : ''}`}>
                             {l}
                         </div>
                     ))}
@@ -1324,7 +1324,7 @@ export const AssetCanvasPanel = () => {
         });
 
         const series = chart.addSeries(CandlestickSeries, {
-            upColor: '#10b981', // emerald-500
+            upColor: '#10b981', // amber-500
             downColor: '#ef4444', // red-500
             borderVisible: false,
             wickUpColor: '#10b981',
@@ -1374,14 +1374,14 @@ export const AssetCanvasPanel = () => {
             {/* Chart Area */}
             <div className="bg-black border border-white/10 rounded-lg p-2 relative overflow-hidden flex flex-col justify-center items-center min-h-[300px]">
                 <div className="absolute top-2 left-2 z-10 flex items-center gap-2">
-                    <span className="text-sm font-black text-white px-2 py-0.5 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded">{activeAssetTarget || 'UNKNOWN'}</span>
+                    <span className="text-sm font-black text-white px-2 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded">{activeAssetTarget || 'UNKNOWN'}</span>
                     <span className="text-[9px] font-bold text-zinc-500 uppercase">Live Feed</span>
                 </div>
                 
                 {isLoading && (
                     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
-                        <Loader2 className="w-6 h-6 animate-spin text-cyan-400 mb-2" />
-                        <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest animate-pulse">Syncing Liquidity Pools...</span>
+                        <Loader2 className="w-6 h-6 animate-spin text-amber-400 mb-2" />
+                        <span className="text-[9px] font-mono text-amber-400 uppercase tracking-widest animate-pulse">Syncing Liquidity Pools...</span>
                     </div>
                 )}
                 
@@ -1399,24 +1399,24 @@ export const AssetCanvasPanel = () => {
             <div className="flex-1 bg-zinc-950 border border-white/5 rounded-lg p-3 overflow-hidden flex flex-col">
                 <h3 className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Promethea Intelligence Stream</h3>
                 <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
-                    <div className="p-2 bg-white/5 border-l-2 border-emerald-500 rounded text-[10px] text-zinc-300">
-                        <span className="text-emerald-400 font-bold mr-1">[08:42]</span>
+                    <div className="p-2 bg-white/5 border-l-2 border-amber-500 rounded text-[10px] text-zinc-300">
+                        <span className="text-amber-400 font-bold mr-1">[08:42]</span>
                         Unusual options activity detected on {activeAssetTarget}. 15,000 contracts bought out-of-the-money.
                     </div>
-                    <div className="p-2 bg-white/5 border-l-2 border-cyan-500 rounded text-[10px] text-zinc-300">
-                        <span className="text-cyan-400 font-bold mr-1">[08:15]</span>
+                    <div className="p-2 bg-white/5 border-l-2 border-amber-500 rounded text-[10px] text-zinc-300">
+                        <span className="text-amber-400 font-bold mr-1">[08:15]</span>
                         Global liquidity index shows +2.4% influx into tech sector.
                     </div>
                 </div>
             </div>
 
             {/* Execution Engine */}
-            <div className="bg-zinc-900 border border-emerald-500/20 rounded-lg p-3">
-                <h3 className="text-[9px] font-bold uppercase tracking-widest text-emerald-400 mb-2 flex items-center gap-1">
+            <div className="bg-zinc-900 border border-amber-500/20 rounded-lg p-3">
+                <h3 className="text-[9px] font-bold uppercase tracking-widest text-amber-400 mb-2 flex items-center gap-1">
                     <Zap className="w-3 h-3" /> Sovereign Execution Engine
                 </h3>
                 <div className="flex gap-2">
-                    <button className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-[10px] uppercase tracking-widest rounded transition-colors shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+                    <button className="flex-1 py-2 bg-amber-500 hover:bg-amber-400 text-black font-black text-[10px] uppercase tracking-widest rounded transition-colors shadow-[0_0_10px_rgba(245, 158, 11,0.3)]">
                         BUY {activeAssetTarget}
                     </button>
                     <button className="flex-1 py-2 bg-red-500 hover:bg-red-400 text-white font-black text-[10px] uppercase tracking-widest rounded transition-colors shadow-[0_0_10px_rgba(239,68,68,0.3)]">
@@ -1466,10 +1466,10 @@ export function ConferencePanel() {
             <div className="flex justify-between items-center p-3 bg-black/45 border border-white/5 rounded-xl">
                 <div className="flex items-center gap-2">
                     <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                     </span>
-                    <span className="text-[10px] font-mono font-black uppercase tracking-wider text-cyan-400">
+                    <span className="text-[10px] font-mono font-black uppercase tracking-wider text-amber-400">
                         WebRTC Connected
                     </span>
                     <span className="text-[8px] font-mono text-zinc-500">· secp256k1-E2EE</span>
@@ -1482,13 +1482,13 @@ export function ConferencePanel() {
                         <div className="flex rounded bg-black/40 p-0.5 border border-white/5 text-[8px] font-mono">
                             <button 
                                 onClick={() => setViewMode('meet')}
-                                className={`px-2 py-0.5 rounded ${viewMode === 'meet' ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-white'}`}
+                                className={`px-2 py-0.5 rounded ${viewMode === 'meet' ? 'bg-amber-500/20 text-amber-400' : 'text-zinc-500 hover:text-white'}`}
                             >
                                 Google Meet
                             </button>
                             <button 
                                 onClick={() => setViewMode('simulator')}
-                                className={`px-2 py-0.5 rounded ${viewMode === 'simulator' ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-white'}`}
+                                className={`px-2 py-0.5 rounded ${viewMode === 'simulator' ? 'bg-amber-500/20 text-amber-400' : 'text-zinc-500 hover:text-white'}`}
                             >
                                 Simulator
                             </button>
@@ -1504,11 +1504,11 @@ export function ConferencePanel() {
                         <iframe
                             src={activeMeetUrl}
                             allow="camera; microphone; fullscreen; display-capture; autoplay"
-                            className="w-full flex-1 border border-cyan-500/10 rounded-lg bg-black/60 shadow-inner"
+                            className="w-full flex-1 border border-amber-500/10 rounded-lg bg-black/60 shadow-inner"
                         />
                         <div className="p-2 flex justify-between items-center text-[8px] font-mono text-zinc-500 bg-black/20 rounded-b-lg border-t border-white/5 mt-1">
-                            <span className="truncate max-w-[280px]">Meeting URL: <a href={activeMeetUrl} target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">{activeMeetUrl}</a></span>
-                            <span className="shrink-0 text-emerald-400">● LIVE HUD PIPELINE</span>
+                            <span className="truncate max-w-[280px]">Meeting URL: <a href={activeMeetUrl} target="_blank" rel="noreferrer" className="text-amber-400 hover:underline">{activeMeetUrl}</a></span>
+                            <span className="shrink-0 text-amber-400">● LIVE HUD PIPELINE</span>
                         </div>
                     </div>
                 ) : (
@@ -1518,13 +1518,13 @@ export function ConferencePanel() {
                         <div className="grid grid-cols-2 gap-3 flex-1">
                             {/* Participant 1: User */}
                             <div className="relative bg-zinc-950 border border-white/5 rounded-lg overflow-hidden flex flex-col justify-between p-2">
-                                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none" />
+                                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none" />
                                 {/* Cyber scanline effect if video on */}
                                 {!isVideoOff && (
                                     <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,3px_100%] opacity-20 pointer-events-none" />
                                 )}
                                 <div className="flex justify-between items-start z-10">
-                                    <span className="text-[8px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-1 py-0.2 rounded uppercase font-bold tracking-wider">
+                                    <span className="text-[8px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-1 py-0.2 rounded uppercase font-bold tracking-wider">
                                         YOU (Citizen)
                                     </span>
                                     <span className="text-[7px] font-mono text-zinc-600">secp256k1</span>
@@ -1533,9 +1533,9 @@ export function ConferencePanel() {
                                     {!isVideoOff ? (
                                         /* Orbital particle mesh animation */
                                         <div className="relative w-12 h-12 flex items-center justify-center">
-                                            <div className="absolute inset-0 rounded-full border border-dashed border-cyan-500/40 animate-[spin_10s_linear_infinite]" />
-                                            <div className="absolute inset-2 rounded-full border border-double border-cyan-500/20 animate-[spin_6s_linear_infinite_reverse]" />
-                                            <div className="w-6 h-6 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+                                            <div className="absolute inset-0 rounded-full border border-dashed border-amber-500/40 animate-[spin_10s_linear_infinite]" />
+                                            <div className="absolute inset-2 rounded-full border border-double border-amber-500/20 animate-[spin_6s_linear_infinite_reverse]" />
+                                            <div className="w-6 h-6 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(245, 158, 11,0.15)]">
                                                 <span className="text-[10px]">📡</span>
                                             </div>
                                         </div>
@@ -1555,9 +1555,9 @@ export function ConferencePanel() {
 
                             {/* Participant 2: Citizen Joshua */}
                             <div className="relative bg-zinc-950 border border-white/5 rounded-lg overflow-hidden flex flex-col justify-between p-2">
-                                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none" />
+                                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none" />
                                 <div className="flex justify-between items-start z-10">
-                                    <span className="text-[8px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1 py-0.2 rounded uppercase font-bold tracking-wider">
+                                    <span className="text-[8px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-1 py-0.2 rounded uppercase font-bold tracking-wider">
                                         Citizen Joshua
                                     </span>
                                     <span className="text-[7px] font-mono text-zinc-600">secp256k1</span>
@@ -1565,8 +1565,8 @@ export function ConferencePanel() {
                                 <div className="flex-1 flex items-center justify-center py-4 z-10">
                                     {/* Joshua voice mesh */}
                                     <div className="relative w-12 h-12 flex items-center justify-center">
-                                        <div className="absolute inset-0 rounded-full border border-dashed border-emerald-500/30 animate-[spin_8s_linear_infinite]" />
-                                        <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shadow-[0_0_10px_rgba(16,185,129,0.1)]">
+                                        <div className="absolute inset-0 rounded-full border border-dashed border-amber-500/30 animate-[spin_8s_linear_infinite]" />
+                                        <div className="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shadow-[0_0_10px_rgba(245, 158, 11,0.1)]">
                                             <span className="text-xs">💎</span>
                                         </div>
                                     </div>
@@ -1632,7 +1632,7 @@ export function ConferencePanel() {
                                 <span 
                                     key={idx}
                                     style={{ height: `${freq}%` }}
-                                    className="w-1 bg-gradient-to-t from-cyan-600 via-cyan-400 to-indigo-500 rounded-full transition-all duration-75"
+                                    className="w-1 bg-gradient-to-t from-amber-600 via-amber-400 to-indigo-500 rounded-full transition-all duration-75"
                                 />
                             ))}
                         </div>
@@ -1648,11 +1648,11 @@ export function ConferencePanel() {
                 </div>
                 <div className="p-2 bg-black/40 border border-white/5 rounded-lg flex flex-col gap-0.5">
                     <span className="text-zinc-500 uppercase font-black tracking-widest text-[7px]">Ping</span>
-                    <span className="text-cyan-400 font-bold text-[10px]">12 ms</span>
+                    <span className="text-amber-400 font-bold text-[10px]">12 ms</span>
                 </div>
                 <div className="p-2 bg-black/40 border border-white/5 rounded-lg flex flex-col gap-0.5">
                     <span className="text-zinc-500 uppercase font-black tracking-widest text-[7px]">Packet Loss</span>
-                    <span className="text-emerald-400 font-bold text-[10px]">0.01 %</span>
+                    <span className="text-amber-400 font-bold text-[10px]">0.01 %</span>
                 </div>
                 <div className="p-2 bg-black/40 border border-white/5 rounded-lg flex flex-col gap-0.5">
                     <span className="text-zinc-500 uppercase font-black tracking-widest text-[7px]">E2EE Key</span>
@@ -1689,7 +1689,7 @@ export function ConferencePanel() {
                         onClick={() => setIsScreenSharing(prev => !prev)}
                         className={`p-2.5 rounded-lg border transition-all flex items-center justify-center ${
                             isScreenSharing 
-                                ? 'bg-cyan-500/20 border-cyan-500/30 text-cyan-400' 
+                                ? 'bg-amber-500/20 border-amber-500/30 text-amber-400' 
                                 : 'bg-black/50 border-white/10 text-zinc-300 hover:border-white/20 hover:text-white'
                         }`}
                         title="Share Screen"
@@ -1709,19 +1709,103 @@ export function ConferencePanel() {
     );
 }
 
+// --- SUB-PANEL: SOCIAL HUB (CONSOLIDATED CHAT + NARRATIVES) ---
+export function SocialHubPanel({ initialTab }: { initialTab: 'CHAT' | 'NARRATIVE' }) {
+    const [activeTab, setActiveTab] = useState<'CHAT' | 'NARRATIVE'>(initialTab);
+
+    useEffect(() => {
+        setActiveTab(initialTab);
+    }, [initialTab]);
+
+    return (
+        <div className="flex flex-col h-full overflow-hidden space-y-4">
+            {/* Elegant glassmorphic tab selector */}
+            <div className="flex rounded p-1 bg-black/40 border border-white/5 shrink-0 select-none">
+                <button
+                    onClick={() => setActiveTab('CHAT')}
+                    className={`flex-1 py-2 text-[9px] font-black uppercase tracking-widest rounded transition-all flex items-center justify-center gap-1.5 ${
+                        activeTab === 'CHAT' 
+                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' 
+                            : 'text-zinc-500 hover:text-white border border-transparent'
+                    }`}
+                >
+                    💬 PROMETHEA CHAT
+                </button>
+                <button
+                    onClick={() => setActiveTab('NARRATIVE')}
+                    className={`flex-1 py-2 text-[9px] font-black uppercase tracking-widest rounded transition-all flex items-center justify-center gap-1.5 ${
+                        activeTab === 'NARRATIVE' 
+                            ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' 
+                            : 'text-zinc-500 hover:text-white border border-transparent'
+                    }`}
+                >
+                    📡 NARRATIVE FEED
+                </button>
+            </div>
+            
+            <div className="flex-1 overflow-hidden">
+                {activeTab === 'CHAT' ? <PrometheaPanel /> : <NarrativeTray />}
+            </div>
+        </div>
+    );
+}
+
+// --- SUB-PANEL: SYSTEM CONFIG (CONSOLIDATED PULSE + SETTINGS) ---
+export function SystemConfigPanel({ initialTab }: { initialTab: 'PULSE' | 'SETTINGS' }) {
+    const [activeTab, setActiveTab] = useState<'PULSE' | 'SETTINGS'>(initialTab);
+
+    useEffect(() => {
+        setActiveTab(initialTab);
+    }, [initialTab]);
+
+    return (
+        <div className="flex flex-col h-full overflow-hidden space-y-4">
+            {/* Elegant glassmorphic tab selector */}
+            <div className="flex rounded p-1 bg-black/40 border border-white/5 shrink-0 select-none">
+                <button
+                    onClick={() => setActiveTab('PULSE')}
+                    className={`flex-1 py-2 text-[9px] font-black uppercase tracking-widest rounded transition-all flex items-center justify-center gap-1.5 ${
+                        activeTab === 'PULSE' 
+                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' 
+                            : 'text-zinc-500 hover:text-white border border-transparent'
+                    }`}
+                >
+                    💓 VITALITY MONITOR
+                </button>
+                <button
+                    onClick={() => setActiveTab('SETTINGS')}
+                    className={`flex-1 py-2 text-[9px] font-black uppercase tracking-widest rounded transition-all flex items-center justify-center gap-1.5 ${
+                        activeTab === 'SETTINGS' 
+                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' 
+                            : 'text-zinc-500 hover:text-white border border-transparent'
+                    }`}
+                >
+                    ⚙️ HUD PREFERENCES
+                </button>
+            </div>
+            
+            <div className="flex-1 overflow-hidden">
+                {activeTab === 'PULSE' ? <PulseTray /> : <SettingsTray />}
+            </div>
+        </div>
+    );
+}
+
 // --- CONTAINER TRAY COMPONENT ---
 export const RightFocusTray = () => {
-    const { activeFocusPanel, activateFocusPanel } = useHUD();
+    const { activeFocusPanel, activePillar, activateFocusPanel, activeHazards } = useHUD();
 
-    if (!activeFocusPanel) return null;
+    const currentPanel = activeFocusPanel || activePillar;
+
+    if (!currentPanel) return null;
     
     // Do not render the tray shell for full-screen themes
-    if (['16BIT', 'CHESS', 'PHOSPHOR'].includes(activeFocusPanel)) {
+    if (['16BIT', 'CHESS', 'PHOSPHOR'].includes(currentPanel)) {
         return null;
     }
 
     let title = 'FOCUS PANEL';
-    switch (activeFocusPanel) {
+    switch (currentPanel) {
         case 'EXCHANGE': title = 'ASGI // RWA EXCHANGE'; break;
         case 'SQL_EXPLORER': title = 'SUBSTRATE // SQL STATE EXPLORER'; break;
         case 'CLI_GUIDE': title = 'DEVELOPERS // CLI HOOK'; break;
@@ -1736,36 +1820,72 @@ export const RightFocusTray = () => {
         case 'ATLAS': title = 'ATLAS // NETWORK TOPOLOGY'; break;
         case 'ECONOMICS': title = 'ECONOMICS // TREASURY & ASSETS'; break;
         case 'GOVERNANCE': title = 'GOVERNANCE // SYNTHETIC STATE'; break;
-        case 'NARRATIVE': title = 'NARRATIVE // PUBLIC CHANNELS'; break;
+        case 'SOCIAL_HUB':
+        case 'NARRATIVE':
+        case 'ASGI':
+        case 'CHAT':
+            title = 'SOCIAL HUB // SECURE COMMUNICATOR';
+            break;
         case 'DIPLOMATIC': title = 'DIPLOMATIC // PASSPORT & VISAS'; break;
-        case 'PULSE': title = 'PULSE // SUBSTRATE VITALITY'; break;
-        case 'ASGI': title = 'ASGI // PROMETHEA CORE'; break;
-        case 'SETTINGS': title = 'SETTINGS // HUD PREFERENCES'; break;
+        case 'SYSTEM_CONFIG':
+        case 'PULSE':
+        case 'SETTINGS':
+            title = 'SYSTEM CONFIG // HUD COGNITION';
+            break;
     }
 
     return (
         <div className="flex-1 flex flex-col overflow-hidden">
+            {activeHazards && activeHazards.length > 0 && (
+                <div className="mx-4 mt-4 p-3 bg-red-950/40 border border-red-500/30 rounded-lg flex items-center justify-between gap-3 backdrop-blur-md animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.15)]">
+                    <div className="flex items-center gap-2.5">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                        </span>
+                        <div className="flex flex-col">
+                            <span className="text-[10px] font-black tracking-wider text-red-400 uppercase font-mono">
+                                OSIRIS CRITICAL HAZARD ALERT
+                            </span>
+                            <span className="text-[9px] text-zinc-400 font-mono">
+                                {activeHazards.length} threat {activeHazards.length === 1 ? 'vector' : 'vectors'} detected near Citadels
+                            </span>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => activateFocusPanel('ATLAS')}
+                        className="px-2.5 py-1 bg-red-500/20 hover:bg-red-500/35 border border-red-500/40 rounded text-[9px] font-bold text-red-200 tracking-wider transition-all font-mono hover:scale-105 active:scale-95"
+                    >
+                        VIEW DECK
+                    </button>
+                </div>
+            )}
             {/* Redundant header removed per unified tray design */}
             <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 custom-scrollbar">
-                {activeFocusPanel === 'EXCHANGE' && <ExchangePanel />}
-                {activeFocusPanel === 'SQL_EXPLORER' && <SqlExplorerPanel />}
-                {activeFocusPanel === 'CLI_GUIDE' && <CliGuidePanel />}
-                {activeFocusPanel === 'SWEAT_CLAIM' && <SweatClaimPanel />}
-                {activeFocusPanel === 'FINANCIALS' && <FinancialsPanel />}
-                {activeFocusPanel === 'PROMETHEA_ASGI' && <AsgiTelemetryPanel />}
-                {activeFocusPanel === 'WALLET' && <WalletPanel />}
-                {activeFocusPanel === 'OMNI_SCANNER' && <OmniScannerPanel />}
-                {activeFocusPanel === 'ASSET_CANVAS' && <AssetCanvasPanel />}
-                {activeFocusPanel === 'CONFERENCE' && <ConferencePanel />}
-                {activeFocusPanel === 'ATLAS' && <AtlasTray />}
-                {activeFocusPanel === 'ECONOMICS' && <EconomicsTray />}
-                {activeFocusPanel === 'GOVERNANCE' && <GovernanceTray />}
-                {activeFocusPanel === 'NARRATIVE' && <NarrativeTray />}
-                {activeFocusPanel === 'DIPLOMATIC' && <DiplomaticTray />}
-                {activeFocusPanel === 'PULSE' && <PulseTray />}
-                {activeFocusPanel === 'ASGI' && <PrometheaPanel />}
-                {activeFocusPanel === 'SETTINGS' && <SettingsTray />}
-                {activeFocusPanel === 'BIOLOGICAL_POW' && (
+                {currentPanel === 'EXCHANGE' && <ExchangePanel />}
+                {currentPanel === 'SQL_EXPLORER' && <SqlExplorerPanel />}
+                {currentPanel === 'CLI_GUIDE' && <CliGuidePanel />}
+                {currentPanel === 'SWEAT_CLAIM' && <SweatClaimPanel />}
+                {currentPanel === 'FINANCIALS' && <FinancialsPanel />}
+                {currentPanel === 'PROMETHEA_ASGI' && <AsgiTelemetryPanel />}
+                {currentPanel === 'WALLET' && <WalletPanel />}
+                {currentPanel === 'OMNI_SCANNER' && <OmniScannerPanel />}
+                {currentPanel === 'ASSET_CANVAS' && <AssetCanvasPanel />}
+                {currentPanel === 'CONFERENCE' && <ConferencePanel />}
+                {currentPanel === 'MINER_NODE' && <MinerNodePanel />}
+                {currentPanel === 'MARKETPLACE' && <MarketplacePanel />}
+                {currentPanel === 'ATLAS' && <AtlasTray />}
+                {currentPanel === 'ECONOMICS' && <EconomicsTray />}
+                {currentPanel === 'GOVERNANCE' && <GovernanceTray />}
+                {(currentPanel === 'SOCIAL_HUB' || currentPanel === 'NARRATIVE' || currentPanel === 'ASGI' || currentPanel === 'CHAT') && (
+                    <SocialHubPanel initialTab={(currentPanel === 'NARRATIVE') ? 'NARRATIVE' : 'CHAT'} />
+                )}
+                {currentPanel === 'DIPLOMATIC' && <DiplomaticTray />}
+                {(currentPanel === 'SYSTEM_CONFIG' || currentPanel === 'PULSE' || currentPanel === 'SETTINGS') && (
+                    <SystemConfigPanel initialTab={(currentPanel === 'SETTINGS') ? 'SETTINGS' : 'PULSE'} />
+                )}
+                {currentPanel === 'BIOLOGICAL_POW' && (
+
                     <div className="flex items-center justify-center h-full">
                         <ProofOfWorkSubmission 
                             taskId="oracle-eval-task"

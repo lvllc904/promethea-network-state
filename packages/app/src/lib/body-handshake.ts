@@ -23,13 +23,17 @@ export function useBodyHandshake() {
             // 1. Body 3 Check: Passive Identity consumption from local storage
             const token = typeof window !== 'undefined' ? localStorage.getItem('pns_sovereign_token') : null;
             
+            const headers: Record<string, string> = { 
+                'Content-Type': 'application/json'
+            };
+            if (token && token !== 'null') {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
             // 2. Body 2 Validation: Push intent to Authentication Application (Gateway)
             const response = await fetch('/api/guardian/handshake', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` 
-                },
+                headers,
                 body: JSON.stringify(intent)
             });
 

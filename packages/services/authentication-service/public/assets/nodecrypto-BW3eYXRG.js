@@ -1,0 +1,1 @@
+import{T as e,b as t}from"./index-8EyrEzlV.js";import{t as n}from"./utils-CVQUBe96.js";var r=e(t(),1),i=async e=>{let{content:t,publicKey:i,privateKey:a}=e,o=r.createPrivateKey({key:n({uncompressedPrivateKeyHex:a,compressedPublicKeyHex:i}),format:`jwk`}),s=r.createSign(`SHA256`);return s.write(Buffer.from(t)),s.end(),s.sign(o,`hex`)};export{i as signWithApiKey};

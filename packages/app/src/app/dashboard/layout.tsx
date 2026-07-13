@@ -3,9 +3,9 @@ import { Suspense, useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
 import { SidebarProvider } from '@promethea/ui';
-import { useDynamicContext, DynamicWidget } from '@dynamic-labs/sdk-react-core';
+
 import { Skeleton } from '@promethea/ui';
-import { Handshake } from '@/components/auth/Handshake';
+
 import { MainNav } from '@/components/layout/main-nav';
 import { SovereignHeaderTicker } from '@/components/hud/SovereignHeaderTicker';
 import { SovereignFooterTicker } from '@/components/hud/SovereignFooterTicker';
@@ -36,7 +36,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
-  const { isLoggedIn, setShowAuthFlow } = useDynamicContext();
+
   const pathname = usePathname();
 
   useEffect(() => {
@@ -50,12 +50,12 @@ export default function DashboardLayout({
 
   return (
       <SidebarProvider>
-        <Suspense fallback={null}>
-          <Handshake />
-        </Suspense>
+
         
         <div className="w-full h-screen overflow-hidden bg-black text-white flex flex-col">
-          <SovereignHUD>{children}</SovereignHUD>
+          <Suspense fallback={<DashboardSkeleton />}>
+            <SovereignHUD>{children}</SovereignHUD>
+          </Suspense>
         </div>
       </SidebarProvider>
   );

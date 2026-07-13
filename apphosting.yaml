@@ -11,7 +11,7 @@ env:
   - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
     value: studio-9105849211-9ba48
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: AIzaSyAgGHbGW611F1MOWusBeiTFV0EN9QGrkHk
+    secret: NEXT_PUBLIC_FIREBASE_API_KEY
   - variable: SOLANA_RPC_URL
     value: https://mainnet.helius-rpc.com/?api-key=f8b67b54-f005-4858-89eb-da92335cf076
   - variable: ECONOMIC_ENGINE_URL

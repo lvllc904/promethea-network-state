@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useUser } from '@promethea/identity';
+import { useUser } from '@promethea/sovereign-store';
 
 export interface TeamMessage {
     sender: 'user' | 'antigravity' | 'promethea' | string;

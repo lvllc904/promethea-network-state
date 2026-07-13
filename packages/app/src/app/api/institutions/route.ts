@@ -5,7 +5,7 @@ const ENGINE_URL = process.env.ECONOMIC_ENGINE_URL || 'https://economic-engine-3
 
 export async function GET() {
   try {
-    const r = await fetch(`${ENGINE_URL}/api/institutions`, { cache: 'no-store', signal: AbortSignal.timeout(15000) });
+    const r = await fetch(`${ENGINE_URL}/api/institutions`, { cache: 'no-store', signal: AbortSignal.timeout(3000) });
     if (r.ok) { 
         const d = await r.json(); 
         if (Array.isArray(d)) return NextResponse.json(d); 

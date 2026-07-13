@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
-import { useCollection, useFirestore, useSovereignMemo, collection, query, orderBy, type Query } from '@promethea/identity';
+import { useCollection, useFirestore, useSovereignMemo, collection, query, orderBy, type Query } from '@promethea/sovereign-store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Button, Badge, Skeleton } from '@promethea/ui';
 import { Newspaper, Send, ArrowRight, BrainCircuit, Globe, BookOpen } from 'lucide-react';
 import { RealityBadge } from '@promethea/components';

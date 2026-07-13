@@ -1,8 +1,8 @@
 'use client';
 export const dynamic = 'force-dynamic';
 import { useState } from 'react';
-import { useFirestore, useUser } from '@promethea/identity';
-import { addDoc, collection, serverTimestamp } from '@promethea/identity';
+import { useFirestore, useUser } from '@promethea/sovereign-store';
+import { addDoc, collection, serverTimestamp } from '@promethea/sovereign-store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Input } from '@promethea/ui';
 import { Button } from '@promethea/ui';
 import { Badge } from '@promethea/ui';
@@ -77,8 +77,8 @@ export default function DiplomaticPortalPage() {
     if (submitted) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[70vh] gap-6 text-center px-4">
-                <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30">
-                    <CheckCircle2 className="w-10 h-10 text-emerald-400" />
+                <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/30">
+                    <CheckCircle2 className="w-10 h-10 text-amber-400" />
                 </div>
                 <div>
                     <h2 className="text-2xl font-bold text-white mb-2">Request Received</h2>

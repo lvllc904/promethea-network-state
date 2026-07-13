@@ -4,23 +4,27 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useMesh } from '@/components/providers/mesh-provider';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@promethea/ui';
 import dynamic from 'next/dynamic';
 
 const BirdsBackground = dynamic(() => import('../../components/ui/BirdsBackground'), { ssr: false });
 
 export default function AboutPage() {
-  React.useEffect(() => {
-    const root = window.document.documentElement;
-    if (!root.classList.contains('dark')) root.classList.add('dark');
-  }, []);
+  const { themeState } = useMesh();
+  const currentTheme = themeState?.theme || 'dark';
+  const isClassicTheme = currentTheme === 'theme-latex';
 
   return (
-    <div className="bg-background text-foreground dark:text-white min-h-screen selection:bg-cyan-500/30 font-sans transition-colors duration-300">
-      <BirdsBackground />
+    <div className={`min-h-screen selection:bg-amber-500/30 transition-colors duration-500 ${
+      isClassicTheme 
+        ? 'bg-[#fdfcf7] text-[#1a1a1a] font-serif' 
+        : 'bg-background text-foreground dark:text-white font-sans'
+    }`}>
+      {!isClassicTheme && <BirdsBackground />}
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-20 border-b border-foreground/5 dark:border-white/5 bg-background/20 backdrop-blur-md">
         <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <ArrowLeft className="w-4 h-4 text-cyan-500" />
+          <ArrowLeft className="w-4 h-4 text-amber-500" />
           <span className="font-headline font-black tracking-[0.2em] text-xs text-foreground dark:text-white">BACK TO CORE</span>
         </Link>
       </header>
@@ -81,10 +85,10 @@ export default function AboutPage() {
                 <h3 className="text-2xl font-bold text-white mt-12 mb-4">Governance via Code</h3>
                 <p className="mb-6">By utilizing the Promethean Constitution as our bedrock, we encode our axioms into the Sovereign Mesh. Decisions are executed via a reputation-based voting system, ensuring that influence in the DAC is earned through contribution, not purchased through capital.</p>
 
-                <div className="mt-16 p-8 border border-cyan-500/30 bg-cyan-500/10 rounded-lg text-center">
+                <div className="mt-16 p-8 border border-amber-500/30 bg-amber-500/10 rounded-lg text-center">
                   <h4 className="text-xl font-bold text-white mb-4">Continue the Journey</h4>
-                  <p className="text-sm text-cyan-100 mb-6">Discover how we are building the future, milestone by milestone.</p>
-                  <Link href="/roadmap" className="inline-flex items-center justify-center px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-bold uppercase tracking-widest text-xs transition-colors rounded-none">
+                  <p className="text-sm text-amber-100 mb-6">Discover how we are building the future, milestone by milestone.</p>
+                  <Link href="/roadmap" className="inline-flex items-center justify-center px-6 py-3 bg-amber-500 hover:bg-amber-400 text-black font-bold uppercase tracking-widest text-xs transition-colors rounded-none">
                     View The Roadmap
                   </Link>
                 </div>

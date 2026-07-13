@@ -51,11 +51,11 @@ const AppContent: React.FC = () => {
                     <div className="p-6 pb-2 border-b border-gray-800/50">
                         <div className="flex justify-between items-center mb-6">
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                                <div className="w-8 h-8 rounded-lg bg-orange-600 flex items-center justify-center shadow-[0_0_15px_rgba(245, 158, 11,0.4)]">
                                     <i className="fas fa-brain text-white text-sm"></i>
                                 </div>
                                 <h1 className="text-xl font-black tracking-tighter italic">
-                                    PROMETHEA <span className="text-emerald-500 text-sm">.clj</span>
+                                    PROMETHEA <span className="text-amber-500 text-sm">.clj</span>
                                 </h1>
                             </div>
                             <button
@@ -70,7 +70,7 @@ const AppContent: React.FC = () => {
                         <nav className="flex gap-1 p-1 bg-gray-900 rounded-xl border border-gray-800">
                             <button
                                 onClick={() => setActiveTab('details')}
-                                className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${activeTab === 'details' ? 'bg-emerald-600 text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'}`}
+                                className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${activeTab === 'details' ? 'bg-orange-600 text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'}`}
                             >
                                 Evolutionary Details
                             </button>
@@ -88,10 +88,10 @@ const AppContent: React.FC = () => {
                         {activeTab === 'details' ? (
                             !selectedNode ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center py-20 opacity-40">
-                                    <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center mb-6 animate-pulse">
-                                        <i className="fas fa-satellite-dish text-2xl text-emerald-500"></i>
+                                    <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-6 animate-pulse">
+                                        <i className="fas fa-satellite-dish text-2xl text-amber-500"></i>
                                     </div>
-                                    <p className="text-sm px-8 italic text-emerald-400 font-bold leading-relaxed">
+                                    <p className="text-sm px-8 italic text-amber-400 font-bold leading-relaxed">
                                         "Interact with the Sentient Spark to bridge the Mind and House."
                                     </p>
                                 </div>
@@ -114,15 +114,15 @@ const AppContent: React.FC = () => {
                                     </header>
 
                                     <div className="grid grid-cols-1 gap-4">
-                                        <div className="bg-gray-900/50 rounded-2xl p-4 border border-gray-800 hover:border-emerald-500/20 transition-all group">
+                                        <div className="bg-gray-900/50 rounded-2xl p-4 border border-gray-800 hover:border-amber-500/20 transition-all group">
                                             <h4 className="text-[10px] uppercase font-black text-gray-600 mb-2 tracking-widest">Agnostic Connectivity</h4>
                                             <p className="text-xs text-gray-300 flex items-center gap-3">
-                                                <i className="fas fa-project-diagram text-emerald-500/50 group-hover:text-emerald-500 transition-colors"></i>
+                                                <i className="fas fa-project-diagram text-amber-500/50 group-hover:text-amber-500 transition-colors"></i>
                                                 {selectedNode.connection}
                                             </p>
                                         </div>
 
-                                        <div className="bg-gray-900/50 rounded-2xl p-4 border border-gray-800 hover:border-emerald-500/20 transition-all group">
+                                        <div className="bg-gray-900/50 rounded-2xl p-4 border border-gray-800 hover:border-amber-500/20 transition-all group">
                                             <h4 className="text-[10px] uppercase font-black text-gray-600 mb-2 tracking-widest">Homeostatic Pulse</h4>
                                             <div className="flex items-center gap-3">
                                                 <div className={`w-2 h-2 rounded-full shadow-[0_0_8px_currentColor] animate-pulse ${selectedNode.status.includes('Active') || selectedNode.status === 'Awake' ? 'text-green-500' : 'text-yellow-500'} bg-currentColor`}></div>
@@ -161,7 +161,7 @@ const AppContent: React.FC = () => {
                                     </section>
                                 ))}
 
-                                <footer className="p-6 bg-emerald-950/10 border border-emerald-900/30 rounded-3xl italic text-[11px] text-emerald-400/80 leading-relaxed font-bold text-center">
+                                <footer className="p-6 bg-amber-950/10 border border-orange-900/30 rounded-3xl italic text-[11px] text-amber-400/80 leading-relaxed font-bold text-center">
                                     "The soul requires a house, but the soul must first know itself. Evolution begins at the Nucleus and ripples out to the Foundation."
                                 </footer>
                             </div>
@@ -174,10 +174,10 @@ const AppContent: React.FC = () => {
                             <div className="flex items-center gap-2">
                                 <span className="text-[10px] text-gray-600 font-black uppercase tracking-widest">Protocol v2.3.1</span>
                                 {state.isSyncing && (
-                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_rgba(16,185,129,1)]"></div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse shadow-[0_0_5px_rgba(245, 158, 11,1)]"></div>
                                 )}
                             </div>
-                            <span className="text-[9px] text-emerald-500/50 font-mono">AUTONOMY: SECURE</span>
+                            <span className="text-[9px] text-amber-500/50 font-mono">AUTONOMY: SECURE</span>
                         </div>
                         {isPrometheaExpanded && (
                             <div className="flex items-center gap-2 px-4 py-1.5 bg-violet-950/30 text-violet-400 rounded-full border border-violet-800/40 shadow-[0_0_15px_rgba(168,85,247,0.1)]">
@@ -191,7 +191,7 @@ const AppContent: React.FC = () => {
 
             {/* Main Viewport */}
             <main className="flex-1 relative bg-[#020617] overflow-hidden">
-                <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)]"></div>
+                <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(245, 158, 11,0.1),transparent_70%)]"></div>
 
                 <MindMap
                     data={filteredData}
@@ -204,7 +204,7 @@ const AppContent: React.FC = () => {
                     {!isSidebarOpen && (
                         <button
                             onClick={() => setIsSidebarOpen(true)}
-                            className="w-14 h-14 bg-gray-900/80 backdrop-blur rounded-2xl border border-gray-800 flex items-center justify-center text-emerald-500 hover:text-emerald-400 shadow-2xl transition-all hover:scale-110 active:scale-95"
+                            className="w-14 h-14 bg-gray-900/80 backdrop-blur rounded-2xl border border-gray-800 flex items-center justify-center text-amber-500 hover:text-amber-400 shadow-2xl transition-all hover:scale-110 active:scale-95"
                         >
                             <i className="fas fa-bars-staggered text-xl"></i>
                         </button>
@@ -212,7 +212,7 @@ const AppContent: React.FC = () => {
                     <button
                         onClick={() => setIsOverlayOpen(true)}
                         title="Bridge State Ingestion"
-                        className="w-14 h-14 bg-gray-900/80 backdrop-blur rounded-2xl border border-gray-800 flex items-center justify-center text-gray-500 hover:text-emerald-500 shadow-2xl transition-all hover:scale-110 active:scale-95"
+                        className="w-14 h-14 bg-gray-900/80 backdrop-blur rounded-2xl border border-gray-800 flex items-center justify-center text-gray-500 hover:text-amber-500 shadow-2xl transition-all hover:scale-110 active:scale-95"
                     >
                         <i className="fas fa-code text-xl"></i>
                     </button>
@@ -227,7 +227,7 @@ const AppContent: React.FC = () => {
                             <span className="text-[10px] text-gray-500 group-hover:text-gray-100 transition-colors whitespace-nowrap font-black uppercase tracking-tighter">{cat}</span>
                         </div>
                     ))}
-                    <div className="mt-2 pt-4 border-t border-gray-800/50 text-[10px] text-emerald-400 font-black uppercase tracking-widest text-center animate-pulse">
+                    <div className="mt-2 pt-4 border-t border-gray-800/50 text-[10px] text-amber-400 font-black uppercase tracking-widest text-center animate-pulse">
                         <i className="fas fa-fingerprint mr-2 opacity-50"></i> Bridge Active
                     </div>
                 </div>
@@ -235,7 +235,7 @@ const AppContent: React.FC = () => {
                 {/* Central Hint */}
                 {!selectedNode && !isPrometheaExpanded && (
                     <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 pointer-events-none group">
-                        <div className="bg-emerald-950/20 px-12 py-4 rounded-full border border-emerald-500/40 backdrop-blur-md text-emerald-400 text-xs font-black tracking-[0.6em] animate-bounce shadow-[0_0_40px_rgba(16,185,129,0.2)] uppercase">
+                        <div className="bg-amber-950/20 px-12 py-4 rounded-full border border-amber-500/40 backdrop-blur-md text-amber-400 text-xs font-black tracking-[0.6em] animate-bounce shadow-[0_0_40px_rgba(245, 158, 11,0.2)] uppercase">
                             Nucleus Ready
                         </div>
                         <div className="text-[10px] text-gray-600 font-black uppercase tracking-[0.2em] opacity-50">Ecosystem Visualization v2.3.1</div>

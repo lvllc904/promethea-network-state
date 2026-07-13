@@ -1,4 +1,12 @@
 steps:
+  - name: 'alpine'
+    id: 'prune-workspaces'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "Pruning non-essential workspaces to avoid installing frontend dependencies..."
+        rm -rf packages/app packages/services/ai-service packages/services/economic-engine packages/services/sbi-core
   - name: 'gcr.io/kaniko-project/executor:latest'
     args:
       - --destination=gcr.io/studio-9105849211-9ba48/authentication-service:latest
@@ -24,6 +32,7 @@ steps:
 timeout: '1200s'
 
 options:
+  machineType: E2_HIGHCPU_8
   logging: CLOUD_LOGGING_ONLY
 
 

@@ -41,7 +41,7 @@ export const ProposalWizard: React.FC<ProposalWizardProps> = ({ onComplete, onRe
             id: 1,
             title: "Intent & Origin",
             description: "Define the core objective of your proposal.",
-            icon: <LucideGlobe className="w-6 h-6 text-cyan-400" />,
+            icon: <LucideGlobe className="w-6 h-6 text-amber-400" />,
         },
         {
             id: 2,
@@ -70,7 +70,7 @@ export const ProposalWizard: React.FC<ProposalWizardProps> = ({ onComplete, onRe
                 {steps.map((s) => (
                     <div key={s.id} className="flex flex-col items-center gap-2 relative z-10">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
-                            step >= s.id ? 'bg-black border-cyan-500 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.3)]' : 'bg-zinc-900 border-zinc-800 text-zinc-600'
+                            step >= s.id ? 'bg-black border-amber-500 text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'bg-zinc-900 border-zinc-800 text-zinc-600'
                         }`}>
                             {step > s.id ? <LucideShieldCheck className="w-6 h-6" /> : <span>{s.id}</span>}
                         </div>
@@ -92,7 +92,7 @@ export const ProposalWizard: React.FC<ProposalWizardProps> = ({ onComplete, onRe
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
                     <Card className="bg-black/40 backdrop-blur-xl border-zinc-800/50 overflow-hidden shadow-2xl">
-                        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
                         
                         <CardHeader>
                             <div className="flex items-center gap-4 mb-2">
@@ -110,7 +110,7 @@ export const ProposalWizard: React.FC<ProposalWizardProps> = ({ onComplete, onRe
                                     {/* Multimodal Ingestion Zone */}
                                     <div 
                                         className={`p-8 border-2 border-dashed rounded-xl transition-all flex flex-col items-center justify-center gap-4 ${
-                                            isIngesting ? 'border-cyan-500 bg-cyan-500/5 animate-pulse' : 'border-zinc-800 hover:border-cyan-500/30 bg-zinc-950/20'
+                                            isIngesting ? 'border-amber-500 bg-amber-500/5 animate-pulse' : 'border-zinc-800 hover:border-amber-500/30 bg-zinc-950/20'
                                         }`}
                                         onDragOver={e => e.preventDefault()}
                                         onDrop={async e => {
@@ -128,7 +128,7 @@ export const ProposalWizard: React.FC<ProposalWizardProps> = ({ onComplete, onRe
                                         }}
                                     >
                                         <div className="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center">
-                                            {isIngesting ? <LucideCpu className="w-6 h-6 text-cyan-400 animate-spin" /> : <LucideGlobe className="w-6 h-6 text-zinc-500" />}
+                                            {isIngesting ? <LucideCpu className="w-6 h-6 text-amber-400 animate-spin" /> : <LucideGlobe className="w-6 h-6 text-zinc-500" />}
                                         </div>
                                         <div className="text-center">
                                             <p className="text-sm font-bold text-white">Sovereign Ingestion</p>
@@ -178,15 +178,15 @@ export const ProposalWizard: React.FC<ProposalWizardProps> = ({ onComplete, onRe
                             {step === 3 && (
                                 <div className="space-y-8 py-8">
                                     <div className="p-6 rounded-lg bg-zinc-950/50 border border-zinc-800 space-y-4">
-                                        <h3 className="font-bold text-cyan-400 uppercase tracking-tighter">Treasury Impact Prediction</h3>
+                                        <h3 className="font-bold text-amber-400 uppercase tracking-tighter">Treasury Impact Prediction</h3>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="space-y-1">
                                                 <span className="text-[10px] text-zinc-500 uppercase font-black">Reserve Delta</span>
-                                                <div className="text-xl font-mono text-emerald-400">+$12,400.00</div>
+                                                <div className="text-xl font-mono text-orange-400">+$12,400.00</div>
                                             </div>
                                             <div className="space-y-1">
                                                 <span className="text-[10px] text-zinc-500 uppercase font-black">Backing Confidence</span>
-                                                <div className="text-xl font-mono text-cyan-400">98.2%</div>
+                                                <div className="text-xl font-mono text-amber-400">98.2%</div>
                                             </div>
                                         </div>
                                     </div>
@@ -198,8 +198,8 @@ export const ProposalWizard: React.FC<ProposalWizardProps> = ({ onComplete, onRe
 
                             {step === 4 && (
                                 <div className="flex flex-col items-center justify-center py-12 space-y-6">
-                                    <div className="w-20 h-20 rounded-full bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30 animate-pulse">
-                                        <LucideShieldCheck className="w-10 h-10 text-cyan-400" />
+                                    <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/30 animate-pulse">
+                                        <LucideShieldCheck className="w-10 h-10 text-amber-400" />
                                     </div>
                                     <div className="text-center space-y-2">
                                         <h3 className="text-xl font-bold">Ready for Commitment</h3>
@@ -225,7 +225,7 @@ export const ProposalWizard: React.FC<ProposalWizardProps> = ({ onComplete, onRe
                                 <Button 
                                     onClick={nextStep}
                                     disabled={!formData.title || !formData.description}
-                                    className="bg-cyan-600 hover:bg-cyan-500 text-white"
+                                    className="bg-amber-600 hover:bg-amber-500 text-white"
                                 >
                                     Continue <LucideArrowRight className="w-4 h-4 ml-2" />
                                 </Button>
@@ -233,7 +233,7 @@ export const ProposalWizard: React.FC<ProposalWizardProps> = ({ onComplete, onRe
                                 <Button 
                                     onClick={handleComplete}
                                     disabled={isSubmitting}
-                                    className="bg-emerald-600 hover:bg-emerald-500 text-white px-8"
+                                    className="bg-orange-600 hover:bg-orange-500 text-white px-8"
                                 >
                                     {isSubmitting ? 'Committing...' : 'Finalize Proposal'}
                                 </Button>

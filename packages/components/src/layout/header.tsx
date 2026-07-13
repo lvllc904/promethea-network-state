@@ -19,7 +19,7 @@ import Image from 'next/image';
 import { Skeleton } from "@promethea/ui";
 import { useAuthStatus } from "@promethea/hooks";
 import { AuthStatusIndicator } from "./AuthStatusIndicator";
-import { useUser } from "@promethea/identity";
+import { useUser } from "@promethea/sovereign-store";
 import { useState, useEffect } from "react";
 import type { LocalCitizenProfile } from "@promethea/lib";
 

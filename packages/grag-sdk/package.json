@@ -1,0 +1,21 @@
+{
+  "name": "@promethea/grag-sdk",
+  "version": "1.0.0",
+  "description": "Isomorphic Node/TypeScript SDK and CLI for the Grounded Rationality Agent Gateway (GRAG)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "grag": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/node": "^20.14.9"
+  }
+}

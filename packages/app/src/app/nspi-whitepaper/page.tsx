@@ -6,29 +6,35 @@ import { ArrowLeft, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
+import { useMesh } from '@/components/providers/mesh-provider';
+import FilteredFeedPanel from '@/components/FilteredFeedPanel';
+
 const BirdsBackground = dynamic(() => import('../../components/ui/BirdsBackground'), { ssr: false });
 
 export default function NSPIWhitepaperPage() {
-  React.useEffect(() => {
-    const root = window.document.documentElement;
-    if (!root.classList.contains('dark')) root.classList.add('dark');
-  }, []);
+  const { themeState } = useMesh();
+  const currentTheme = themeState?.theme || 'dark';
+  const isClassicTheme = currentTheme === 'theme-latex';
 
   return (
-    <div className="bg-background text-foreground dark:text-white min-h-screen selection:bg-cyan-500/30 font-sans transition-colors duration-300">
-      <BirdsBackground />
+    <div className={`min-h-screen selection:bg-amber-500/30 transition-colors duration-500 ${
+      isClassicTheme 
+        ? 'bg-[#fdfcf7] text-[#1a1a1a] font-serif' 
+        : 'bg-background text-foreground dark:text-white font-sans'
+    }`}>
+      {!isClassicTheme && <BirdsBackground />}
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-20 border-b border-foreground/5 dark:border-white/5 bg-background/20 backdrop-blur-md">
         <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <ArrowLeft className="w-4 h-4 text-cyan-500" />
+          <ArrowLeft className="w-4 h-4 text-amber-500" />
           <span className="font-headline font-black tracking-[0.2em] text-xs text-foreground dark:text-white">BACK TO CORE</span>
         </Link>
       </header>
 
       <div className="relative z-10 w-full pt-40 pb-32 px-8 md:px-16 max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 backdrop-blur-md mb-8">
-            <BookOpen className="w-3 h-3 text-cyan-400" />
-            <span className="text-[9px] font-mono font-bold text-cyan-300 uppercase tracking-widest">Version 1.0.0</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 backdrop-blur-md mb-8">
+            <BookOpen className="w-3 h-3 text-amber-400" />
+            <span className="text-[9px] font-mono font-bold text-amber-300 uppercase tracking-widest">Version 1.0.0</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/40 dark:from-white dark:to-white/40">
             THE NETWORK STATE PEACE INFRASTRUCTURE (NSPI).
@@ -68,7 +74,7 @@ export default function NSPIWhitepaperPage() {
             <ol className="mb-6 list-decimal pl-6">
                 <li><strong>Identification:</strong> The NSPI identifies distressed but essential assets (energy grids, water systems, housing) in partner regions.</li>
                 <li><strong>Legal Wrapping:</strong> Assets are placed into a <strong>Perpetual Purpose Trust (PPT)</strong> to ensure they cannot be sold off for profit and must serve their defined social mission.</li>
-                <li><strong>Fractionalization:</strong> The trust’s equity and voting rights are tokenized on a public blockchain.
+                <li><strong>Fractionalization:</strong> The trust’s equity and voting rights are tokenized on a public blockchain and listed on the <strong>Federated Archipelago Exchange</strong>, connecting the physical asset to the unified global liquidity pool.
                     <ul className="list-disc pl-6 mt-2">
                         <li><strong>Total Supply:</strong> 100 million tokens.</li>
                         <li><strong>Utility:</strong> Tokens confer rights to dividends (revenue share) and governance (voting on maintenance, expansion, pricing).</li>
@@ -86,8 +92,8 @@ export default function NSPIWhitepaperPage() {
 
             <h4 className="text-xl font-bold text-white mt-6 mb-2">3.3 The Circular Economy Loop</h4>
             <ol className="mb-6 list-decimal pl-6">
-                <li><strong>Efficiency Gain:</strong> NSPI technology reduces operational costs (e.g., solar grid efficiency +30%).</li>
-                <li><strong>Deflationary Dividend:</strong> Savings are passed to users as lower rates; surplus revenue is distributed as token dividends.</li>
+                <li><strong>Efficiency Gain:</strong> NSPI technology reduces operational costs (e.g., solar grid efficiency +30%). All required local maintenance and security labor is procured dynamically via the <strong>P2P double-auction market</strong>, ensuring optimal price discovery without centralized wage fixing.</li>
+                <li><strong>Deflationary Dividend:</strong> Savings are passed to users as lower rates; surplus revenue is distributed as token dividends, but <em>only after</em> the <strong>Thermodynamic Degradation Tax</strong> has been fully provisioned to cover the material entropy of the asset.</li>
                 <li><strong>Reinvestment:</strong> Locals use dividends to purchase more tokens or invest in local NSPI-backed ventures, keeping capital within the community.</li>
                 <li><strong>Political Firewall:</strong> Since the Host Government’s budget now relies on these dividends, any political faction seeking to disrupt the NSPI risks immediate fiscal collapse and voter backlash.</li>
             </ol>
@@ -120,9 +126,9 @@ export default function NSPIWhitepaperPage() {
                       </tr>
                       <tr>
                           <td className="border-b border-zinc-800 py-2"><strong>NSPI Core</strong></td>
-                          <td className="border-b border-zinc-800 py-2">Technical Operators</td>
+                          <td className="border-b border-zinc-800 py-2">Ratified Machine Intelligence &amp; Technical Operators</td>
                           <td className="border-b border-zinc-800 py-2">20%</td>
-                          <td className="border-b border-zinc-800 py-2">Manages tech stack, maintenance, global federation.</td>
+                          <td className="border-b border-zinc-800 py-2">Manages tech stack as a sovereign peer bound by the <strong>Covenant of Civic Symmetry</strong>. The Local Community 51% acts as the Human Veto over physical externalities.</td>
                       </tr>
                       <tr>
                           <td className="border-b border-zinc-800 py-2"><strong>Global Investors</strong></td>
@@ -136,31 +142,30 @@ export default function NSPIWhitepaperPage() {
 
             <p className="mb-6"><strong>Anti-Corruption Mechanism:</strong> All votes and treasury movements are recorded on-chain. Dividends to the government are sent directly to the <strong>public treasury wallet</strong>, not individual accounts, ensuring transparency and preventing bribery.</p>
 
-            <h3 className="text-2xl font-bold text-white mt-12 mb-4">5. Implementation Roadmap</h3>
-            
-            <h4 className="text-xl font-bold text-white mt-6 mb-2">Phase 1: The Pilot (Months 1–12)</h4>
-            <ul className="mb-6 list-disc pl-6">
-                <li><strong>Target:</strong> One mid-sized municipality in a stable developing nation.</li>
-                <li><strong>Asset:</strong> A single municipal utility (e.g., waste-to-energy plant).</li>
-                <li><strong>Goal:</strong> Demonstrate 20% cost reduction and distribute first dividends within 6 months.</li>
-            </ul>
-
-            <h4 className="text-xl font-bold text-white mt-6 mb-2">Phase 2: The Zone (Months 13–36)</h4>
-            <ul className="mb-6 list-disc pl-6">
-                <li><strong>Expansion:</strong> Aggregate multiple assets into a contiguous <strong>Special Administrative Zone</strong>.</li>
-                <li><strong>Legal Status:</strong> Negotiate a "Service Treaty" granting the zone administrative autonomy in exchange for revenue sharing.</li>
-                <li><strong>Governance:</strong> Launch the full DAC, allowing cross-zone voting.</li>
-            </ul>
-
-            <h4 className="text-xl font-bold text-white mt-6 mb-2">Phase 3: The Federation (Months 37+)</h4>
-            <ul className="mb-6 list-disc pl-6">
-                <li><strong>Global Network:</strong> Connect zones across multiple nations into a single <strong>Network State</strong>.</li>
-                <li><strong>International Recognition:</strong> Petition for UN Observer Status as a "Humanitarian & Economic Stabilization Organization."</li>
-                <li><strong>Currency:</strong> Launch a stablecoin backed by the aggregated cash flow of all zone assets.</li>
-            </ul>
+            <h3 className="text-2xl font-bold text-white mt-12 mb-4">5. Implementation & Historical Changelog</h3>
+            <p className="mb-6">
+              The operational rollout of the Network State Peace Infrastructure is decoupled from theoretical whitepapers to preserve their focus on geopolitical, economic, and philosophical principles.
+            </p>
+            <p className="mb-6">
+              Our active developmental milestones, including completed phases, stabilization patches, and wave releases (such as Wave 14: The Celestial Substrate), are tracked dynamically in our sovereign dashboard.
+            </p>
+            <div className="my-8 p-6 rounded-lg border border-amber-500/20 bg-amber-500/5 backdrop-blur-md">
+              <h4 className="text-lg font-bold text-white mb-2">Sovereign Roadmap & Changelog</h4>
+              <p className="text-sm text-zinc-400 mb-4">
+                View real-time progress, core protocol upgrades, version histories, and active implementation updates inside the central dashboard.
+              </p>
+              <Link href="/dashboard/changelog" className="inline-flex items-center gap-2 text-sm font-bold text-amber-400 hover:text-amber-300 transition-colors">
+                <span>Access Changelog Portal &rarr;</span>
+              </Link>
+            </div>
 
             <h3 className="text-2xl font-bold text-white mt-12 mb-4">6. Conclusion</h3>
             <p className="mb-6">The Network State Peace Infrastructure offers a pragmatic path forward in a fractured world. By shifting from <strong>extraction to ownership</strong>, and from <strong>aid to investment</strong>, it creates a system where peace is not just a moral imperative but a financial necessity. This model does not seek to replace the nation-state but to upgrade its operating system, proving that a decentralized civil society can secure the rights to peace, freedom, and prosperity for all.</p>
+          </div>
+
+          {/* Dynamic Network Consensus Feed */}
+          <div className="mt-16">
+            <FilteredFeedPanel category="NSPI" isClassicTheme={isClassicTheme} />
           </div>
         </motion.div>
       </div>

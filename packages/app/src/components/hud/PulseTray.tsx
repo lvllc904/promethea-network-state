@@ -55,7 +55,7 @@ export const PulseTray = () => {
     const substrateNodes = substrate?.nodes ?? [
         { label: 'Economic Engine', status: 'NOMINAL', load: 23, icon: 'cpu' },
         { label: 'AI Service', status: 'NOMINAL', load: 67, icon: 'brain' },
-        { label: 'Guardian Auth', status: 'NOMINAL', load: 12, icon: 'shield' },
+        { label: 'Guardian Module', status: 'NOMINAL', load: 12, icon: 'shield' },
         { label: 'Omni-Lake DB', status: 'NOMINAL', load: 45, icon: 'database' },
     ];
 
@@ -83,7 +83,7 @@ export const PulseTray = () => {
                 </button>
                 <button
                     onClick={() => setActiveSection('substrate')}
-                    className={`flex-1 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-all ${activeSection === 'substrate' ? 'bg-emerald-500/20 text-emerald-400' : 'text-zinc-500 hover:text-white'}`}
+                    className={`flex-1 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-all ${activeSection === 'substrate' ? 'bg-amber-500/20 text-amber-400' : 'text-zinc-500 hover:text-white'}`}
                 >
                     Substrate Health
                 </button>
@@ -109,7 +109,7 @@ export const PulseTray = () => {
                         </div>
                         <div className="p-3 bg-black/40 border border-white/5 rounded-lg">
                             <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Immune Integrity</p>
-                            <p className="text-2xl font-black font-mono text-emerald-400">{immuneIntegrity}%</p>
+                            <p className="text-2xl font-black font-mono text-amber-400">{immuneIntegrity}%</p>
                         </div>
                     </div>
 
@@ -132,10 +132,10 @@ export const PulseTray = () => {
                     <button
                         onClick={handleScan}
                         disabled={isScanning}
-                        className="w-full py-2.5 flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 rounded-lg transition-all disabled:opacity-50 group"
+                        className="w-full py-2.5 flex items-center justify-center gap-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 hover:border-amber-500/40 rounded-lg transition-all disabled:opacity-50 group"
                     >
-                        <ShieldCheck className={`w-3 h-3 text-emerald-400 ${isScanning ? 'animate-spin' : ''}`} />
-                        <span className="text-[9px] font-black uppercase tracking-widest text-emerald-400">
+                        <ShieldCheck className={`w-3 h-3 text-amber-400 ${isScanning ? 'animate-spin' : ''}`} />
+                        <span className="text-[9px] font-black uppercase tracking-widest text-amber-400">
                             {isScanning ? 'Scanning Substrate...' : 'Run Integrity Scan'}
                         </span>
                     </button>
@@ -147,15 +147,15 @@ export const PulseTray = () => {
                     {/* Substrate KPIs */}
                     <div className="grid grid-cols-2 gap-2">
                         {[
-                            { label: 'Metabolic Velocity', val: `${pulse?.metabolicVelocity ?? 41} ops/s`, color: 'text-cyan-400' },
-                            { label: 'Substrate Load', val: `${((pulse?.substrateLoad ?? 0.23) * 100).toFixed(1)}%`, color: 'text-emerald-400' },
+                            { label: 'Metabolic Velocity', val: `${pulse?.metabolicVelocity ?? 41} ops/s`, color: 'text-amber-400' },
+                            { label: 'Substrate Load', val: `${((pulse?.substrateLoad ?? 0.23) * 100).toFixed(1)}%`, color: 'text-amber-400' },
                             { label: 'Sync Deficit', val: `${pulse?.mirrorSyncDeficit ?? 0}ms`, color: 'text-blue-400' },
                             { label: 'Sovereign Uptime', val: `${((pulse?.uptime ?? 86400) / 3600).toFixed(1)}h`, color: 'text-purple-400' },
                         ].map(v => (
                             <div 
                                 key={v.label} 
                                 onClick={() => activateFocusPanel('SQL_EXPLORER')}
-                                className="p-3 bg-black/40 border border-white/5 rounded-lg hover:border-cyan-500/20 cursor-pointer transition-colors"
+                                className="p-3 bg-black/40 border border-white/5 rounded-lg hover:border-amber-500/20 cursor-pointer transition-colors"
                             >
                                 <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-1">{v.label}</p>
                                 <p className={`text-lg font-black font-mono ${v.color}`}>{v.val}</p>
@@ -172,16 +172,16 @@ export const PulseTray = () => {
                             <div 
                                 key={node.label} 
                                 onClick={() => activateFocusPanel('SQL_EXPLORER')}
-                                className="flex items-center justify-between px-3 py-2.5 bg-black/40 border border-white/5 rounded-lg group hover:border-emerald-500/20 cursor-pointer transition-colors"
+                                className="flex items-center justify-between px-3 py-2.5 bg-black/40 border border-white/5 rounded-lg group hover:border-amber-500/20 cursor-pointer transition-colors"
                             >
                                 <div className="flex items-center gap-2">
-                                    <div className={`w-1.5 h-1.5 rounded-full ${node.status === 'NOMINAL' ? 'bg-emerald-500' : 'bg-red-500 animate-pulse'}`} />
+                                    <div className={`w-1.5 h-1.5 rounded-full ${node.status === 'NOMINAL' ? 'bg-amber-500' : 'bg-red-500 animate-pulse'}`} />
                                     <span className="text-[10px] font-mono text-zinc-300">{node.label}</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <div className="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full rounded-full transition-all ${node.load > 80 ? 'bg-red-500' : node.load > 60 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                                            className={`h-full rounded-full transition-all ${node.load > 80 ? 'bg-red-500' : node.load > 60 ? 'bg-amber-500' : 'bg-amber-500'}`}
                                             style={{ width: `${node.load}%` }}
                                         />
                                     </div>

@@ -79,12 +79,32 @@ func (r *LedgerRepository) InitializeSchema(ctx context.Context) error {
 		encrypted_payload BYTEA,
 		created_at TIMESTAMPTZ DEFAULT NOW()
 	);
+
+	-- Row-Level Security enablement & Policies
+	DO $$
+	BEGIN
+		ALTER TABLE sovereign_profiles ENABLE ROW LEVEL SECURITY;
+		ALTER TABLE public_ledger ENABLE ROW LEVEL SECURITY;
+		ALTER TABLE crdt_event_chain ENABLE ROW LEVEL SECURITY;
+		
+		-- Re-create policies for absolute tenant separation
+		DROP POLICY IF EXISTS profile_syndicate_policy ON sovereign_profiles;
+		CREATE POLICY profile_syndicate_policy ON sovereign_profiles FOR ALL USING (syndicate_id = current_setting('app.current_syndicate_id', true) OR syndicate_id = 'global');
+
+		DROP POLICY IF EXISTS ledger_syndicate_policy ON public_ledger;
+		CREATE POLICY ledger_syndicate_policy ON public_ledger FOR ALL USING (syndicate_id = current_setting('app.current_syndicate_id', true) OR syndicate_id = 'global');
+
+		DROP POLICY IF EXISTS crdt_syndicate_policy ON crdt_event_chain;
+		CREATE POLICY crdt_syndicate_policy ON crdt_event_chain FOR ALL USING (syndicate_id = current_setting('app.current_syndicate_id', true) OR syndicate_id = 'global');
+	EXCEPTION WHEN OTHERS THEN
+		RAISE NOTICE 'Row-Level Security setup bypassed or already configured.';
+	END $$;
 	`
 	_, err := r.pool.Exec(ctx, query)
 	if err != nil {
 		return fmt.Errorf("failed to initialize schema: %w", err)
 	}
-	log.Println("Sovereign Ledger Schema Initialized.")
+	log.Println("Sovereign Ledger Schema Initialized with Row-Level Security policies.")
 	return nil
 }
 

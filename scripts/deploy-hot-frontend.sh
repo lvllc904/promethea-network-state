@@ -4,6 +4,16 @@ set -e
 # Source Google Cloud SDK
 if [ -f '/Users/officeone/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/officeone/Downloads/google-cloud-sdk/path.zsh.inc'; fi
 
+# Load local .env variables
+if [ -f .env ]; then
+  echo "🔌 Sourcing local .env file..."
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    if [[ ! "$line" =~ ^# ]] && [[ ! -z "${line//[[:space:]]/}" ]]; then
+      export "$line"
+    fi
+  done < .env
+fi
+
 PROJECT_ID="studio-9105849211-9ba48"
 REGION="us-central1"
 

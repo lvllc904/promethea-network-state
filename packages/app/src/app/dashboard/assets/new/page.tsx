@@ -1,18 +1,18 @@
 'use client';
 export const dynamic = 'force-dynamic';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@promethea/ui";
 import { Input } from "@promethea/ui";
 import { Label } from "@promethea/ui";
 import { Button } from "@promethea/ui";
 import { Textarea } from "@promethea/ui";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@promethea/ui";
-import { useUser } from "@promethea/identity";
+import { useUser } from "@promethea/sovereign-store";
 import { useRouter } from "next/navigation";
 import { Loader2, CheckCircle, XCircle, PartyPopper } from "lucide-react";
 import { handleUnderwrite, handleAutoList } from "./actions";
 import { handleProposeAsset } from "@/lib/client-actions";
-import { useFirestore } from "@promethea/identity";
+import { useFirestore } from "@promethea/sovereign-store";
 import { type UnderwriteRWAInput, type UnderwriteRWAOutput, type AutoListRWAOutput } from "@promethea/lib";
 import { Alert, AlertDescription, AlertTitle } from "@promethea/ui";
 import { Badge } from "@promethea/ui";
@@ -35,7 +35,28 @@ function UnderwritingAnalysis({
 
     const formatCurrency = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 
+    const [paymentMethod, setPaymentMethod] = useState<'Stripe' | 'Helio' | 'Wallet' | 'Bypass' | null>(null);
+    const [isPaying, setIsPaying] = useState(false);
+    const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+
+    useEffect(() => {
+        const handlePaymentMessage = (event: MessageEvent) => {
+            if (event.data?.type === 'PAYMENT_SUCCESS') {
+                setPaymentConfirmed(true);
+                setPaymentMethod(event.data.gateway);
+                setIsPaying(false);
+            }
+        };
+        window.addEventListener('message', handlePaymentMessage);
+        return () => window.removeEventListener('message', handlePaymentMessage);
+    }, []);
+
     const onPromote = async () => {
+        if (!paymentConfirmed && paymentMethod !== 'Bypass') {
+            alert("Please settle or authorize the at-cost state filing fee before proposing this physical node.");
+            return;
+        }
+
         if (!firestore) {
             setListingResult({ success: false, error: "Database not connected" });
             return;
@@ -59,6 +80,36 @@ function UnderwritingAnalysis({
         setIsListing(false);
     };
 
+    const handleCheckoutGtw = (gateway: 'Stripe' | 'Helio' | 'Wallet' | 'Bypass') => {
+        setPaymentMethod(gateway);
+        setIsPaying(true);
+        
+        if (gateway === 'Bypass') {
+            setTimeout(() => {
+                setIsPaying(false);
+                setPaymentConfirmed(true);
+                alert("[PATH B: SOVEREIGN BYPASS ACTIVE]\n\nYou are executing on-chain registry with an offline manual filing hash. Surcharge adjusted to $0.00.");
+            }, 1000);
+            return;
+        }
+
+        if (gateway === 'Wallet') {
+            setTimeout(() => {
+                setIsPaying(false);
+                setPaymentConfirmed(true);
+                alert("[ZERO-TRUST WALLET HEARTBEAT]\n\nPhantom wallet prompt: Authorized 25.00 USDC transfer to State Filing Account.");
+            }, 1500);
+            return;
+        }
+
+        const urls = {
+            Stripe: `/checkout/stripe?prefilled_email=${encodeURIComponent(ownerId + '@lvhllc.org')}`,
+            Helio: `/checkout/helio`
+        };
+
+        window.open(urls[gateway], '_blank');
+    };
+
     if (listingResult?.success) {
         return (
             <Card className="shadow-lg text-center">
@@ -73,62 +124,146 @@ function UnderwritingAnalysis({
                     <p className="text-sm text-muted-foreground">Redirecting you to the Governance page...</p>
                 </CardContent>
             </Card>
-        )
+        );
     }
 
-
     return (
-        <Card className="shadow-lg">
-            <CardHeader>
-                <CardTitle className="font-headline">Underwriting Analysis</CardTitle>
-                <CardDescription>The AI's assessment of the submitted asset.</CardDescription>
+        <Card className="shadow-lg border-amber-500/20 bg-[#090d16]/90 backdrop-blur-xl">
+            <CardHeader className="border-b border-white/5 pb-4">
+                <div className="flex items-center justify-between">
+                    <CardTitle className="font-headline text-lg">Underwriting Analysis</CardTitle>
+                    <span className="text-[9px] font-mono text-amber-400 border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        AI-Underwritten
+                    </span>
+                </div>
+                <CardDescription>Real-world valuation and state-level compliance assessment.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 pt-6">
                 {analysis.isViable ? (
-                    <Alert>
-                        <CheckCircle className="h-4 w-4" />
-                        <AlertTitle>Asset Deemed Viable</AlertTitle>
-                        <AlertDescription>
-                            The AI has determined this asset is a potentially sound investment for the community.
+                    <Alert className="border-amber-500/20 bg-amber-500/5 text-amber-400">
+                        <CheckCircle className="h-4 w-4 text-amber-400" />
+                        <AlertTitle className="font-bold">Asset Deemed Viable</AlertTitle>
+                        <AlertDescription className="text-xs">
+                            The AI underwriter has successfully calculated a sound Enterprise Value for the physical node.
                         </AlertDescription>
                     </Alert>
                 ) : (
-                    <Alert variant="destructive">
+                    <Alert variant="destructive" className="border-red-500/20 bg-red-500/5">
                         <XCircle className="h-4 w-4" />
                         <AlertTitle>Asset Deemed Not Viable</AlertTitle>
-                        <AlertDescription>
-                            The AI has flagged potential issues with this asset. See assessment for details.
+                        <AlertDescription className="text-xs">
+                            The AI underwriter has flagged structural compliance issues with this asset.
                         </AlertDescription>
                     </Alert>
                 )}
 
                 <div>
-                    <h3 className="font-semibold">Viability Assessment</h3>
-                    <p className="text-sm text-muted-foreground">{analysis.viabilityAssessment}</p>
+                    <h3 className="font-semibold text-sm text-zinc-300">Viability Assessment</h3>
+                    <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{analysis.viabilityAssessment}</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                <div className="grid grid-cols-2 gap-4 py-4 border-y border-white/5">
                     <div>
-                        <h3 className="text-sm font-medium text-muted-foreground">Enterprise Value</h3>
-                        <p className="text-2xl font-bold">{formatCurrency(analysis.enterpriseValue)}</p>
+                        <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Enterprise Value</h3>
+                        <p className="text-xl font-bold mt-1 text-amber-400">{formatCurrency(analysis.enterpriseValue)}</p>
                     </div>
                     <div>
-                        <h3 className="text-sm font-medium text-muted-foreground">Key Assumptions</h3>
-                        <p className="text-xs text-muted-foreground whitespace-pre-line">{analysis.keyAssumptions}</p>
+                        <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Key Assumptions</h3>
+                        <p className="text-[10px] text-muted-foreground mt-1 whitespace-pre-line leading-relaxed">{analysis.keyAssumptions}</p>
                     </div>
                 </div>
 
                 <div>
-                    <h3 className="font-semibold">Path to Value</h3>
-                    <div className="space-y-2 mt-2">
+                    <h3 className="font-semibold text-sm text-zinc-300 mb-2">Path to Value Tasking Checklist</h3>
+                    <div className="space-y-2">
                         {analysis.pathTovalue.map((task, i) => (
-                            <div key={i} className="flex items-center gap-2 p-2 rounded bg-muted/50 text-sm">
-                                <Badge variant={task.priority === 'High' ? 'destructive' : 'secondary'}>{task.priority}</Badge>
-                                <span>{task.description}</span>
+                            <div key={i} className="flex items-center gap-2 p-2 rounded border border-white/5 bg-zinc-950/40 text-xs">
+                                <Badge variant={task.priority === 'High' ? 'destructive' : 'secondary'} className="text-[9px] uppercase">
+                                    {task.priority}
+                                </Badge>
+                                <span className="text-zinc-400">{task.description}</span>
                             </div>
                         ))}
                     </div>
                 </div>
+
+                {/* State Filing Cost Reimbursement receipt panel */}
+                {analysis.isViable && (
+                    <div className="border border-amber-500/30 bg-amber-950/20 p-4 rounded-none space-y-3">
+                        <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-amber-400 flex items-center gap-2">
+                            <span>⚖️ State-Level Filing Settle Portal</span>
+                            <span className="text-[8px] bg-amber-500/20 px-2 py-0.5 rounded text-amber-300 normal-case font-light">At Cost Only</span>
+                        </h4>
+                        
+                        <div className="space-y-1 text-xs font-mono text-zinc-400">
+                            <div className="flex justify-between">
+                                <span>Wyoming SOS UCC-1 Filing:</span>
+                                <span className="text-white">$20.00</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Cobalt Lien-Search API Search:</span>
+                                <span className="text-white">$5.00</span>
+                            </div>
+                            <div className="flex justify-between border-b border-zinc-700/50 pb-1.5 mb-1.5 text-amber-400">
+                                <span>Promethean Protocol Fee (0% Markup):</span>
+                                <span>$0.00</span>
+                            </div>
+                            <div className="flex justify-between text-white font-bold text-sm">
+                                <span>Total Citizen Cost:</span>
+                                <span className="text-amber-400">$25.00</span>
+                            </div>
+                        </div>
+
+                        {!paymentConfirmed ? (
+                            <div className="space-y-2 pt-2">
+                                <span className="text-[10px] text-zinc-500 block">Settle via secure fiat credit card link-out, web3 swap, or direct crypto transfer:</span>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Button 
+                                        type="button" 
+                                        variant="outline" 
+                                        className="h-8 text-[10px] font-mono border-zinc-700/50 hover:bg-zinc-800"
+                                        onClick={() => handleCheckoutGtw('Stripe')}
+                                        disabled={isPaying}
+                                    >
+                                        Stripe Credit Card
+                                    </Button>
+                                    <Button 
+                                        type="button" 
+                                        variant="outline" 
+                                        className="h-8 text-[10px] font-mono border-zinc-700/50 hover:bg-zinc-800"
+                                        onClick={() => handleCheckoutGtw('Helio')}
+                                        disabled={isPaying}
+                                    >
+                                        Helio (Multi-Chain)
+                                    </Button>
+                                    <Button 
+                                        type="button" 
+                                        variant="outline" 
+                                        className="h-8 text-[10px] font-mono border-zinc-700/50 hover:bg-zinc-800"
+                                        onClick={() => handleCheckoutGtw('Wallet')}
+                                        disabled={isPaying}
+                                    >
+                                        Direct USDC / SOL
+                                    </Button>
+                                    <Button 
+                                        type="button" 
+                                        variant="outline" 
+                                        className="h-8 text-[10px] font-mono border-zinc-700/50 text-amber-400 hover:text-amber-300 hover:bg-zinc-800 col-span-2"
+                                        onClick={() => handleCheckoutGtw('Bypass')}
+                                        disabled={isPaying}
+                                    >
+                                        Path B Bypass (Manual Filing)
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="bg-amber-500/10 border border-amber-500/20 p-2 text-center text-xs text-amber-400 font-mono font-bold flex items-center justify-center gap-2">
+                                <CheckCircle className="w-4 h-4" />
+                                <span>FEES SETTLED AT COST // READY TO REGISTER</span>
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {listingResult?.error && (
                     <Alert variant="destructive">
@@ -138,9 +273,13 @@ function UnderwritingAnalysis({
                     </Alert>
                 )}
 
-                <Button onClick={onPromote} disabled={isListing || !analysis.isViable} className="w-full">
+                <Button 
+                    onClick={onPromote} 
+                    disabled={isListing || !analysis.isViable || (!paymentConfirmed && paymentMethod !== 'Bypass')} 
+                    className="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold uppercase tracking-wider text-xs rounded-none h-11"
+                >
                     {isListing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Propose for Funding
+                    Confirm & Propose physical Node
                 </Button>
             </CardContent>
         </Card>

@@ -1,0 +1,1 @@
+import{i as e,n as t,r as n}from"./index-8EyrEzlV.js";function r(r){let{uncompressedPrivateKeyHex:i,compressedPublicKeyHex:a}=r,o;try{o=t(e(a))}catch{throw Error(`unable to load API key: invalid public key. Did you switch your public and private key by accident? Is your public key a valid, compressed P-256 public key?`)}return o.d=n(i,32),o}export{r as t};

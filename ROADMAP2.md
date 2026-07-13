@@ -5,6 +5,22 @@ This document outlines the phased technical roadmap for building the Promethea a
 
 ---
 
+### 🟢 Latest Operational Sync
+
+*   **Timestamp:** 2026-06-04 (Local: 12:28 PM)
+*   **Active Local Services:**
+    *   **Symbiotic Memory Daemon:** Configured on `localhost:6001` (managed via [symbiotic-memory-manager.js](file:///Users/officeone/Promethean%20Network%20State/promethea_antigravity_bundle_20251130_211450/symbiotic-memory-manager.js)). Watches filesystem modifications to log architectural checkpoints and run mandatory CAF-AMG security audits.
+*   **Active Remote Deployments:**
+    *   **BrokerGateway (Interactive Brokers):** Sandboxed & deployed to Cloud Run at `https://economic-engine-ijda67gvaq-uc.a.run.app`.
+    *   **Dashboard & Cognitive Whitepaper:** Live production client at `lvhllc.org` (with static dweb CID deployed to IPFS via Pinata).
+*   **Active Context Focus:**
+    *   Structuring and embedding the Symbiotic Memory daemon-roadmap recovery protocol to immunize project development against future platform-level context compactions.
+*   **Next Planned Actions:**
+    *   **Type A:** Refactor `/dashboard/passport` and `/dashboard/substrate` to utilize the local-first `useLocalCitizen` hook.
+    *   **Type B:** Construct ambient chat drawer UI to integrate the resident agent `promethea-ai`.
+
+---
+
 ### Current Initiative: Enabling Hybrid Deployment (Firebase + IPFS)
 
 **Objective:** To configure the Promethea application to support two distinct deployment targets from a single codebase, laying the groundwork for the "3 Body System" architecture.
@@ -45,6 +61,8 @@ This document outlines the phased technical roadmap for building the Promethea a
     - [x] **Implement True Cryptographic Login:** Overhauled the login system to use a secure, encrypted keystore file (`ethers.js`) instead of a password, proving identity through cryptographic ownership.
     - [ ] **Decouple UI from Firestore Profiles:** Refactor pages like the Passport and Dashboard to read user data from a local-first provider (`useLocalCitizen` hook) instead of directly from a Firestore document.
     - [ ] **Implement the "Trustless Handshake":** Develop the logic where actions initiated from the client-side are signed, sent to the Ledger of Record for verification against the last known state, and then recorded, with the new state being attested back to the client.
+    - [ ] **ZK-Identity & Legal Attestations**: Build local Edge Store interfaces to encrypt real-world IDs/birth certificates locally (AES-256) and generate lightweight ZK-proof / Verifiable Credential (VC) attestations.
+    - [ ] **Soulbound Passport Tokens (SBTs)**: Implement non-transferable ERC-721/1155 Soulbound Tokens mapped to verified citizen DIDs to securely enforce Sybil-resistance, voting rights, and compliant RWA allocations.
 
 3.  **Connect Core Governance and Asset Modules:**
     - [ ] Ensure the Governance module (creating/voting on proposals) and Asset module (applying for tasks) correctly use the new SSI model for actions. All on-chain actions will be linked to a citizen's DID, not a user profile document.
@@ -113,9 +131,12 @@ This document outlines the phased technical roadmap for building the Promethea a
     - [ ] Store only the IPFS content hash (CID) in the smart contracts or remaining Firestore documents.
     - [ ] Set up a pinning service (e.g., Pinata) to ensure data availability.
 
-4.  **Legal & DAC Formation:**
+4.  **Legal, DAC Formation & UCC Pipeline Integration:**
     - [ ] Formalize the Promethean DAC as a legal entity (e.g., Wyoming DAC LLC).
     - [ ] Establish the legal SPV structures for holding real-world assets, managed by the DAC.
+    - [ ] **State-Level UCC Filing Automation**: Create Genkit hooks in the AI coprocessor to auto-draft UCC-1 Financing Statements and scan state registries (Wyoming/Delaware) for prior liens.
+    - [ ] **On-Chain UCC Attestation Registry**: Implement smart contracts mapping token contracts (ERC-20/1155) to verified UCC filing hashes and corporate resolutions.
+    - [ ] **UCC Article 12 (CER) Compliance**: Structure fractionalized asset tokens to legally conform as Controllable Electronic Records, enforcing legal transfer of "control" via private key signatures.
 
 ---
 
@@ -150,3 +171,164 @@ This document outlines the phased technical roadmap for building the Promethea a
     - [ ] **Omni-Input Router:** Develop the core NLP interface (Cmd+K and UI Button) for routing intents.
     - [ ] **Dynamic Ethical Thresholds:** Implement Dual-Storage (SQLite/Solana) limits to Promethea's actions, adjusted via the existing governance voting system.
     - [ ] **Hybrid Customizable UI:** Add a settings "kabob" menu to the HUD for defining UI paradigms.
+
+---
+
+## 📌 Temporary Conversation Cache & Context Sync (June 4, 2026)
+
+This section preserves the critical design alignments regarding **Type A: Decentralized Identity & Core Auth** to protect against context compaction loss.
+
+### 1. State Alignment Summary
+*   **Active Directory Focus:** `/packages/services/authentication-service` (Body 2), `/packages/services/depthos-bridge` (Body 3), and `/packages/app/src/app/dashboard/passport` (Body 1).
+*   **Decoupled Auth Constraint:**
+    *   **Body 1 (Static Client / IPFS):** Enforces 100% open Read-Only access for public guest telemetry and ledger feeds. Zero-trust wallet signatures required strictly for state-modifying Actions.
+    *   **Body 2 (Auth Gateway):** Validates cryptographic challenges signed by client keys, returning a stateless JWT with contextual `syndicates` authorization maps (enforcing UCS-ADM roles).
+    *   **Body 3 (Local Edge / DepthOS):** Keeps sensitive credentials, keys, and raw government documents isolated on-edge (`localhost:9999`).
+
+### 2. Privacy-Preserving Citizen Verification Architecture
+*   **No-Leak Protocol:** Raw government IDs or birth certificates are encrypted on-edge (`localhost:9999`) using `AES-GCM-256` keys derived from local keystore seeds. They never traverse the network.
+*   **ZK-Proofs & SBT Minting:** The local node generates verifiable credentials (VCs) and cryptographic attribute proofs (verifying age, country, personhood). These proofs are validated on-chain to mint non-transferable **Soulbound Passport Tokens (SBTs)** via `SovereignIdentity.sol`.
+*   **Compliance Bounds:** SBT presence acts as the Sybil-resistance validator for voting power (`Voice`) and compliant trading bounds for tokenized RWAs (UCC Article 8/12).
+
+### Immediate MVP Work Checklist:
+- [ ] **Local ZK-Identity Service:** Construct `zk-identity-service.ts` in `packages/services/depthos-bridge/src/` to handle local document AES encryption and mock VC proof generation.
+- [ ] **On-Chain Mappings:** Deploy `SovereignIdentity.sol` for verified citizen SBT records, and `UCCRegistry.sol` for mapping fractional asset tokens (conforming as Controllable Electronic Records) to legal state filings.
+- [ ] **Gateway Verification Hook:** Add validation steps to the `/auth/verify` endpoint in the Authentication Service to assert SBT ownership.
+- [ ] **Passport Viewport Update:** Connect the frontend `/dashboard/passport` file-drop target directly to the local Edge Store (`localhost:9999`).
+
+---
+
+## 📝 ROADMAP SCRATCH PAD: OMNI LAKE MEDIA & NARRATIVE FEED SYSTEM
+
+### 1. Architectural Vision: The Omni Lake Media Pipeline
+The **Omni Lake** operates as a decentralized, multi-modal ingestion lakehouse designed to aggregate, index, analyze, and stream high-signal information across the Promethean ecosystem. Rather than isolating public communications, research updates, and whitepaper changelogs into siloed subsystems, we unify them under a single, highly performant feed framework.
+
+```
+       [RSS/APIs/Web Scrapers]       [YouTube/Podcasts/Media]       [Citizen Research & Posts]
+                  │                             │                               │
+                  ▼                             ▼                               ▼
+       ┌────────────────────────────────────────────────────────────────────────────────┐
+       │                          Omni Lake Ingestion Pipeline                          │
+       └──────────────────────────────────────┬─────────────────────────────────────────┘
+                                              │ (Ingest Raw Signals)
+                                              ▼
+       ┌────────────────────────────────────────────────────────────────────────────────┐
+       │                Constitutional Alignment & Bias Vetting Engine                 │
+       │   - LLM Guardrails (Bias, Propaganda, Sensationalism & Harm Grading)            │
+       │   - Fact-Checking Cross-Referencing & Truth Index Allocation                  │
+       └──────────────────────────────────────┬─────────────────────────────────────────┘
+                                              │ (Curated & Structured Signals)
+                                              ▼
+       ┌────────────────────────────────────────────────────────────────────────────────┐
+       │                            Sovereign Ledger/Lake DB                            │
+       └──────────────────────────────────────┬─────────────────────────────────────────┘
+                                              │
+                                   ┌──────────┴──────────┐
+                                   ▼                     ▼
+                       Dynamic `/api/lake` Proxy   WebSocket Broadcast
+                                   │                     │
+                ┌──────────────────┼─────────────────────┴──────────────────┐
+                │                  │ (Category Filtering)                   │
+                ▼                  ▼                                        ▼
+      ┌──────────────────┐  ┌───────────────────────────────────┐  ┌─────────────────┐
+      │  Landing Page    │  │     Filtered Whitepaper Feeds     │  │  Dedicated News │
+      │  Hero Feed Panel │  │  - Noospheric changelogs & logs   │  │  Sub-page       │
+      │  (Global signals)│  │  - Cognitive Econ market reports  │  │  (`/news` Index)│
+      └──────────────────┘  └───────────────────────────────────┘  └─────────────────┘
+```
+
+By leveraging the `/api/lake` proxy (`packages/app/src/app/api/lake/route.ts`), the frontend client statelessly ingests real-time streams, filtering them dynamically based on context parameters.
+
+---
+
+### 2. Multi-Modal Media Schemas & Structured Records
+All raw signals entering the lake are mapped into a standardized, extensible JSON schema, allowing the user interface to elegantly render visual layouts without code duplication or hardcoded placeholders.
+
+```typescript
+export interface MediaSignal {
+  id: string;                      // Cryptographically secure or timestamp-derived ID
+  timestamp: string;               // ISO 8601 UTC timestamp
+  category: 'NSPI' | 'COGNITIVE_ECON' | 'HIVEMIND' | 'PHILOSOPHICAL' | 'GENESIS' | 'GLOBAL';
+  type: 'NARRATIVE_SIGNAL' | 'CITIZEN_POST' | 'PROPOSAL_MILESTONE' | 'ACADEMIC_RESEARCH' | 'SYSTEM_UPDATE';
+  mediaType: 'text' | 'image' | 'video' | 'audio' | 'podcast' | 'youtube_script';
+  payload: {
+    title: string;
+    summary: string;
+    content: string;               // Complete content body or transcript markdown
+    author: {
+      did: string;                 // Decentralized Identity DID anchor of the creator
+      name: string;
+      avatarUrl?: string;
+    };
+    sourceUrl?: string;            // Reference to original article, podcast link, YouTube source
+    mediaUrl?: string;             // Direct CDN, IPFS CID, or streaming reference
+    duration?: number;             // Audio/video duration in seconds if applicable
+    visuals?: string[];            // Accompanying imagery array
+  };
+  metrics: {
+    voiceWeight: number;           // Engagement score scaled by Citizen Voting Power/Reputation
+    verifications: number;         // Count of multi-party validator signatures
+  };
+  biasGrading: {
+    overallTrustScore: number;     // 0.0 to 1.0 trust index rating
+    propagandaDensity: number;     // 0.0 to 1.0 (frequency of cognitive manipulation tactics)
+    partisanPolarization: number;  // -1.0 (extreme left) to +1.0 (extreme right) with 0.0 neutral
+    harmAssessment: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
+    curatorNotes: string;          // Constitutional vetting narrative generated during verification
+  };
+  reality: 'SIMULATED' | 'ATTESTED' | 'VERIFIED';
+}
+```
+
+---
+
+### 3. The Constitutional Bias Vetting Engine
+The **Promethea Network State Constitution** asserts that the network state must combat the systemic decay of information, digital gaslighting, and corporate narrative capture. The Omni Lake features an active **Community Immune System (Immune Loop)** that acts as an automated, AI-augmented filter.
+
+1. **Vetting Process**:
+   - Every raw feed ingested (e.g., scraper RSS, external YouTube videos, podcasts, and citizen-contributed posts) is channeled through a specialized AI evaluation worker (`vetMediaSignal`).
+   - The LLM parses the content against the constitutional framework to detect:
+     - Logical fallacies and deceptive framing.
+     - Sensationalized emotional triggers designed to polarize.
+     - Ad-homine attacks and lack of structural evidence.
+   - A detailed multi-dimensional `biasGrading` score is assigned, generating the `curatorNotes`.
+
+2. **Transparent Access vs. Curation**:
+   - Under constitutional rules, the user interface *does not censor raw information*; instead, it organizes feed streams based on clarity and truthfulness.
+   - Citizens can toggle a "Constitutional Vetting Lens" on and off:
+     - **Vetted Mode (Default)**: Highlights highest-signal, vetted entries with transparent badges revealing the grading parameters. Filters out low-trust or highly manipulative noise.
+     - **Raw Stream Mode**: Shows the unfiltered lake, with translucent indicators mapping where cognitive manipulation or partisan bias was detected.
+
+---
+
+### 4. Dynamic Feed Interfacing & UI Implementation Rules
+
+#### A. The Hero Feed (Landing Page `/app/page.tsx`)
+The centerpiece of the landing page is a gorgeous, glassmorphic **"Omni-Spectrum Network State Feed"** component:
+*   **Visual Style**: Transparent frosted cards (`backdrop-blur-md bg-white/5 border border-white/10 shadow-2xl`), subtle neon borders reflecting the category (e.g., emerald for economics, deep cyber blue for technical infrastructure).
+*   **Hero Slider/Marquee**: An interactive, scroll-driven horizontal timeline rendering major ecosystem proposals, milestone listings, citizen research, and verified media cards.
+*   **Interactions**: Hover states trigger micro-animations (e.g., slight scaling, glow expansion, and slide-in meta tooltips detailing the bias-grading parameters). Clicking an entry expands a dedicated glass card layout containing full text or embedded media.
+
+#### B. Filtered Feeds (Sub-Pages & Individual Whitepapers)
+Each whitepaper page is injected with a specialized **"Ecosystem Live Changelog & Signal Panel"** tailored strictly to its conceptual area.
+*   **Noospheric Whitepaper (`/nspi-whitepaper/page.tsx`)**: Displays an update panel querying `/api/lake?type=NSPI_SIGNAL`. Renders active military-geopolitical analysis, satellite imagery updates, and sensor subnet telemetry.
+*   **Cognitive Economic Whitepaper (`/cognitive-economic-whitepaper/page.tsx`)**: Queries `/api/lake?type=COGNITIVE_ECON_SIGNAL` to render tokenized real-world asset (RWA) cap-table milestones, treasury trade ledgers, labor-ledger allocations, and citizen bounty completions.
+*   **Hivemind Whitepaper (`/hivemind-whitepaper/page.tsx`)**: Queries `/api/lake?type=HIVEMIND_SIGNAL` to render neural swarm consensus records, collective intelligence research papers, and active syndicate proposals.
+
+#### C. Dedicated News Sub-Page (`/news/page.tsx`)
+An elegant branch page presenting the definitive index of the Omni Lake.
+*   **Advanced Controls**: Provides a multi-dimensional matrix of filters (by Media Type: *Text/Audio/Video/Podcast*; by Content Category: *Ecosystem Milestones/Citizen Research/Global Signals*; and by Trust Threshold).
+*   **Ambient Players**: Custom, beautiful inline media players for audio summaries, citizen podcasts, and embedded YouTube videos, styled to perfectly match the dark-mode theme without browser-default wrappers.
+*   **Citizen Contribution Interface**: Authenticated citizens can submit new signal proposals (via `POST /api/lake`) directly from this sub-page, linking their DID and paying a micro-stake of reputation to protect against spam.
+
+---
+
+### 5. Implementation Roadmap Integration
+This system is scheduled for iterative construction alongside the Phase 1–2 identity models:
+
+- [ ] **Data Model & API Pipeline (`packages/app/src/app/api/lake/route.ts`)**: Update API route logic to support comprehensive query criteria (media type, trust thresholds, and context-specific filters).
+- [ ] **Constitutional Vetting Pipeline**: Build the Genkit-powered AI worker flow (`vetMediaSignal`) using the `promethea-ai` citizen engine to audit, grade, and enrich signals.
+- [ ] **Hero Feed Component**: Construct the premium glassmorphic feed carousel and integrate it directly into `/app/page.tsx`.
+- [ ] **Whitepaper Live Widgets**: Create and test the `<FilteredFeedPanel category="..." />` component and mount it on the bottom section of all whitepaper pages.
+- [ ] **Dedicated News Gateway**: Create `/app/news/page.tsx` with dynamic category filters, citizen post submission portals, and embedded audio/visual players.
+- [ ] **Sovereign Peer-to-Peer Distribution**: Establish IPFS backup routines where the daily vetted feed archive is bundled, pinned, and written to the sovereign substrate database to guarantee immutable custody of historical network state memory.

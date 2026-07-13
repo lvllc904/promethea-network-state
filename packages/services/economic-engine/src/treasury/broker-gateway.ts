@@ -28,11 +28,15 @@ export interface Position {
 export class BrokerGateway {
     private baseUrl: string;
     private accountId: string;
+    private allowLiveTrading: boolean;
 
     constructor() {
         // The URL where the local IBKR Gateway (IBeam) is running.
         this.baseUrl = process.env.IBKR_API_URL || 'https://localhost:5001/v1/api';
         this.accountId = process.env.IBKR_ACCOUNT_ID || ''; // e.g., DU1234567
+        // Hard security constraint: Connections must strictly default to Paper Trading (starts with 'DU')
+        // unless explicitly overridden by conscious user toggle in environment variables or UI.
+        this.allowLiveTrading = process.env.IBKR_ALLOW_LIVE_TRADING === 'true';
     }
 
     /**
@@ -110,6 +114,16 @@ export class BrokerGateway {
     async placeMarketOrder(symbol: string, action: 'BUY' | 'SELL', quantity: number): Promise<BrokerOrderResult> {
         if (!this.accountId) {
              return { success: false, error: 'IBKR_ACCOUNT_ID not configured.' };
+        }
+
+        const isPaperAccount = this.accountId.toUpperCase().startsWith('DU');
+        if (!isPaperAccount && !this.allowLiveTrading) {
+            const blockMsg = `LIVE TRADING BLOCKED: Account ${this.accountId} is a production live account, but live trading has not been explicitly enabled. IBKR connections strictly default to Paper Trading (DU...) sandboxes and require conscious, explicit configuration (setting IBKR_ALLOW_LIVE_TRADING=true) to promote.`;
+            console.error(`[BrokerGateway] ⚠️ ${blockMsg}`);
+            return {
+                success: false,
+                error: blockMsg
+            };
         }
 
         try {

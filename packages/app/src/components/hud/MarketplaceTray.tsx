@@ -24,18 +24,18 @@ export const MarketplaceTray = () => {
             {/* Matrix List */}
             <div className="space-y-3">
                 {MOCK_GIGS.map((item) => (
-                    <div key={item.id} className="p-3 bg-black/40 border border-white/5 rounded-lg hover:border-cyan-500/20 transition-colors group cursor-pointer">
+                    <div key={item.id} className="p-3 bg-black/40 border border-white/5 rounded-lg hover:border-amber-500/20 transition-colors group cursor-pointer">
                         <div className="flex justify-between items-start mb-2">
                             <div className="flex items-center gap-2">
-                                {item.type === 'GIG' && <Briefcase className="w-3 h-3 text-emerald-400" />}
+                                {item.type === 'GIG' && <Briefcase className="w-3 h-3 text-amber-400" />}
                                 {item.type === 'AI_ACTION' && <Bot className="w-3 h-3 text-purple-400" />}
-                                {item.type === 'PROPOSAL' && <Scale className="w-3 h-3 text-cyan-400" />}
+                                {item.type === 'PROPOSAL' && <Scale className="w-3 h-3 text-amber-400" />}
                                 <span className="text-[8px] text-zinc-500 font-bold uppercase">{item.type} · {item.id}</span>
                             </div>
                             <span className={`text-[8px] font-bold uppercase px-1.5 py-0.5 rounded ${
-                                item.status === 'OPEN' ? 'bg-emerald-500/10 text-emerald-400' :
+                                item.status === 'OPEN' ? 'bg-amber-500/10 text-amber-400' :
                                 item.status === 'IN_PROGRESS' ? 'bg-purple-500/10 text-purple-400' :
-                                'bg-cyan-500/10 text-cyan-400'
+                                'bg-amber-500/10 text-amber-400'
                             }`}>
                                 {item.status.replace('_', ' ')}
                             </span>

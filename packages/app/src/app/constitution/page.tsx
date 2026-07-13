@@ -5,22 +5,26 @@ import Link from 'next/link';
 import { ArrowLeft, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@promethea/ui';
+import { useMesh } from '@/components/providers/mesh-provider';
 import dynamic from 'next/dynamic';
 
 const BirdsBackground = dynamic(() => import('../../components/ui/BirdsBackground'), { ssr: false });
 
 export default function ConstitutionPage() {
-  React.useEffect(() => {
-    const root = window.document.documentElement;
-    if (!root.classList.contains('dark')) root.classList.add('dark');
-  }, []);
+  const { themeState } = useMesh();
+  const currentTheme = themeState?.theme || 'dark';
+  const isClassicTheme = currentTheme === 'theme-latex';
 
   return (
-    <div className="bg-background text-foreground dark:text-white min-h-screen selection:bg-cyan-500/30 font-sans transition-colors duration-300">
-      <BirdsBackground />
+    <div className={`min-h-screen selection:bg-amber-500/30 transition-colors duration-500 ${
+      isClassicTheme 
+        ? 'bg-[#fdfcf7] text-[#1a1a1a] font-serif' 
+        : 'bg-background text-foreground dark:text-white font-sans'
+    }`}>
+      {!isClassicTheme && <BirdsBackground />}
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-20 border-b border-foreground/5 dark:border-white/5 bg-background/20 backdrop-blur-md">
         <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <ArrowLeft className="w-4 h-4 text-cyan-500" />
+          <ArrowLeft className="w-4 h-4 text-amber-500" />
           <span className="font-headline font-black tracking-[0.2em] text-xs text-foreground dark:text-white">BACK TO CORE</span>
         </Link>
       </header>

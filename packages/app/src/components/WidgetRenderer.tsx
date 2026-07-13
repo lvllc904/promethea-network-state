@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { SovereignMap } from './SovereignMap';
-import { useSovereignData } from '@promethea/identity';
+import { useSovereignData } from '@promethea/sovereign-store';
 import { WidgetConfig } from '@/lib/sovereign-layout';
 
 interface WidgetRendererProps {
@@ -24,7 +24,7 @@ export const WidgetRenderer: React.FC<WidgetRendererProps> = ({ config }) => {
             return (
                 <div className="p-4 bg-gray-900 border border-gray-800 rounded">
                     <h3 className="text-[10px] text-gray-500 uppercase font-black mb-2">{config.title}</h3>
-                    <div className="text-2xl font-mono text-emerald-400">$20,054.52</div>
+                    <div className="text-2xl font-mono text-amber-400">$20,054.52</div>
                 </div>
             );
         default:

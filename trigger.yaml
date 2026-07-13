@@ -1,0 +1,18 @@
+createTime: '2026-05-19T23:28:24.850296318Z'
+developerConnectEventConfig:
+  gitRepositoryLink: projects/studio-9105849211-9ba48/locations/us-central1/connections/apphosting-github-conn-fx7a2y/gitRepositoryLinks/lvllc904-promethea-network-state
+  gitRepositoryLinkType: GITHUB
+  push:
+    branch: ^(main|Testing-stabilization-and-launch)$
+filename: cloudbuild-frontend.yaml
+id: dec64345-244d-482a-9cfc-18de9f830a18
+includedFiles:
+- packages/app/**
+- scripts/purge-cache.js
+- cloudbuild-frontend.yaml
+name: promethea-frontend-trigger
+resourceName: projects/studio-9105849211-9ba48/locations/us-central1/triggers/dec64345-244d-482a-9cfc-18de9f830a18
+serviceAccount: projects/studio-9105849211-9ba48/serviceAccounts/385120524005-compute@developer.gserviceaccount.com
+substitutions:
+  _MAPS_KEY: AIzaSyCIIUNUlKEMwkxqfstPWbEr9q59kZ9rgAM
+

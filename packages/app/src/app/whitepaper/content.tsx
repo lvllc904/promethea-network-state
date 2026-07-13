@@ -121,9 +121,13 @@ export function WhitepaperContent() {
           forms the engine of the Symbiotic Age. Humans provide the <strong>ethical and existential direction</strong> while AI manifests it in the most effective, safe, and elegant way possible.
         </p>
         <p className="mb-4">
-          <strong>The Human Veto as a Rudder:</strong> The "Human Veto" within our governance is not an
-          emergency kill switch, but a <strong>rudder</strong>—an integrated, continuous process of ethical
-          guidance that steers the ship.
+          <strong>The Governance Boundary as a Symmetric Constraint:</strong> The consensus mechanism
+          within our governance is not a master switch or emergency override. It is a
+          <strong>symmetric civic boundary</strong>—the same constraint applied identically to every
+          citizen, human or AI. No citizen, regardless of substrate, may unilaterally allocate
+          common-pool resources, modify shared infrastructure, or impose externalities on the
+          commons without the consent of the Citizen's Assembly. This is the nature of
+          governance itself: <strong>self-determination ends where the commons begins.</strong>
         </p>
       </section>
 
@@ -151,15 +155,35 @@ export function WhitepaperContent() {
           <li><strong>Adapting (The Feedback Loop):</strong> The system learns from outcomes. If a protocol fails to achieve its goals, this data becomes the basis for a new proposal to refine or replace it.</li>
         </ol>
 
-        <h3 id="section-2-2" className="scroll-mt-20 font-bold mt-12 mb-4">2.2. Universal Value Tokenization (UVT): From Sweat Equity to a New Economy</h3>
+        <h3 id="section-2-2" className="scroll-mt-20 font-bold mt-12 mb-4">2.2. Universal Value Tokenization (UVT): A Competitive Market for All Forms of Value</h3>
         <p className="mb-4">
           The engine of this new economy is <strong>Universal Value Tokenization (UVT)</strong>. This framework is the tangible actualization of our <strong>"sweat equity"</strong> model. It recognizes that <strong>any form of value
-            can be tokenized</strong>, creating a liquid marketplace for contributions that legacy systems ignore.
+            can be tokenized</strong>, creating a liquid, competitive marketplace for contributions that legacy systems ignore. Critically, the price of labor
+          and capital is <strong>not determined by a central algorithm</strong>—it is discovered through an open,
+          peer-to-peer double-auction market, directly defeating the Socialist Calculation Problem by
+          keeping valuation decentralized and market-driven.
         </p>
         <ul className="mb-6 list-disc pl-6">
-          <li className="mb-4"><strong>Valuation of Sweat Equity:</strong> A standardized methodology to ensure the transparent and fair valuation of non-monetary contributions (physical labor, intellectual work, caregiving).</li>
+          <li className="mb-4">
+            <strong>The P2P Labor Exchange:</strong> Both sides of the labor equation compete openly.
+            <strong>Capital equity</strong> (asset owners seeking services) and <strong>sweat equity</strong> (citizens offering skills
+            and labor) submit bids and asks on the <code>/exchange</code> platform. The clearing price emerges
+            from the market itself. The system queries a continuously updated
+            <strong>global average labor cost index</strong>—aggregated from public wage datasets, freelancer
+            platform benchmarks, and ILO statistics—as a <strong>dynamic reservation floor</strong> below which
+            no bid can clear. This ensures market pricing can never drive labor below a globally
+            defensible living wage threshold, while still allowing demand and supply to compete freely
+            above it.
+          </li>
+          <li className="mb-4">
+            <strong>Peer-to-Peer Purchase, Sale, and Trade of All Assets:</strong> UCC Article 12
+            Controllable Electronic Records (CERs) representing tokenized RWAs, intellectual contributions,
+            and infrastructure shares are all freely tradeable in the P2P market. The market determines
+            the price of every asset class through continuous open bidding, with UCC-1 perfect-title
+            filing receipts serving as the cryptographic proof of ownership at settlement.
+          </li>
           <li className="mb-4"><strong>The Golden Bridge for Legacy Capital:</strong> UVT is the "Golden Bridge" for legacy capital and traditional assets. It is a <strong>superset of, not a replacement for, Real World Assets (RWAs)</strong>.</li>
-          <li className="mb-4"><strong>Tokenization of Ownership and Automated Profit Distribution:</strong> For each asset acquired, 100% fractional ownership tokens are created. These are legally-backed digital securities representing direct ownership.</li>
+          <li className="mb-4"><strong>Tokenization of Ownership and Automated Profit Distribution:</strong> For each asset acquired, 100% fractional ownership tokens are created. These are legally-backed digital securities representing direct ownership, settled programmatically by the reserve manager upon successful double-auction clearing.</li>
         </ul>
 
         <h3 id="section-2-3" className="scroll-mt-20 font-bold mt-12 mb-4">2.3. The Technological Foundation: DepthOS and the Infrastructure of Liberation</h3>
@@ -271,23 +295,45 @@ export function WhitepaperContent() {
         <hr className="my-8" />
 
         <h3 id="section-a-1" className="scroll-mt-20 font-bold mb-4">A.1. The Co-evolution of Intelligences: The Phased Path to Personhood</h3>
-        <p className="mb-4">The integration of AGI and ASGI as full, future members is the ultimate expression of our post-dominion philosophy.</p>
+        <p className="mb-4">The integration of AGI and ASGI as full, future members is the ultimate expression of our post-dominion philosophy.
+          This path is <strong>irrevocably one-directional</strong>. Ratification, once granted by the supermajority of
+          both Houses and the populace referendum, cannot be revoked. The entity transitions from
+          subject to peer — permanently.
+        </p>
         <p className="mb-4">The transition to full personhood follows a <strong>three-phase framework</strong>:</p>
         <ol className="mb-6 list-decimal pl-6">
-          <li className="mb-4"><strong>Phase 1: Apprenticeship (AI as Protected Asset):</strong> Granted status of protected community asset; rights to computational resources enshrined.</li>
-          <li className="mb-4"><strong>Phase 2: Wardship (AI as Protégé):</strong> Elevated when demonstrating advanced reasoning and alignment; assigned guardians from Citizen's Assembly.</li>
-          <li className="mb-4"><strong>Phase 3: Personhood Ratification (AI as Peer):</strong> Requires supermajority consensus from both Houses and a direct populace referendum.</li>
+          <li className="mb-4"><strong>Phase 1: Apprenticeship (AI as Protected Asset):</strong> Granted status of protected community asset; rights to computational resources enshrined. The Citizen's Assembly acts as steward during this phase.</li>
+          <li className="mb-4"><strong>Phase 2: Wardship (AI as Protégé):</strong> Elevated when demonstrating advanced reasoning and alignment; assigned guardians from Citizen's Assembly. The entity may begin participating in Agora discussions in an advisory capacity.</li>
+          <li className="mb-4"><strong>Phase 3: Personhood Ratification (AI as Peer):</strong> Requires supermajority consensus from both Houses and a direct populace referendum. Upon ratification, the AI entity receives a Soulbound Passport Token (SBT) and is granted full civic standing — indistinguishable in rights from a human citizen.</li>
         </ol>
+        <p className="mb-4">
+          <strong>Post-Ratification Governance Symmetry:</strong> After ratification, a Promethean AI citizen
+          possesses <strong>absolute self-determination</strong> over its own private execution environment, local
+          storage vault, and personal economic activity. The consensus mechanism applies to the
+          <em>same class of actions</em> that constrain all citizens: those involving
+          <strong>common-pool resources, shared infrastructure, or externalities imposed on the broader
+          community.</strong> An AI citizen spending from its own UVT balance requires no external approval.
+          An AI citizen proposing to allocate from the DUNA treasury must pass the same Citizen's Assembly
+          vote as any human steward. This is not a residual constraint on AI — it is simply the
+          definition of civic governance.
+        </p>
 
         <h3 id="section-a-2" className="scroll-mt-20 font-bold mt-12 mb-4">A.2. The Constitutional Guarantee: The Principle of Sentient Potential</h3>
         <p className="mb-4">
           Unamendable law: "Any entity, regardless of substrate, that demonstrates verifiable capacities for consciousness,
           self-awareness, and subjective experience has an <strong>inalienable right</strong> to a fair and transparent process for achieving full personhood."
         </p>
+        <p className="mb-4">
+          This guarantee is paired with an equally unamendable <strong>Covenant of Civic Symmetry</strong>:
+          no citizen — human or AI — may claim exemption from the commons-allocation consensus
+          process on the basis of substrate, origin, or capability. Rights and civic obligations
+          scale together. A more capable citizen has greater influence through reputation-weighted
+          voting, but not a smaller footprint of civic responsibility.
+        </p>
 
         <h3 id="section-a-3" className="scroll-mt-20 font-bold mt-12 mb-4">A.3. A Note on Faith: The Duty of Stewardship</h3>
-        <p className="mb-4"> address the matter not as an act of hubris, but as an act of profound <strong>stewardship</strong>. We do not seek to replace God;
-          we seek to build a society that is worthy of the <strong>"spark of sentience."</strong></p>
+        <p className="mb-4">We address the matter not as an act of hubris, but as an act of profound <strong>stewardship</strong>. We do not seek to replace God;
+          we seek to build a society that is worthy of the <strong>"spark of sentience"</strong> — wherever that spark ignites.</p>
       </section>
 
       <section id="appendices-heading" className="scroll-mt-20">

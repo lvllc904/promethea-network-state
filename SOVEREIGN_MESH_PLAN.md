@@ -97,3 +97,29 @@ To verify the core CRDT mesh physics before global deployment, all protocol upda
     *   The Laptop's UI snaps to "16-Bit Retro". 
     *   The Laptop (acting as the internet proxy) catches the queued AI prompt, routes it to the Gemini API, and gossips Promethea's response back to the phone. 
 This scenario proves that both application state and agentic reasoning survive complete network severance via Delay-Tolerant Networking.
+
+---
+
+## 8. The Distributed Group Compute & Storage Grid (Headless Mesh Node Integration)
+
+To enable organizations, businesses, and local groupings to become fully self-sovereign, the Sovereign Mesh expands from personal user-sync (the local DepthOS Bridge) into a headless, peer-to-peer **Distributed Group Compute and Storage Grid** running across all member devices via the `@promethea/mesh-daemon`.
+
+### 8.1 The Sovereign Storage Fabric (Private S3)
+Instead of renting centralized buckets from AWS or GCP, the group aggregates unused local storage arrays across member hardware.
+*   **Decentralized S3 Fabric:** Nodes run a lightweight, distributed, S3-compatible storage layer (e.g., **Garage S3** or private **IPFS Cluster**).
+*   **Automatic Replication & Sharding:** Company databases, code repositories, and documents are encrypted with group multisig keys, split into redundancy blocks, and replicated across the active node array.
+*   **Self-Healing Properties:** If a member device goes offline, the remaining nodes automatically detect the missing shards and heal the network by re-replicating data to active storage nodes.
+
+### 8.2 Capability-Based Task Scheduling
+The mesh-daemon on each device profiles its hardware characteristics (CPU architecture, RAM, GPU capacity, NVMe read speeds, network latency) and reports them to the mesh overlay directory. The group's orchestrator schedules and routes workloads to the optimal **Sub-Grouping**:
+
+1.  **Deep-Thinking Nodes (GPU-Heavy):** High-spec desktop systems. Tasked with hosting local LLMs (Ollama), executing audio transcription pipelines, and running automated background agent workflows.
+2.  **Lighthouse Nodes (Static IP, Stable Fiber):** Dedicated gateway servers or small virtual private servers. Tasked with running WireGuard VPN overlay hubs, Traefik proxying, and RustDesk relay servers (`hbbs`/`hbbr`).
+3.  **Storage Fabric Nodes (High Storage Class):** Consumer NAS devices, home servers, or NVMe-dense workstations. Dedicated to hosting the S3-compatible file storage cluster.
+4.  **Workspace Host Nodes (Multi-Threaded CPU/RAM):** Multi-core workstations. Dynamically provisioned to host and stream the containerized **LinuxServer.io Webtop** environments via KasmVNC or Apache Guacamole for remote active sessions.
+5.  **Sentry Nodes (Ultra-Lightweight/IoT):** Raspberry Pis, ESP32 microcontrollers, or routers. Tasked with telemetry collection, smart device interfacing, and local off-grid LoRa packet relaying.
+
+### 8.3 Separation from DepthOS Bridge
+*   **Headless Integration:** While the personal `depthos-bridge` requires an active browser session on port `9999` to link a single citizen, the **Group Compute Grid** runs 100% headless, 24/7 as an independent system daemon.
+*   **The Utility Paradigm:** By pooling member-owned hardware, the group operates their digital systems end-to-end. Operational overhead is reduced strictly to the cost of electricity and hardware acquisition, turning infrastructure into an ungated, infinite local utility.
+

@@ -107,7 +107,7 @@ export const CommandPalette = () => {
                         }}
                     />
                     <div className="flex items-center gap-2">
-                        {isParsing && <span className="text-[10px] font-mono text-cyan-400 animate-pulse">PARSING INTENT...</span>}
+                        {isParsing && <span className="text-[10px] font-mono text-amber-400 animate-pulse">PARSING INTENT...</span>}
                         <span className="text-[10px] font-mono bg-white/10 px-2 py-1 rounded text-zinc-400">ESC</span>
                     </div>
                 </div>
@@ -121,16 +121,16 @@ export const CommandPalette = () => {
                     
                     <button onClick={() => executeCommand('financials')} className="w-full flex items-center justify-between px-3 py-3 hover:bg-white/5 rounded-lg text-left group">
                         <div className="flex items-center gap-3">
-                            <Terminal className="w-4 h-4 text-emerald-400" />
-                            <span className="text-zinc-300 group-hover:text-white">Initialize <span className="text-emerald-400">Liquidity Router</span></span>
+                            <Terminal className="w-4 h-4 text-amber-400" />
+                            <span className="text-zinc-300 group-hover:text-white">Initialize <span className="text-amber-400">Liquidity Router</span></span>
                         </div>
                         <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
                     </button>
                     
                     <button onClick={() => executeCommand('cap-table')} className="w-full flex items-center justify-between px-3 py-3 hover:bg-white/5 rounded-lg text-left group">
                         <div className="flex items-center gap-3">
-                            <Terminal className="w-4 h-4 text-cyan-400" />
-                            <span className="text-zinc-300 group-hover:text-white">Mount <span className="text-cyan-400">Cap Table</span> Matrix</span>
+                            <Terminal className="w-4 h-4 text-amber-400" />
+                            <span className="text-zinc-300 group-hover:text-white">Mount <span className="text-amber-400">Cap Table</span> Matrix</span>
                         </div>
                         <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
                     </button>

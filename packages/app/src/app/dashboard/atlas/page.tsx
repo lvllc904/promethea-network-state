@@ -23,8 +23,12 @@ import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 import { SovereignCockpit } from '@/components/SovereignCockpit';
 import { SovereignMap } from '@/components/SovereignMap';
+import { useHUD, defaultPOI } from '@/lib/hud-store';
 
 export default function AtlasPage() {
+  const { activePOI } = useHUD();
+  const poi = activePOI || defaultPOI;
+
   const { data: liveAssets, refetch } = useSovereignData<any[]>('/api/assets');
   const { data: atlasLayers } = useSovereignData<any[]>('/api/atlas/layers');
   const { data: intelligence } = useSovereignData<any[]>('/intelligence');
@@ -61,12 +65,9 @@ export default function AtlasPage() {
     }
   };
 
-  const generateMiniData = (methodId: string) => {
-     const method = refineries?.find(r => r.methodId === methodId);
-     const base = method?.totalProfit || 50;
-     const variance = (method?.executionCount || 1) * 5;
+  const generateMiniData = (baseline: number) => {
      return Array.from({ length: 12 }, (_, i) => ({ 
-       val: Math.max(0, base + (Math.random() - 0.5) * variance + (i * 2)) 
+       val: Math.max(0, baseline + Math.sin(i / 1.5) * 8 + (Math.random() - 0.5) * 3) 
      }));
   };
 
@@ -86,26 +87,26 @@ export default function AtlasPage() {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
              {[
-               { id: 'land-scanner', label: 'Solar Potential', color: '#fbbf24' },
-               { id: 'bio-node', label: 'Wind Yield', color: '#06b6d4' },
-               { id: 'data-scraping', label: 'Water Rights', color: '#3b82f6' },
-               { id: 'real-estate-tokenization', label: 'Zoning Status', color: '#10b981' }
+               { label: 'Solar Potential', color: '#fbbf24', value: poi.metrics.solar },
+               { label: 'Wind Yield', color: '#06b6d4', value: poi.metrics.wind },
+               { label: 'Water Rights', color: '#3b82f6', value: poi.metrics.water },
+               { label: 'Zoning Status', color: '#10b981', value: poi.metrics.zoning }
              ].map(m => (
                 <div key={m.label} className="p-3 bg-gray-900 border border-gray-800 rounded">
                    <p className="text-[9px] text-gray-600 uppercase font-bold mb-2">{m.label}</p>
                    <div className="h-10 w-full opacity-60">
                       <ResponsiveContainer width="100%" height="100%">
-                         <AreaChart data={generateMiniData(m.id || '')}>
+                         <AreaChart data={generateMiniData(m.value)}>
                             <Area type="monotone" dataKey="val" stroke={m.color} fill={m.color} fillOpacity={0.1} strokeWidth={1.5} dot={false} />
                          </AreaChart>
                       </ResponsiveContainer>
                    </div>
                    <div className="flex justify-between items-end mt-1">
                       <p className="text-[10px] font-mono text-white uppercase font-black">
-                         {refineries?.find((r: any) => r.methodId === m.id)?.totalProfit > 0 ? 'Active' : 'Standby'}
+                         {m.value}% Potential
                       </p>
                       <span className="text-[8px] text-gray-600 font-mono">
-                         {Math.round((refineries?.find((r: any) => r.methodId === m.id)?.totalProfit || 0) * 10) / 10} UVT
+                         {m.label === 'Zoning Status' ? 'Completed' : 'Raw Yield'}
                       </span>
                    </div>
                 </div>
@@ -123,7 +124,7 @@ export default function AtlasPage() {
           <div className="flex justify-between items-center mb-2">
              <h2 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Asset Registry</h2>
              <Link href="/dashboard/assets/new">
-                <Button size="sm" className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/20 text-[9px] h-7 uppercase font-black">
+                <Button size="sm" className="bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 text-[9px] h-7 uppercase font-black">
                    <PlusCircle className="w-3 h-3 mr-1" /> Propose New Asset
                 </Button>
              </Link>
@@ -136,7 +137,7 @@ export default function AtlasPage() {
                   <p className="text-[10px] text-gray-600 uppercase mt-1">Initiate a Zero-to-One test by underwriting a real-world proposal.</p>
                </div>
                <Link href="/dashboard/assets/new">
-                  <Button className="bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-black uppercase tracking-wider">
+                  <Button className="bg-amber-600 hover:bg-amber-500 text-white text-[10px] font-black uppercase tracking-wider">
                      Begin Asset Underwriting
                   </Button>
                </Link>
@@ -144,7 +145,7 @@ export default function AtlasPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {assets.map((asset) => (
-                <div key={asset.id} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-cyan-500/50 transition-all group">
+                <div key={asset.id} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-amber-500/50 transition-all group">
                   <div className="flex justify-between items-start mb-4">
                      <div>
                         <span className="text-[8px] font-bold text-gray-600 uppercase">{asset.type}</span>
@@ -155,7 +156,7 @@ export default function AtlasPage() {
                   <div className="space-y-2 mb-4">
                      <div className="flex justify-between text-[9px]">
                         <span className="text-gray-500 underline decoration-gray-800 decoration-dotted">Status</span>
-                        <span className="text-cyan-400 font-bold uppercase">{asset.status}</span>
+                        <span className="text-amber-400 font-bold uppercase">{asset.status}</span>
                      </div>
                      <div className="flex justify-between text-[9px]">
                         <span className="text-gray-500">Valuation</span>
@@ -164,7 +165,7 @@ export default function AtlasPage() {
                   </div>
                   <button 
                     onClick={() => handleAction('actualize_claim', { assetId: asset.id })}
-                    className="w-full py-2 bg-gray-800 hover:bg-cyan-600 text-[9px] font-black uppercase tracking-widest rounded transition-colors"
+                    className="w-full py-2 bg-gray-800 hover:bg-amber-600 text-[9px] font-black uppercase tracking-widest rounded transition-colors"
                   >
                     Actualize Claim
                   </button>
@@ -183,14 +184,14 @@ export default function AtlasPage() {
         <div className="space-y-4">
            <div className="flex justify-between items-center mb-2">
               <h2 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Mapped Entities</h2>
-              <Button size="sm" className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 text-[9px] h-7 uppercase font-black">
+              <Button size="sm" className="bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 text-[9px] h-7 uppercase font-black">
                  <PlusCircle className="w-3 h-3 mr-1" /> Map New Organization
               </Button>
            </div>
            
            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {institutions.length > 0 ? institutions.map((org, i) => (
-                <div key={i} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-emerald-500/50 transition-all">
+                <div key={i} className="p-4 bg-gray-900 border border-gray-800 rounded hover:border-amber-500/50 transition-all">
                    <div className="flex justify-between items-start mb-3">
                       <div>
                          <span className="text-[7px] text-gray-600 font-black uppercase tracking-widest">{org.type}</span>
@@ -201,7 +202,7 @@ export default function AtlasPage() {
                    <div className="flex justify-between items-end">
                       <div>
                           <span className="text-[8px] text-gray-500 uppercase block mb-1">Reputation Stake</span>
-                         <span className="text-xs font-mono text-emerald-400 font-bold">{org.stake}</span>
+                         <span className="text-xs font-mono text-amber-400 font-bold">{org.stake}</span>
                       </div>
                       <button className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-[8px] font-black uppercase tracking-widest rounded transition-all text-gray-500">
                          View Charter
@@ -224,8 +225,8 @@ export default function AtlasPage() {
       icon: <Droplet className="w-3 h-3" />,
       content: (
         <div className="space-y-6">
-           <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-lg">
-              <h3 className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-4 flex items-center">
+           <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-lg">
+              <h3 className="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-4 flex items-center">
                  <Droplet className="w-3 h-3 mr-2" /> Live Planetary Telemetry [Sovereign Hub]
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -269,8 +270,10 @@ export default function AtlasPage() {
         description="Territorial Metadata, RWA Underwriting & Environmental Protocols"
         tabs={cockpitTabs}
         stats={[
-           { label: 'Territory Claimed', value: '1,240 AC', color: 'text-cyan-400' },
-           { label: 'Fabrication Uptime', value: '98.4%' }
+           { label: 'Active POI', value: poi.name, color: 'text-amber-400' },
+           { label: 'Coordinates', value: `${poi.coordinates.lat.toFixed(4)}, ${poi.coordinates.lng.toFixed(4)}` },
+           { label: 'Reference Frame', value: poi.referenceFrame },
+           { label: 'Owner', value: poi.ownership?.ownerName || 'None' }
         ]}
         actions={[
            { label: 'Initialize Global Scan', action: 'trigger_atlas_scan' },

@@ -40,18 +40,18 @@ export const SovereignPulseChart: React.FC<SovereignPulseChartProps> = ({ veloci
             },
             crosshair: {
                 mode: 1,
-                vertLine: { color: '#10b981', width: 1, style: 3 },
-                horzLine: { color: '#10b981', width: 1, style: 3 },
+                vertLine: { color: '#f59e0b', width: 1, style: 3 },
+                horzLine: { color: '#f59e0b', width: 1, style: 3 },
             },
             autoSize: true,
         });
         chartInstanceRef.current = chart;
 
-        // Primary Series: Metabolic Velocity (Cyan)
+        // Primary Series: Metabolic Velocity (Gold-Amber)
         const velocitySeries = chart.addSeries(AreaSeries, {
-            lineColor: '#06b6d4',
-            topColor: 'rgba(6, 182, 212, 0.3)',
-            bottomColor: 'rgba(6, 182, 212, 0.0)',
+            lineColor: '#f59e0b',
+            topColor: 'rgba(245, 158, 11, 0.3)',
+            bottomColor: 'rgba(245, 158, 11, 0.0)',
             lineWidth: 2,
             priceScaleId: 'right',
             title: 'Ops/s'
@@ -82,14 +82,14 @@ export const SovereignPulseChart: React.FC<SovereignPulseChartProps> = ({ veloci
             <div className="absolute top-0 left-0 right-0 z-10 p-4 flex justify-between items-start pointer-events-none">
                 <div>
                     <h3 className="text-sm font-black uppercase text-white font-mono flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-cyan-500" />
+                        <Activity className="w-4 h-4 text-amber-500" />
                         NOC Telemetry Stream
                     </h3>
                     <p className="text-[9px] text-gray-500 uppercase tracking-widest font-bold">Metabolic Velocity vs Immune Responses</p>
                 </div>
                 <div className="flex gap-4">
                     <div className="text-right">
-                        <span className="text-[8px] text-cyan-500 uppercase block font-bold">Current Velocity</span>
+                        <span className="text-[8px] text-amber-500 uppercase block font-bold">Current Velocity</span>
                         <span className="text-xs font-mono font-black text-white">{velocityData[velocityData.length - 1]?.value.toFixed(1)} Ops/s</span>
                     </div>
                     <div className="text-right">

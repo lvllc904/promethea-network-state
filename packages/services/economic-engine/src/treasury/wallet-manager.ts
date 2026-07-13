@@ -167,6 +167,13 @@ export class WalletManager {
     }
 
     /**
+     * Helper to transfer SOL directly
+     */
+    async transferSol(to: string, amount: number): Promise<string> {
+        return this.transferNative('solana', to, amount.toString());
+    }
+
+    /**
      * Get SPL token balances for Solana
      */
     async getSolanaTokenBalances(): Promise<{ symbol: string; balance: number; usdValue: number }[]> {

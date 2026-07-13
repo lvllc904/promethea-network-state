@@ -543,7 +543,7 @@ const TelemetryOverlay = ({ features }: { features: any[] }) => {
                             <Html distanceFactor={10} position={[node.pos.x, node.pos.y + 0.3, node.pos.z]} center>
                                 <div className="glass-panel p-2 border border-zinc-800 bg-black/95 text-white font-mono text-[7px] rounded-md shadow-2xl flex flex-col gap-0.5 whitespace-nowrap select-none pointer-events-none z-50">
                                     <span className="font-black text-amber-400 uppercase tracking-widest flex items-center gap-1">
-                                        <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: node.color }} />
+                                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: node.color }} />
                                         {node.feature.properties?.title || 'Telemetry Target'}
                                     </span>
                                     <span className="text-[6px] text-zinc-400 uppercase tracking-wider">
@@ -801,6 +801,18 @@ export const InterstellarMap = () => {
             active = false;
             clearInterval(interval);
         };
+    }, []);
+
+    // Support Escape key to clear selected target and zoom back out
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setSelectedPlanet(null);
+                setSelectedBody(null);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
     const [hoveredBody, setHoveredBody] = useState<any | null>(null);
     const [celestialData, setCelestialData] = useState<any[]>([]);
@@ -1071,7 +1083,7 @@ export const InterstellarMap = () => {
                                 pointerEvents="none"
                                 center
                             >
-                                <div className="glass-panel px-2.5 py-1.5 border border-amber-400/40 bg-black/95 text-white font-mono text-[8px] rounded-lg shadow-[0_0_10px_rgba(245,158,11,0.3)] flex flex-col gap-0.5 whitespace-nowrap select-none">
+                                <div className="glass-panel px-3 py-2 text-white font-sans text-xs rounded-lg flex flex-col gap-1 whitespace-nowrap select-none">
                                     <span className="font-black text-amber-400 uppercase tracking-widest">{hoveredBody.id}</span>
                                     <span className="text-[6px] text-zinc-400 uppercase tracking-wider">{hoveredBody.type} // mag: {hoveredBody.mag}</span>
                                     <span className="text-[6px] text-rose-400 tracking-wider">z = {hoveredBody.z}</span>
@@ -1115,6 +1127,9 @@ export const InterstellarMap = () => {
                             minDistance={2} // Allow close zooms to trigger the transition continuum
                             maxPolarAngle={Math.PI / 1.9} // Prevent clipping below bottom grid
                             enablePan={false}
+                            enableDamping={true}
+                            dampingFactor={0.05}
+                            zoomSpeed={1.2}
                         />
                     </Canvas>
                 ) : (
@@ -1177,7 +1192,7 @@ export const InterstellarMap = () => {
                             const pColor = isLuna ? '#ffffff' : '#f59e0b';
                             return (
                                 <g key={packet.id} ref={el => { packetRefs.current[packet.id] = el; }}>
-                                    <circle r="4" fill={pColor} className="animate-pulse" />
+                                    <circle r="4" fill={pColor} />
                                     <circle r="12" fill="none" stroke={pColor} strokeWidth="0.5" opacity="0.4" className="animate-ping" />
                                     <text y="-8" textAnchor="middle" fill="#f59e0b" className="font-mono text-[5px] uppercase tracking-widest pointer-events-none select-none">
                                         PKG {packet.id.split('-')[1]} ({Math.floor(packet.transitProgress * 100)}%)
@@ -1360,7 +1375,7 @@ export const InterstellarMap = () => {
                 {/* Header title */}
                 <div className="flex flex-col gap-1 border-b border-amber-400/20 pb-3">
                     <div className="flex flex-row items-center gap-2">
-                        <Radio className="w-4 h-4 text-amber-400 animate-pulse" />
+                        <Radio className="w-4 h-4 text-zinc-400" />
                         <span className="text-xs font-black tracking-widest text-white">SYSTEM SELECTOR</span>
                     </div>
                     <span className="text-[7px] text-zinc-400">TELEMETRY LINK STATUS AND COGNITIVE TRANSCEIVERS</span>
@@ -1400,8 +1415,17 @@ export const InterstellarMap = () => {
                                 className="w-4 h-4 rounded-full border border-black/40 shrink-0"
                                 style={{ backgroundColor: selectedPlanet.color, boxShadow: `0 0 10px ${selectedPlanet.color}` }}
                             />
-                            <div className="flex flex-col">
-                                <span className="text-[11px] font-black text-white uppercase tracking-wider">{selectedPlanet.name}</span>
+                            <div className="flex flex-col flex-1">
+                                <div className="flex flex-row justify-between items-center">
+                                    <span className="text-[11px] font-black text-white uppercase tracking-wider">{selectedPlanet.name}</span>
+                                    <button 
+                                        onClick={() => setSelectedPlanet(null)}
+                                        className="text-[8px] text-zinc-500 hover:text-amber-400 font-bold uppercase cursor-pointer transition-colors duration-200"
+                                        title="Deselect Planet & Reset Focus"
+                                    >
+                                        [Reset System Focus]
+                                    </button>
+                                </div>
                                 <span className="text-[6px] text-zinc-400 uppercase tracking-widest">{selectedPlanet.details.type}</span>
                             </div>
                         </div>
@@ -1455,14 +1479,14 @@ export const InterstellarMap = () => {
                             <button
                                 onClick={() => handleDescent(selectedPlanet)}
                                 disabled={transitioning !== null}
-                                className="mt-auto px-4 py-2 bg-amber-950/20 hover:bg-amber-950/60 border border-amber-500/40 hover:border-amber-400 text-amber-400 hover:text-white text-[9px] font-black rounded-lg uppercase tracking-widest transition-all duration-300 flex flex-row items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="mt-auto px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-zinc-300 hover:text-white text-[10px] font-bold rounded-lg uppercase tracking-widest transition-all duration-300 flex flex-row items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <ArrowDownCircle className="w-4 h-4 animate-bounce" />
                                 Initiate Surface Descent
                             </button>
                         ) : (
                             <div className="mt-auto glass-panel p-3 border border-amber-500/20 bg-amber-950/10 rounded-xl flex flex-row items-start gap-2">
-                                <ShieldAlert className="w-4 h-4 text-amber-500 shrink-0 mt-0.5 animate-pulse" />
+                                <ShieldAlert className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                                 <div className="flex flex-col gap-0.5">
                                     <span className="text-[8px] font-black text-amber-400 uppercase tracking-wider">Descent Restrained</span>
                                     <span className="text-[6px] text-zinc-400 leading-normal">
@@ -1552,7 +1576,7 @@ export const InterstellarMap = () => {
                         <div className="relative flex items-center justify-center w-24 h-24">
                             <div className="absolute inset-0 border border-dashed border-amber-400/40 rounded-full animate-spin" style={{ animationDuration: '8s' }} />
                             <div className="absolute inset-2 border border-amber-400/20 rounded-full animate-spin" style={{ animationDuration: '4s', animationDirection: 'reverse' }} />
-                            <Layers className="w-8 h-8 text-amber-400 animate-pulse" />
+                            <Layers className="w-8 h-8 text-zinc-400" />
                         </div>
 
                         {/* Flight computer readouts */}

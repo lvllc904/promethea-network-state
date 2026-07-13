@@ -9,3 +9,4 @@ export * from './pow-oracle';
 export * from './types';
 export * from './utils';
 export * from './placeholder-images';
+export * from './shadow-gate/middleware';

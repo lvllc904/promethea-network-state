@@ -1,6 +1,12 @@
 # The Promethean Roadmap: To the Sovereign Mesh
 
+> [!IMPORTANT]
+> **Contextual Recovery Instruction for AI Agents (Post-Compaction Protocol):**
+> If you are resuming from a conversation compaction or truncation, you must execute the following sequence to fully restore your cognitive context:
+> *"please start with the ROADMAP.md master file and work your way out to all of the supporting documents, then review the entire codebase line by line, then review the entire mono repo, line by line and then you will have the contextual information to respond correctly, my apologies, you lost some of the contextual clues, most likely from needing to truncate a chat thread for getting too long..."*
+
 > "We are not building a country; we are building the physics for all future countries."
+
 
 ## Executive Summary: The Sovereign Substrate Pivot (May 2026)
 TPNS has evolved from a standalone digital jurisdiction into the **Sovereign Substrate**. We are now positioned as the **Layer 0 Infrastructure** for the "Network State" ecosystem. By providing autonomous economic engines, tokenized governance, and M2M (Machine-to-Machine) visibility, TPNS acts as the neutral, high-utility cloud provider for parallel societies.
@@ -45,6 +51,19 @@ TPNS has evolved from a standalone digital jurisdiction into the **Sovereign Sub
     2.  **UCC Article 12 (CER) Conformance**: Mints RWA tokens (`UCCRegistry.sol`) conforming as Controllable Electronic Records (CERs), proving legal "control" through private key ownership.
     3.  **ZK-Identity Attestations**: Embeds an on-edge encryption vault (`zk-identity-service.ts` on `localhost:9999`) to store and verify physical government IDs and birth certificates locally (AES-256), outputing lightweight W3C Verifiable Credentials (VCs).
     4.  **Soulbound Passport Tokens (SBTs)**: Mints non-transferable citizenship credentials (`SovereignIdentity.sol`) to verify unique humans on-chain, preventing Sybil attacks and establishing compliant trading bounds (UCC Article 8) for RWA markets.
+
+### 4.6: Conversational Pivot Protocol (CPP) & DSG Mind Map Canvas [NEW]
+*   **The Vision**: Transitioning Promethean human-AI collaboration from synchronous, legacy linear chat channels to a Directed Semantic Graph (DSG) with **State-Halting Suspension** and retroactive history anchoring, maximizing human-agent co-reasoning on the spatial DSG Mind Map Canvas.
+*   **Action**: Implementing the complete CPP client/server protocol, control pipelines, and custom spatial UI widgets:
+    1.  **State-Store & WS Pipelines**: Rolling out `@promethea/cpp-client` and `@promethea/cpp-server` npm structures, implementing custom WebSocket control frames (`CPP_PIVOT_INIT`, `CPP_ANCHOR_HEAD`, `CPP_STREAM_HALTED`), and adding state-store pause/resume methods with serialized `executionSnapshot` support.
+    2.  **Suspension & Canvas Integration**: Linking the model dispatcher cleanly to CPP's Stateful Suspension—letting users pause intensive co-reasoning threads to branch parallel sibling ideas, then retroactively anchoring those sub-graphs to any point in the history matrix on the spatial dashboard.
+
+### 4.7: Omni-Lake Open Property Ingestion & Unified Query Engine [NEW]
+*   **The Vision**: Creating a high-fidelity, open-government real-estate and socioeconomic ingestion pipeline within the Omni-Lake to dynamically map land and housing metrics without relying on restricted commercial registries or gated GSE APIs.
+*   **Action**: Building the automated state and federal data scrapers and unified DB query routing:
+    1.  **Florida State Property Ingestion**: Automating scripts to systematically parse and aggregate statewide assessment text rolls (NAL, NAP, SDF) and parcel shapefiles directly from the **Florida Department of Revenue Portal** (bypassing restricted, gated GSE APIs like Fannie Mae/Freddie Mac UPD, which are strictly gated for registered mortgage lenders and TSPs).
+    2.  **Census & HUD Layering**: Connecting public federal endpoints, querying the **US Census Bureau REST API (ACS)** for neighborhood-level socioeconomic context, and calling the **HUD User Portal API** for Fair Market Rent (FMR) limits and income parameters.
+    3.  **Refinery & Query Routing**: Storing raw parsed assessor tables and federal vectors directly into the `omni_intel_lake` and bridging them to the map canvas widget libraries as unified GIS visualizers.
 
 ---
 

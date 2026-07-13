@@ -26,7 +26,8 @@ export async function POST(req: Request) {
         // Forward to the Promethea LISP Core (Simulated via a network call or direct process invocation)
         // This triggers the `:diagnose-issue` phase in the Metabolic Loop
         try {
-            await fetch('http://localhost:3000/api/engine/execute', {
+            const origin = new URL(req.url).origin;
+            await fetch(`${origin}/api/engine/execute`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 

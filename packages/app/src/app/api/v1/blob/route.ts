@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     const r = await fetch(`${LEDGER_URL}/api/v1/blob?did=${did}&syndicate_id=${syndicate_id}`, { 
       headers: { 'Authorization': token },
       cache: 'no-store', 
-      signal: AbortSignal.timeout(30000) 
+      signal: AbortSignal.timeout(3000) 
     });
     
     if (r.ok) { 

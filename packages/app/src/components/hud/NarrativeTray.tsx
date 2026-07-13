@@ -1,8 +1,21 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { Radio, Eye, TerminalSquare, Zap } from 'lucide-react';
+import { Radio, Eye, TerminalSquare, Zap, Loader2, Sparkles } from 'lucide-react';
 import { useHUD } from '@/lib/hud-store';
+
+const stripHtml = (text: string) => {
+    if (!text) return '';
+    return text
+        .replace(/<\/?[^>]+(>|$)/g, "")
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .trim();
+};
 
 export const NarrativeTray = () => {
     const { activatePillar } = useHUD();
@@ -10,12 +23,54 @@ export const NarrativeTray = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [localFeed, setLocalFeed] = useState<any[]>([]);
 
+    // Form states
+    const [title, setTitle] = useState('');
+    const [category, setCategory] = useState('NARRATIVE_SIGNAL');
+    const [content, setContent] = useState('');
+    const [reality, setReality] = useState('SIMULATED');
+    const [isBroadcasting, setIsBroadcasting] = useState(false);
+    const [formError, setFormError] = useState('');
+    const [formSuccess, setFormSuccess] = useState(false);
+
+    // Load draft from localStorage on mount
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem('promethea-local-signals');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed.title) setTitle(parsed.title);
+                if (parsed.category) setCategory(parsed.category);
+                if (parsed.content) setContent(parsed.content);
+                if (parsed.reality) setReality(parsed.reality);
+            }
+        } catch (e) {
+            console.warn('[NarrativeTray] Failed to load draft from localStorage', e);
+        }
+    }, []);
+
+    // Save draft to localStorage on form state changes
+    useEffect(() => {
+        if (!title && !content) {
+            // Avoid saving empty drafts
+            return;
+        }
+        try {
+            localStorage.setItem('promethea-local-signals', JSON.stringify({ title, category, content, reality }));
+        } catch (e) {
+            console.warn('[NarrativeTray] Failed to save draft to localStorage', e);
+        }
+    }, [title, category, content, reality]);
+
     const fetchFeed = useCallback(async () => {
         try {
             const r = await fetch('/api/lake?type=NARRATIVE_SIGNAL,GOVERNANCE,VISIONARY&limit=8', { cache: 'no-store' });
             if (r.ok) {
                 const d = await r.json();
-                if (Array.isArray(d) && d.length > 0) { setIntelFeed(d); setIsLoading(false); return; }
+                if (Array.isArray(d) && d.length > 0) { 
+                    setIntelFeed(d); 
+                    setIsLoading(false); 
+                    return; 
+                }
             }
         } catch (_) {}
         setIsLoading(false);
@@ -44,13 +99,57 @@ export const NarrativeTray = () => {
         return () => clearInterval(interval);
     }, [fetchFeed]);
 
+    const handleBroadcast = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!title.trim() || !content.trim()) {
+            setFormError('Title and Content fields are required.');
+            return;
+        }
+
+        setFormError('');
+        setIsBroadcasting(true);
+        setFormSuccess(false);
+
+        try {
+            const response = await fetch('/api/lake', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: title.trim(), category, content: content.trim(), reality })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.signal) {
+                    // Prepend newly created signal to local feed
+                    setLocalFeed(prev => [result.signal, ...prev]);
+                    
+                    // Reset form and clear localStorage draft
+                    setTitle('');
+                    setContent('');
+                    localStorage.removeItem('promethea-local-signals');
+                    
+                    setFormSuccess(true);
+                    setTimeout(() => setFormSuccess(false), 3000);
+                } else {
+                    setFormError(result.error || 'Failed to broadcast signal.');
+                }
+            } else {
+                setFormError('Failed to broadcast signal (HTTP error).');
+            }
+        } catch (err: any) {
+            setFormError(err.message || 'Connection failure to DepthOS lake.');
+        } finally {
+            setIsBroadcasting(false);
+        }
+    };
+
     const typeColors: Record<string, string> = {
-        SYNDICATE: 'text-cyan-400',
+        SYNDICATE: 'text-amber-400',
         VETO: 'text-red-400',
         CONTENT: 'text-purple-400',
         SYSTEM: 'text-zinc-400',
         GOVERNANCE: 'text-amber-400',
-        VISIONARY: 'text-emerald-400',
+        VISIONARY: 'text-amber-400',
         NARRATIVE_SIGNAL: 'text-purple-300',
     };
 
@@ -82,13 +181,131 @@ export const NarrativeTray = () => {
                 </div>
             </div>
 
+            {/* Inline Broadcaster Form */}
+            <div className="p-4 bg-black/40 border border-purple-500/20 rounded-xl space-y-4">
+                <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-purple-400" />
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-purple-200">
+                        Broadcast Narrative Block
+                    </h4>
+                </div>
+                
+                <form onSubmit={handleBroadcast} className="space-y-3">
+                    {formError && (
+                        <p className="text-[9px] font-mono text-red-400 bg-red-950/20 border border-red-500/20 p-2 rounded">
+                            {formError}
+                        </p>
+                    )}
+                    {formSuccess && (
+                        <p className="text-[9px] font-mono text-amber-400 bg-amber-950/20 border border-amber-500/20 p-2 rounded">
+                            ✓ Signal block established in sovereign lake.
+                        </p>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-2">
+                        <div>
+                            <label htmlFor="signal-title" className="text-[8px] text-zinc-500 font-mono block mb-1">SIGNAL TITLE</label>
+                            <input
+                                id="signal-title"
+                                name="signal_title"
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Zoning Charter Alpha"
+                                className="w-full bg-black/60 border border-white/10 rounded px-2.5 py-1.5 text-[9px] text-white focus:outline-none focus:border-purple-500/50"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="signal-category" className="text-[8px] text-zinc-500 font-mono block mb-1">CATEGORY</label>
+                            <select
+                                id="signal-category"
+                                name="signal_category"
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                                className="w-full bg-black/60 border border-white/10 rounded px-2 py-1 text-[9px] text-zinc-300 focus:outline-none focus:border-purple-500/50"
+                            >
+                                <option value="NARRATIVE_SIGNAL">NARRATIVE_SIGNAL</option>
+                                <option value="SYNDICATE">SYNDICATE</option>
+                                <option value="VISIONARY">VISIONARY</option>
+                                <option value="GOVERNANCE">GOVERNANCE</option>
+                                <option value="CONTENT">CONTENT</option>
+                                <option value="VETO">VETO</option>
+                                <option value="SYSTEM">SYSTEM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label htmlFor="signal-content" className="text-[8px] text-zinc-500 font-mono block mb-1">CONTENT / OBSERVATION</label>
+                        <textarea
+                            id="signal-content"
+                            name="signal_content"
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            rows={3}
+                            placeholder="Drafting cryptographic signal block parameters..."
+                            className="w-full bg-black/60 border border-white/10 rounded p-2.5 text-[9px] text-zinc-200 focus:outline-none focus:border-purple-500/50 resize-none"
+                        />
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-[8px] text-zinc-500 font-mono uppercase">Reality:</span>
+                            <label htmlFor="reality-simulated" className="inline-flex items-center gap-1 cursor-pointer">
+                                <input
+                                    id="reality-simulated"
+                                    type="radio"
+                                    name="reality_state"
+                                    value="SIMULATED"
+                                    checked={reality === 'SIMULATED'}
+                                    onChange={() => setReality('SIMULATED')}
+                                    className="rounded bg-black border-white/10 text-purple-500 focus:ring-0 w-2.5 h-2.5"
+                                />
+                                <span className="text-[8px] font-mono text-zinc-400">SIMULATED</span>
+                            </label>
+                            <label htmlFor="reality-actualized" className="inline-flex items-center gap-1 cursor-pointer">
+                                <input
+                                    id="reality-actualized"
+                                    type="radio"
+                                    name="reality_state"
+                                    value="ACTUALIZED"
+                                    checked={reality === 'ACTUALIZED'}
+                                    onChange={() => setReality('ACTUALIZED')}
+                                    className="rounded bg-black border-white/10 text-purple-500 focus:ring-0 w-2.5 h-2.5"
+                                />
+                                <span className="text-[8px] font-mono text-zinc-400">ACTUALIZED</span>
+                            </label>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isBroadcasting}
+                            className="px-4 py-1.5 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-black text-[9px] font-black uppercase tracking-widest rounded flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(168,85,247,0.2)]"
+                        >
+                            {isBroadcasting ? (
+                                <>
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                    TRANSMITTING...
+                                </>
+                            ) : (
+                                <>
+                                    <Zap className="w-2.5 h-2.5" />
+                                    BROADCAST BLOCK
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
             {/* The Live Stream */}
             <div className="space-y-3 relative before:absolute before:inset-y-0 before:left-[11px] before:w-[1px] before:bg-purple-500/20">
                 {localFeed.map((log: any) => {
-                    const title = log.payload?.title || log.payload?.observation || log.content || 'Relaying sovereign signal...';
+                    const titleVal = log.payload?.title || log.payload?.observation || log.content || 'Relaying sovereign signal...';
+                    const cleanDesc = stripHtml(titleVal);
                     const time = log.timestamp || log.time || '...';
                     const type = log.type || 'SYSTEM';
-                    const reality = log.reality || log.realityState || 'SIMULATED';
+                    const realityState = log.reality || log.realityState || 'SIMULATED';
                     
                     return (
                         <div key={log.id} className="relative pl-8 group cursor-pointer">
@@ -99,11 +316,11 @@ export const NarrativeTray = () => {
                                     <span className="text-[8px] font-mono text-zinc-500">{time}</span>
                                 </div>
                                 <p className="text-xs text-zinc-300 mb-2 leading-relaxed line-clamp-2">
-                                    {title.substring(0, 120)}{title.length > 120 ? '...' : ''}
+                                    {cleanDesc.substring(0, 120)}{cleanDesc.length > 120 ? '...' : ''}
                                 </p>
                                 <div className="flex justify-between items-center">
-                                    <span className={`text-[8px] px-1.5 py-0.5 rounded font-mono ${reality === 'ACTUALIZED' ? 'bg-green-500/20 text-green-400' : 'bg-zinc-800 text-zinc-400'}`}>
-                                        {reality}
+                                    <span className={`text-[8px] px-1.5 py-0.5 rounded font-mono ${realityState === 'ACTUALIZED' ? 'bg-green-500/20 text-green-400' : 'bg-zinc-800 text-zinc-400'}`}>
+                                        {realityState}
                                     </span>
                                     <div className="flex gap-2">
                                         <Eye className="w-3 h-3 text-zinc-600 group-hover:text-purple-400 transition-colors" />
@@ -115,12 +332,6 @@ export const NarrativeTray = () => {
                     );
                 })}
             </div>
-
-            {/* Broadcast Action */}
-            <button className="w-full py-2.5 flex items-center justify-center gap-2 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 hover:border-purple-500/40 rounded-lg transition-all group">
-                <Zap className="w-3 h-3 text-purple-400 group-hover:text-purple-200" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-purple-400 group-hover:text-purple-200">Broadcast Narrative Block</span>
-            </button>
         </div>
     );
 };

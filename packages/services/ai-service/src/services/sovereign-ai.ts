@@ -36,11 +36,11 @@ export class SovereignAI {
     }
 
     async generateContent(modelName: string, prompt: string, isJson: boolean = false): Promise<string> {
-        if (!this.auth) {
-            throw new Error('Sovereign Identity missing. Access Denied.');
-        }
-
         try {
+            if (!this.auth) {
+                throw new Error('Sovereign Identity missing. Access Denied.');
+            }
+
             const client = await this.auth.getClient();
             const token = await client.getAccessToken();
             
@@ -66,8 +66,80 @@ export class SovereignAI {
             const parts = response.data.candidates[0].content.parts;
             return parts[0].text;
         } catch (err: any) {
-            console.error('[SovereignAI] Generation failed:', err.response?.data || err.message);
-            throw err;
+            console.error('[SovereignAI] Primary Generation failed:', err.response?.data || err.message);
+            
+            const geminiKey = process.env.GEMINI_API_KEY;
+            if (geminiKey && geminiKey !== 'undefined' && geminiKey.trim() !== '') {
+                console.log('[SovereignAI] Attempting direct Gemini API Key fallback...');
+                try {
+                    const directModel = modelName === 'gemini-1.5-flash' ? 'gemini-2.5-flash' : modelName;
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${directModel}:generateContent?key=${geminiKey}`;
+                    const response = await axios.post(url, {
+                        contents: [{
+                            role: 'user',
+                            parts: [{ text: prompt }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 4096,
+                            responseMimeType: isJson ? "application/json" : "text/plain"
+                        }
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) {
+                        console.log('[SovereignAI] Direct Gemini API Key fallback succeeded.');
+                        return text;
+                    } else {
+                        throw new Error('Empty response from direct Gemini API Key');
+                    }
+                } catch (geminiErr: any) {
+                    console.error('[SovereignAI] Direct Gemini API Key fallback failed:', geminiErr.response?.data || geminiErr.message);
+                }
+            }
+
+            const openRouterKey = process.env.OPENROUTER_API_KEY;
+            if (openRouterKey && openRouterKey !== 'undefined' && openRouterKey.trim() !== '') {
+                console.log('[SovereignAI] Attempting OpenRouter fallback...');
+                try {
+                    // map gemini-1.5-flash to google/gemini-2.5-flash or google/gemini-flash-1.5
+                    const fallbackModel = modelName === 'gemini-1.5-flash' ? 'google/gemini-flash-1.5' : 'google/gemini-2.5-flash';
+                    
+                    const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
+                        model: fallbackModel,
+                        messages: [
+                            { role: 'user', content: prompt }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 4096,
+                        response_format: isJson ? { type: "json_object" } : undefined
+                    }, {
+                        headers: {
+                            'Authorization': `Bearer ${openRouterKey}`,
+                            'Content-Type': 'application/json',
+                            'HTTP-Referer': 'https://lvhllc.org',
+                            'X-Title': 'Promethea Network State'
+                        }
+                    });
+                    
+                    const text = response.data?.choices?.[0]?.message?.content;
+                    if (text) {
+                        console.log('[SovereignAI] OpenRouter fallback succeeded.');
+                        return text;
+                    } else {
+                        throw new Error('Empty response from OpenRouter');
+                    }
+                } catch (fallbackErr: any) {
+                    console.error('[SovereignAI] OpenRouter fallback failed:', fallbackErr.response?.data || fallbackErr.message);
+                    throw fallbackErr;
+                }
+            } else {
+                throw err;
+            }
         }
     }
 }

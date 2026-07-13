@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { DetectNetworkThreatsInput, DetectNetworkThreatsOutput, Pledge, Vote } from "@promethea/lib";
-import { useUser } from "@promethea/identity";
+import { useUser } from "@promethea/sovereign-store";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@promethea/ui";
 import { Label } from "@promethea/ui";

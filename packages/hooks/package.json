@@ -20,10 +20,11 @@
     }
   },
   "dependencies": {
+    "@promethea/lib": "file:../lib",
+    "@promethea/sovereign-store": "file:../sovereign-store",
     "react": "18.3.1",
     "swr": "^2.2.5",
-    "@promethea/lib": "file:../lib",
-    "@promethea/identity": "file:../identity"
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@types/react": "18.3.3"

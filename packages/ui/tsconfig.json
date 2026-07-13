@@ -6,7 +6,12 @@
     "composite": true,
     "declaration": true,
     "jsx": "react-jsx",
-    "moduleResolution": "node"
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@promethea/ui": ["./src/index.ts"],
+      "@promethea/ui/*": ["./src/*"]
+    }
   },
   "include": [
     "src/**/*"

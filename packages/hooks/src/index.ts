@@ -4,5 +4,6 @@ export * from './use-toast';
 export * from './use-sovereign-data';
 export * from './use-hardware-handshake';
 export * from './use-solana-citizen';
+export * from './use-sovereign-store';
 export * from './sovereign-api';
-export { useUser } from '@promethea/identity';
+export { useUser } from '@promethea/sovereign-store';

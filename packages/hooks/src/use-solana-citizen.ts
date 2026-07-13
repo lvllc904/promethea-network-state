@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { Connection, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { useSovereignStore } from './use-sovereign-store';
 
 export interface SolanaCitizenData {
   walletAddress: string | null;
@@ -11,7 +11,7 @@ export interface SolanaCitizenData {
 }
 
 export function useSolanaCitizen(): SolanaCitizenData {
-  const { primaryWallet } = useDynamicContext();
+  const { isUnlocked, walletAddress, lock } = useSovereignStore();
   const [solBalance, setSolBalance] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -19,7 +19,7 @@ export function useSolanaCitizen(): SolanaCitizenData {
   const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.devnet.solana.com';
 
   const refreshBalance = useCallback(async () => {
-    if (!primaryWallet || primaryWallet.chain !== 'SOL') {
+    if (!isUnlocked || !walletAddress) {
       setSolBalance(null);
       return;
     }
@@ -27,7 +27,7 @@ export function useSolanaCitizen(): SolanaCitizenData {
     try {
       setIsLoading(true);
       const connection = new Connection(rpcUrl, 'confirmed');
-      const publicKey = new PublicKey(primaryWallet.address);
+      const publicKey = new PublicKey(walletAddress);
       const balance = await connection.getBalance(publicKey);
       setSolBalance(balance / LAMPORTS_PER_SOL);
     } catch (error) {
@@ -36,7 +36,7 @@ export function useSolanaCitizen(): SolanaCitizenData {
     } finally {
       setIsLoading(false);
     }
-  }, [primaryWallet, rpcUrl]);
+  }, [walletAddress, rpcUrl, isUnlocked]);
 
   useEffect(() => {
     refreshBalance();
@@ -47,28 +47,12 @@ export function useSolanaCitizen(): SolanaCitizenData {
   }, [refreshBalance]);
 
   const signMessage = async (message: string): Promise<string | null> => {
-    if (!primaryWallet || primaryWallet.chain !== 'SOL') {
-      console.error("No Solana wallet connected for signing");
-      return null;
-    }
-
-    try {
-        const walletConnector = primaryWallet.connector as any;
-        if (typeof walletConnector.signMessage !== 'function') {
-           console.error("Wallet connector does not support signMessage");
-           return null;
-        }
-        // The dynamic solana connector supports signMessage
-        const signature = await walletConnector.signMessage(message);
-        return signature as string;
-    } catch (error) {
-        console.error("Failed to sign message:", error);
-        return null;
-    }
+    console.error("Signing logic has been moved to the Authentication Gateway (Body 2)");
+    return null;
   };
 
   return {
-    walletAddress: primaryWallet?.address || null,
+    walletAddress,
     solBalance,
     isLoading,
     refreshBalance,

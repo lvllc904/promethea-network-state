@@ -1,8 +1,13 @@
 # Exclude heavy directories and files from Docker build context
 node_modules/
 **/node_modules/
-.next/
-**/.next/
+# Exclude Next.js build outputs but allow compiler cache for speedups
+packages/app/.next/*
+!packages/app/.next/cache/
+!packages/app/.next/standalone/
+!packages/app/.next/standalone/**
+!packages/app/.next/static/
+!packages/app/.next/static/**
 .firebase/
 **/.firebase/
 .gemini/

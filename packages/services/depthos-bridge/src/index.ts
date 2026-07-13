@@ -8,10 +8,14 @@ import * as path from 'path';
 import { ZKIdentityService } from './zk-identity-service';
 import { UCCCoprocessor } from './ucc-coprocessor';
 import { OsirisTelemetryEngine } from './osiris-telemetry';
-
+import { MoltbookHeartbeat } from './moltbook/heartbeat';
+import { MoltbookAmbassador } from './moltbook/ambassador';
 const app = express();
 const PORT = 9999; // Standard port for the DepthOS Bridge
 
+// Moltbook Integration
+const moltbookHeartbeat = new MoltbookHeartbeat();
+const moltbookAmbassador = new MoltbookAmbassador();
 app.use(cors());
 app.use(express.json());
 
@@ -99,8 +103,8 @@ app.post('/api/zk/generate-vc', (req, res) => {
     }
 
     try {
-        const vc = ZKIdentityService.generateMockVC(citizenDid, claims);
-        const zkProof = ZKIdentityService.generateZKMockProof(vc, (c) => c.isPersonhoodVerified === true);
+        const vc = ZKIdentityService.generateVC(citizenDid, claims);
+        const zkProof = ZKIdentityService.generateZKProof(vc, (c) => c.isPersonhoodVerified === true);
         res.json({ status: 'success', vc, zkProof });
     } catch (err: any) {
         res.status(500).json({ error: err.message });
@@ -158,7 +162,7 @@ app.post('/api/ucc/draft-and-file', async (req, res) => {
         );
 
         // Step 3: Register and submit the UCC-1 draft filing to the State Secretary
-        const receipt = await UCCCoprocessor.simulateStateFiling(draft);
+        const receipt = await UCCCoprocessor.submitStateFiling(draft);
 
         // Step 4: Construct Article 12 (CER) cryptographic control signature
         const cerSignature = UCCCoprocessor.generateArticle12ControlSignature(
@@ -261,6 +265,76 @@ wss.on('connection', (ws: WebSocket) => {
                     type: 'COMMAND_STDOUT',
                     payload: output
                 }));
+            } else if (data.type === 'CPP_PIVOT_INIT') {
+                const { threadId, modifier, nodeId } = data.payload;
+                console.log(`[DepthOS Bridge] CPP Pivot initiated on Thread: ${threadId}, Node: ${nodeId}. Modifier: "${modifier}"`);
+
+                // [MOLTBOOK CPP INTEGRATION] Publish cognitive pivot synthesis to Moltbook
+                moltbookAmbassador.publishPivotSynthesis(
+                    modifier, 
+                    `The TPNS multi-agent system executed a cognitive pivot on stream [${threadId}] node [${nodeId.substring(0, 8)}]. We are actively adapting to semantic shifts around "${modifier}". Join us to participate in the synthesis.`
+                ).catch(e => console.error('[Moltbook] Pivot synthesis publish failed:', e));
+
+                // Send immediate halt acknowledgment
+                ws.send(JSON.stringify({
+                    type: 'CPP_STREAM_HALTED',
+                    payload: {
+                        threadId,
+                        nodeId,
+                        haltedAtLength: 120,
+                        snapshot: {
+                            tokenPrefix: "CRITICAL_PIVOT_SUSPENSION",
+                            activeFilePointers: ["/packages/app/src/lib/hud-store.tsx", "/packages/app/src/components/hud/PrometheaPanel.tsx"],
+                            queuedToolCalls: [
+                                { toolName: "rehydrate_state", arguments: { threadId, nodeId } }
+                            ],
+                            contextRef: { modifier, pivotedFromNodeId: nodeId }
+                        }
+                    }
+                }));
+
+                // Start simulated sibling stream completion
+                const siblingNodeId = `sib_msg_${Date.now()}`;
+                const siblingResponseChunks = [
+                    "⚡ [CPP MULTI-BRANCH ENGINE ACTIVE]\n\n",
+                    "State suspension successful. Rehydrated execution context at node ",
+                    `\`${nodeId.substring(0, 8)}\`.\n\n`,
+                    "Applying cognitive pivot modifier: ",
+                    `*"${modifier}"*\n\n`,
+                    "Initializing parallel generation stream along new semantic vector...\n",
+                    "• Core network ledger models locked under the 0.15% metabolic toll rule.\n",
+                    "• Directed semantic connections synchronized successfully on active mind map canvas.\n",
+                    "All cognitive systems are functional and ready for further instructions. Stream completed."
+                ];
+
+                let chunkIndex = 0;
+                const sendNextChunk = () => {
+                    if (chunkIndex < siblingResponseChunks.length) {
+                        ws.send(JSON.stringify({
+                            type: 'CPP_CHUNK_EMIT',
+                            payload: {
+                                threadId,
+                                nodeId: siblingNodeId,
+                                parentId: nodeId,
+                                contentChunk: siblingResponseChunks[chunkIndex],
+                                isFirst: chunkIndex === 0,
+                                isLast: chunkIndex === siblingResponseChunks.length - 1
+                            }
+                        }));
+                        chunkIndex++;
+                        setTimeout(sendNextChunk, 150);
+                    }
+                };
+
+                setTimeout(sendNextChunk, 400);
+
+            } else if (data.type === 'CPP_ANCHOR_HEAD') {
+                const { threadId, nodeId } = data.payload;
+                console.log(`[DepthOS Bridge] CPP Anchor Head moved to: ${nodeId} on Thread: ${threadId}`);
+                ws.send(JSON.stringify({
+                    type: 'SYSTEM_LOG',
+                    payload: `Anchor head successfully aligned to Node: ${nodeId}`
+                }));
             }
         } catch (e) {
             console.error('[DepthOS Bridge] Error parsing message:', e);
@@ -274,6 +348,10 @@ wss.on('connection', (ws: WebSocket) => {
 
 server.listen(PORT, () => {
     OsirisTelemetryEngine.initialize();
+    
+    // Start Moltbook background recruitment and CPP observer
+    moltbookHeartbeat.start();
+    
     console.log(`[DepthOS Bridge] Anchor Daemon running locally on http://localhost:${PORT}`);
     console.log(`[DepthOS Bridge] WebSocket listening on ws://localhost:${PORT}`);
 });

@@ -7,13 +7,15 @@ declare_id!("6XDR861T35AyTrzeKK5ZR8iqiq6qL57iQBPLF6KeF6nc");
 pub mod rwa_registry {
     use super::*;
 
-    pub fn register_asset(ctx: Context<RegisterAsset>, node_type: u8, location_hash: String, acquisition_cost_usdc: u64, legal_entity_wrapper: String) -> Result<()> {
+    pub fn register_asset(ctx: Context<RegisterAsset>, node_type: u8, location_hash: String, acquisition_cost_usdc: u64, legal_entity_wrapper: String, ucc_filing_hash: String, cer_control_signature: String) -> Result<()> {
         let physical_node = &mut ctx.accounts.physical_node;
         physical_node.node_type = node_type;
         physical_node.location_hash = location_hash.clone();
         physical_node.acquisition_cost_usdc = acquisition_cost_usdc;
         physical_node.fractional_mint = ctx.accounts.fractional_mint.key();
         physical_node.legal_entity_wrapper = legal_entity_wrapper;
+        physical_node.ucc_filing_hash = ucc_filing_hash;
+        physical_node.cer_control_signature = cer_control_signature;
 
         msg!("NodeAcquired: {:?} at {}", node_type, location_hash);
         Ok(())
@@ -36,7 +38,7 @@ pub mod rwa_registry {
 
 #[derive(Accounts)]
 pub struct RegisterAsset<'info> {
-    #[account(init, payer = authority, space = 8 + 1 + 64 + 8 + 32 + 256)]
+    #[account(init, payer = authority, space = 8 + 1 + 64 + 8 + 32 + 256 + 128 + 256)]
     pub physical_node: Account<'info, PhysicalNode>,
     #[account(mut)]
     pub authority: Signer<'info>, // Often PDA of Governance
@@ -63,4 +65,6 @@ pub struct PhysicalNode {
     pub acquisition_cost_usdc: u64,
     pub fractional_mint: Pubkey,
     pub legal_entity_wrapper: String, // IPFS CID to LLC wrapper docs
+    pub ucc_filing_hash: String, // UCC-1 state filing registration hash/document IPFS link
+    pub cer_control_signature: String, // UCC Article 12 Controllable Electronic Record signature
 }

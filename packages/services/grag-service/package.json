@@ -1,0 +1,23 @@
+{
+  "name": "@promethea/grag-service",
+  "version": "1.0.0",
+  "description": "Grounded Rationality Agent Gateway (GRAG) microservice featuring pre-gen Conformal prediction and local WASM NLI Cross-Encoder validation",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node .",
+    "build": "tsc -b",
+    "dev": "npm run build && node --watch dist/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/node": "20.14.9",
+    "typescript": "^5.5.4"
+  }
+}

@@ -90,6 +90,7 @@ export class MarketplaceService {
         3. Valuation (USD/UVT)
         4. Expiry/Maturity (if applicable)
         5. Barter Preferences
+        6. Asset Category (One of: RESTORATION_LAND, MINERAL_CLAIM, RECLAMATION_BROWNFIELD, DEPIN_COMPUTE, COMPUTE_NODE, STANDARD)
         
         Return valid JSON:
         {
@@ -101,7 +102,8 @@ export class MarketplaceService {
             "uvxType": "TFC/CPT/STANDARD",
             "isPerishable": boolean,
             "barterAllowed": true,
-            "barterPreferences": "..."
+            "barterPreferences": "...",
+            "assetType": "RESTORATION_LAND/MINERAL_CLAIM/DEPIN_COMPUTE/etc"
         }
         `;
 
@@ -110,11 +112,111 @@ export class MarketplaceService {
         const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
         const data = JSON.parse(jsonStr);
 
-        return this.listItem({
-            ...data,
+        const assetId = 'asset-' + Date.now();
+        const assetData = {
+            id: assetId,
+            name: data.title,
+            title: data.title,
+            description: data.description,
+            price: data.price,
+            currency: data.currency || 'USD',
+            assetType: data.assetType || 'RESTORATION_LAND',
+            status: 'Idea',
+            realityState: 'SIMULATED',
+            progressionState: 'IDEA',
+            prerequisiteTasks: [],
             providerId,
-            methodId: 'ai-ingestion'
+            methodId: 'ai-ingestion',
+            createdAt: new Date().toISOString()
+        };
+
+        // Write to real_world_assets collection
+        await db.collection('real_world_assets').doc(assetId).set(assetData);
+
+        // Generate prerequisite quests
+        const { metabolicTaskGenerator } = require('./metabolic-task-generator');
+        await metabolicTaskGenerator.generatePrerequisiteQuests(assetId, data.title, data.assetType || 'RESTORATION_LAND');
+
+        return assetId;
+    }
+
+    /**
+     * Transition the progressive actualization state of an asset
+     */
+    async transitionState(assetId: string, targetState: string): Promise<void> {
+        const assetRef = db.collection('real_world_assets').doc(assetId);
+        const doc = await assetRef.get();
+        if (!doc.exists) throw new Error('Asset not found');
+
+        const asset = doc.data();
+        const currentState = asset.progressionState || 'IDEA';
+        console.log(`[MarketplaceService] 🔄 Checking manual state transition of ${asset.name} from ${currentState} to ${targetState}`);
+
+        // Validate targetState
+        const validStates = ['IDEA', 'VETTED', 'LEGALIZED', 'SECURED', 'ACTUALIZED'];
+        if (!validStates.includes(targetState)) {
+            throw new Error(`Invalid target state: ${targetState}`);
+        }
+
+        // Run transition-specific checks
+        if (targetState === 'VETTED') {
+            const yesVotes = asset.yesVotes || 0;
+            const noVotes = asset.noVotes || 0;
+            if (yesVotes - noVotes < 10) {
+                throw new Error('Asset requires at least +10 net consensus votes to progress to VETTED state.');
+            }
+        } else if (targetState === 'LEGALIZED') {
+            // Find Legal quest
+            const questsSnapshot = await db.collection('quests').get();
+            const legalQuest = questsSnapshot.docs
+                .map((d: any) => d.data())
+                .find((q: any) => q.associatedAssetId === assetId && q.questType === 'Legal');
+            if (!legalQuest || legalQuest.status !== 'COMPLETED') {
+                throw new Error('Asset requires Wyoming DUNA Operating Agreement / Entity Wrapping to be completed.');
+            }
+        } else if (targetState === 'SECURED') {
+            const hasUcc1Filing = asset.ucc1FilingId || asset.bypassReceiptUrl || asset.wyomingFilingNumber;
+            const questsSnapshot = await db.collection('quests').get();
+            const financialQuest = questsSnapshot.docs
+                .map((d: any) => d.data())
+                .find((q: any) => q.associatedAssetId === assetId && q.questType === 'Financial');
+            const financialDone = financialQuest && financialQuest.status === 'COMPLETED';
+
+            if (!financialDone && !hasUcc1Filing) {
+                throw new Error('Asset requires Secretary of State filing fee or UCC-1 Filing registration / Bypass Upload.');
+            }
+        } else if (targetState === 'ACTUALIZED') {
+            const questsSnapshot = await db.collection('quests').get();
+            const assetQuests = questsSnapshot.docs
+                .map((d: any) => d.data())
+                .filter((q: any) => q.associatedAssetId === assetId);
+
+            const physicalQuest = assetQuests.find((q: any) => q.questType === 'Physical');
+            const techQuest = assetQuests.find((q: any) => q.questType === 'Technical');
+            
+            const physicalDone = !physicalQuest || physicalQuest.status === 'COMPLETED';
+            const techDone = !techQuest || techQuest.status === 'COMPLETED';
+
+            if (!physicalDone || !techDone) {
+                throw new Error('Asset requires all physical and technical boundary telemetry quests to be completed before actualizing.');
+            }
+
+            // Perform token minting loop if actualized
+            await assetRef.update({
+                realityState: 'ACTUALIZED',
+                status: 'Active'
+            });
+        }
+
+        await assetRef.update({
+            progressionState: targetState
         });
+
+        await personaSubstrate.broadcastUpdate(
+            `State Transition: ${asset.name}`,
+            `${asset.name} has been transitioned to ${targetState}.`,
+            assetId
+        );
     }
     /**
      * ATOMIC ASSET SWAP (Wave 10)

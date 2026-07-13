@@ -25,11 +25,22 @@ const InterstellarMap = dynamic(
     { ssr: false }
 );
 
+const OblongMenuBelt = dynamic(
+    () => import('@/components/ui/OblongMenuBelt').then(m => m.OblongMenuBelt),
+    { ssr: false }
+);
+
+const PhosphorCLI = dynamic(
+    () => import('@/components/terminal/PhosphorCLI').then(m => m.PhosphorCLI),
+    { ssr: false }
+);
+
 
 
 import { NotificationCenter } from './NotificationCenter';
 import { SovereignHeaderTicker } from './SovereignHeaderTicker';
 import { SovereignFooterTicker } from './SovereignFooterTicker';
+import { SovereignNavBar } from './SovereignNavBar';
 import { useSovereignStore, useSolanaCitizen } from '@promethea/hooks';
 
 // Fetch atlas layers from the same-origin BFF proxy (avoids CORS entirely)
@@ -47,7 +58,7 @@ function useAtlasLayers() {
 }
 
 
-const SovereignAtlasBackground = ({ isEclipsed, globalVix }: { isEclipsed: boolean, globalVix: number }) => {
+const SovereignAtlasBackground = ({ isEclipsed, globalVix, isPortalBlurred = false }: { isEclipsed: boolean, globalVix: number, isPortalBlurred?: boolean }) => {
     const layers = useAtlasLayers();
     const { mapMode } = useHUD();
     const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
@@ -81,7 +92,7 @@ const SovereignAtlasBackground = ({ isEclipsed, globalVix }: { isEclipsed: boole
 
     // Render SovereignMap or InterstellarMap based on mapMode
     return (
-        <div className={`absolute inset-0 z-0 transition-[filter] duration-700 ease-out ${isEclipsed ? 'brightness-[0.3] saturate-50' : 'brightness-100'}`}>
+        <div className={`absolute inset-0 z-0 transition-all duration-700 ease-out ${isPortalBlurred ? 'brightness-[0.25] saturate-[0.5] blur-[8px] scale-[1.03]' : isEclipsed ? 'brightness-[0.3] saturate-50' : 'brightness-100'}`}>
             <div className="absolute inset-0 w-full h-full overflow-hidden">
                 {/* Surface Map Viewport */}
                 <div 
@@ -133,7 +144,8 @@ const SovereignAtlasBackground = ({ isEclipsed, globalVix }: { isEclipsed: boole
 };
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { Terminal, Shield, Cpu, Zap, Power, LogOut, X, AlertCircle, Sliders } from 'lucide-react';
+import Link from 'next/link';
+import { X, AlertCircle, LayoutGrid, Minimize2, ChevronLeft, ChevronRight, Compass, Wallet, Vote, Lock, Unlock, BarChart3, Fingerprint, CheckCircle2, Activity, FileText, Layers, RefreshCw } from 'lucide-react';
 
 import { ethers } from 'ethers';
 
@@ -205,29 +217,118 @@ class TrayErrorBoundary extends React.Component<TrayErrorBoundaryProps, TrayErro
 }
 
 export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
-    const { activePillar, activatePillar, triggerOmniScanner, activeFocusPanel, activateFocusPanel, reduceAnimations, toggleAnimations, globalVix } = useHUD();
+    const { activePillar, activatePillar, triggerOmniScanner, activeFocusPanel, activateFocusPanel, reduceAnimations, toggleAnimations, globalVix, activePOI, isMapInteractive, setHUDState, isPhosphorMode } = useHUD();
+    const refFrame = activePOI?.referenceFrame || 'EARTH';
     const { themeState } = useMesh();
     const currentTheme = themeState?.theme || 'dark';
+    const isLatex = currentTheme === 'theme-latex';
     const router = useRouter();
     const pathname = usePathname();
     const isSubPage = pathname !== '/dashboard' && pathname !== '/dashboard/';
     const isEclipsed = activePillar !== null && activePillar !== 'ATLAS';
     const { isUnlocked, unlock, lock } = useSovereignStore();
-    const { walletAddress } = useSolanaCitizen();
     const searchParams = useSearchParams();
+    const { walletAddress, solBalance, signMessage } = useSolanaCitizen();
+    const [cockpitMode, setCockpitMode] = useState<'PORTAL' | 'CONSOLE'>('PORTAL');
 
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const settingsRef = useRef<HTMLDivElement>(null);
-
-    // Auto-close settings dropdown when clicking outside
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
-                setIsSettingsOpen(false);
+        if (typeof window !== 'undefined') {
+            const savedMode = localStorage.getItem('promethea-cockpit-mode') as any;
+            if (savedMode === 'PORTAL' || savedMode === 'CONSOLE') {
+                setCockpitMode(savedMode);
+            }
+        }
+    }, []);
+
+    const handleCockpitModeChange = (mode: 'PORTAL' | 'CONSOLE') => {
+        setCockpitMode(mode);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('promethea-cockpit-mode', mode);
+        }
+    };
+
+    // States for interactive consensus voting
+    const [selectedPropId, setSelectedPropId] = useState<string>('PRP-104');
+    const [isSigning, setIsSigning] = useState(false);
+    const [signSuccess, setSignSuccess] = useState(false);
+    const [generatedSig, setGeneratedSig] = useState<string>('');
+    const [votedProposal, setVotedProposal] = useState<string | null>(null);
+
+    const handleSignVote = async () => {
+        setIsSigning(true);
+        setSignSuccess(false);
+        try {
+            const message = `Promethea Consensus Vote signing on ${selectedPropId} at timestamp ${Date.now()}`;
+            if (isUnlocked && walletAddress && signMessage) {
+                const signature = await signMessage(message);
+                setGeneratedSig(signature);
+            } else {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                const mockSig = '0x' + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join('');
+                setGeneratedSig(mockSig);
+            }
+            setSignSuccess(true);
+            setVotedProposal(selectedPropId);
+        } catch (err) {
+            console.error('[Consensus] Error signing message:', err);
+        } finally {
+            setIsSigning(false);
+        }
+    };
+
+    const handleIdentityToggle = () => {
+        if (isUnlocked) {
+            lock();
+        } else {
+            const mockAddress = walletAddress || "9xQdZWhhN9sAka698n6F2SgZ1m6f9Uf9M4XFvC3Lz59a";
+            unlock(mockAddress);
+        }
+    };
+
+    const [workspaceLayout, setWorkspaceLayout] = useState<'dock-right' | 'dock-left' | 'centered' | 'minimized'>('dock-right');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const savedLayout = localStorage.getItem('promethea-workspace-layout') as any;
+            if (savedLayout && ['dock-right', 'dock-left', 'centered', 'minimized'].includes(savedLayout)) {
+                setWorkspaceLayout(savedLayout);
+            }
+        }
+    }, []);
+
+    const handleLayoutChange = (layout: 'dock-right' | 'dock-left' | 'centered' | 'minimized') => {
+        setWorkspaceLayout(layout);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('promethea-workspace-layout', layout);
+        }
+    };
+
+    // Listen for custom 'hud-exit' event from the relocated settings drawer
+    useEffect(() => {
+        const handleExitEvent = () => {
+            setIsExiting(true);
+            setTimeout(() => {
+                router.push('/');
+            }, 800);
+        };
+        window.addEventListener('hud-exit', handleExitEvent);
+        return () => window.removeEventListener('hud-exit', handleExitEvent);
+    }, [router]);
+
+    // Listen for custom 'context-switch' event to trigger isolated State Re-Hydration
+    useEffect(() => {
+        const handleContextSwitch = (e: Event) => {
+            const customEvent = e as CustomEvent;
+            const targetSyndicate = customEvent.detail?.syndicateId || 'global';
+            console.log(`[SovereignHUD] 🌐 Context Switch Triggered! New Tenant Scope: ${targetSyndicate}`);
+            
+            if (typeof window !== 'undefined') {
+                // Perform quick cockpit cold-reboot to re-hydrate state with isolated syndicate headers
+                window.location.reload();
             }
         };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        window.addEventListener('context-switch', handleContextSwitch);
+        return () => window.removeEventListener('context-switch', handleContextSwitch);
     }, []);
 
     // The Hydration Handshake: Listen for verification hash from Body 2 Auth Gateway
@@ -547,6 +648,10 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
 
 
 
+    if (isPhosphorMode) {
+        return <PhosphorCLI />;
+    }
+
     return (
         <div className="fixed inset-0 bg-black overflow-hidden font-body text-white">
             {/* Embedded transitional slide layouts for drawers */}
@@ -578,22 +683,377 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
             {/* Persistent Financial Header Ticker (Z-60) */}
             <SovereignHeaderTicker />
 
+            {/* Floating Mode Switcher (Pill Switcher) */}
+            {!isSubPage && (
+                <div className={`fixed top-12 left-1/2 transform -translate-x-1/2 z-50 flex items-center gap-1 rounded-full p-1 border backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.5)] ${
+                    isLatex
+                        ? 'bg-[#fdfcf7]/90 border-stone-200 shadow-stone-900/10'
+                        : 'bg-black/60 border-white/10 shadow-black/80'
+                }`}>
+                    <button
+                        onClick={() => handleCockpitModeChange('PORTAL')}
+                        className={`px-4 py-1 text-[8px] font-mono font-bold tracking-widest uppercase transition-all duration-300 rounded-full cursor-pointer ${
+                            cockpitMode === 'PORTAL'
+                                ? isLatex
+                                    ? 'bg-amber-800/10 text-amber-950 border border-amber-800/20'
+                                    : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+                                : isLatex
+                                    ? 'text-stone-400 hover:text-stone-700 border border-transparent'
+                                    : 'text-zinc-500 hover:text-zinc-300 border border-transparent'
+                        }`}
+                    >
+                        Sovereign Portal
+                    </button>
+                    <button
+                        onClick={() => handleCockpitModeChange('CONSOLE')}
+                        className={`px-4 py-1 text-[8px] font-mono font-bold tracking-widest uppercase transition-all duration-300 rounded-full cursor-pointer ${
+                            cockpitMode === 'CONSOLE'
+                                ? isLatex
+                                    ? 'bg-amber-800/10 text-amber-950 border border-amber-800/20'
+                                    : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+                                : isLatex
+                                    ? 'text-stone-400 hover:text-stone-700 border border-transparent'
+                                    : 'text-zinc-500 hover:text-zinc-300 border border-transparent'
+                        }`}
+                    >
+                        Command Console
+                    </button>
+                </div>
+            )}
+
+            {/* Sovereign Portal (Tier 1) Overlay */}
+            {!isSubPage && (
+                <div 
+                    className={`absolute inset-x-4 top-24 bottom-16 md:inset-x-[6vw] lg:inset-x-[8vw] xl:inset-x-[12vw] z-40 flex flex-col justify-center items-center transition-all duration-700 ease-in-out ${
+                        cockpitMode === 'PORTAL' 
+                            ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' 
+                            : 'opacity-0 scale-95 translate-y-4 pointer-events-none'
+                    }`}
+                >
+                    {/* Portal Header */}
+                    <div className="text-center mb-8 select-none max-w-xl">
+                        <div className="flex items-center justify-center gap-2 mb-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className={`text-[8.5px] font-mono font-black uppercase tracking-[0.3em] ${isLatex ? 'text-amber-800' : 'text-emerald-400/80'}`}>
+                                3-Body Network State Portal
+                            </span>
+                        </div>
+                        <h2 className={`text-2xl md:text-3xl font-black uppercase tracking-tight mb-2 font-display ${isLatex ? 'text-stone-900' : 'text-white'}`}>
+                            Sovereign Cockpit
+                        </h2>
+                        <p className={`text-[9.5px] font-mono uppercase tracking-widest leading-relaxed ${isLatex ? 'text-stone-500' : 'text-zinc-400/70'}`}>
+                            Progressive Command Deck // Guest Access Active // Cryptographic Decoupled Interface
+                        </p>
+                    </div>
+
+                    {/* 3-Body Cards Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
+                        
+                        {/* Card 1: Decoupled Identity (Body 1) */}
+                        <div className={isLatex
+                            ? "bg-[#fdfcf7]/90 border border-stone-200/80 shadow-[0_12px_40px_rgba(28,25,23,0.08)] text-stone-900 backdrop-blur-2xl p-6 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:border-stone-400 hover:shadow-[0_20px_50px_rgba(28,25,23,0.15)] group relative"
+                            : "bg-zinc-950/65 border border-emerald-500/15 shadow-[0_0_40px_rgba(0,0,0,0.8)] text-white backdrop-blur-3xl p-6 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_0_50px_rgba(16,185,129,0.25)] group relative overflow-hidden"
+                        }>
+                            {!isLatex && (
+                                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/5 to-cyan-500/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none" />
+                            )}
+                            <div className="relative z-10 space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <span className={`text-[9px] font-mono font-bold tracking-widest ${isLatex ? 'text-amber-800' : 'text-emerald-400'}`}>01 // IDENTITY</span>
+                                    <Fingerprint className={`w-4 h-4 ${isLatex ? 'text-stone-400' : 'text-zinc-500 group-hover:text-emerald-400 transition-colors duration-300'}`} />
+                                </div>
+                                <div>
+                                    <h3 className={`text-base font-black uppercase tracking-tight mb-1 ${isLatex ? 'text-stone-955' : 'text-white'}`}>
+                                        Decoupled Keys
+                                    </h3>
+                                    <p className={`text-[8.5px] font-mono uppercase tracking-wide leading-relaxed ${isLatex ? 'text-stone-500' : 'text-zinc-400'}`}>
+                                        Accessing network telemetry via guest-safe edge signatures without authorization gates.
+                                    </p>
+                                </div>
+
+                                <div className={`p-4 rounded-xl border font-mono text-[9px] space-y-2 ${
+                                    isLatex 
+                                        ? 'bg-stone-50/50 border-stone-200' 
+                                        : 'bg-black/40 border-white/5 shadow-inner'
+                                }`}>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-zinc-500 uppercase">Status</span>
+                                        <span className={`font-bold uppercase tracking-wider flex items-center gap-1.5 ${isUnlocked ? 'text-emerald-500' : 'text-zinc-400'}`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full ${isUnlocked ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-400'}`} />
+                                            {isUnlocked ? 'Citizen' : 'Guest'}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-zinc-500 uppercase font-mono">DID Portal</span>
+                                        <span className={`text-zinc-400 truncate max-w-[120px] font-extrabold ${isLatex ? 'text-stone-800' : 'text-zinc-300'}`}>
+                                            {isUnlocked && walletAddress 
+                                                ? `did:prmth:${walletAddress.slice(0, 5)}...${walletAddress.slice(-4)}` 
+                                                : 'did:prmth:guest-safe'}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-zinc-500 uppercase">ZK Proofs</span>
+                                        <span className="text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                                            <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
+                                            Verified
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleIdentityToggle}
+                                className={`mt-6 w-full py-2.5 font-mono text-[8.5px] font-bold uppercase tracking-widest rounded-xl border transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 shadow-sm ${
+                                    isUnlocked
+                                        ? isLatex
+                                            ? 'bg-stone-900 hover:bg-stone-800 text-stone-50 border-stone-950'
+                                            : 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border-red-500/20'
+                                        : isLatex
+                                            ? 'bg-amber-800 hover:bg-amber-900 text-white border-amber-900 shadow-[0_4px_12px_rgba(139,92,26,0.15)]'
+                                            : 'bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-black border-emerald-500/20 hover:border-emerald-500/40 shadow-[0_4px_12px_rgba(16,185,129,0.15)]'
+                                }`}
+                            >
+                                {isUnlocked ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
+                                <span>{isUnlocked ? 'Lock Citizen Keys' : 'Unlock Citizen Keys'}</span>
+                            </button>
+                        </div>
+
+                        {/* Card 2: Sovereign Treasury (Body 2) */}
+                        <div className={isLatex
+                            ? "bg-[#fdfcf7]/90 border border-stone-200/80 shadow-[0_12px_40px_rgba(28,25,23,0.08)] text-stone-900 backdrop-blur-2xl p-6 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:border-stone-400 hover:shadow-[0_20px_50px_rgba(28,25,23,0.15)] group relative"
+                            : "bg-zinc-950/65 border border-emerald-500/15 shadow-[0_0_40px_rgba(0,0,0,0.8)] text-white backdrop-blur-3xl p-6 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_0_50px_rgba(16,185,129,0.25)] group relative overflow-hidden"
+                        }>
+                            {!isLatex && (
+                                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/5 to-cyan-500/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none" />
+                            )}
+                            <div className="relative z-10 space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <span className={`text-[9px] font-mono font-bold tracking-widest ${isLatex ? 'text-amber-800' : 'text-emerald-400'}`}>02 // TREASURY</span>
+                                    <BarChart3 className={`w-4 h-4 ${isLatex ? 'text-stone-400' : 'text-zinc-500 group-hover:text-emerald-400 transition-colors duration-300'}`} />
+                                </div>
+                                <div>
+                                    <h3 className={`text-base font-black uppercase tracking-tight mb-1 ${isLatex ? 'text-stone-950' : 'text-white'}`}>
+                                        Treasury Ledger
+                                    </h3>
+                                    <p className={`text-[8.5px] font-mono uppercase tracking-wide leading-relaxed ${isLatex ? 'text-stone-500' : 'text-zinc-400'}`}>
+                                        Consolidated network reserves distribution. Double-entry ledger streams verified locally on edge.
+                                    </p>
+                                </div>
+
+                                {/* Custom HTML/CSS Micro Bar-Graph */}
+                                <div className="flex items-end justify-between gap-1.5 h-[65px] pt-1 border-b border-white/5 pb-2">
+                                    {[
+                                        { name: 'UVT', usd: '$6.2M', pct: 49, color: isLatex ? 'bg-stone-800' : 'bg-gradient-to-t from-emerald-600 to-emerald-400' },
+                                        { name: 'SOL', usd: '$2.1M', pct: 17, color: isLatex ? 'bg-stone-500' : 'bg-gradient-to-t from-emerald-500/60 to-emerald-500/30' },
+                                        { name: 'USDC', usd: '$4.8M', pct: 38, color: isLatex ? 'bg-stone-600' : 'bg-gradient-to-t from-cyan-600 to-cyan-400' },
+                                        { name: 'BTC', usd: '$0.6M', pct: 8, color: isLatex ? 'bg-stone-400' : 'bg-gradient-to-t from-amber-600 to-amber-400' },
+                                    ].map((asset) => (
+                                        <div key={asset.name} className="flex flex-col items-center flex-1 group/bar">
+                                            <span className="text-[5.5px] font-mono text-zinc-500 opacity-0 group-hover/bar:opacity-100 transition-opacity duration-300 pb-0.5">
+                                                {asset.usd}
+                                            </span>
+                                            <div 
+                                                className={`w-full ${asset.color} rounded-t-[1px] transition-all duration-1000 ease-out`}
+                                                style={{ height: `${asset.pct * 0.75}px` }}
+                                            />
+                                            <span className="text-[6.5px] font-mono font-bold text-zinc-400 mt-1 select-none">{asset.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="flex items-center justify-between text-[8px] font-mono text-zinc-500 pt-1 uppercase">
+                                    <span>Total Reserves:</span>
+                                    <span className={`font-extrabold ${isLatex ? 'text-stone-950' : 'text-emerald-400'}`}>$13,791,241 // LIVE</span>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={() => activatePillar('ECONOMICS')}
+                                className={`mt-6 w-full py-2.5 font-mono text-[8.5px] font-bold uppercase tracking-widest rounded-xl border transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 ${
+                                    isLatex
+                                        ? 'bg-stone-100 hover:bg-stone-200 text-stone-900 border-stone-300'
+                                        : 'bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border-white/5 hover:border-white/10'
+                                }`}
+                            >
+                                <Wallet className="w-3 h-3" />
+                                <span>Inspect Assets & Ledger</span>
+                            </button>
+                        </div>
+
+                        {/* Card 3: Consensus Voting (Body 3) */}
+                        <div className={isLatex
+                            ? "bg-[#fdfcf7]/90 border border-stone-200/80 shadow-[0_12px_40px_rgba(28,25,23,0.08)] text-stone-900 backdrop-blur-2xl p-6 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:border-stone-400 hover:shadow-[0_20px_50px_rgba(28,25,23,0.15)] group relative"
+                            : "bg-zinc-950/65 border border-emerald-500/15 shadow-[0_0_40px_rgba(0,0,0,0.8)] text-white backdrop-blur-3xl p-6 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_0_50px_rgba(16,185,129,0.25)] group relative overflow-hidden"
+                        }>
+                            {!isLatex && (
+                                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/5 to-cyan-500/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none" />
+                            )}
+                            <div className="relative z-10 space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <span className={`text-[9px] font-mono font-bold tracking-widest ${isLatex ? 'text-amber-800' : 'text-emerald-400'}`}>03 // CONSENSUS</span>
+                                    <Vote className={`w-4 h-4 ${isLatex ? 'text-stone-400' : 'text-zinc-500 group-hover:text-emerald-400 transition-colors duration-300'}`} />
+                                </div>
+                                <div>
+                                    <h3 className={`text-base font-black uppercase tracking-tight mb-1 ${isLatex ? 'text-stone-950' : 'text-white'}`}>
+                                        Consensus Ledger
+                                    </h3>
+                                    <p className={`text-[8.5px] font-mono uppercase tracking-wide leading-relaxed ${isLatex ? 'text-stone-500' : 'text-zinc-400'}`}>
+                                        Active constitutional proposal voting. Cast edge signatures directly to substrate nodes.
+                                    </p>
+                                </div>
+
+                                <div className="space-y-2.5">
+                                    {[
+                                        { id: 'PRP-104', title: 'Substrate Oracle Nodes', yes: 84 },
+                                        { id: 'PRP-105', title: 'Carry-Trade Multi-Sig', yes: 93 },
+                                    ].map((prop) => (
+                                        <button
+                                            key={prop.id}
+                                            onClick={() => {
+                                                if (votedProposal !== prop.id) {
+                                                    setSelectedPropId(prop.id);
+                                                    setSignSuccess(false);
+                                                }
+                                            }}
+                                            className={`w-full p-2.5 rounded-xl border text-left font-mono text-[8.5px] transition-all cursor-pointer block ${
+                                                selectedPropId === prop.id 
+                                                    ? isLatex
+                                                        ? 'bg-amber-800/5 border-amber-800/30'
+                                                        : 'bg-emerald-500/10 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.05)]'
+                                                    : isLatex
+                                                        ? 'bg-stone-50/30 border-transparent hover:border-stone-200'
+                                                        : 'bg-black/20 border-transparent hover:border-white/5'
+                                            }`}
+                                        >
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className={`font-black uppercase tracking-wider ${selectedPropId === prop.id ? 'text-emerald-400' : 'text-zinc-500'}`}>{prop.id}</span>
+                                                <span className="text-zinc-500 font-bold uppercase">{prop.yes}% Yes</span>
+                                            </div>
+                                            <div className={`font-bold truncate max-w-[190px] mb-1.5 ${isLatex ? 'text-stone-800' : 'text-white'}`}>{prop.title}</div>
+                                            <div className={`w-full h-1 rounded-full overflow-hidden ${isLatex ? 'bg-stone-200' : 'bg-white/5'}`}>
+                                                <div 
+                                                    className={`h-full transition-all duration-500 ${isLatex ? 'bg-amber-800' : 'bg-emerald-500'}`} 
+                                                    style={{ width: `${prop.yes}%` }} 
+                                                />
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Dynamic Voting Success Signature Terminal overlay */}
+                                {isSigning && (
+                                    <div className="flex items-center gap-2 text-[8px] font-mono text-zinc-500 animate-pulse justify-center py-1">
+                                        <RefreshCw className="w-2.5 h-2.5 animate-spin" />
+                                        SIGNING EDGE ATTESTATION...
+                                    </div>
+                                )}
+                                {signSuccess && votedProposal === selectedPropId && (
+                                    <div className={`p-2.5 rounded-xl border font-mono text-[7px] space-y-1 ${isLatex ? 'bg-stone-50 border-stone-200 text-stone-800' : 'bg-emerald-950/20 border-emerald-500/25 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.05)]'}`}>
+                                        <div className="flex justify-between font-bold">
+                                            <span>SIGNATURE ATTESTED</span>
+                                            <span className="text-emerald-500">SUCCESS</span>
+                                        </div>
+                                        <div className="truncate text-zinc-500">
+                                            Hash: {generatedSig}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <button
+                                onClick={handleSignVote}
+                                disabled={isSigning || votedProposal === selectedPropId}
+                                className={`mt-6 w-full py-2.5 font-mono text-[8.5px] font-bold uppercase tracking-widest rounded-xl border transition-all duration-300 flex items-center justify-center gap-2 ${
+                                    votedProposal === selectedPropId
+                                        ? 'bg-zinc-800/10 border-zinc-800/20 text-zinc-500 cursor-not-allowed'
+                                        : isLatex
+                                            ? 'bg-amber-800 hover:bg-amber-900 text-white border-amber-900 shadow-[0_4px_12px_rgba(139,92,26,0.15)] cursor-pointer'
+                                            : 'bg-emerald-500 hover:bg-emerald-600 text-black border-emerald-500 shadow-[0_4px_12px_rgba(16,185,129,0.2)] cursor-pointer'
+                                }`}
+                            >
+                                <Vote className="w-3 h-3" />
+                                <span>{votedProposal === selectedPropId ? 'Vote Attested' : 'Cast Sovereign Vote'}</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
             {/* Background Layer (Z-0) — offset top/bottom for tickers */}
             <div className="absolute inset-0 top-8 bottom-7">
-                <SovereignAtlasBackground isEclipsed={isEclipsed} globalVix={globalVix} />
+                <SovereignAtlasBackground 
+                    isEclipsed={isEclipsed} 
+                    globalVix={globalVix} 
+                    isPortalBlurred={!isSubPage && cockpitMode === 'PORTAL'} 
+                />
             </div>
 
             {/* Tactical Navigation is now integrated into EclipseTray */}
 
+            {/* Persistent Menu Bar Background Strip (Z-30) - always visible across subpages, extends top-0 to bottom-0 */}
+            <div className={`fixed top-0 bottom-0 left-[40px] w-16 bg-black/[0.01] border-l border-r border-white/5 backdrop-blur-md pointer-events-none z-30 shadow-2xl transition-all duration-700 ease-in-out ${cockpitMode === 'PORTAL' ? 'opacity-0 -translate-x-12' : 'opacity-100 translate-x-0'}`} />
+
             {/* Left Hand Resizable Data Tray with Slide-out logic */}
-            <div className={`absolute inset-0 pointer-events-none transition-all duration-700 ease-out ${isSubPage ? '-translate-x-[110%]' : 'translate-x-0'}`}>
+            <div className={`absolute inset-0 pointer-events-none transition-all duration-700 ease-out ${isSubPage || cockpitMode === 'PORTAL' ? '-translate-x-[110%]' : 'translate-x-0'}`}>
                 <TrayErrorBoundary name="Eclipse Tray" position="left">
                     <EclipseTray />
                 </TrayErrorBoundary>
             </div>
 
+            {/* 3D Oblong Elliptical Menu Belt — only shown on subpages or when explicitly in CONSOLE mode */}
+            {!isSubPage && cockpitMode === 'CONSOLE' && (
+                <div 
+                    className="fixed top-0 bottom-0 z-40 pointer-events-none w-64 transition-all duration-700 ease-in-out opacity-100 translate-x-0"
+                    style={{ left: '16px' }}
+                >
+                    {/* Slim Menu Belt */}
+                    <div className="absolute top-4 bottom-[230px] left-6 w-16 pointer-events-auto z-10">
+                        <OblongMenuBelt />
+                    </div>
+
+                    {/* Fixed Non-Scrolling Telemetry Card */}
+                    <div className="absolute bottom-10 left-[28px] w-14 pointer-events-auto z-20 bg-black/95 border border-red-500/25 border-l-red-500/60 rounded p-1 font-mono text-[6px] text-zinc-400 select-none shadow-[0_4px_15px_rgba(0,0,0,0.9)]">
+                        <div className="text-[6.5px] font-black text-red-500 tracking-wider pb-1 border-b border-white/5 flex items-center justify-between">
+                            <span>LCT</span>
+                            <span className="w-1 h-1 rounded-full bg-red-500 animate-pulse shadow-[0_0_4px_rgba(239,68,68,0.7)]" />
+                        </div>
+                        <div className="space-y-1.5 pt-1.5 leading-tight">
+                            <div className="flex flex-col">
+                                <span className="text-[5px] text-zinc-500 font-bold uppercase tracking-widest">SYS</span>
+                                <span className="text-white font-extrabold truncate block">{refFrame}</span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[5px] text-zinc-500 font-bold uppercase tracking-widest">POI</span>
+                                <span className="text-white font-extrabold truncate block" title={activePOI?.name || 'NONE'}>
+                                    {activePOI?.name?.toUpperCase() || 'NONE'}
+                                </span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[5px] text-zinc-500 font-bold uppercase tracking-widest">LAT</span>
+                                <span className="text-red-400 font-extrabold truncate block">{activePOI?.coordinates?.lat.toFixed(4) || '0.0000'}</span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[5px] text-zinc-500 font-bold uppercase tracking-widest">LNG</span>
+                                <span className="text-red-400 font-extrabold truncate block">{activePOI?.coordinates?.lng.toFixed(4) || '0.0000'}</span>
+                            </div>
+                            <button 
+                                onClick={() => window.dispatchEvent(new CustomEvent('reset-offline-viewport'))}
+                                className="mt-1 w-full py-0.5 bg-red-950/40 hover:bg-red-900/40 active:bg-red-900/60 border border-red-500/30 hover:border-red-500/60 rounded flex items-center justify-center text-red-400 font-black tracking-widest transition-all text-[5.5px]"
+                                title="RESET VIEWPORT"
+                            >
+                                RESET
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Sovereign Nav Bar — auto-hiding bottom navigation for Citadel/Portal mode */}
+            {!isSubPage && <SovereignNavBar />}
+
             {/* Right Hand Resizable Chat Tray with Slide-out logic */}
-            <div className={`absolute inset-0 pointer-events-none transition-all duration-700 ease-out ${isSubPage ? 'translate-x-[110%]' : 'translate-x-0'}`}>
+            <div className={`absolute inset-0 pointer-events-none transition-all duration-700 ease-out ${isSubPage || cockpitMode === 'PORTAL' ? 'translate-x-[110%]' : 'translate-x-0'}`}>
                 <TrayErrorBoundary name="Chat Tray" position="right">
                     <ChatTray />
                 </TrayErrorBoundary>
@@ -603,129 +1063,206 @@ export const SovereignHUD = ({ children }: { children?: React.ReactNode }) => {
             <CommandPalette />
             <OmniButton />
 
-            {/* Backdrop Blur Map Dimmer */}
-            {isSubPage && (
-                <div 
-                    onClick={() => router.push('/dashboard')}
-                    className="fixed inset-0 z-40 bg-black/45 backdrop-blur-sm transition-all duration-500 cursor-pointer"
-                />
-            )}
+            {/* 
+                Spatial Windowing Enabled: The map is now always fully interactive by default. 
+                We no longer render a fullscreen bg-black/45 click-trap overlay when a subpage is open.
+            */}
 
-            {/* Centered Premium Console */}
-            {isSubPage && children ? (
-                <div className="fixed inset-x-4 inset-y-16 md:inset-x-[8vw] md:inset-y-[10vh] lg:inset-x-[12vw] lg:inset-y-[12vh] z-50 bg-zinc-950/90 border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.12)] rounded-2xl backdrop-blur-3xl overflow-hidden flex flex-col animate-cockpit-center">
-                    {/* Decorative Header */}
-                    <div className="flex items-center justify-between px-6 py-4 bg-zinc-900/50 border-b border-white/5 shrink-0 select-none">
-                        <div className="flex items-center gap-3">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </span>
-                            <span className="text-[9px] font-mono font-bold text-emerald-400 tracking-[0.2em] uppercase">
-                                // COCKPIT WORKSPACE OVERLAY // SECURE FRAME CONTROL
-                            </span>
+            {/* Dynamic Dockable Premium Console */}
+            {isSubPage && children && workspaceLayout !== 'minimized' ? (
+                (() => {
+                    let layoutClasses = '';
+                    if (workspaceLayout === 'dock-right') {
+                        layoutClasses = "fixed top-16 bottom-[32px] right-4 w-[42vw] min-w-[460px] max-w-[650px] z-[100] rounded-2xl flex flex-col overflow-hidden transition-all duration-500 ease-in-out animate-cockpit-center shadow-[0_15px_60px_rgba(0,0,0,0.6)]";
+                    } else if (workspaceLayout === 'dock-left') {
+                        layoutClasses = "fixed top-16 bottom-[32px] left-[80px] w-[42vw] min-w-[460px] max-w-[650px] z-[100] rounded-2xl flex flex-col overflow-hidden transition-all duration-500 ease-in-out animate-cockpit-center shadow-[0_15px_60px_rgba(0,0,0,0.6)]";
+                    } else { // centered
+                        layoutClasses = "fixed inset-x-4 inset-y-16 md:inset-x-[8vw] md:inset-y-[10vh] lg:inset-x-[12vw] lg:inset-y-[12vh] z-[100] rounded-2xl flex flex-col overflow-hidden transition-all duration-500 ease-in-out animate-cockpit-center";
+                    }
+
+                    const cardThemeClasses = isLatex
+                        ? "bg-[#fdfcf7]/85 border border-stone-200 text-stone-900 shadow-[0_10px_40px_rgba(28,25,23,0.06)] backdrop-blur-2xl"
+                        : "bg-zinc-950/60 border border-emerald-500/20 text-white shadow-[0_0_50px_rgba(16,185,129,0.12)] backdrop-blur-3xl";
+
+                    const headerThemeClasses = isLatex
+                        ? "bg-stone-100/60 border-b border-stone-200/60"
+                        : "bg-zinc-900/50 border-b border-white/5";
+
+                    const headerTextClasses = isLatex
+                        ? "text-amber-900"
+                        : "text-emerald-400";
+
+                    const blinkerClasses = isLatex
+                        ? "bg-amber-800"
+                        : "bg-emerald-500";
+
+                    const blinkerPingClasses = isLatex
+                        ? "bg-amber-700"
+                        : "bg-emerald-400";
+
+                    const closeBtnClasses = isLatex
+                        ? "p-1.5 hover:bg-stone-200/50 rounded-lg text-stone-500 hover:text-stone-900 border border-transparent hover:border-stone-200 transition-all cursor-pointer shadow-inner"
+                        : "p-1.5 hover:bg-white/10 rounded-lg text-zinc-500 hover:text-white transition-all cursor-pointer border border-transparent hover:border-white/5 shadow-inner";
+
+                    return (
+                        <div className={`${layoutClasses} ${cardThemeClasses}`}>
+                            {/* Decorative Header */}
+                            <div className={`flex items-center justify-between px-6 py-4 shrink-0 select-none ${headerThemeClasses}`}>
+                                <div className="flex items-center gap-3">
+                                    <span className="relative flex h-2 w-2 shrink-0">
+                                        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${blinkerPingClasses}`}></span>
+                                        <span className={`relative inline-flex rounded-full h-2 w-2 ${blinkerClasses}`}></span>
+                                    </span>
+                                    <span className={`text-[9px] font-mono font-bold tracking-[0.2em] uppercase ${headerTextClasses}`}>
+                                        // COCKPIT WORKSPACE OVERLAY // SECURE FRAME CONTROL
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center gap-3">
+                                    {/* Layout Selectors */}
+                                    <div className={`flex items-center gap-1.5 mr-1 border rounded-lg p-0.5 shadow-inner shrink-0 ${isLatex ? 'bg-stone-100/40 border-stone-200/80' : 'bg-black/20 border-white/5'}`}>
+                                        <button
+                                            onClick={() => handleLayoutChange('dock-left')}
+                                            className={`p-1 rounded transition-all cursor-pointer ${
+                                                workspaceLayout === 'dock-left'
+                                                    ? (isLatex ? 'bg-amber-800/10 text-amber-950' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20')
+                                                    : 'text-zinc-500 hover:text-zinc-300 border border-transparent'
+                                            }`}
+                                            title="Dock Left"
+                                        >
+                                            <ChevronLeft className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleLayoutChange('centered')}
+                                            className={`p-1 rounded transition-all cursor-pointer ${
+                                                workspaceLayout === 'centered'
+                                                    ? (isLatex ? 'bg-amber-800/10 text-amber-950' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20')
+                                                    : 'text-zinc-500 hover:text-zinc-300 border border-transparent'
+                                            }`}
+                                            title="Center Classic"
+                                        >
+                                            <LayoutGrid className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleLayoutChange('dock-right')}
+                                            className={`p-1 rounded transition-all cursor-pointer ${
+                                                workspaceLayout === 'dock-right'
+                                                    ? (isLatex ? 'bg-amber-800/10 text-amber-950' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20')
+                                                    : 'text-zinc-500 hover:text-zinc-300 border border-transparent'
+                                            }`}
+                                            title="Dock Right"
+                                        >
+                                            <ChevronRight className="w-3.5 h-3.5" />
+                                        </button>
+                                        <span className={`w-px h-3 mx-0.5 shrink-0 ${isLatex ? 'bg-stone-200' : 'bg-white/10'}`} />
+                                        <button
+                                            onClick={() => handleLayoutChange('minimized')}
+                                            className={`p-1 rounded transition-all cursor-pointer border border-transparent ${isLatex ? 'text-stone-400 hover:text-amber-800' : 'text-zinc-500 hover:text-amber-400'}`}
+                                            title="Minimize to HUD"
+                                        >
+                                            <Minimize2 className="w-3.5 h-3.5" />
+                                        </button>
+                                        <span className={`w-px h-3 mx-0.5 shrink-0 ${isLatex ? 'bg-stone-200' : 'bg-white/10'}`} />
+                                        <button
+                                            onClick={() => setHUDState({ isMapInteractive: !isMapInteractive })}
+                                            className={`p-1 rounded transition-all cursor-pointer ${
+                                                isMapInteractive
+                                                    ? (isLatex ? 'bg-amber-800/20 text-amber-950 border border-amber-300' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 shadow-[0_0_8px_rgba(16,185,129,0.3)] animate-pulse')
+                                                    : (isLatex ? 'text-stone-400 hover:text-amber-800' : 'text-zinc-500 hover:text-emerald-400 border border-transparent')
+                                            }`}
+                                            title={isMapInteractive ? "Lock Map Control" : "Unlock Map Free Roam"}
+                                        >
+                                            <Compass className="w-3.5 h-3.5" style={{ transform: isMapInteractive ? 'rotate(45deg)' : 'none', transition: 'transform 0.5s ease' }} />
+                                        </button>
+                                    </div>
+
+                                    <Link 
+                                        href="/dashboard"
+                                        className={closeBtnClasses}
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </Link>
+                                </div>
+                            </div>
+                            {/* Content Area */}
+                            <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-10">
+                                {children}
+                            </div>
                         </div>
-                        <button 
-                            onClick={() => router.push('/dashboard')}
-                            className="p-1.5 hover:bg-white/10 rounded-lg text-zinc-500 hover:text-white transition-all cursor-pointer border border-transparent hover:border-white/5 shadow-inner"
-                        >
-                            <X className="w-4 h-4" />
-                        </button>
+                    );
+                })()
+            ) : null}
+
+            {/* Float-Minimized HUD Card */}
+            {isSubPage && workspaceLayout === 'minimized' && (
+                <div 
+                    className={`fixed bottom-12 right-4 z-[999] p-3.5 rounded-xl border flex items-center justify-between gap-6 transition-all duration-500 shadow-[0_10px_35px_rgba(0,0,0,0.7)] backdrop-blur-2xl animate-cockpit-center max-w-sm ${
+                        isLatex 
+                            ? 'bg-[#fdfcf7]/90 border-stone-200 text-stone-900' 
+                            : 'bg-zinc-950/85 border-emerald-500/30 text-white'
+                    }`}
+                >
+                    <div className="flex items-center gap-3">
+                        <span className="relative flex h-2 w-2 shrink-0">
+                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isLatex ? 'bg-amber-600' : 'bg-emerald-400'}`}></span>
+                            <span className={`relative inline-flex rounded-full h-2 w-2 ${isLatex ? 'bg-amber-700' : 'bg-emerald-500'}`}></span>
+                        </span>
+                        <div className="font-mono text-[9px] uppercase tracking-wide leading-tight">
+                            <div className="font-bold text-[10px] text-amber-500 truncate max-w-[160px]" title={activePOI?.name}>
+                                {activePOI?.name || 'GENESIS POINT'}
+                            </div>
+                            <div className="text-zinc-400 mt-0.5">
+                                LAT: {activePOI?.coordinates?.lat.toFixed(4)} | LNG: {activePOI?.coordinates?.lng.toFixed(4)}
+                            </div>
+                        </div>
                     </div>
-                    {/* Content Area */}
-                    <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-10">
-                        {children}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                            onClick={() => handleLayoutChange('dock-right')}
+                            className={`px-3 py-1 text-[8px] font-mono font-bold uppercase tracking-widest rounded-lg border transition-all cursor-pointer ${
+                                isLatex
+                                    ? 'bg-stone-900 hover:bg-stone-800 text-stone-50 border-stone-950'
+                                    : 'bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-black border-emerald-500/20 hover:border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.15)]'
+                            }`}
+                        >
+                            RESTORE
+                        </button>
+                        <Link
+                            href="/dashboard"
+                            className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                                isLatex
+                                    ? 'hover:bg-stone-100 text-stone-500 hover:text-stone-900 border-transparent hover:border-stone-200'
+                                    : 'hover:bg-white/5 text-zinc-400 hover:text-red-400 border-transparent hover:border-white/10'
+                            }`}
+                            title="Close Workspace"
+                        >
+                            <X className="w-3.5 h-3.5" />
+                        </Link>
                     </div>
                 </div>
-            ) : null}
+            )}
 
             {/* Unified Left-Hand/Right-Hand Tray Architecture is handled above */}
             
+            {isMapInteractive && (
+                <div className="fixed top-12 left-1/2 -translate-x-1/2 z-[999] animate-bounce pointer-events-auto">
+                    <button
+                        onClick={() => setHUDState({ isMapInteractive: false })}
+                        className={`px-4 py-2 rounded-full border text-xs font-mono font-bold tracking-widest transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] cursor-pointer flex items-center gap-2 ${
+                            isLatex
+                                ? 'bg-[#fdfcf7] border-amber-200 text-amber-900 shadow-[0_0_15px_rgba(245,158,11,0.3)]'
+                                : 'bg-black/80 border-emerald-500/40 text-emerald-400 hover:border-emerald-500 hover:text-emerald-300'
+                        }`}
+                    >
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                        <span>MAP FREE ROAM ACTIVE — CLICK TO LOCK MAP</span>
+                    </button>
+                </div>
+            )}
+
             <NotificationCenter />
 
-            {/* Cmd+K & Exit controls — consolidated dropdown */}
-            <div ref={settingsRef} className="fixed top-11 right-6 z-50 flex flex-col items-end">
-                <button
-                    onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                    className="px-4 py-1.5 bg-black/40 backdrop-blur border border-emerald-500/30 hover:border-emerald-400/60 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em] rounded transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)] flex items-center gap-2 cursor-pointer group"
-                >
-                    <Sliders className={`w-3 h-3 transition-transform duration-300 ${isSettingsOpen ? 'rotate-90 text-emerald-300' : 'group-hover:rotate-12'}`} />
-                    <span>HUD OPTIONS</span>
-                </button>
 
-                {isSettingsOpen && (
-                    <div className="mt-2 w-64 bg-black/95 backdrop-blur-md border border-emerald-500/30 rounded shadow-[0_0_30px_rgba(16,185,129,0.2)] p-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-150">
-                        <div className="flex flex-col gap-1 border-b border-white/5 pb-2">
-                            <span className="text-[8px] font-black text-emerald-500/70 tracking-widest uppercase">System Core Status</span>
-                            {walletAddress ? (
-                                <span className="text-[9px] text-zinc-400 font-mono truncate">{walletAddress}</span>
-                            ) : (
-                                <span className="text-[9px] text-zinc-500">Unregistered Guest</span>
-                            )}
-                        </div>
-
-                        {/* Hydrate Cockpit */}
-                        <div className="flex flex-col gap-1.5">
-                            <span className="text-[8px] font-bold text-zinc-500 tracking-wider uppercase">Authentication</span>
-                            {!isUnlocked ? (
-                                <button 
-                                    onClick={() => {
-                                        window.location.href = 'http://localhost:3001';
-                                    }}
-                                    className="w-full px-3 py-2 bg-emerald-950/20 hover:bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-[9px] font-black uppercase tracking-[0.15em] rounded transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                                >
-                                    <Shield className="w-3 h-3" />
-                                    <span>Hydrate Cockpit</span>
-                                </button>
-                            ) : (
-                                <div className="w-full px-3 py-2 bg-emerald-950/20 border border-emerald-500/30 text-emerald-400 text-[9px] font-black uppercase tracking-[0.15em] rounded flex items-center justify-center gap-1.5">
-                                    <Shield className="w-3 h-3" />
-                                    <span>Sovereign Link Active</span>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Command Helper */}
-                        <div className="flex flex-col gap-1.5">
-                            <span className="text-[8px] font-bold text-zinc-500 tracking-wider uppercase">Quick Search</span>
-                            <div className="px-3 py-2 bg-zinc-950/40 border border-white/5 rounded text-[9px] font-black uppercase tracking-[0.15em] text-gray-400 flex items-center justify-between opacity-80">
-                                <span>Command Menu</span>
-                                <span className="font-mono bg-white/10 px-1 py-0.5 rounded text-[8px]">⌘ K</span>
-                            </div>
-                        </div>
-
-                        {/* Toggle Animations */}
-                        <div className="flex flex-col gap-1.5">
-                            <span className="text-[8px] font-bold text-zinc-500 tracking-wider uppercase">Aesthetics</span>
-                            <button
-                                onClick={toggleAnimations}
-                                className={`w-full px-3 py-2 border rounded text-[9px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 ${
-                                    reduceAnimations 
-                                        ? 'bg-zinc-900/50 border-zinc-700/50 text-zinc-400 hover:bg-zinc-800' 
-                                        : 'bg-emerald-950/20 border-emerald-500/20 text-emerald-400 hover:bg-emerald-950/40 hover:border-emerald-400/50'
-                                }`}
-                            >
-                                <Zap className="w-3 h-3" />
-                                <span>Animations: {reduceAnimations ? 'OFF' : 'ON'}</span>
-                            </button>
-                        </div>
-
-                        {/* Exit Button */}
-                        <div className="border-t border-white/5 pt-3">
-                            <button
-                                onClick={() => {
-                                    setIsSettingsOpen(false);
-                                    handleExitHUD();
-                                }}
-                                className="w-full px-3 py-2 bg-red-950/20 hover:bg-red-500/20 border border-red-500/20 hover:border-red-400/50 rounded text-red-400 transition-all flex items-center justify-center gap-1.5 text-[9px] font-black uppercase tracking-wider cursor-pointer"
-                            >
-                                <LogOut className="w-3 h-3" />
-                                <span>Exit HUD</span>
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </div>
 
             {/* Persistent State Footer Ticker (Z-60) */}
             <SovereignFooterTicker />

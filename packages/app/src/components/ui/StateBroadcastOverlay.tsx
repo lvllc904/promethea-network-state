@@ -28,8 +28,8 @@ export function StateBroadcastOverlay({ label = 'SYNCHRONIZING MESH...' }: { lab
                 
                 {/* Loader Ring & Label */}
                 <div className="flex items-center gap-4 mb-12">
-                    <div className="w-8 h-8 border-2 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin"></div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400 font-mono">
+                    <div className="w-8 h-8 border-2 border-amber-500/20 border-t-amber-500 rounded-full animate-spin"></div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 font-mono">
                         {label}
                     </span>
                 </div>

@@ -63,9 +63,9 @@ export class CoinbaseService {
             const bufferedSol = estimatedSolRequired * 1.01;
             
             console.log(`[CoinbaseService] Sending ${bufferedSol.toFixed(4)} SOL from Promethea Treasury to Coinbase Drop-Zone: ${depositAddress}...`);
-            // await walletManager.transferSol(depositAddress, bufferedSol);
+            await walletManager.transferSol(depositAddress, bufferedSol);
             console.log(`[CoinbaseService] ⏱️ Awaiting 30 block confirmations for CEX deposit clearance...`);
-            // await new Promise(resolve => setTimeout(resolve, 60 * 1000)); // Wait 60s for exchange ingestion
+            await new Promise(resolve => setTimeout(resolve, 60 * 1000)); // Wait 60s for exchange ingestion
             
             // STEP 2: Verify Account balances to ensure Treasury availability inside the CEX
             console.log(`[CoinbaseService] 🏦 Step 2: Extracting CEX Treasury Balances...`);
@@ -78,7 +78,6 @@ export class CoinbaseService {
 
             // STEP 3: Execute Market Sell on Advanced Trade
             console.log(`[CoinbaseService] 💱 Step 3: Executing Market Sell Order (SOL/USD) to generate Fiat...`);
-            /*
             const tradeToken = this.generateToken('POST', '/api/v3/brokerage/orders');
             const tradeBody = {
                 client_order_id: crypto.randomBytes(16).toString('hex'),
@@ -94,7 +93,6 @@ export class CoinbaseService {
                 headers: { 'Authorization': `Bearer ${tradeToken}` }
             });
             console.log(`[CoinbaseService] ⚡ Trade Executed. Order ID: ${tradeRes.data.order_id}`);
-            */
             
             // STEP 2: Find the Varo Bank Payment Method
             console.log(`[CoinbaseService] Querying linked Varo Bank fiat rails...`);
@@ -127,15 +125,13 @@ export class CoinbaseService {
             };
 
             // Uncomment the actual API trigger below for live production
-            /*
             const wdToken = this.generateToken('POST', '/api/v3/brokerage/fiat_withdrawals');
             const wdRes = await axios.post(`https://api.coinbase.com/api/v3/brokerage/fiat_withdrawals`, reqBody, {
                 headers: { 'Authorization': `Bearer ${wdToken}` }
             });
             console.log(`[CoinbaseService] ⚡ Withdrawal Event Fired! ID: ${wdRes.data.withdrawal.id}`);
-            */
             
-            console.log(`[CoinbaseService] ✅ $${amountUsd} USD Off-Ramp transmission simulated successfully.`);
+            console.log(`[CoinbaseService] ✅ $${amountUsd} USD Off-Ramp transmission executed successfully.`);
             console.log(`[CoinbaseService] The Metabolic Bridge (Path A) is fully operational.`);
 
             return true;

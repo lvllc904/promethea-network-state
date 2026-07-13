@@ -3,7 +3,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Badge, Button } from '@promethea/ui';
 import { Globe, HardDrive, Factory, Landmark, MapPin, DollarSign } from 'lucide-react';
-import { useCollection, useFirestore, useSovereignMemo, collection, query } from '@promethea/identity';
+import { useCollection, useFirestore, useSovereignMemo, collection, query } from '@promethea/sovereign-store';
 import { RealWorldAsset } from '@promethea/lib';
 import Link from 'next/link';
 

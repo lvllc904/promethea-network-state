@@ -13,3 +13,6 @@ node_modules/
 *.log
 *.vsix
 tmp/
+**/.env
+**/.env.*
+**/.env.local

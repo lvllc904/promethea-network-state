@@ -28,6 +28,8 @@ import {
     AssetCanvasPanel, 
     ConferencePanel 
 } from './RightFocusTray';
+import { MinerNodePanel, MarketplacePanel } from './PrometheanEcosystemPanels';
+import { WorkspaceViewport } from './WorkspaceViewport';
 
 export const WindowManager = () => {
     const { osWindows, activateFocusPanel } = useHUD();
@@ -49,6 +51,8 @@ export const WindowManager = () => {
                             {win.type === 'ASGI' && <PrometheaPanel />}
                             {win.type === 'SETTINGS' && <SettingsTray />}
 
+                            {win.type === 'WORKSPACES' && <WorkspaceViewport />}
+
                             {win.type === 'EXCHANGE' && <ExchangePanel />}
                             {win.type === 'SQL_EXPLORER' && <SqlExplorerPanel />}
                             {win.type === 'CLI_GUIDE' && <CliGuidePanel />}
@@ -59,6 +63,8 @@ export const WindowManager = () => {
                             {win.type === 'OMNI_SCANNER' && <OmniScannerPanel />}
                             {win.type === 'ASSET_CANVAS' && <AssetCanvasPanel />}
                             {win.type === 'CONFERENCE' && <ConferencePanel />}
+                            {win.type === 'MINER_NODE' && <MinerNodePanel />}
+                            {win.type === 'MARKETPLACE' && <MarketplacePanel />}
                             {win.type === 'BIOLOGICAL_POW' && (
                                 <div className="flex items-center justify-center h-full">
                                     <ProofOfWorkSubmission 

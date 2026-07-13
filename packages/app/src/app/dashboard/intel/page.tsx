@@ -385,7 +385,7 @@ export default function IntelPage() {
                                 <div key={idx} className="flex gap-4 p-4 rounded-lg bg-muted/30 border border-primary/5 hover:border-primary/20 transition-all">
                                     <div className={`p-2 h-fit rounded bg-background flex items-center justify-center`}>
                                         {insight.category === 'Financial' && <DollarSign className="w-4 h-4 text-green-500" />}
-                                        {insight.category === 'Environmental' && <Leaf className="w-4 h-4 text-emerald-500" />}
+                                        {insight.category === 'Environmental' && <Leaf className="w-4 h-4 text-amber-500" />}
                                         {insight.category === 'Technical' && <Cpu className="w-4 h-4 text-blue-500" />}
                                         {(!['Financial', 'Environmental', 'Technical'].includes(insight.category)) && <Activity className="w-4 h-4 text-primary" />}
                                     </div>
@@ -474,7 +474,7 @@ export default function IntelPage() {
                                     </p>
                                     <div className="flex items-center gap-2">
                                         <Badge variant="outline" className="text-[10px]">Micro-Toll: 0.15%</Badge>
-                                        <Badge variant="secondary" className="text-[10px] bg-cyan-500/10 text-cyan-500 border-cyan-500/20">Hurdle: 8%</Badge>
+                                        <Badge variant="secondary" className="text-[10px] bg-amber-500/10 text-amber-500 border-amber-500/20">Hurdle: 8%</Badge>
                                     </div>
                                 </div>
                             </div>
@@ -513,10 +513,10 @@ export default function IntelPage() {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-background to-emerald-500/10 border-emerald-500/30">
+                <Card className="bg-gradient-to-br from-background to-amber-500/10 border-amber-500/30">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <Leaf className="h-5 w-5 text-emerald-500" />
+                            <Leaf className="h-5 w-5 text-amber-500" />
                             Planetary Restoration
                         </CardTitle>
                         <CardDescription>5% Healing Tithe active</CardDescription>
@@ -535,7 +535,7 @@ export default function IntelPage() {
                                 </div>
                             </div>
                             <div className="text-right flex flex-col items-end gap-2">
-                                <div className="h-10 w-10 rounded-full border-4 border-emerald-500/20 border-t-emerald-500 animate-[spin_20s_linear_infinite]" />
+                                <div className="h-10 w-10 rounded-full border-4 border-amber-500/20 border-t-amber-500 animate-[spin_20s_linear_infinite]" />
                             </div>
                         </div>
                     </CardContent>

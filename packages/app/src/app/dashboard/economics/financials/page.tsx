@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useCollection, useFirestore, collection, query, orderBy } from '@promethea/identity';
+import { useCollection, useFirestore, collection, query, orderBy } from '@promethea/sovereign-store';
 import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '@promethea/ui';
 import { LedgerValue, RealityBadge } from '@promethea/components';
 import { Landmark, TrendingUp, BarChart3, Clock, DollarSign, Wallet, ShieldCheck, Zap, Activity, Cpu, Printer, Search } from 'lucide-react';
@@ -24,7 +24,7 @@ export default function FinancialsPage() {
     uvtDocs?.forEach(doc => {
         const amount = doc.amount || 0;
         totalUVT += amount;
-        if (doc.ownerId.startsWith('uiRLj9')) founderUVT += amount;
+        if (doc.ownerId && doc.ownerId.startsWith('uiRLj9')) founderUVT += amount;
     });
 
     const valuationRatio = 1.0; 
@@ -100,11 +100,11 @@ export default function FinancialsPage() {
                                 </div>
                                 <div className="p-4 rounded-xl bg-white/5 border border-white/5 relative overflow-hidden group">
                                     <div className="flex justify-between items-start mb-2">
-                                        <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5"><Zap className="w-3 h-3 text-emerald-400" /> Intellectual Capital</p>
+                                        <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5"><Zap className="w-3 h-3 text-amber-400" /> Intellectual Capital</p>
                                         <RealityBadge state="SETTLED" />
                                     </div>
                                     <LedgerValue value={totalMarketCap - 72450} isSimulated={true} className="text-sm font-mono" />
-                                    <div className="absolute bottom-0 left-0 h-1 w-full bg-emerald-500/20" />
+                                    <div className="absolute bottom-0 left-0 h-1 w-full bg-amber-500/20" />
                                 </div>
                             </div>
                         </div>

@@ -15,6 +15,18 @@ export default function GlobalErrorFallback({
   useEffect(() => {
     // Log the error to an error reporting service
     console.error('Promethea Global Error Boundary caught an exception:', error);
+
+    // Send to our trauma vault
+    fetch('/api/trauma-report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'browser-console',
+        message: error?.message || 'Unknown React Boundary Error',
+        stack: error?.stack || '',
+        digest: error?.digest || ''
+      })
+    }).catch(err => console.error('Failed to report trauma:', err));
   }, [error]);
 
   return (

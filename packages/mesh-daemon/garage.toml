@@ -1,0 +1,17 @@
+# Promethean Network State (TPNS) Distributed Storage Substrate Config
+# Configuration file for Garage S3 distributed peer-to-peer object storage
+
+metadata_dir = "./.garage/meta"
+data_dir = "./.garage/data"
+db_engine = "sqlite"
+
+# S3 compatibility gateway ports
+s3_api_bind_addr = "127.0.0.1:3900"
+s3_web_bind_addr = "127.0.0.1:3902"
+
+# Internal RPC port for P2P inter-node communication
+rpc_bind_addr = "[::]:3901"
+rpc_public_addr = "127.0.0.1:3901"
+
+# Group identification secret
+bootstrap_key = "tpns-sovereign-mesh-key-genesis-block-token"

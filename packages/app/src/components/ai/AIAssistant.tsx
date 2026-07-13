@@ -72,7 +72,7 @@ export function AIAssistant() {
         }
     };
 
-    if (pathname === '/dashboard') {
+    if (pathname && pathname.startsWith('/dashboard')) {
         return null;
     }
 

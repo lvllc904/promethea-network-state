@@ -63,12 +63,12 @@ export const SovereignChart: React.FC<SovereignChartProps> = ({ primaryData, btc
             crosshair: {
                 mode: 1, // Normal mode
                 vertLine: {
-                    color: '#10b981',
+                    color: '#f59e0b',
                     width: 1,
                     style: 3,
                 },
                 horzLine: {
-                    color: '#10b981',
+                    color: '#f59e0b',
                     width: 1,
                     style: 3,
                 },
@@ -79,9 +79,9 @@ export const SovereignChart: React.FC<SovereignChartProps> = ({ primaryData, btc
 
         // Primary Series (UVT / Reserve)
         const areaSeries = chart.addSeries(AreaSeries, {
-            lineColor: '#06b6d4', // Cyan
-            topColor: 'rgba(6, 182, 212, 0.2)',
-            bottomColor: 'rgba(6, 182, 212, 0.0)',
+            lineColor: '#f59e0b', // Gold-Amber
+            topColor: 'rgba(245, 158, 11, 0.2)',
+            bottomColor: 'rgba(245, 158, 11, 0.0)',
             lineWidth: 2,
         });
         areaSeries.setData(primaryData);
@@ -155,7 +155,7 @@ export const SovereignChart: React.FC<SovereignChartProps> = ({ primaryData, btc
             <div className="absolute top-0 left-0 right-0 z-10 p-4 flex justify-between items-start pointer-events-none">
                 <div>
                     <h3 className="text-lg font-black uppercase text-white font-mono flex items-center gap-2">
-                        <Activity className="w-5 h-5 text-cyan-500" />
+                        <Activity className="w-5 h-5 text-amber-500" />
                         {title}
                     </h3>
                     <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Live Data Canvas</p>

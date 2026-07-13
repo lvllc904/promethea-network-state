@@ -59,7 +59,7 @@ export function MainNav() {
         <Link href="/" prefetch={false}>
           <SidebarMenuButton tooltip={{ children: "Home" }} className="h-auto">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.4)]">
                 <span className="font-black text-black text-xs tracking-tighter">PNS</span>
               </div>
               <span className="font-headline font-black tracking-[0.2em] text-xs text-white">PROMETHEAN</span>
@@ -73,7 +73,7 @@ export function MainNav() {
             <SidebarMenuItem key={item.href}>
               <Link href={item.href}>
                 <SidebarMenuButton
-                  isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}
+                  isActive={!!pathname && pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}
                   tooltip={{ children: item.label }}
                 >
                   <item.icon />

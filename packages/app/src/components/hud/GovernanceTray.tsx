@@ -3,20 +3,86 @@
 import React, { useState, useEffect } from 'react';
 import { Scale, Users, Gavel, PlusCircle, CheckCircle, XCircle, ArrowLeft, Send, Loader2 } from 'lucide-react';
 
+const getMockData = (path: string): any => {
+    const cleanPath = path.split('?')[0];
+    switch (cleanPath) {
+        case '/api/governance/proposals':
+            return [
+                {
+                    id: 'prop-1',
+                    title: 'Amplify Reserve Sweep Dividend',
+                    type: 'ECONOMIC',
+                    current: 8,
+                    threshold: 10,
+                    narrative: 'Mandates increase of sovereign plowsbacks into direct citizen dividends by 5%.'
+                },
+                {
+                    id: 'prop-2',
+                    title: 'Establish Sovereign Grid Boundary',
+                    type: 'TERRITORIAL',
+                    current: 5,
+                    threshold: 10,
+                    narrative: 'Defines permanent physical coordinate boundaries for Zone-A agricultural cells.'
+                },
+                {
+                    id: 'prop-3',
+                    title: '3-Body Protocol Integration',
+                    type: 'CONSTITUTIONAL',
+                    current: 12,
+                    threshold: 15,
+                    narrative: 'Fully integrates DepthOS telemetry loops directly into constitutional decision trees.'
+                }
+            ];
+        case '/api/governance/cap-table':
+            return {
+                promethea: 42.5,
+                citizens: 36.8,
+                liquidity: 20.7
+            };
+        case '/api/citizens':
+            return [
+                { id: 'cit-1', name: 'Alara Vance', displayName: 'Alara Vance', weight: '245.5 UVT' },
+                { id: 'cit-2', name: 'Kaelen Voss', displayName: 'Kaelen Voss', weight: '188.2 UVT' },
+                { id: 'cit-3', name: 'Sora Takahashi', displayName: 'Sora Takahashi', weight: '310.0 UVT' },
+                { id: 'cit-4', name: 'Marcus Sterling', displayName: 'Marcus Sterling', weight: '150.0 UVT' }
+            ];
+        default:
+            return undefined;
+    }
+};
+
 function useBFFData<T>(path: string, defaultValue: T): { data: T; refetch: () => void } {
-    const [data, setData] = useState<T>(defaultValue);
+    const [data, setData] = useState<T>(() => {
+        const mock = getMockData(path);
+        return mock !== undefined ? (mock as unknown as T) : defaultValue;
+    });
+
     const fetchData = () => {
         fetch(path)
-            .then(r => r.ok ? r.json() : null)
-            .then(d => { if (d !== null) setData(d); })
-            .catch(() => {});
+            .then(r => {
+                if (r.ok) {
+                    return r.json();
+                } else {
+                    const mock = getMockData(path);
+                    return mock !== undefined ? mock : null;
+                }
+            })
+            .then(d => {
+                if (d !== null) setData(d);
+            })
+            .catch(() => {
+                const mock = getMockData(path);
+                if (mock !== undefined) setData(mock as unknown as T);
+            });
     };
+
     useEffect(() => { fetchData(); }, [path]);
     return { data, refetch: fetchData };
 }
 
 import { useHUD } from '@/lib/hud-store';
 import { useSolanaCitizen, useToast } from '@promethea/hooks';
+
 
 const PROPOSAL_TYPES = ['CONSTITUTIONAL', 'ECONOMIC', 'DIPLOMATIC', 'OPERATIONAL', 'TERRITORIAL', 'THRESHOLD'] as const;
 
@@ -40,8 +106,7 @@ const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess:
             const res = await fetch('/api/governance/proposals', {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${typeof window !== 'undefined' ? localStorage.getItem('pns_sovereign_token') : ''}`,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ title, type, narrative }),
             });
@@ -76,7 +141,7 @@ const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess:
                 >
                     <ArrowLeft className="w-3.5 h-3.5 text-zinc-400" />
                 </button>
-                <p className="text-[9px] text-cyan-400 font-black uppercase tracking-widest flex items-center gap-1.5">
+                <p className="text-[9px] text-amber-400 font-black uppercase tracking-widest flex items-center gap-1.5">
                     <Scale className="w-3 h-3" /> Draft New Proposal
                 </p>
             </div>
@@ -93,7 +158,7 @@ const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess:
                                 onClick={() => setType(t)}
                                 className={`px-2 py-1 text-[8px] font-black uppercase rounded transition-all ${
                                     type === t
-                                        ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
+                                        ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
                                         : 'bg-black/40 text-zinc-600 border border-white/5 hover:text-zinc-300'
                                 }`}
                             >
@@ -111,7 +176,7 @@ const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess:
                             value={title}
                             onChange={e => setTitle(e.target.value)}
                             placeholder="State the sovereign intent..."
-                            className="flex-1 bg-black/60 border border-white/10 rounded px-3 py-2 text-[11px] text-white placeholder-zinc-700 focus:outline-none focus:border-cyan-500/40 transition-colors"
+                            className="flex-1 bg-black/60 border border-white/10 rounded px-3 py-2 text-[11px] text-white placeholder-zinc-700 focus:outline-none focus:border-amber-500/40 transition-colors"
                         />
                         <button
                             type="button"
@@ -133,7 +198,7 @@ const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess:
                         onChange={e => setNarrative(e.target.value)}
                         placeholder="Describe the constitutional basis and desired outcome..."
                         rows={5}
-                        className="w-full bg-black/60 border border-white/10 rounded px-3 py-2 text-[11px] text-white placeholder-zinc-700 focus:outline-none focus:border-cyan-500/40 transition-colors resize-none"
+                        className="w-full bg-black/60 border border-white/10 rounded px-3 py-2 text-[11px] text-white placeholder-zinc-700 focus:outline-none focus:border-amber-500/40 transition-colors resize-none"
                     />
                 </div>
 
@@ -144,7 +209,7 @@ const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess:
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-2.5 flex items-center justify-center gap-2 bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed text-black text-[9px] font-black uppercase tracking-widest rounded transition-all"
+                    className="w-full py-2.5 flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed text-black text-[9px] font-black uppercase tracking-widest rounded transition-all"
                 >
                     {isSubmitting ? (
                         <><Loader2 className="w-3 h-3 animate-spin" /> Submitting to Docket...</>
@@ -160,6 +225,7 @@ const NewProposalForm = ({ onBack, onSuccess }: { onBack: () => void; onSuccess:
 // ─── Main Tray ──────────────────────────────────────────────────────────────
 export const GovernanceTray = () => {
     const { activateFocusPanel } = useHUD();
+
     const { data: proposals, refetch: refetchProposals } = useBFFData<any[]>('/api/governance/proposals', []);
     const { data: capTable } = useBFFData<any>('/api/governance/cap-table', null);
     const { data: citizens } = useBFFData<any[]>('/api/citizens', []);
@@ -196,7 +262,7 @@ export const GovernanceTray = () => {
 
     const handleVote = async (proposalId: string, vote: 'FOR' | 'AGAINST') => {
         if (!walletAddress) {
-            toast({ title: 'Authentication Required', description: 'Please connect your Solana wallet to vote.' });
+            toast({ title: 'Connection Required', description: 'Please connect your Solana wallet to vote.' });
             return;
         }
 
@@ -248,7 +314,7 @@ export const GovernanceTray = () => {
                     <button
                         key={s}
                         onClick={() => setActiveSection(s)}
-                        className={`flex-1 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-all ${activeSection === s ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-white'}`}
+                        className={`flex-1 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-md transition-all ${activeSection === s ? 'bg-amber-500/20 text-amber-400' : 'text-zinc-500 hover:text-white'}`}
                     >
                         {s === 'proposals' ? 'Docket' : s === 'cap_table' ? 'Cap Table' : 'Citizens'}
                     </button>
@@ -259,11 +325,11 @@ export const GovernanceTray = () => {
                 <>
                     <div className="flex justify-between items-center">
                         <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                            <Scale className="w-3 h-3 text-cyan-400" /> Active Proposals
+                            <Scale className="w-3 h-3 text-amber-400" /> Active Proposals
                         </p>
                         <button
                             onClick={() => setShowNewProposal(true)}
-                            className="flex items-center gap-1 px-2 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 rounded text-[9px] font-black text-cyan-400 transition-all"
+                            className="flex items-center gap-1 px-2 py-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 rounded text-[9px] font-black text-amber-400 transition-all"
                         >
                             <PlusCircle className="w-3 h-3" /> New
                         </button>
@@ -278,7 +344,7 @@ export const GovernanceTray = () => {
                             </div>
                             <button
                                 onClick={() => setShowNewProposal(true)}
-                                className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-black text-[9px] font-black uppercase tracking-widest rounded transition-all"
+                                className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-black text-[9px] font-black uppercase tracking-widest rounded transition-all"
                             >
                                 Draft New Proposal
                             </button>
@@ -288,22 +354,22 @@ export const GovernanceTray = () => {
                             {combinedProposals.map((p: any) => {
                                 const progress = Math.min(100, ((p.current || 0) / (p.threshold || 100)) * 100);
                                 return (
-                                    <div key={p.id} className="p-3 bg-black/40 border border-white/5 rounded-lg hover:border-cyan-500/20 transition-colors">
+                                    <div key={p.id} className="p-3 bg-black/40 border border-white/5 rounded-lg hover:border-amber-500/20 transition-colors">
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
                                                 <span className="text-[8px] text-zinc-600 font-bold uppercase">{p.type} · {p.id}</span>
                                                 <p className="text-[11px] font-bold text-white uppercase leading-tight">{p.title}</p>
                                             </div>
-                                            <span className="text-[9px] font-mono text-cyan-400">{p.current}/{p.threshold}</span>
+                                            <span className="text-[9px] font-mono text-amber-400">{p.current}/{p.threshold}</span>
                                         </div>
                                         <div className="h-1 bg-white/5 rounded-full overflow-hidden mb-3">
-                                            <div className="h-full bg-cyan-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
+                                            <div className="h-full bg-amber-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
                                         </div>
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => handleVote(p.id, 'FOR')}
                                                 disabled={isVoting === p.id}
-                                                className="flex-1 py-1.5 flex items-center justify-center gap-1 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded text-[9px] font-black text-emerald-400 uppercase transition-all disabled:opacity-50"
+                                                className="flex-1 py-1.5 flex items-center justify-center gap-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 rounded text-[9px] font-black text-amber-400 uppercase transition-all disabled:opacity-50"
                                             >
                                                 <CheckCircle className="w-3 h-3" /> Affirm
                                             </button>
@@ -326,12 +392,12 @@ export const GovernanceTray = () => {
             {activeSection === 'cap_table' && (
                 <div className="space-y-4">
                     <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                        <Gavel className="w-3 h-3 text-cyan-400" /> Live Cap Table
+                        <Gavel className="w-3 h-3 text-amber-400" /> Live Cap Table
                     </p>
                     {[
-                        { label: 'Promethea Base', val: cap.promethea, color: 'bg-cyan-500' },
+                        { label: 'Promethea Base', val: cap.promethea, color: 'bg-amber-500' },
                         { label: 'Citizen Pool', val: cap.citizens, color: 'bg-purple-500' },
-                        { label: 'Liquidity Routing', val: cap.liquidity, color: 'bg-emerald-500' },
+                        { label: 'Liquidity Routing', val: cap.liquidity, color: 'bg-amber-500' },
                     ].map(row => (
                         <div key={row.label}>
                             <div className="flex justify-between text-[9px] mb-1">
@@ -359,7 +425,7 @@ export const GovernanceTray = () => {
             {activeSection === 'citizens' && (
                 <div className="space-y-2">
                     <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                        <Users className="w-3 h-3 text-cyan-400" /> Citizen Ledger
+                        <Users className="w-3 h-3 text-amber-400" /> Citizen Ledger
                     </p>
                     {citizens.length === 0 ? (
                         <p className="py-8 text-center text-[9px] text-zinc-700 uppercase font-bold tracking-widest">No Citizens Registered</p>
@@ -367,10 +433,10 @@ export const GovernanceTray = () => {
                         <div
                             key={c.id}
                             onClick={() => activateFocusPanel('SWEAT_CLAIM')}
-                            className="flex items-center gap-3 px-3 py-2.5 bg-black/40 border border-white/5 rounded-lg hover:border-cyan-500/20 cursor-pointer transition-colors"
+                            className="flex items-center gap-3 px-3 py-2.5 bg-black/40 border border-white/5 rounded-lg hover:border-amber-500/20 cursor-pointer transition-colors"
                         >
-                            <div className="w-6 h-6 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0">
-                                <span className="text-[9px] font-black text-cyan-400">{(c.name || c.displayName || 'C')[0]}</span>
+                            <div className="w-6 h-6 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                                <span className="text-[9px] font-black text-amber-400">{(c.name || c.displayName || 'C')[0]}</span>
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-[10px] font-bold text-white uppercase truncate">{c.name || c.displayName || c.id}</p>

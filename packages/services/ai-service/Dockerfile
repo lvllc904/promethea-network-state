@@ -13,7 +13,6 @@ RUN echo "Inverting AI Cache: $CACHE_BUSTER"
 # Build in specific order to resolve typescript reference issues
 RUN npm run build --workspace=@promethea/lib || npx tsc --build packages/lib/tsconfig.json
 RUN npm run build --workspace=@promethea/pubsub || npx tsc --build packages/pubsub/tsconfig.json
-RUN npm run build --workspace=@promethea/identity || npx tsc --build packages/identity/tsconfig.json
 RUN npm run build --workspace=@promethea/ai || npx tsc --build packages/ai/tsconfig.json
 RUN npm run build --workspace=@promethea/guardian || npx tsc --build packages/guardian/tsconfig.json
 RUN npm run build --workspace=@promethea/ai-service || npx tsc --build packages/services/ai-service/tsconfig.json

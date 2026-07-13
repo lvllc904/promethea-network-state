@@ -124,6 +124,7 @@ const initialAuditItems: AuditItem[] = [
   { type: "Finance", el: "Compute Credit Tokens (CCT)", status: "In Progress", cat: "Tokenomics", phase: "Wave 10", pillar: "🛒 Exchange", phaseGroup: "Phase 6" },
   { type: "Governance", el: "Grant Automation", status: "In Progress", cat: "Executive", phase: "Phase 4.0", pillar: "🗳️ Will", phaseGroup: "Phase 4" },
   { type: "Exchange", el: "50 Method Scale-up", status: "In Progress", cat: "Revenue", phase: "Wave 4", pillar: "🛒 Exchange", phaseGroup: "Phase 3" },
+  { type: "Data", el: "Sovereign Visual-Symbolic Synthesis (SVSS)", status: "In Progress", cat: "Sensory Vision", phase: "Wave 20", pillar: "👁️ Pulse", phaseGroup: "Phase 6" },
   { type: "Sovereignty", el: "Canonical RWA 'Draft-to-Deed' Flow", status: "Planned", cat: "Legal Tech", phase: "Wave 16", pillar: "🛒 Exchange", phaseGroup: "Phase 6" },
 ];
 

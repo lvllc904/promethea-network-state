@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getAuth } from 'firebase/auth';
 import { useToast } from '@promethea/hooks';
 import { askPrometheaAction } from '../actions';
 import {

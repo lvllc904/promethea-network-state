@@ -6,7 +6,7 @@
     "composite": true,
     "declaration": true,
     "jsx": "react-jsx",
-    "moduleResolution": "node"
+    "moduleResolution": "bundler"
   },
   "include": [
     "src/**/*"
@@ -20,7 +20,7 @@
       "path": "../lib"
     },
     {
-      "path": "../identity"
+      "path": "../sovereign-store"
     }
   ]
 }

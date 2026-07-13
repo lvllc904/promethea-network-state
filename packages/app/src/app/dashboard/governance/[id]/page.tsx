@@ -51,7 +51,7 @@ import {
   getDoc,
   type Query,
   type DocumentReference
-} from '@promethea/identity';
+} from '@promethea/sovereign-store';
 import { Proposal, Vote, Citizen, Task, type CompensationChoice } from '@promethea/lib';
 import { Skeleton } from '@promethea/ui';
 import { useEffect, useState } from 'react';

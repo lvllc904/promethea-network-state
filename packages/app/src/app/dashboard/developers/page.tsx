@@ -56,12 +56,12 @@ export default function DeveloperPortalPage() {
                   {apiKey}
                 </div>
                 <Button onClick={handleCopy} size="sm" variant="ghost" className="text-gray-400 hover:text-white">
-                  {copied ? <CheckCircle className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                  {copied ? <CheckCircle className="w-4 h-4 text-amber-500" /> : <Copy className="w-4 h-4" />}
                 </Button>
               </div>
               <div className="mt-4 flex items-center gap-2">
-                <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-[9px]">Verified Citizen</Badge>
-                <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-[9px]">Full Write Access</Badge>
+                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-[9px]">Verified Citizen</Badge>
+                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-[9px]">Full Write Access</Badge>
               </div>
             </CardContent>
           </Card>
@@ -70,12 +70,12 @@ export default function DeveloperPortalPage() {
              <Card className="bg-gray-900 border-gray-800">
                 <CardHeader>
                    <CardTitle className="text-sm text-gray-300 uppercase font-black tracking-widest flex items-center gap-2">
-                      <Terminal className="w-4 h-4 text-cyan-500" />
+                      <Terminal className="w-4 h-4 text-amber-500" />
                       Cartographer SDK
                    </CardTitle>
                 </CardHeader>
                 <CardContent>
-                   <pre className="bg-black p-3 rounded font-mono text-[10px] text-cyan-400 overflow-x-auto border border-gray-800">
+                   <pre className="bg-black p-3 rounded font-mono text-[10px] text-amber-400 overflow-x-auto border border-gray-800">
                       <code>npm install @promethea/cartographer-react</code>
                    </pre>
                    <p className="text-[10px] text-gray-500 mt-3 leading-relaxed">
@@ -110,19 +110,19 @@ export default function DeveloperPortalPage() {
       icon: <Cpu className="w-3 h-3" />,
       content: (
         <div className="space-y-4">
-           <div className="p-6 bg-gradient-to-br from-gray-900 to-black rounded-xl border-2 border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+           <div className="p-6 bg-gradient-to-br from-gray-900 to-black rounded-xl border-2 border-amber-500/30 shadow-[0_0_30px_rgba(245, 158, 11,0.1)]">
               <div className="flex justify-between items-center mb-6">
                  <div>
                     <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Hardware Identity Probe</h2>
                     <p className="text-xs text-gray-500">Real-time metabolic telemetry from your current vessel.</p>
                  </div>
-                 <Badge className="bg-emerald-500 text-black font-black text-[10px] px-3 py-1">Nexus Protocol Active</Badge>
+                 <Badge className="bg-amber-500 text-black font-black text-[10px] px-3 py-1">Nexus Protocol Active</Badge>
               </div>
 
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                  {[
-                   { label: 'GPU Substrate', value: profile?.gpu || 'Scanning...', icon: Zap, color: 'text-cyan-400' },
-                   { label: 'Metabolic Score', value: `${(profile?.score || 0).toFixed(2)} / 1.00`, icon: Activity, color: 'text-emerald-400' },
+                   { label: 'GPU Substrate', value: profile?.gpu || 'Scanning...', icon: Zap, color: 'text-amber-400' },
+                   { label: 'Metabolic Score', value: `${(profile?.score || 0).toFixed(2)} / 1.00`, icon: Activity, color: 'text-amber-400' },
                    { label: 'Assigned Tier', value: profile?.tier || 'Calculating...', icon: Cpu, color: 'text-purple-400' },
                    { label: 'Memory Availability', value: `${profile?.memory || 0}GB RAM`, icon: Database, color: 'text-blue-400' }
                  ].map(stat => (
@@ -136,8 +136,8 @@ export default function DeveloperPortalPage() {
                  ))}
               </div>
 
-              <div className="mt-8 p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-lg">
-                 <h3 className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+              <div className="mt-8 p-4 bg-amber-500/5 border border-amber-500/20 rounded-lg">
+                 <h3 className="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-2 flex items-center gap-2">
                     <BookOpen className="w-3 h-3" /> Promethean Suggestion
                  </h3>
                  <p className="text-xs text-gray-400 leading-relaxed italic">
@@ -147,10 +147,10 @@ export default function DeveloperPortalPage() {
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-gray-900 border border-gray-800 rounded group cursor-pointer hover:border-cyan-500/50 transition-all">
+              <div className="p-4 bg-gray-900 border border-gray-800 rounded group cursor-pointer hover:border-amber-500/50 transition-all">
                  <h4 className="text-[10px] font-black text-white uppercase mb-1">Reality Map SDK</h4>
                  <p className="text-[9px] text-gray-500">Inject 3D reality layers into your own dashboard.</p>
-                 <ArrowUpRight className="w-3 h-3 text-cyan-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                 <ArrowUpRight className="w-3 h-3 text-amber-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="p-4 bg-gray-900 border border-gray-800 rounded group cursor-pointer hover:border-purple-500/50 transition-all">
                  <h4 className="text-[10px] font-black text-white uppercase mb-1">Vessel Sentinel</h4>
@@ -172,14 +172,14 @@ export default function DeveloperPortalPage() {
       icon: <BookOpen className="w-3 h-3" />,
       content: (
         <div className="p-8 text-center bg-gray-900 border border-gray-800 rounded-lg">
-           <div className="w-16 h-16 bg-cyan-500/10 border border-cyan-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
-              <BookOpen className="w-8 h-8 text-cyan-400" />
+           <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <BookOpen className="w-8 h-8 text-amber-400" />
            </div>
            <h3 className="text-xl font-black text-white uppercase tracking-tighter">Sovereign Knowledge Base</h3>
            <p className="text-xs text-gray-500 mt-2 max-w-md mx-auto leading-relaxed">
              The full Cartographer SDK specification and API reference are available on the Sovereign Git substrate.
            </p>
-           <Button variant="outline" className="mt-6 gap-2 text-[10px] font-black uppercase border-cyan-500/50 text-cyan-400 hover:bg-cyan-500 hover:text-black">
+           <Button variant="outline" className="mt-6 gap-2 text-[10px] font-black uppercase border-amber-500/50 text-amber-400 hover:bg-amber-500 hover:text-black">
               View External Docs <ExternalLink className="w-3 h-3" />
            </Button>
         </div>
@@ -194,8 +194,8 @@ export default function DeveloperPortalPage() {
         description="Build the Future of the Network State"
         stats={[
           { label: 'Active Keys', value: '1', color: 'text-amber-500' },
-          { label: 'API Health', value: '99.9%', color: 'text-emerald-500' },
-          { label: 'Requests (24h)', value: '1,204', color: 'text-cyan-500' }
+          { label: 'API Health', value: '99.9%', color: 'text-amber-500' },
+          { label: 'Requests (24h)', value: '1,204', color: 'text-amber-500' }
         ]}
         tabs={cockpitTabs}
       />

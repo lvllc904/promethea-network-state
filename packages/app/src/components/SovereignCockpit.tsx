@@ -4,10 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { useBodyHandshake } from '@/lib/body-handshake';
 import { useSovereignLayout } from '@/lib/sovereign-layout';
 import { WidgetRenderer } from './WidgetRenderer';
-import { useUser } from '@promethea/identity';
+import { useUser } from '@promethea/sovereign-store';
 import { useHardwareHandshake } from '@promethea/hooks';
 import { Terminal } from 'lucide-react';
 import { SovereignCommandMatrix } from './SovereignCommandMatrix';
+import { useMesh } from '@/components/providers/mesh-provider';
+import { motion } from 'framer-motion';
 
 interface SovereignCockpitProps {
     title: string;
@@ -26,12 +28,15 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
 }) => {
     const { executeIntent, isProcessing } = useBodyHandshake();
     const { layout, isLoading } = useSovereignLayout();
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(tabs?.[0]?.id);
     const [isMatrixOpen, setIsMatrixOpen] = useState(false);
     const [renderMode, setRenderMode] = useState<'CORE' | 'NEXUS' | 'APEX'>('NEXUS');
     const { profile, isLoading: isHardwareLoading } = useHardwareHandshake();
     const { user } = useUser();
+    const { themeState } = useMesh();
+
+    const currentTheme = themeState?.theme || 'dark';
+    const isLatex = currentTheme === 'theme-latex';
 
     // Fallback to anonymous identity if no auth is configured in this env
     useEffect(() => {
@@ -54,90 +59,131 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
 
     const currentTabContent = tabs?.find(t => t.id === activeTab)?.content;
 
-    return (
-        <div className="flex flex-col h-full min-h-[500px] bg-black text-gray-100 rounded-lg border-2 border-emerald-500/50 overflow-hidden">
-            {/* DEBUG INDICATOR */}
-            <div className="bg-emerald-500 text-black text-[8px] font-bold px-2 py-0.5 uppercase tracking-widest text-center flex justify-between items-center">
-                <span>Cockpit Active // Tabs: {tabs ? 'YES' : 'NO'} // Active: {activeTab}</span>
-                <span className="animate-pulse">Hardware Identity: {profile?.gpu || 'Scanning...'} // Tier: {profile?.tier}</span>
-            </div>
-            {/* Header */}
-            <div className="p-4 bg-gray-900 border-b border-gray-800 flex justify-between items-center">
-                <div className="flex items-center gap-6">
-                    <div>
-                        <h1 className="text-xl font-bold tracking-tight text-white uppercase">{title}</h1>
-                        <p className="text-xs text-gray-500">{description} | ROLE: <span className="text-emerald-500">{role}</span></p>
-                    </div>
+    // Theme adaptive styles
+    const cockpitBg = isLatex 
+        ? "bg-[#fdfcf7]/60 border-stone-200/80 shadow-[0_8px_32px_rgba(28,25,23,0.05)] text-stone-900" 
+        : "bg-zinc-950/40 border-white/5 shadow-2xl text-white";
 
-                    {/* CONTEXT SWITCHER */}
-                    <div className="flex items-center gap-2 bg-black/40 border border-gray-800 rounded-lg px-3 py-1.5">
-                        <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mr-2">Context:</span>
-                        <select 
-                            value={user?.activeOrgId || 'global'}
-                            onChange={(e) => (user as any).switchContext?.(e.target.value)}
-                            className="bg-transparent text-emerald-400 text-[10px] font-black uppercase tracking-widest outline-none cursor-pointer hover:text-emerald-300 transition-colors"
-                        >
-                            <option value="global">Global Nexus</option>
-                            <option value="syndicate_zero">Syndicate Zero (Admin)</option>
-                            <option value="opencivics">OpenCivics Hub</option>
-                            <option value="locilife">Loci Life Archipelago</option>
-                            <option value="network_nations">Network Nations Mesh</option>
-                        </select>
+    const headerBg = isLatex
+        ? "bg-stone-50/80 border-b border-stone-200/50"
+        : "bg-gradient-to-b from-white/[0.03] to-transparent border-b border-white/5";
+
+    const titleColor = isLatex ? "text-stone-900" : "text-white";
+    const descColor = isLatex ? "text-stone-500" : "text-zinc-400";
+    const pipeColor = isLatex ? "text-stone-300" : "text-zinc-600";
+    const roleColor = isLatex ? "text-amber-800" : "text-emerald-400";
+
+    const contextSwitcherBg = isLatex
+        ? "bg-stone-100/50 hover:bg-stone-100/80 border-stone-200/60 hover:border-stone-200"
+        : "bg-white/[0.02] hover:bg-white/[0.04] border-white/5 hover:border-white/10";
+
+    const contextSelectText = isLatex
+        ? "text-amber-900 hover:text-amber-950"
+        : "text-emerald-400 hover:text-emerald-300";
+
+    const optionClass = isLatex ? "bg-[#fdfcf7] text-stone-900" : "bg-zinc-950 text-white";
+
+    const actionBtnClass = isLatex
+        ? "bg-amber-800/10 hover:bg-amber-800 text-amber-950 hover:text-white border-amber-800/20 hover:border-amber-800/40"
+        : "bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-black border border-emerald-500/20 hover:border-emerald-500/40";
+
+    const statLabelColor = isLatex ? "text-stone-500" : "text-zinc-500";
+    
+    const getStatValueColor = (originalColor?: string) => {
+        if (isLatex) {
+            if (!originalColor || originalColor.includes('emerald') || originalColor.includes('text-emerald')) {
+                return "text-amber-900 drop-shadow-sm";
+            }
+            return originalColor.replace('text-emerald-400', 'text-amber-900').replace('text-emerald-500', 'text-amber-950').replace('drop-shadow-[0_0_8px_rgba(52,211,153,0.15)]', '');
+        }
+        return originalColor || 'text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.15)]';
+    };
+
+    const tierBadgeClass = isLatex
+        ? "text-stone-500 bg-stone-100/50 border-stone-200/60"
+        : "text-zinc-500 bg-white/[0.02] border-white/5";
+
+    const engineCtrlClass = isLatex
+        ? "from-amber-700 to-amber-900 hover:from-amber-600 hover:to-amber-800 text-stone-50 shadow-[0_4px_20px_rgba(120,53,4,0.15)] hover:shadow-[0_4px_30px_rgba(120,53,4,0.25)]"
+        : "from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-zinc-950 shadow-[0_4px_20px_rgba(16,185,129,0.25)] hover:shadow-[0_4px_30px_rgba(16,185,129,0.4)]";
+
+    const toggleContainerClass = isLatex
+        ? "bg-stone-100/50 border-stone-200/60"
+        : "bg-white/[0.02] border-white/5";
+
+    const getToggleBtnClass = (mode: string) => {
+        if (renderMode === mode) {
+            return isLatex
+                ? "bg-amber-800 text-white shadow-[0_2px_8px_rgba(120,53,4,0.15)]"
+                : "bg-emerald-500 text-zinc-950 shadow-[0_0_12px_rgba(16,185,129,0.3)]";
+        } else {
+            return isLatex
+                ? "text-stone-400 hover:text-stone-700"
+                : "text-zinc-500 hover:text-zinc-300";
+        }
+    };
+
+    const settingsBtnClass = isLatex
+        ? "bg-stone-100/50 hover:bg-stone-100/80 border-stone-200/60 hover:border-stone-200 text-stone-500 hover:text-stone-900"
+        : "bg-white/[0.02] hover:bg-white/[0.05] border-white/5 hover:border-white/10 text-zinc-400 hover:text-white";
+
+    const tabsContainerClass = isLatex
+        ? "border-stone-200/50 bg-stone-100/20"
+        : "border-b border-white/5 bg-white/[0.01]";
+
+    const getTabBtnClass = (id: string) => {
+        if (activeTab === id) {
+            return isLatex
+                ? "border-amber-800 text-amber-950 bg-amber-800/[0.02]"
+                : "border-emerald-500 text-emerald-400 bg-emerald-500/[0.02]";
+        } else {
+            return isLatex
+                ? "border-transparent text-stone-400 hover:text-stone-700"
+                : "border-transparent text-zinc-500 hover:text-zinc-300";
+        }
+    };
+
+    const viewportBgClass = isLatex
+        ? "bg-[#fdfcf7]/30"
+        : "bg-zinc-950/20";
+
+    const widgetCardClass = isLatex
+        ? "bg-stone-100/40 hover:bg-stone-100/60 border-stone-200/60 hover:border-stone-200 shadow-md"
+        : "bg-white/[0.01] hover:bg-white/[0.02] border-white/5 hover:border-white/10 shadow-xl";
+
+    const widgetLabelClass = isLatex
+        ? "text-stone-400"
+        : "text-zinc-500";
+
+    const widgetSyncClass = isLatex
+        ? "text-amber-800/75"
+        : "text-emerald-500/75";
+
+    const widgetBlinkerClass = isLatex
+        ? "bg-amber-700"
+        : "bg-emerald-500";
+
+    return (
+        <div className={`flex flex-col h-full min-h-[500px] backdrop-blur-xl border rounded-2xl overflow-hidden transition-all duration-300 relative group/cockpit ${cockpitBg}`}>
+            {/* Ultra-Minimal Header */}
+            <div className={`px-6 py-4 flex flex-col lg:flex-row gap-4 justify-between items-center ${headerBg}`}>
+                <div className="flex items-center gap-4">
+                    <div>
+                        <h1 className={`text-xl font-black tracking-tight uppercase ${titleColor}`}>{title}</h1>
+                        <p className={`text-[10px] font-bold tracking-widest mt-0.5 uppercase ${descColor}`}>
+                            {description} <span className={`${pipeColor} mx-2 opacity-50`}>|</span> <span className={`${roleColor}`}>{role}</span>
+                        </p>
                     </div>
                 </div>
-                <div className="flex gap-4 items-center">
-                    {/* Render Global Cockpit Actions */}
-                    {actions && actions.length > 0 && (
-                        <div className="flex gap-2 mr-4 border-r border-gray-800 pr-4">
-                            {actions.map((act, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => handleQuickAction(act.action, act.params)}
-                                    disabled={isProcessing}
-                                    className="px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-black border border-emerald-500/20 text-[9px] font-black uppercase tracking-widest rounded transition-all disabled:opacity-50"
-                                >
-                                    {act.label}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                    
-                    {/* Stats Rendering */}
-                    {stats?.map((stat, i) => (
-                        <div key={i} className="text-right ml-4">
-                            <p className="text-[10px] uppercase text-gray-500">{stat.label}</p>
-                            <p className={`text-lg font-mono ${stat.color || 'text-emerald-400'}`}>{stat.value}</p>
-                        </div>
-                    ))}
-                    
-                    {/* The Omni-Matrix Trigger */}
+
+                <div className="flex items-center gap-3">
+                    {/* The Omni-Matrix Trigger - Elevated to a sleek FAB-style button in the header */}
                     <button 
                         onClick={() => setIsMatrixOpen(true)}
-                        className="ml-6 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-black font-black uppercase tracking-widest text-[10px] rounded flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.5)] hover:shadow-[0_0_25px_rgba(6,182,212,0.8)]"
+                        className={`px-4 py-2 bg-gradient-to-r hover:opacity-95 text-[10px] font-extrabold uppercase tracking-widest rounded-full flex items-center gap-2 transition-all duration-300 ${engineCtrlClass}`}
                     >
-                        <Terminal className="w-4 h-4" />
-                        Engine Control
-                    </button>
-
-                    {/* DIMENSIONAL TOGGLE */}
-                    <div className="ml-4 flex bg-black/50 border border-gray-800 rounded p-0.5">
-                        {['CORE', 'NEXUS', 'APEX'].map(mode => (
-                            <button 
-                                key={mode}
-                                onClick={() => setRenderMode(mode as any)}
-                                className={`px-2 py-1 text-[8px] font-black uppercase tracking-widest rounded-sm transition-all ${renderMode === mode ? 'bg-emerald-500 text-black shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'text-gray-500 hover:text-gray-300'}`}
-                            >
-                                {mode}
-                            </button>
-                        ))}
-                    </div>
-
-
-                    <button 
-                        onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                        className="p-2 hover:bg-gray-800 rounded transition-colors ml-2"
-                    >
-                        <span className="text-lg">⚙️</span>
+                        <Terminal className="w-3.5 h-3.5" />
+                        Command Matrix
                     </button>
                 </div>
             </div>
@@ -146,32 +192,36 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
 
             {/* Tab Navigation (if provided) */}
             {tabs && (
-                <div className="flex border-b border-gray-800 bg-gray-900/50 px-2">
+                <div className={`flex px-4 gap-1 ${tabsContainerClass}`}>
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all border-b-2 ${
-                                activeTab === tab.id 
-                                ? 'border-cyan-500 text-white bg-cyan-500/5' 
-                                : 'border-transparent text-gray-500 hover:text-gray-300'
-                            }`}
+                            className={`px-4 py-3 text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 transition-all duration-300 relative ${activeTab === tab.id ? (isLatex ? 'text-amber-950' : 'text-emerald-400') : (isLatex ? 'text-stone-400 hover:text-stone-700' : 'text-zinc-500 hover:text-zinc-300')}`}
                         >
                             {tab.icon}
                             {tab.label}
+                            {activeTab === tab.id && (
+                                <motion.div
+                                    layoutId="activeCockpitTab"
+                                    className={`absolute bottom-0 left-0 right-0 h-[2px] ${isLatex ? 'bg-amber-800' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,211,153,0.8)]'}`}
+                                    initial={false}
+                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                />
+                            )}
                         </button>
                     ))}
                 </div>
             )}
 
             {/* Main Command Viewport */}
-            <div className="flex-1 overflow-y-auto p-4 bg-gray-950">
+            <div className={`flex-1 overflow-y-auto p-6 ${viewportBgClass}`}>
                 {tabs ? (
                     <div className="h-full">
                         {currentTabContent || (tabs.length > 0 ? tabs[0].content : null)}
                     </div>
                 ) : isLoading ? (
-                    <div className="flex items-center justify-center h-64 text-xs font-black uppercase tracking-[0.3em] animate-pulse">
+                    <div className={`flex items-center justify-center h-64 text-xs font-black uppercase tracking-[0.3em] animate-pulse ${isLatex ? 'text-amber-800' : 'text-emerald-500'}`}>
                         Synchronizing Sovereign Layout...
                     </div>
                 ) : (
@@ -182,10 +232,12 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
                                 className="col-span-12"
                                 style={{ gridColumn: `span ${widget.position.w}` }}
                             >
-                                <div className="p-2 bg-gray-900/50 border border-gray-800 rounded-lg">
+                                <div className={`p-4 border rounded-2xl transition-all duration-300 ${widgetCardClass}`}>
                                     <div className="flex justify-between items-center mb-3 px-1">
-                                        <span className="text-[8px] font-black uppercase text-gray-500 tracking-widest">{widget.pillar} // {widget.title}</span>
-                                        <span className="text-[8px] text-gray-700">M2M_SYNC_OK</span>
+                                        <span className={`text-[8px] font-mono font-bold uppercase tracking-widest ${widgetLabelClass}`}>{widget.pillar} // {widget.title}</span>
+                                        <span className={`flex items-center gap-1 text-[8px] font-mono font-bold tracking-wider ${widgetSyncClass}`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${widgetBlinkerClass}`} /> SYNCED
+                                        </span>
                                     </div>
                                     <WidgetRenderer config={widget} />
                                 </div>
@@ -195,7 +247,6 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
                 )}
             </div>
 
-            {/* Side Drawer... (existing logic) */}
         </div>
     );
 };

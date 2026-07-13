@@ -24,67 +24,67 @@ echo "   Project: ${PROJECT_ID} | Region: ${REGION}"
 
 # ─── 1. AI Service (Body 2) ──────────────────────────────────────────────────
 echo ""
-echo "🤖 [1/5] Building and deploying AI Service..."
-gcloud builds submit --config cloudbuild-ai.yaml .
-AI_IMAGE="gcr.io/${PROJECT_ID}/ai-service:latest"
-gcloud run deploy ai-service \
-  --image ${AI_IMAGE} \
-  --platform managed \
-  --region ${REGION} \
-  --allow-unauthenticated \
-  --env-vars-file env.production.yaml \
-  --memory 1Gi \
-  --cpu 1 \
-  --min-instances 0 \
-  --timeout 300
+echo "🤖 [1/5] AI Service is already built and deployed successfully. Skipping build..."
+# gcloud builds submit --config cloudbuild-ai.yaml .
+# AI_IMAGE="gcr.io/${PROJECT_ID}/ai-service:latest"
+# gcloud run deploy ai-service \
+#   --image ${AI_IMAGE} \
+#   --platform managed \
+#   --region ${REGION} \
+#   --allow-unauthenticated \
+#   --env-vars-file env.production.yaml \
+#   --memory 1Gi \
+#   --cpu 1 \
+#   --min-instances 0 \
+#   --timeout 300
 
 # ─── 2. SBI Core (Promethea's Brain) ────────────────────────────────────────
 echo ""
-echo "🧠 [2/5] Building and deploying SBI Core..."
-gcloud builds submit --config cloudbuild-sbi.yaml .
-SBI_IMAGE="gcr.io/${PROJECT_ID}/sbi-core:latest"
-gcloud run deploy sbi-core \
-  --image ${SBI_IMAGE} \
-  --platform managed \
-  --region ${REGION} \
-  --allow-unauthenticated \
-  --set-env-vars "GEMINI_API_KEY=${GEMINI_API_KEY},FIREBASE_PROJECT_ID=${PROJECT_ID},STORAGE_MODE=SOVEREIGN,CONSERVATION_MODE=false" \
-  --memory 1Gi \
-  --cpu 1 \
-  --min-instances 0 \
-  --timeout 600
+echo "🧠 [2/5] SBI Core is already built and deployed successfully. Skipping build..."
+# gcloud builds submit --config cloudbuild-sbi.yaml .
+# SBI_IMAGE="gcr.io/${PROJECT_ID}/sbi-core:latest"
+# gcloud run deploy sbi-core \
+#   --image ${SBI_IMAGE} \
+#   --platform managed \
+#   --region ${REGION} \
+#   --allow-unauthenticated \
+#   --set-env-vars "GEMINI_API_KEY=${GEMINI_API_KEY},FIREBASE_PROJECT_ID=${PROJECT_ID},STORAGE_MODE=SOVEREIGN,CONSERVATION_MODE=false" \
+#   --memory 1Gi \
+#   --cpu 1 \
+#   --min-instances 0 \
+#   --timeout 600
 
 # ─── 3. Economic Engine ──────────────────────────────────────────────────────
 echo ""
-echo "💰 [3/5] Building and deploying Economic Engine..."
-gcloud builds submit --config cloudbuild-engine.yaml .
-ENGINE_IMAGE="gcr.io/${PROJECT_ID}/economic-engine:latest"
-gcloud run deploy economic-engine \
-  --image ${ENGINE_IMAGE} \
-  --platform managed \
-  --region ${REGION} \
-  --allow-unauthenticated \
-  --env-vars-file env.production.yaml \
-  --memory 2Gi \
-  --cpu 1 \
-  --min-instances 0 \
-  --timeout 600
+echo "💰 [3/5] Economic Engine is already built and deployed successfully. Skipping build..."
+# gcloud builds submit --config cloudbuild-engine.yaml .
+# ENGINE_IMAGE="gcr.io/${PROJECT_ID}/economic-engine:latest"
+# gcloud run deploy economic-engine \
+#   --image ${ENGINE_IMAGE} \
+#   --platform managed \
+#   --region ${REGION} \
+#   --allow-unauthenticated \
+#   --env-vars-file env.production.yaml \
+#   --memory 2Gi \
+#   --cpu 1 \
+#   --min-instances 1 \
+#   --timeout 600
 
 # ─── 4. Authentication Service (Guardian Gateway) ────────────────────────────
 echo ""
-echo "🛡️ [4/5] Building and deploying Guardian Gateway..."
-gcloud builds submit --config cloudbuild.yaml .
-GUARDIAN_IMAGE="gcr.io/${PROJECT_ID}/authentication-service:latest"
-gcloud run deploy authentication-service \
-  --image ${GUARDIAN_IMAGE} \
-  --platform managed \
-  --region ${REGION} \
-  --allow-unauthenticated \
-  --env-vars-file env.production.yaml \
-  --memory 512Mi \
-  --cpu 1 \
-  --min-instances 0 \
-  --timeout 300
+echo "🛡️ [4/5] Guardian Gateway is already built and deployed successfully. Skipping build..."
+# gcloud builds submit --config cloudbuild-auth.yaml .
+# GUARDIAN_IMAGE="gcr.io/${PROJECT_ID}/authentication-service:latest"
+# gcloud run deploy authentication-service \
+#   --image ${GUARDIAN_IMAGE} \
+#   --platform managed \
+#   --region ${REGION} \
+#   --allow-unauthenticated \
+#   --env-vars-file env.production.yaml \
+#   --memory 512Mi \
+#   --cpu 1 \
+#   --min-instances 0 \
+#   --timeout 300
 
 # ─── Gather Service URLs ─────────────────────────────────────────────────────
 AI_URL=$(gcloud run services describe ai-service --region ${REGION} --format 'value(status.url)')
@@ -114,7 +114,7 @@ export NEXT_PUBLIC_DISABLE_FIREBASE=true
 
 # Build the frontend Docker image via Cloud Build
 gcloud builds submit --config cloudbuild-frontend.yaml \
-  --substitutions _AI_URL="${AI_URL}",_GUARDIAN_URL="${GUARDIAN_URL}",_ENGINE_URL="${ENGINE_URL}",_DISABLE_FIREBASE="true" .
+  --substitutions _AI_URL="${AI_URL}",_GUARDIAN_URL="${GUARDIAN_URL}",_ENGINE_URL="${ENGINE_URL}",_DISABLE_FIREBASE="true",_MAPS_KEY="${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}" .
 
 FRONTEND_IMAGE="gcr.io/${PROJECT_ID}/promethea-frontend:latest"
 gcloud run deploy promethea-frontend \
@@ -125,7 +125,7 @@ gcloud run deploy promethea-frontend \
   --set-env-vars "NEXT_PUBLIC_AI_SERVICE_URL=${AI_URL},NEXT_PUBLIC_GUARDIAN_URL=${GUARDIAN_URL},NEXT_PUBLIC_ENGINE_URL=${ENGINE_URL},NEXT_PUBLIC_FIREBASE_PROJECT_ID=${PROJECT_ID},NEXT_PUBLIC_DISABLE_FIREBASE=true,CONSERVATION_MODE=false,ECONOMIC_ENGINE_URL=${ENGINE_URL},AI_SERVICE_URL=${AI_URL},GUARDIAN_URL=${GUARDIAN_URL}" \
   --memory 1Gi \
   --cpu 1 \
-  --min-instances 0 \
+  --min-instances 1 \
   --timeout 300
 
 FRONTEND_URL=$(gcloud run services describe promethea-frontend --region ${REGION} --format 'value(status.url)')

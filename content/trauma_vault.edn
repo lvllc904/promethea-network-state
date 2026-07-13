@@ -1,0 +1,4 @@
+[{:id "err-ju4ovbm54" :source "browser-console" :message "Simulated React runtime exception on Dashboard" :stack "Error: Simulated React runtime exception
+ at Dashboard (index.tsx:10:15)" :digest "sha256-test-digest" :timestamp "2026-06-09T15:44:08.691Z"}
+ {:id "err-m06w1fn3u" :source "test-suite" :message "Manual integration validation crash" :stack "Error: integration check
+ at TestSuite (test.js:1:1)" :digest "" :timestamp "2026-06-09T19:19:49.214Z"}]

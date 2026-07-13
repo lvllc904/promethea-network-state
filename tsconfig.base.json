@@ -44,55 +44,6 @@
       ],
       "@/app/*": [
         "packages/app/src/*"
-      ],
-      "@promethea/ai": [
-        "packages/ai/src"
-      ],
-      "@promethea/ai/*": [
-        "packages/ai/src/*"
-      ],
-      "@promethea/components": [
-        "packages/components/src"
-      ],
-      "@promethea/components/*": [
-        "packages/components/src/*"
-      ],
-      "@promethea/identity": [
-        "packages/identity/src"
-      ],
-      "@promethea/identity/*": [
-        "packages/identity/src/*"
-      ],
-      "@promethea/hooks": [
-        "packages/hooks/src"
-      ],
-      "@promethea/hooks/*": [
-        "packages/hooks/src/*"
-      ],
-      "@promethea/lib": [
-        "packages/lib/src"
-      ],
-      "@promethea/lib/*": [
-        "packages/lib/src/*"
-      ],
-      "@promethea/ui": [
-        "packages/ui/src"
-      ],
-      "@promethea/ui/*": [
-        "packages/ui/src/*"
-      ],
-      "@promethea/pubsub": [
-        "packages/services/pubsub/src"
-      ],
-
-      "@promethea/guardian": [
-        "packages/guardian/src"
-      ],
-      "@promethea/sovereign-store": [
-        "packages/sovereign-store/src"
-      ],
-      "@promethea/sovereign-store/*": [
-        "packages/sovereign-store/src/*"
       ]
     }
   },

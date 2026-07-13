@@ -202,6 +202,11 @@ export const EconomicsTray = () => {
     const { data: methods } = useBFFData<any[]>('/api/refineries', []);
     const { data: broker } = useBFFData<any>('/api/broker', null);
     const { data: assets, refetch: refetchAssets } = useBFFData<any[]>('/api/assets', []);
+    const { data: quests, refetch: refetchQuests } = useBFFData<any[]>('/api/data/quests', []);
+    const [expandedAssetId, setExpandedAssetId] = useState<string | null>(null);
+    const [bypassInputs, setBypassInputs] = useState<Record<string, string>>({});
+    const [bypassIsSubmitting, setBypassIsSubmitting] = useState<Record<string, boolean>>({});
+    const [questCompleting, setQuestCompleting] = useState<Record<string, boolean>>({});
     const [activeSection, setActiveSection] = useState<'reserve' | 'watchlists' | 'treasury' | 'waterfall' | 'methods' | 'marketplace' | 'carry'>('watchlists');
     const [isSweeping, setIsSweeping] = useState(false);
 
@@ -356,7 +361,53 @@ export const EconomicsTray = () => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ vote, citizenId: 'SOVEREIGN_USER' })
-        }).then(() => refetchAssets()).catch(console.error);
+        }).then(() => {
+            refetchAssets();
+            refetchQuests();
+        }).catch(console.error);
+    };
+
+    const handleCompleteQuest = async (questId: string, assetId: string) => {
+        setQuestCompleting(prev => ({ ...prev, [questId]: true }));
+        try {
+            const res = await fetch(`/api/quests/${questId}/complete`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completedBy: 'SOVEREIGN_USER' })
+            });
+            if (res.ok) {
+                refetchQuests();
+                refetchAssets();
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setQuestCompleting(prev => ({ ...prev, [questId]: false }));
+        }
+    };
+
+    const handleBypass = async (assetId: string) => {
+        const filingNumber = bypassInputs[assetId] || `BYPASS-${Date.now()}`;
+        setBypassIsSubmitting(prev => ({ ...prev, [assetId]: true }));
+        try {
+            const res = await fetch(`/api/assets/${assetId}/bypass`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    wyomingFilingNumber: filingNumber,
+                    bypassReceiptUrl: 'https://ipfs.io/ipfs/QmBypassManualReceiptPdf'
+                })
+            });
+            if (res.ok) {
+                setBypassInputs(prev => ({ ...prev, [assetId]: '' }));
+                refetchAssets();
+                refetchQuests();
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setBypassIsSubmitting(prev => ({ ...prev, [assetId]: false }));
+        }
     };
 
     const SECTIONS = [
@@ -1076,7 +1127,7 @@ export const EconomicsTray = () => {
                                                 <span className="font-bold text-zinc-300 uppercase">{tx.method}</span>
                                                 <span className="text-[7.5px] text-zinc-600">{timeStr}</span>
                                             </div>
-                                            <span className={`font-bold ${tx.amount.startsWith('-') ? 'text-red-400' : 'text-amber-400'}`}>{tx.amount}</span>
+                                            <span className={`font-bold ${String(tx.amount || '').startsWith('-') ? 'text-red-400' : 'text-amber-400'}`}>{tx.amount}</span>
                                         </div>
                                     );
                                 })}
@@ -1088,14 +1139,13 @@ export const EconomicsTray = () => {
                 </div>
             )}
 
-            {/* MARKETPLACE */}
             {activeSection === 'marketplace' && (
                 <div className="space-y-3">
                     <div className="flex justify-between items-center pb-2 border-b border-white/5">
                         <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">ASGI Originations</p>
                         <div className="flex gap-2">
                             <button
-                                onClick={() => router.push('/dashboard/assets')}
+                                onClick={() => router.push('/dashboard/exchange/market')}
                                 className="px-2 py-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 text-amber-400 text-[8px] font-bold uppercase rounded transition-colors"
                             >
                                 Marketplace
@@ -1112,46 +1162,198 @@ export const EconomicsTray = () => {
                         <div className="py-10 text-center">
                             <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest animate-pulse">Promethea is synthesizing the Omni-Lake...</p>
                         </div>
-                    ) : combinedAssets.map((a: any) => (
-                        <div 
-                            key={a.id} 
-                            onClick={() => router.push('/dashboard/assets')}
-                            className="p-3 bg-black/40 border rim-highlight-reality-ai rounded-lg hover:border-amber-500/20 cursor-pointer transition-colors relative overflow-hidden"
-                        >
-                            {/* AI Concert Reality Badge */}
-                            <div className="absolute top-2 right-2 flex items-center gap-1 text-[7px] font-black tracking-widest text-amber-400 border border-amber-500/25 bg-amber-500/10 px-1.5 py-0.5 rounded animate-pulse">
-                                <span className="w-1 h-1 rounded-full bg-amber-500" /> AI CONCERT
-                            </div>
-                            <div className="flex justify-between items-start mb-2 mr-20">
-                                <span className="text-[8px] font-mono text-amber-400 uppercase">{a.category || a.type || a.assetType || 'ASSET'}</span>
-                                <span className="text-[8px] text-zinc-600 uppercase">{a.status || 'PENDING'}</span>
-                            </div>
-                            <p className="text-[11px] font-bold text-white uppercase mb-1">{a.title || a.name || 'Sovereign Asset'}</p>
-                            <p className="text-[9px] text-zinc-500 mb-3 leading-relaxed">{a.description}</p>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <button 
-                                        onClick={(e) => { e.stopPropagation(); handleVoteAsset(a.id, 'yes'); }} 
-                                        className="flex items-center gap-1 hover:text-amber-400 transition-colors text-zinc-500"
+                    ) : combinedAssets.map((a: any) => {
+                        const isExpanded = expandedAssetId === a.id;
+                        const progState = a.progressionState || 'IDEA';
+                        const assetQuests = quests.filter((q: any) => q.associatedAssetId === a.id);
+
+                        const STATES_ORDER = ['IDEA', 'VETTED', 'LEGALIZED', 'SECURED', 'ACTUALIZED'];
+                        const STATE_LABELS = {
+                            IDEA: 'Idea',
+                            VETTED: 'Vetted',
+                            LEGALIZED: 'Entity',
+                            SECURED: 'Secured',
+                            ACTUALIZED: 'Active'
+                        };
+                        const currentIdx = STATES_ORDER.indexOf(progState);
+
+                        const getBadgeText = (state: string) => {
+                            switch (state) {
+                                case 'IDEA': return '[DRAFT IDEA]';
+                                case 'VETTED': return '[VETTED PROPOSAL]';
+                                case 'LEGALIZED': return '[ENTITY CREATED]';
+                                case 'SECURED': return '[LIEN SECURED]';
+                                case 'ACTUALIZED': return '[ACTUALIZED ASSET]';
+                                default: return '[DRAFT IDEA]';
+                            }
+                        };
+
+                        return (
+                            <div 
+                                key={a.id} 
+                                onClick={() => setExpandedAssetId(isExpanded ? null : a.id)}
+                                className={`p-3 bg-black/40 border rounded-lg hover:border-amber-500/20 cursor-pointer transition-all relative overflow-hidden ${
+                                    isExpanded ? 'border-amber-500/40 bg-zinc-950/40 shadow-[0_0_15px_rgba(245,158,11,0.05)]' : 'rim-highlight-reality-ai'
+                                }`}
+                            >
+                                {/* Sovereign Progressive State Badge */}
+                                <div className={`absolute top-2 right-2 flex items-center gap-1 text-[7px] font-black tracking-widest border px-1.5 py-0.5 rounded ${
+                                    progState === 'ACTUALIZED' 
+                                        ? 'text-emerald-400 border-emerald-500/25 bg-emerald-500/10' 
+                                        : 'text-amber-400 border-amber-500/25 bg-amber-500/10 animate-pulse'
+                                }`}>
+                                    <span className={`w-1 h-1 rounded-full ${progState === 'ACTUALIZED' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                                    {getBadgeText(progState)}
+                                </div>
+
+                                <div className="flex justify-between items-start mb-2 mr-24">
+                                    <span className="text-[8px] font-mono text-amber-400 uppercase">{a.category || a.type || a.assetType || 'ASSET'}</span>
+                                    <span className="text-[8px] text-zinc-600 uppercase">{a.status || 'PENDING'}</span>
+                                </div>
+                                <p className="text-[11px] font-bold text-white uppercase mb-1">{a.title || a.name || 'Sovereign Asset'}</p>
+                                <p className="text-[9px] text-zinc-500 mb-3 leading-relaxed">{a.description}</p>
+
+                                {/* Glowing Sovereign Stepper progress bar */}
+                                <div className="mt-2 mb-3 px-1" onClick={(e) => e.stopPropagation()}>
+                                    <div className="flex justify-between items-center relative">
+                                        <div className="absolute left-0 right-0 top-1.5 h-[1.5px] bg-zinc-800 -z-0" />
+                                        <div 
+                                            className="absolute left-0 top-1.5 h-[1.5px] bg-emerald-500 transition-all duration-500" 
+                                            style={{ width: `${(Math.max(0, currentIdx) / (STATES_ORDER.length - 1)) * 100}%` }}
+                                        />
+                                        
+                                        {STATES_ORDER.map((st, idx) => {
+                                            const isDone = idx < currentIdx;
+                                            const isActive = idx === currentIdx;
+                                            
+                                            return (
+                                                <div key={st} className="flex flex-col items-center relative z-10">
+                                                    <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center border font-mono text-[6px] font-black transition-all ${
+                                                        isDone 
+                                                            ? 'bg-emerald-500 border-emerald-400 text-black shadow-[0_0_8px_rgba(16,185,129,0.5)]' 
+                                                            : isActive 
+                                                                ? 'bg-amber-500 border-amber-400 text-black animate-pulse shadow-[0_0_10px_rgba(245,158,11,0.8)]' 
+                                                                : 'bg-zinc-900 border-zinc-800 text-zinc-600'
+                                                    }`}>
+                                                        {isDone ? '✓' : idx + 1}
+                                                    </div>
+                                                    <span className={`text-[6.5px] font-black font-mono uppercase mt-1 tracking-tighter ${
+                                                        isActive ? 'text-amber-400 font-extrabold' : isDone ? 'text-emerald-400' : 'text-zinc-600'
+                                                    }`}>
+                                                        {STATE_LABELS[st as keyof typeof STATE_LABELS]}
+                                                    </span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between mt-4">
+                                    <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); handleVoteAsset(a.id, 'yes'); }} 
+                                            className="flex items-center gap-1 hover:text-amber-400 transition-colors text-zinc-500"
+                                        >
+                                            <ThumbsUp className="w-3 h-3" /><span className="text-[8px] font-mono">{a.yesVotes || 0}</span>
+                                        </button>
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); handleVoteAsset(a.id, 'no'); }} 
+                                            className="flex items-center gap-1 hover:text-red-400 transition-colors text-zinc-500"
+                                        >
+                                            <ThumbsDown className="w-3 h-3" /><span className="text-[8px] font-mono">{a.noVotes || 0}</span>
+                                        </button>
+                                    </div>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); router.push('/dashboard/exchange/market'); }}
+                                        className="px-3 py-1.5 bg-amber-900/30 border border-amber-500/30 hover:bg-amber-600 text-[8px] font-black uppercase text-amber-100 hover:text-black rounded transition-all shadow-[0_0_10px_rgba(245,158,11,0.2)]"
                                     >
-                                        <ThumbsUp className="w-3 h-3" /><span className="text-[8px] font-mono">{a.yesVotes || 0}</span>
-                                    </button>
-                                    <button 
-                                        onClick={(e) => { e.stopPropagation(); handleVoteAsset(a.id, 'no'); }} 
-                                        className="flex items-center gap-1 hover:text-red-400 transition-colors text-zinc-500"
-                                    >
-                                        <ThumbsDown className="w-3 h-3" /><span className="text-[8px] font-mono">{a.noVotes || 0}</span>
+                                        Exchange Hub →
                                     </button>
                                 </div>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); router.push('/dashboard/assets'); }}
-                                    className="px-3 py-1.5 bg-amber-900/30 border border-amber-500/30 hover:bg-amber-600 text-[8px] font-black uppercase text-amber-100 hover:text-black rounded transition-all shadow-[0_0_10px_rgba(245, 158, 11,0.2)]"
-                                >
-                                    Fund & Execute →
-                                </button>
+
+                                {/* Collapsible "Needs Completion" Drawer */}
+                                {isExpanded && (
+                                    <div className="mt-3 pt-3 border-t border-white/5 space-y-3" onClick={(e) => e.stopPropagation()}>
+                                        <p className="text-[8px] font-black font-mono uppercase tracking-widest text-amber-500/80">🧬 Prerequisite Quests</p>
+                                        {assetQuests.length === 0 ? (
+                                            <p className="text-[8px] text-zinc-600 font-mono uppercase italic">No active quests detected.</p>
+                                        ) : (
+                                            <div className="space-y-1.5">
+                                                {assetQuests.map((q: any) => {
+                                                    const isCompleted = q.status === 'COMPLETED';
+                                                    const isPending = questCompleting[q.questId || q.id];
+                                                    
+                                                    let actionLabel = 'Claim Quest';
+                                                    if (q.questType === 'Legal') actionLabel = 'Co-sign DUNA Agreement';
+                                                    else if (q.questType === 'Financial') actionLabel = 'Fund $25 SOS Fee';
+                                                    else if (q.questType === 'Physical') actionLabel = 'Verify Coordinates';
+                                                    else if (q.questType === 'Technical') actionLabel = 'Verify Telemetry';
+
+                                                    return (
+                                                        <div key={q.id || q.questId} className="flex justify-between items-center p-2 bg-zinc-950/60 border border-white/5 rounded">
+                                                            <div className="flex flex-col max-w-[65%]">
+                                                                <span className="text-[9px] font-bold text-white uppercase truncate">{q.title}</span>
+                                                                <span className="text-[7.5px] text-zinc-500 font-mono leading-tight mt-0.5 line-clamp-1">{q.description}</span>
+                                                                <div className="flex gap-2 mt-1">
+                                                                    <span className="text-[6px] font-black font-mono px-1 border border-zinc-800 text-zinc-500 rounded uppercase">Type: {q.questType}</span>
+                                                                    <span className="text-[6px] font-black font-mono px-1 border border-zinc-800 text-zinc-500 rounded uppercase">Rate: ${q.valueRate || 25}/hr</span>
+                                                                </div>
+                                                            </div>
+                                                            {isCompleted ? (
+                                                                <span className="text-[6.5px] font-black font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-1.5 py-0.5 rounded uppercase flex items-center gap-1">
+                                                                    <CheckCircle2 className="w-2.5 h-2.5" /> Complete
+                                                                </span>
+                                                            ) : (
+                                                                <button
+                                                                    disabled={isPending}
+                                                                    onClick={() => handleCompleteQuest(q.id || q.questId, a.id)}
+                                                                    className={`px-2 py-1 border text-[6.5px] font-black uppercase rounded transition-all ${
+                                                                        isPending 
+                                                                            ? 'bg-zinc-800 border-zinc-700 text-zinc-500' 
+                                                                            : 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500 hover:text-black hover:border-amber-500'
+                                                                    }`}
+                                                                >
+                                                                    {isPending ? 'Working...' : actionLabel}
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+
+                                        {/* Sovereignty Bypass Form */}
+                                        {progState !== 'ACTUALIZED' && (
+                                            <div className="mt-3 pt-3 border-t border-white/5 space-y-2">
+                                                <p className="text-[8px] font-black font-mono uppercase tracking-widest text-amber-500/80">🛡️ Sovereignty Bypass Portal</p>
+                                                <p className="text-[7.5px] text-zinc-500 font-mono leading-tight">If automated integrations are offline, force-advance state mechanics via Wyoming Secretary of State self-filing registration.</p>
+                                                <div className="flex flex-col gap-1.5 mt-2">
+                                                    <input
+                                                        type="text"
+                                                        placeholder="WYOMING FILING NUMBER (e.g. 2026-0012948)"
+                                                        value={bypassInputs[a.id] || ''}
+                                                        onChange={(e) => setBypassInputs(prev => ({ ...prev, [a.id]: e.target.value }))}
+                                                        className="px-2 py-1 bg-black/60 border border-white/10 text-white text-[8px] font-mono rounded focus:border-amber-500/50 focus:outline-none placeholder-zinc-700"
+                                                    />
+                                                    <button
+                                                        disabled={bypassIsSubmitting[a.id]}
+                                                        onClick={() => handleBypass(a.id)}
+                                                        className={`w-full py-1 border text-[7px] font-black uppercase rounded transition-all ${
+                                                            bypassIsSubmitting[a.id]
+                                                                ? 'bg-zinc-800 border-zinc-700 text-zinc-500'
+                                                                : 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500'
+                                                        }`}
+                                                    >
+                                                        {bypassIsSubmitting[a.id] ? 'Registering Bypass...' : 'Apply Bypass & Force Actualize'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 

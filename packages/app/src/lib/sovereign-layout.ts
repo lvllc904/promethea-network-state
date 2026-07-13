@@ -1,6 +1,6 @@
 'use client';
 
-import { useSovereignData } from '@promethea/identity';
+import { useSovereignData } from '@promethea/sovereign-store';
 import { useEffect, useState } from 'react';
 
 export interface WidgetConfig {

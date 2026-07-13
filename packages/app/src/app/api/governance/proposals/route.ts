@@ -1,12 +1,47 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
-
-const ENGINE_URL = process.env.ECONOMIC_ENGINE_URL || 'https://economic-engine-385120524005.us-central1.run.app';
+import { getLocalDB } from '@/lib/server/sqlite';
 
 export async function GET() {
   try {
-    const r = await fetch(`${ENGINE_URL}/api/governance/proposals?status=active,proposed`, { cache: 'no-store', signal: AbortSignal.timeout(30000) });
-    if (r.ok) { const d = await r.json(); if (Array.isArray(d)) return NextResponse.json(d); }
-  } catch (_) {}
-  return NextResponse.json([]);
+    const db = await getLocalDB();
+    const rows = await db.all('SELECT data FROM proposals');
+    const proposals = rows.map(r => JSON.parse(r.data));
+    return NextResponse.json(proposals);
+  } catch (err: any) {
+    console.error('[API proposals GET] Error:', err);
+    return NextResponse.json([]);
+  }
 }
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const { title, type, narrative } = body;
+    if (!title || !narrative) {
+      return NextResponse.json({ error: 'Title and narrative are required' }, { status: 400 });
+    }
+
+    const db = await getLocalDB();
+    const id = 'prop-' + Math.random().toString(36).substring(2, 11);
+    const proposal = {
+      id,
+      title,
+      type: type || 'CONSTITUTIONAL',
+      current: 0,
+      threshold: 10,
+      narrative
+    };
+
+    await db.run(
+      'INSERT INTO proposals (id, orgId, data) VALUES (?, ?, ?)',
+      [id, 'global', JSON.stringify(proposal)]
+    );
+
+    return NextResponse.json(proposal);
+  } catch (err: any) {
+    console.error('[API proposals POST] Error:', err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
