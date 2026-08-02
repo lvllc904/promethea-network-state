@@ -72,7 +72,9 @@ export function AIAssistant() {
         }
     };
 
-    if (pathname && pathname.startsWith('/dashboard')) {
+    // Hide the floating bubble on /cockpit (PrometheaConcierge is the unified agent surface there)
+    // and on /dashboard (legacy suppression)
+    if (pathname && (pathname.startsWith('/dashboard') || pathname.startsWith('/cockpit'))) {
         return null;
     }
 

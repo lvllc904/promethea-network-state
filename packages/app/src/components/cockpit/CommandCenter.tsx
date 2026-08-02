@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Command, ArrowRight, ShieldCheck, HelpCircle } from 'lucide-react';
+import { Search, Command, ArrowRight, ShieldCheck, HelpCircle, Building2, ChevronDown } from 'lucide-react';
 import { useHUD } from '@/lib/hud-store';
+import { DelawareSeriesTopologyCard } from './DelawareSeriesTopologyCard';
 
 export function CommandCenter() {
     const { activeFocusPanel, setHUDState, mapMode } = useHUD();
     const [isFocused, setIsFocused] = useState(false);
     const [query, setQuery] = useState('');
+    const [isLegalPanelOpen, setIsLegalPanelOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     // Keyboard shortcut to focus (Cmd+K / Ctrl+K)
@@ -27,10 +29,10 @@ export function CommandCenter() {
     }, []);
 
     const quickChips = [
-        { label: '→ Citizens', action: () => setHUDState({ activePillar: 'PASSPORT' }) },
-        { label: '→ Treasury', action: () => setHUDState({ activePillar: 'ECONOMICS' }) },
-        { label: '→ Governance', action: () => setHUDState({ activePillar: 'GOVERNANCE' }) },
-        { label: '→ Intel', action: () => setHUDState({ activePillar: 'ATLAS' }) },
+        { label: '→ Citizens', action: () => setHUDState({ activePillar: 'PASSPORT' as any }) },
+        { label: '→ Treasury', action: () => setHUDState({ cockpitHoldingsTab: 'FINANCIALS' }) },
+        { label: '→ Governance', action: () => setHUDState({ activePillar: 'GOVERNANCE' as any }) },
+        { label: '→ Intel', action: () => setHUDState({ cockpitOpsTab: 'TELEMETRY' }) },
         { label: '→ Exchange', action: () => setHUDState({ activeFocusPanel: activeFocusPanel === 'EXCHANGE' ? null : 'EXCHANGE' }) },
         { label: `→ Map: ${mapMode === 'SURFACE' ? 'Space' : 'Surface'}`, action: () => setHUDState({ mapMode: mapMode === 'SURFACE' ? 'INTERSTELLAR' : 'SURFACE' }) }
     ];
@@ -137,13 +139,40 @@ export function CommandCenter() {
             </div>
 
             {/* Pulsing Status Indicator */}
-            <div className="flex items-center gap-1.5 font-data text-[7px] tracking-[0.2em] text-zinc-600 uppercase select-none">
-                <span className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span>SOVEREIGN MATRIX ONLINE · 847 NODES ACTIVE</span>
+            <div className="flex items-center justify-between font-data text-[7px] tracking-[0.2em] text-zinc-600 uppercase select-none">
+                <div className="flex items-center gap-1.5">
+                    <span className="flex h-2 w-2 relative">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span>SOVEREIGN MATRIX ONLINE · 847 NODES ACTIVE</span>
+                </div>
+                {/* Delaware Legal Panel Toggle */}
+                <button
+                    onClick={() => setIsLegalPanelOpen(v => !v)}
+                    className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/20 hover:border-sky-500/40 text-sky-400 transition-all"
+                >
+                    <Building2 size={9} />
+                    <span className="text-[7px] font-bold tracking-widest">DRULPA</span>
+                    <ChevronDown size={9} className={`transition-transform duration-200 ${isLegalPanelOpen ? 'rotate-180' : ''}`} />
+                </button>
             </div>
+
+            {/* Delaware Series Topology + SEC Chain of Custody — collapsible */}
+            <AnimatePresence>
+                {isLegalPanelOpen && (
+                    <motion.div
+                        key="legal-panel"
+                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                        animate={{ opacity: 1, height: 'auto', marginTop: 8 }}
+                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                        className="overflow-hidden w-full"
+                    >
+                        <DelawareSeriesTopologyCard />
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

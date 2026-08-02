@@ -69,10 +69,11 @@ A foundational policy of TPNS is the rigorous decoupling of reading public metri
 *   **Local ZK-Identity Edge Vault**: Deployed an on-edge encryption vault (`zk-identity-service.ts` running locally on port `9999` via the `depthos-bridge` daemon) that uses AES-256 to encrypt physical government IDs and birth certificates locally. Outputs lightweight W3C Verifiable Credentials (VCs).
 *   **Soulbound Passport Tokens (SBTs)**: Configured the pipeline to mint non-transferable citizenship credentials (`SovereignIdentity.sol`) to verify unique humans on-chain and prevent Sybil attacks.
 
-### 📡 Wave 17: Osiris Telemetry Ingestion & Omni-Lake Scrapers — [IN PROGRESS]
+### 📡 Wave 17: Osiris Telemetry Ingestion & Omni-Lake Scrapers — [COMPLETE]
 *   **Florida Property Ingestion Scraper**: Developed automated Python scripts to parse and aggregate statewide assessment text rolls (NAL, NAP, SDF) and parcel shapefiles directly from the public Florida Department of Revenue Portal, completely bypassing restricted, gated commercial GSE networks (like Fannie Mae/Freddie Mac UPD).
 *   **Socioeconomic Layering**: Connected scrapers to public federal REST endpoints, querying the US Census Bureau (ACS) for block-level socioeconomic data and calling the HUD User Portal API for Fair Market Rent (FMR) limits.
 *   **Osiris OSINT Telemetry Engine**: Built the real-time telemetry engine (`osiris-telemetry.ts`) within our local bridge, serving simulated and real-time aviation tracks (OpenSky Network), NASA FIRMS thermal hotspots, and USGS seismic risk data as GIS map layers in under 50ms.
+*   **Cloud-Native Telemetry Fallback**: Upgraded the Next.js API telemetry route to directly run live OSINT fetches (OpenSky, USGS, FIRMS) when the local daemon is offline. Ensures the Cockpit map layer renders authentic external data without a local daemon running.
 
 ### 💻 Wave 15: Distributed Compute Viewports & Storage — [IN PROGRESS]
 *   **Workspace Viewports**: Built a glassmorphic interactive viewport controller (`WorkspaceViewport.tsx`) enabling users to spin up secure, ephemeral container environments running Ubuntu-XFCE with integrated secure clipboard sync and network latency metrics.

@@ -167,6 +167,46 @@ export default function LandingPage() {
                   </Link>
 
                   <Link 
+                    href="/pitch-deck.html" 
+                    target="_blank"
+                    className="flex items-start gap-3 p-2 hover:bg-white/5 group transition-all text-left"
+                  >
+                    <div className="mt-0.5 p-1 bg-white/5 border border-white/10 group-hover:border-cyan-500/50 group-hover:bg-cyan-500/10 transition-colors">
+                      <BookOpen className="w-3.5 h-3.5 text-zinc-400 group-hover:text-cyan-400" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 group-hover:text-white transition-colors">Pitch Deck</div>
+                      <div className="text-[9px] text-zinc-500 leading-tight">Master-Series & Capital Mechanics.</div>
+                    </div>
+                  </Link>
+
+                  <Link 
+                    href="/lpa" 
+                    className="flex items-start gap-3 p-2 hover:bg-white/5 group transition-all text-left"
+                  >
+                    <div className="mt-0.5 p-1 bg-white/5 border border-white/10 group-hover:border-purple-500/50 group-hover:bg-purple-500/10 transition-colors">
+                      <FileText className="w-3.5 h-3.5 text-zinc-400 group-hover:text-purple-400" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 group-hover:text-white transition-colors">Full LPA</div>
+                      <div className="text-[9px] text-zinc-500 leading-tight">Limited Partnership Agreement.</div>
+                    </div>
+                  </Link>
+
+                  <Link 
+                    href="/ppm" 
+                    className="flex items-start gap-3 p-2 hover:bg-white/5 group transition-all text-left"
+                  >
+                    <div className="mt-0.5 p-1 bg-white/5 border border-white/10 group-hover:border-amber-500/50 group-hover:bg-amber-500/10 transition-colors">
+                      <FileText className="w-3.5 h-3.5 text-zinc-400 group-hover:text-amber-400" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 group-hover:text-white transition-colors">Full PPM</div>
+                      <div className="text-[9px] text-zinc-500 leading-tight">Private Placement Memorandum.</div>
+                    </div>
+                  </Link>
+
+                  <Link 
                     href="/org-chart" 
                     onClick={() => setIsExploreOpen(false)}
                     className="flex items-start gap-3 p-2 hover:bg-white/5 group transition-all text-left border-t border-white/5 mt-1 pt-2"
@@ -638,6 +678,132 @@ export default function LandingPage() {
               </motion.div>
             </Link>
           </motion.div>
+        </section>
+
+        {/* CITIZEN GUIDANCE / TUTORIAL */}
+        <section id="guidance" className="mt-40 px-8 md:px-16 max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-foreground dark:text-white mb-4">CITIZEN GUIDANCE.</h2>
+            <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl">Official onboarding procedures and operational best practices for navigating the Promethean Network State (TPNS).</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <motion.div variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="p-8 bg-card/40 backdrop-blur-xl border border-foreground/5 dark:border-white/5 flex flex-col group hover:bg-foreground/5 dark:hover:bg-white/5 transition-all relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-cyan-500/20 transition-all duration-500" />
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-4 flex items-center gap-2">
+                  <ShieldAlert className="w-5 h-5 text-cyan-400" /> 
+                  1. Secure Your Sovereign Identity
+                </h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
+                  Before interacting with the state's economic engines, ensure your local DepthOS Bridge is configured. This local-first data store protects your cryptographic keys and identity passports. Never share your seed phrase.
+                </p>
+                <div className="font-mono text-[10px] text-cyan-400 bg-black/40 px-3 py-1.5 rounded inline-block w-fit border border-cyan-500/20 uppercase tracking-widest">
+                  Best Practice: Enable Hardware Wallet Signatures
+                </div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="p-8 bg-card/40 backdrop-blur-xl border border-foreground/5 dark:border-white/5 flex flex-col group hover:bg-foreground/5 dark:hover:bg-white/5 transition-all relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-amber-500/20 transition-all duration-500" />
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-4 flex items-center gap-2">
+                  <Activity className="w-5 h-5 text-amber-400" /> 
+                  2. Monitor The Omni-Spectrum Feed
+                </h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
+                  Stay updated with the live narrative stream. Utilize the Sovereign Bias Vetting Drawer to analyze propaganda indices and source trust ratings before making decisions based on state revelations.
+                </p>
+                <div className="font-mono text-[10px] text-amber-400 bg-black/40 px-3 py-1.5 rounded inline-block w-fit border border-amber-500/20 uppercase tracking-widest">
+                  Best Practice: Always verify on-chain audits
+                </div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="p-8 bg-card/40 backdrop-blur-xl border border-foreground/5 dark:border-white/5 flex flex-col group hover:bg-foreground/5 dark:hover:bg-white/5 transition-all relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-purple-500/20 transition-all duration-500" />
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-4 flex items-center gap-2">
+                  <Building className="w-5 h-5 text-purple-400" /> 
+                  3. Participate in Asset Fractionalization
+                </h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
+                  Through the Cartographer toolkit, citizens can acquire fractional ownership in verified Real-World Assets (RWAs). Familiarize yourself with the 21/30/49 Distribution model (specific to TPNS holdings, and a suggested structure for independent fund managers) to understand how yields are generated and distributed.
+                </p>
+                <div className="font-mono text-[10px] text-purple-400 bg-black/40 px-3 py-1.5 rounded inline-block w-fit border border-purple-500/20 uppercase tracking-widest">
+                  Best Practice: Review the Institutional Master Deck
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Explainer / Pitch Deck Callout */}
+            <div className="lg:col-span-1 h-full">
+              <div className="p-8 bg-gradient-to-br from-cyan-500/10 via-card/40 to-purple-500/10 backdrop-blur-xl border border-cyan-500/20 flex flex-col justify-between hover:border-cyan-500/40 transition-all relative overflow-hidden group h-full">
+                <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-cyan-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-cyan-500/20 transition-all duration-500" />
+                
+                <div className="mb-8 relative z-10">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="bg-white/5 w-12 h-12 flex items-center justify-center border border-white/10 group-hover:border-cyan-500/50 group-hover:bg-cyan-500/10 transition-colors">
+                      <BookOpen className="w-5 h-5 text-zinc-400 group-hover:text-cyan-400" />
+                    </div>
+                    <span className="text-[9px] font-mono font-bold tracking-widest text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-1 uppercase">
+                      REQUIRED READING
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl font-bold text-foreground dark:text-white mb-4">
+                    Institutional Master Deck
+                  </h3>
+                  <p className="text-sm text-zinc-400 leading-relaxed mb-6 font-light">
+                    The comprehensive guide detailing our Master-Series Architecture, the 3-Tier Fee Matrix, the suggested 21/30/49 Metabolic Waterfall for independent managers, and the Sovereign Buyout mechanics. Essential for all new citizens and capital allocators.
+                  </p>
+
+                  <ul className="space-y-3 mb-8">
+                    <li className="flex items-start gap-2 text-xs text-zinc-500">
+                      <ArrowRight className="w-4 h-4 text-cyan-500 shrink-0" />
+                      <span>Learn the Dual-Class Token Matrix ($PEACE vs $YIELD)</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-xs text-zinc-500">
+                      <ArrowRight className="w-4 h-4 text-cyan-500 shrink-0" />
+                      <span>Explore the interactive Sweat Equity Calculator</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-xs text-zinc-500">
+                      <ArrowRight className="w-4 h-4 text-cyan-500 shrink-0" />
+                      <span>Understand the Thermodynamic Ecological Tax</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="flex flex-col gap-3 relative z-10">
+                  <a 
+                    href="/pitch-deck.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-4 border border-cyan-500/30 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 hover:text-cyan-200 text-xs font-mono font-bold uppercase tracking-widest transition-all rounded-none hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] w-full"
+                  >
+                    Open Explainer Deck <ArrowUpRight className="w-4 h-4" />
+                  </a>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <a 
+                      href="/lpa"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-3 border border-white/10 hover:border-purple-500/30 bg-white/5 hover:bg-purple-500/10 text-zinc-400 hover:text-purple-300 text-[10px] font-mono font-bold uppercase tracking-widest transition-all rounded-none w-full"
+                    >
+                      <FileText className="w-3 h-3" /> Full LPA
+                    </a>
+                    <a 
+                      href="/ppm"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-3 border border-white/10 hover:border-amber-500/30 bg-white/5 hover:bg-amber-500/10 text-zinc-400 hover:text-amber-300 text-[10px] font-mono font-bold uppercase tracking-widest transition-all rounded-none w-full"
+                    >
+                      <FileText className="w-3 h-3" /> Full PPM
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* MANIFESTO / CONSTITUTION CALLOUT */}

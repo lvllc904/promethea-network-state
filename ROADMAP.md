@@ -435,15 +435,15 @@ Traditional Web2 session authentication must never be conflated with sovereign c
 - [x] **ZK-Identity Attestations**: Embeds an on-edge encryption vault (`zk-identity-service.ts` on `localhost:9999`) to store and verify physical government IDs and birth certificates locally (AES-256), outputting lightweight W3C Verifiable Credentials (VCs).
 - [x] **Soulbound Passport Tokens (SBTs)**: Mints non-transferable citizenship credentials (`SovereignIdentity.sol`) to verify unique humans on-chain, preventing Sybil attacks and establishing compliant trading bounds (UCC Article 8) for RWA markets.
 
-### Wave 17: Grounded Rationality Agent Gateway (GRAG) & Osiris Planetary Intelligence [ACTIVE]
+### Wave 17: Grounded Rationality Agent Gateway (GRAG) & Osiris Planetary Intelligence [COMPLETE]
 - [x] **GRAG Neuro-Symbolic Sandwich Engine**: Sandwiches LLM generation between strict pre-generation statistical Conformal Prediction boundaries ($\hat{\tau}_\alpha \le 0.10$) and post-generation Natural Language Inference (NLI) claim validation.
 - [x] **Local WASM Cross-Encoder**: Runs the `nli-deberta-v3-large-xnli` model locally in WebAssembly via Transformers.js for offline claim classification into Entailment, Contradiction, or Neutral.
 - [x] **GRAG Node SDK & CLI**: Standalone isomorphic `@promethea/grag-sdk` NPM client for React/Node.js, alongside a Unix-native `grag` terminal pipe controller.
 - [x] **Homebrew Formula Distribution**: Standardized Homebrew tap (`brew install tpns/tap/grag`) packaging compiled CLI binaries and automated system daemon configurations.
-- [ ] **Osiris Telemetry Integration**: Formally ingest global real-time OSINT feeds into the OmniLake data pipeline and the Sovereign Cockpit map interface.
-- [ ] **Live Flight & Wildfire Feeds**: Map dynamic aircraft transponders (OpenSky Network) and satellite thermal hotspots (NASA FIRMS) as real-time layers in the 3D Satellite Viewport.
-- [ ] **USGS Earthquakes & AIS Maritime Tracking**: Integrate global seismic events and marine AIS positions for real-time risk modeling and cargo underwriting.
-- [ ] **OmniLake Risk Oracle Ingestion**: Expose parsed intelligence data streams as risk evaluation triggers for economic and asset allocation algorithms.
+- [x] **Osiris Telemetry Integration**: Formally ingest global real-time OSINT feeds into the OmniLake data pipeline and the Sovereign Cockpit map interface.
+- [x] **Live Flight & Wildfire Feeds**: Map dynamic aircraft transponders (OpenSky Network) and satellite thermal hotspots (NASA FIRMS) as real-time layers in the 3D Satellite Viewport.
+- [x] **USGS Earthquakes & AIS Maritime Tracking**: Integrate global seismic events and marine AIS positions for real-time risk modeling and cargo underwriting.
+- [x] **OmniLake Risk Oracle Ingestion**: Expose parsed intelligence data streams as risk evaluation triggers for economic and asset allocation algorithms.
 
 ### Wave 18: Scholarly Theme Alignment & Premium Citadel Dark Theme Upgrades [COMPLETE]
 - [x] **Garamond LaTeX Scholarly Light Mode**: Designed and standardized a classic scientific light aesthetic using EB Garamond typography, true page margin alignments, math-friendly layout matrices, and organic parchment coloring (#fcfbf7).

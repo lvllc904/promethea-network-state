@@ -166,6 +166,38 @@ export interface POIDetails {
     };
 }
 
+export type AssetOwnership = 'WHOLE' | 'FRACTIONAL';
+export type PricingMode = 'FIXED' | 'ORDER_BOOK';
+
+export interface Asset {
+    id: string;
+    type: 'REAL_ESTATE' | 'COMPUTE_NODE' | 'IP' | 'OTHER';
+    name: string;
+    description: string;
+    ownership: AssetOwnership;
+    pricingMode: PricingMode;
+    valuationUSDC: number;
+    sharesTotal?: number; // for FRACTIONAL
+    sharesAvailable?: number;
+    isUCC1Filed: boolean;
+    ownerDid: string;
+}
+
+export interface EscrowOffer {
+    id: string;
+    assetId: string;
+    buyerDid: string;
+    amountUSDC: number;
+    status: 'PENDING' | 'LOCKED' | 'SETTLED' | 'CANCELLED';
+    timestamp: string;
+}
+
+export interface TreasuryState {
+    balanceUSDC: number;
+    balanceUVT: number;
+    lockedUSDC: number;
+}
+
 export const defaultPOI: POIDetails = {
     name: "Whiskey River Retreat",
     formattedAddress: "1200 Whiskey River Rd, Texas, USA",
@@ -194,6 +226,10 @@ export interface HUDState {
     isMacroView: boolean; // true = Promethea/Global baseline, false = Citizen/Personal focus
     selectedNodeId: string | null; // e.g. for Map interaction
     activeFocusPanel: string | null; // e.g. 'EXCHANGE' | 'SQL_EXPLORER' | 'CLI_GUIDE' | 'SWEAT_CLAIM' | 'FINANCIALS' | 'WALLET' | 'OMNI_SCANNER' | 'ASSET_CANVAS' | 'CONFERENCE'
+    cockpitHoldingsTab: 'PORTFOLIO' | 'SWEAT' | 'FINANCIALS' | null; // Pre-select right panel tab
+    cockpitOpsTab: 'AGENTS' | 'TELEMETRY' | 'LOGS' | null; // Pre-select left panel tab
+    cockpitDrilldownAssetId: string | null; // Asset ID to expand in PORTFOLIO drill-down
+    competencyLevel: 'NOVICE' | 'OPERATOR' | 'ARCHITECT'; // Adaptive UI competency mode
     omniScannerTarget: string | null; // The address, tx hash, or contract to scan
     activeAssetTarget: string | null; // The ticker or asset ID (e.g. 'TSLA', 'SOL') to focus on the canvas
     activePOI: POIDetails;
@@ -239,6 +275,16 @@ export interface HUDState {
     isHeatmapEnabled: boolean;
     isOsirisTelemetryEnabled: boolean;
     isMapInteractive?: boolean;
+
+    // Celestial Selection State (elevated from InterstellarMap local state)
+    selectedCelestialId: string | null;
+    selectedDeepFieldBody: any | null;
+    interstellarTransitioning: string | null; // planet ID undergoing atmospheric entry, or null
+
+    // Deal Flow / Assets
+    assets: Asset[];
+    escrows: EscrowOffer[];
+    treasury: TreasuryState;
 }
 
 interface HUDContextType extends HUDState {
@@ -280,6 +326,12 @@ interface HUDContextType extends HUDState {
     popOutOSWindow: (id: string) => void;
     syncHUDState: (state: Partial<HUDState>) => void;
     setGlobalVix: (val: number) => void;
+
+    // Deal Flow Actions
+    listAsset: (asset: Asset) => void;
+    createEscrow: (buyerDid: string, assetId: string, amount: number) => void;
+    placeLimitOrder: (assetId: string, price: number, side: 'BUY'|'SELL') => void;
+    executeAtomicSwap: (escrowId: string) => void;
 }
 
 const defaultWatchlists: Watchlist[] = [
@@ -362,6 +414,10 @@ const defaultState: HUDState = {
     isMacroView: true,
     selectedNodeId: null,
     activeFocusPanel: null,
+    cockpitHoldingsTab: null,
+    cockpitOpsTab: null,
+    cockpitDrilldownAssetId: null,
+    competencyLevel: 'NOVICE',
     omniScannerTarget: null,
     activeAssetTarget: null,
     activePOI: defaultPOI,
@@ -385,6 +441,41 @@ const defaultState: HUDState = {
     isHeatmapEnabled: true,
     isOsirisTelemetryEnabled: true,
     isMapInteractive: false,
+    selectedCelestialId: null,
+    selectedDeepFieldBody: null,
+    interstellarTransitioning: null,
+    assets: [
+        {
+            id: 'asset-0x1',
+            type: 'COMPUTE_NODE',
+            name: 'Wyoming Cluster Alpha',
+            description: 'High-density compute node in Wyoming Citadel.',
+            ownership: 'WHOLE',
+            pricingMode: 'FIXED',
+            valuationUSDC: 24500,
+            isUCC1Filed: true,
+            ownerDid: 'did:sovereign:citizen:0x9f1d2b8a3e1c0d4f'
+        },
+        {
+            id: 'asset-0x2',
+            type: 'REAL_ESTATE',
+            name: 'Whiskey River Retreat (Syndicate)',
+            description: '100-acre off-grid sustainable retreat.',
+            ownership: 'FRACTIONAL',
+            pricingMode: 'ORDER_BOOK',
+            valuationUSDC: 1450000,
+            sharesTotal: 10000,
+            sharesAvailable: 2500,
+            isUCC1Filed: true,
+            ownerDid: 'did:sovereign:org:whiskey-river'
+        }
+    ],
+    escrows: [],
+    treasury: {
+        balanceUSDC: 142394.00,
+        balanceUVT: 250000,
+        lockedUSDC: 0
+    }
 };
 
 const HUDContext = createContext<HUDContextType | undefined>(undefined);
@@ -612,9 +703,9 @@ export const HUDProvider = ({ children }: { children: ReactNode }) => {
         setState((prev) => ({ ...prev, isMacroView: !prev.isMacroView }));
     };
 
-    const toggleAnimations = () => setHUDState(prev => ({ ...prev, reduceAnimations: !prev.reduceAnimations }));
+    const toggleAnimations = () => setState(prev => ({ ...prev, reduceAnimations: !prev.reduceAnimations }));
 
-    const togglePhosphorMode = () => setHUDState(prev => ({ ...prev, isPhosphorMode: !prev.isPhosphorMode }));
+    const togglePhosphorMode = () => setState(prev => ({ ...prev, isPhosphorMode: !prev.isPhosphorMode }));
 
     const activatePillar = (pillar: PillarCategory | null, defaultTab: string | null = null) => {
         setState((prev) => {
@@ -1206,6 +1297,96 @@ export const HUDProvider = ({ children }: { children: ReactNode }) => {
         setHUDState({ activePOI: poi });
     };
 
+    const listAsset = (asset: Asset) => {
+        setState((prev) => ({
+            ...prev,
+            assets: [...prev.assets, asset]
+        }));
+    };
+
+    const createEscrow = (buyerDid: string, assetId: string, amount: number) => {
+        setState((prev) => {
+            const escrowId = `escrow-${Date.now()}`;
+            const newEscrow: EscrowOffer = {
+                id: escrowId,
+                assetId,
+                buyerDid,
+                amountUSDC: amount,
+                status: 'PENDING',
+                timestamp: new Date().toISOString()
+            };
+            return {
+                ...prev,
+                escrows: [...prev.escrows, newEscrow]
+            };
+        });
+    };
+
+    const placeLimitOrder = (assetId: string, price: number, side: 'BUY'|'SELL') => {
+        // Future logic for expanding the order book limit orders
+        console.log(`Placed ${side} order for ${assetId} at $${price}`);
+    };
+
+    const executeAtomicSwap = (escrowId: string) => {
+        setState((prev) => {
+            const escrowIndex = prev.escrows.findIndex(e => e.id === escrowId);
+            if (escrowIndex === -1) return prev;
+
+            const escrow = prev.escrows[escrowIndex];
+            const assetIndex = prev.assets.findIndex(a => a.id === escrow.assetId);
+            if (assetIndex === -1) return prev;
+
+            const asset = prev.assets[assetIndex];
+
+            // Verify Treasury has sufficient UVT/USDC if the user is buying
+            // (Assuming user is 'did:sovereign:citizen:0x9f1d2b8a3e1c0d4f')
+            const isUserBuying = escrow.buyerDid === prev.userDid;
+            if (isUserBuying && prev.treasury.balanceUSDC < escrow.amountUSDC) {
+                console.warn('[Exchange] Insufficient funds for atomic swap.');
+                return prev; // Swap fails
+            }
+
+            const updatedTreasury = { ...prev.treasury };
+            const updatedAsset = { ...asset };
+
+            // Fractional vs Whole processing
+            if (asset.ownership === 'FRACTIONAL' && asset.sharesAvailable) {
+                // Determine shares bought based on amount
+                // Here we assume 1 share = valuation / total shares (simplified for OTC)
+                const sharePrice = asset.valuationUSDC / (asset.sharesTotal || 1);
+                const sharesBought = Math.floor(escrow.amountUSDC / sharePrice);
+
+                updatedAsset.sharesAvailable -= sharesBought;
+                if (isUserBuying) {
+                    updatedTreasury.balanceUSDC -= escrow.amountUSDC;
+                } else {
+                    updatedTreasury.balanceUSDC += escrow.amountUSDC;
+                }
+            } else {
+                // WHOLE Asset transfer
+                updatedAsset.ownerDid = escrow.buyerDid;
+                if (isUserBuying) {
+                    updatedTreasury.balanceUSDC -= escrow.amountUSDC;
+                } else {
+                    updatedTreasury.balanceUSDC += escrow.amountUSDC;
+                }
+            }
+
+            const updatedAssets = [...prev.assets];
+            updatedAssets[assetIndex] = updatedAsset;
+
+            const updatedEscrows = [...prev.escrows];
+            updatedEscrows[escrowIndex] = { ...escrow, status: 'SETTLED' };
+
+            return {
+                ...prev,
+                assets: updatedAssets,
+                escrows: updatedEscrows,
+                treasury: updatedTreasury
+            };
+        });
+    };
+
     return (
         <HUDContext.Provider value={{ 
             ...state, 
@@ -1240,7 +1421,11 @@ export const HUDProvider = ({ children }: { children: ReactNode }) => {
             focusOSWindow,
             popOutOSWindow,
             syncHUDState,
-            setGlobalVix
+            setGlobalVix,
+            listAsset,
+            createEscrow,
+            placeLimitOrder,
+            executeAtomicSwap
         }}>
             {children}
         </HUDContext.Provider>

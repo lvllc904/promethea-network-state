@@ -31,6 +31,7 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
     const [activeTab, setActiveTab] = useState(tabs?.[0]?.id);
     const [isMatrixOpen, setIsMatrixOpen] = useState(false);
     const [renderMode, setRenderMode] = useState<'CORE' | 'NEXUS' | 'APEX'>('NEXUS');
+    const [viewMode, setViewMode] = useState<'LP' | 'GP'>('LP');
     const { profile, isLoading: isHardwareLoading } = useHardwareHandshake();
     const { user } = useUser();
     const { themeState } = useMesh();
@@ -176,7 +177,31 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
+                    {/* LP / GP View Mode Switcher */}
+                    <div className={`flex items-center p-0.5 rounded-full border text-[9px] font-extrabold uppercase tracking-widest ${toggleContainerClass}`}>
+                        <button
+                            onClick={() => setViewMode('LP')}
+                            className={`px-3 py-1 rounded-full transition-all duration-200 ${
+                                viewMode === 'LP'
+                                    ? (isLatex ? 'bg-amber-800 text-white shadow-sm' : 'bg-sky-500 text-white shadow-[0_0_12px_rgba(56,189,248,0.4)]')
+                                    : (isLatex ? 'text-stone-400 hover:text-stone-700' : 'text-zinc-500 hover:text-sky-300')
+                            }`}
+                        >
+                            LP View
+                        </button>
+                        <button
+                            onClick={() => setViewMode('GP')}
+                            className={`px-3 py-1 rounded-full transition-all duration-200 ${
+                                viewMode === 'GP'
+                                    ? (isLatex ? 'bg-amber-900 text-white shadow-sm' : 'bg-emerald-500 text-black shadow-[0_0_12px_rgba(16,185,129,0.4)]')
+                                    : (isLatex ? 'text-stone-400 hover:text-stone-700' : 'text-zinc-500 hover:text-emerald-300')
+                            }`}
+                        >
+                            GP Admin
+                        </button>
+                    </div>
+
                     {/* The Omni-Matrix Trigger - Elevated to a sleek FAB-style button in the header */}
                     <button 
                         onClick={() => setIsMatrixOpen(true)}

@@ -7,7 +7,7 @@ import { useHUD } from '@/lib/hud-store';
 import { useMesh } from '@/components/providers/mesh-provider';
 
 export function ControlDock() {
-    const { mapMode, setHUDState, isPhosphorMode } = useHUD();
+    const { mapMode, setHUDState, isPhosphorMode, competencyLevel } = useHUD();
     const { themeState, setTheme } = useMesh();
 
     const themes = [
@@ -69,8 +69,18 @@ export function ControlDock() {
                     })}
                 </div>
 
-                {/* RIGHT WING: Command Matrix Trigger */}
-                <div className="flex bg-black/50 backdrop-blur-xl border border-white/[0.08] rounded-xl p-1 shadow-[0_0_16px_rgba(0,0,0,0.5)]">
+                {/* RIGHT WING: Competency Level & Command Matrix Trigger */}
+                <div className="flex bg-black/50 backdrop-blur-xl border border-white/[0.08] rounded-xl p-1 shadow-[0_0_16px_rgba(0,0,0,0.5)] gap-1">
+                    <button
+                        onClick={() => {
+                            const next = competencyLevel === 'NOVICE' ? 'OPERATOR' : competencyLevel === 'OPERATOR' ? 'ARCHITECT' : 'NOVICE';
+                            setHUDState({ competencyLevel: next });
+                        }}
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-lg font-data text-[9px] tracking-[0.14em] font-semibold text-emerald-400 border border-emerald-500/20 bg-emerald-500/10 hover:bg-emerald-500/20 transition-all"
+                    >
+                        <Compass className="w-3 h-3 text-emerald-400" />
+                        <span>MODE: {competencyLevel}</span>
+                    </button>
                     <button
                         onClick={() => {
                             const event = new CustomEvent('toggle-command-matrix');

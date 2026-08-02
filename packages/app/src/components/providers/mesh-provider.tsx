@@ -9,6 +9,7 @@ interface MeshContextType {
   provider: WebrtcProvider | null;
   synced: boolean;
   themeState: any;
+  setTheme?: (theme: string) => void;
 }
 
 const MeshContext = createContext<MeshContextType>({

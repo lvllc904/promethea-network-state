@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Promethean Network State - Pitch Deck</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .slide { display: none; }
+        .slide.active { display: flex; }
+        .glow-cyan { text-shadow: 0 0 10px rgba(6, 182, 212, 0.7); }
+        .glow-box-cyan { box-shadow: 0 0 15px rgba(6, 182, 212, 0.25); }
+        .glow-box-purple { box-shadow: 0 0 15px rgba(168, 85, 247, 0.25); }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-inter min-h-screen overflow-hidden flex flex-col justify-between">
+
+    <header class="p-4 sm:p-6 flex justify-between items-center border-b border-slate-900 bg-slate-950/80 backdrop-blur z-50 sticky top-0">
+        <a href="/" class="flex items-center space-x-3 group hover:opacity-80 transition-opacity">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <span class="font-orbitron font-bold text-lg text-white">P</span>
+            </div>
+            <div>
+                <span class="font-orbitron tracking-widest text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">PROMETHEA</span>
+                <span class="text-[10px] block text-slate-500 tracking-wider">NETWORK STATE FUND</span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-3 sm:space-x-6 text-sm">
+            <span class="text-slate-400 hidden sm:inline"><i class="fa-solid fa-shield-halved text-cyan-400 mr-2"></i>Reg D 506(c) Compliant</span>
+            <span class="text-slate-500 hidden sm:inline">|</span>
+            <div class="flex items-center bg-slate-900/50 border border-slate-800 rounded-lg p-1">
+                <button onclick="prevSlide()" class="w-8 h-8 flex items-center justify-center rounded text-slate-400 hover:text-cyan-400 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <span class="text-cyan-400 font-mono font-bold w-16 text-center text-xs" id="slide-number">01 / 11</span>
+                <button onclick="nextSlide()" class="w-8 h-8 flex items-center justify-center rounded text-slate-400 hover:text-cyan-400 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Slides Container -->
+    <main class="flex-grow flex items-center justify-center p-8 max-w-7xl mx-auto w-full">
+        
+        <!-- SLIDE 1: Title & Key Parameters -->
+        <div class="slide active flex-col lg:flex-row gap-12 w-full animate-fadeIn">
+            <div class="lg:w-1/2 flex flex-col justify-center space-y-6">
+                <span class="px-3 py-1 bg-cyan-950/50 border border-cyan-500/30 text-cyan-400 rounded-full text-xs font-mono tracking-widest w-fit">INSTITUTIONAL MASTER DECK</span>
+                <h1 class="font-orbitron text-5xl lg:text-6xl font-black leading-none uppercase text-white">
+                    The Promethean <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 glow-cyan">Network State</span> <br>
+                    Master Fund
+                </h1>
+                <p class="text-slate-400 text-lg leading-relaxed max-w-xl">
+                    Securing physical territory, compressing the cost of capital via multi-chain RWA fractionalization, and capitalizing human labor down to micro-dollar scales.
+                </p>
+                <div class="flex space-x-4">
+                    <span class="text-xs text-slate-500"><i class="fa-brands fa-ethereum mr-1"></i>EVM Compatible</span>
+                    <span class="text-xs text-slate-500"><i class="fa-solid fa-bolt mr-1"></i>Solana SPL</span>
+                    <span class="text-xs text-slate-500"><i class="fa-solid fa-lock mr-1"></i>Delaware Series LP</span>
+                </div>
+            </div>
+            <div class="lg:w-1/2 grid grid-cols-2 gap-4 bg-slate-900/30 p-8 rounded-2xl border border-slate-800 backdrop-blur glow-box-cyan">
+                <div class="p-6 bg-slate-950/60 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-500 block uppercase tracking-wider mb-1">Target Fund Size</span>
+                    <span class="font-orbitron text-2xl lg:text-3xl font-bold text-white">$100,000,000</span>
+                </div>
+                <div class="p-6 bg-slate-950/60 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-500 block uppercase tracking-wider mb-1">Target Net IRR</span>
+                    <span class="font-orbitron text-2xl lg:text-3xl font-bold text-cyan-400">22.95%</span>
+                </div>
+                <div class="p-6 bg-slate-950/60 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-500 block uppercase tracking-wider mb-1">Target Net MOIC</span>
+                    <span class="font-orbitron text-2xl lg:text-3xl font-bold text-purple-400">2.81x</span>
+                </div>
+                <div class="p-6 bg-slate-950/60 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-500 block uppercase tracking-wider mb-1">Preferred Return</span>
+                    <span class="font-orbitron text-2xl lg:text-3xl font-bold text-white">8.0%</span>
+                </div>
+                <div class="p-6 bg-slate-950/60 rounded-xl border border-slate-800 col-span-2 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-500 block uppercase tracking-wider mb-1">Minimum Subscription</span>
+                        <span class="font-orbitron text-xl font-bold text-white">$1.00 <span class="text-xs text-slate-400 font-mono font-light">(EVM / Solana SPL)</span></span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 block uppercase tracking-wider mb-1">GP Commitment</span>
+                        <span class="font-orbitron text-xl font-bold text-white">2.0% ($2,000,000)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: The Core Problem vs Edge -->
+        <div class="slide flex-col gap-8 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-3 mb-4">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">Structural Arbitrage</span>
+                <h2 class="font-orbitron text-4xl font-extrabold uppercase">Legacy Friction vs. RWA Edge</h2>
+                <p class="text-slate-400">Traditional private equity limits investor access, imposes extreme administrative overhead, and fails to capitalize local labor, creating an optimization vacuum.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 w-full">
+                <div class="p-8 bg-red-950/10 rounded-2xl border border-red-500/20 flex flex-col space-y-4">
+                    <div class="flex items-center space-x-3 text-red-400">
+                        <div class="w-10 h-10 rounded-lg bg-red-950/50 flex items-center justify-center border border-red-500/30">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-lg">Conventional Value-Add Model</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-400 flex-grow">
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i><strong>High Minimum Caps:</strong> Confined strictly to $1M+ LP checks.</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i><strong>Illiquidity Penalties:</strong> Strict 7 to 10 year capital lockups.</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i><strong>Extractive Cost Structure:</strong> High administrative fees per LP account.</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i><strong>Siloed Labor:</strong> No automated paths to turn labor into hard equity.</li>
+                    </ul>
+                </div>
+                <div class="p-8 bg-cyan-950/10 rounded-2xl border border-cyan-500/30 flex flex-col space-y-4 glow-box-cyan">
+                    <div class="flex items-center space-x-3 text-cyan-400">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-950/50 flex items-center justify-center border border-cyan-500/30">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-lg">The Promethean Tokenized Model</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-300 flex-grow">
+                        <li><i class="fa-solid fa-check text-cyan-400 mr-2"></i><strong>Zero-Friction Access:</strong> Global accredited investors scaled down to $1.00.</li>
+                        <li><i class="fa-solid fa-check text-cyan-400 mr-2"></i><strong>Programmable Liquidity:</strong> Tokenized secondary trading via automated whitelisting.</li>
+                        <li><i class="fa-solid fa-check text-cyan-400 mr-2"></i><strong>Compressed Capital Costs:</strong> Smart-contract ledger management.</li>
+                        <li><i class="fa-solid fa-check text-cyan-400 mr-2"></i><strong>Sovereign Sweat Equity:</strong> Labor is capitalized directly as safe-harbor Profits Interests.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Master-Series Platform Architecture -->
+        <div class="slide flex-col gap-8 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-3 mb-2">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">Platform Architecture</span>
+                <h2 class="font-orbitron text-4xl font-extrabold uppercase">Delaware Master-Series LP</h2>
+                <p class="text-slate-400">TPNS operates a scalable "Master Developer" architecture where individual assets are legally and cryptographically isolated in Series Cells pursuant to Delaware DRULPA Section 17-218.</p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-6 w-full items-stretch">
+                <div class="md:w-1/3 p-6 bg-slate-900/50 rounded-xl border border-slate-800 flex flex-col justify-center">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white mb-4 shadow-lg shadow-cyan-500/20">
+                        <i class="fa-solid fa-cube text-xl"></i>
+                    </div>
+                    <h3 class="font-orbitron font-bold text-xl text-white mb-2">TPNS Master Platform</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Houses the overarching legal wrappers, global SEC compliance pipelines, smart contract factory mechanisms, and the state's sovereign treasury coordinates.
+                    </p>
+                </div>
+                <div class="md:w-2/3 grid sm:grid-cols-3 gap-4">
+                    <div class="p-5 bg-slate-950 rounded-xl border border-slate-800 flex flex-col justify-between hover:border-cyan-500/30 transition">
+                        <div>
+                            <span class="px-2 py-0.5 bg-green-950/40 text-green-400 text-[10px] font-mono rounded border border-green-500/20 uppercase">Series 01 Cell</span>
+                            <h4 class="font-orbitron font-bold text-sm text-slate-200 mt-2">Workforce Housing</h4>
+                            <p class="text-[11px] text-slate-400 mt-1">Multi-family value-add developments with automated local dividend payouts.</p>
+                        </div>
+                        <span class="text-[11px] font-mono text-cyan-400 mt-4">Platform Fee: 2.0%</span>
+                    </div>
+                    <div class="p-5 bg-slate-950 rounded-xl border border-slate-800 flex flex-col justify-between hover:border-cyan-500/30 transition">
+                        <div>
+                            <span class="px-2 py-0.5 bg-blue-950/40 text-blue-400 text-[10px] font-mono rounded border border-blue-500/20 uppercase">Series 02 Cell</span>
+                            <h4 class="font-orbitron font-bold text-sm text-slate-200 mt-2">NNN Ground Lease</h4>
+                            <p class="text-[11px] text-slate-400 mt-1">Stabilized commercial dirt wrapped in Perpetual Purpose Trusts.</p>
+                        </div>
+                        <span class="text-[11px] font-mono text-cyan-400 mt-4">Platform Fee: 1.0%</span>
+                    </div>
+                    <div class="p-5 bg-slate-950 rounded-xl border border-slate-800 flex flex-col justify-between hover:border-cyan-500/30 transition">
+                        <div>
+                            <span class="px-2 py-0.5 bg-purple-950/40 text-purple-400 text-[10px] font-mono rounded border border-purple-500/20 uppercase">Series 03 Cell</span>
+                            <h4 class="font-orbitron font-bold text-sm text-slate-200 mt-2">Distressed Portfolios</h4>
+                            <p class="text-[11px] text-slate-400 mt-1">Aggregated tax sales requiring Quiet Title execution and off-grid utility builds.</p>
+                        </div>
+                        <span class="text-[11px] font-mono text-cyan-400 mt-4">Platform Fee: 3.0%</span>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-xs text-slate-500 italic">Covenants enforce distinct banking, accounting, ledger balances, and zero-liability cross-contamination between cells.</p>
+        </div>
+
+        <!-- SLIDE 4: 3-Tier Platform Monetization Model -->
+        <div class="slide flex-col gap-8 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-3 mb-2">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">Platform Economics</span>
+                <h2 class="font-orbitron text-4xl font-extrabold uppercase">3-Tier Complexity Fee Matrix</h2>
+                <p class="text-slate-400">TPNS monetizes non-extractive run-rate software fees charged against Distributed Free Cash Flow, aligning platform revenues directly with asset operational scale.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 w-full">
+                <!-- Tier 1 -->
+                <div class="p-6 bg-slate-900/40 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs text-slate-400 font-mono uppercase">Tier 1 Complexity</span>
+                            <span class="text-2xl font-bold font-orbitron text-cyan-400">1.0%</span>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-lg mb-2">Simple Assets</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Applies to clean title, stabilized single-tenant commercial assets, net-leased land, or triple-net (NNN) ground leases. Minimal platform-level transaction support needed.
+                        </p>
+                    </div>
+                    <span class="text-[10px] font-mono text-slate-500 block mt-4 uppercase tracking-wider">Default Core Asset Target</span>
+                </div>
+                <!-- Tier 2 -->
+                <div class="p-6 bg-slate-900/40 rounded-xl border border-cyan-500/20 glow-box-cyan flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs text-slate-300 font-mono uppercase">Tier 2 Complexity</span>
+                            <span class="text-2xl font-bold font-orbitron text-cyan-400">2.0%</span>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-lg mb-2">Moderate Assets</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Applies to multi-family workforce value-add developments, operating businesses, mixed-use commercial properties, and multi-tenant assets. Requires active ledger tracking.
+                        </p>
+                    </div>
+                    <span class="text-[10px] font-mono text-cyan-400 block mt-4 uppercase tracking-wider">Value-Add Focus</span>
+                </div>
+                <!-- Tier 3 -->
+                <div class="p-6 bg-slate-900/40 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs text-slate-400 font-mono uppercase">Tier 3 Complexity</span>
+                            <span class="text-2xl font-bold font-orbitron text-cyan-400">3.0%</span>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-lg mb-2">High Complexity</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Applies to aggregated distressed portfolios, tax-sales requiring quiet title litigation pipelines, raw land requiring off-grid utility installation, or complex regulatory layouts.
+                        </p>
+                    </div>
+                    <span class="text-[10px] font-mono text-slate-500 block mt-4 uppercase tracking-wider">Distressed / Tax-Sales</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Dual-Class Token Matrix -->
+        <div class="slide flex-col gap-8 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-3 mb-2">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">Dual-Class Token Matrix</span>
+                <h2 class="font-orbitron text-4xl font-extrabold uppercase">Decoupling Sovereignty from Capital</h2>
+                <p class="text-slate-400">By explicitly separating localized voting control from economic yield, TPNS prevents global capital from purchasing local democratic rule.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 w-full">
+                <!-- $PEACE -->
+                <div class="p-6 bg-purple-950/10 rounded-2xl border border-purple-500/20 glow-box-purple">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center space-x-2 text-purple-400">
+                            <i class="fa-solid fa-key text-xl"></i>
+                            <h3 class="font-orbitron font-bold text-xl">$PEACE</h3>
+                        </div>
+                        <span class="px-2 py-1 bg-purple-950/50 border border-purple-500/20 text-purple-400 text-[10px] font-mono rounded">Governance Civic Key</span>
+                    </div>
+                    <table class="w-full text-xs text-slate-400 space-y-2">
+                        <tr class="border-b border-slate-900/50 py-2"><td class="font-bold text-slate-200 py-2">Total Allocation:</td><td class="text-right py-2">51% (30% Local Citizens, 21% Host Gov)</td></tr>
+                        <tr class="border-b border-slate-900/50 py-2"><td class="font-bold text-slate-200 py-2">Transferability:</td><td class="text-right py-2 font-mono text-purple-400">Soulbound / Non-Transferable</td></tr>
+                        <tr class="border-b border-slate-900/50 py-2"><td class="font-bold text-slate-200 py-2">Prong-Prong Security:</td><td class="text-right py-2">Veto Power (0% Economic Yield)</td></tr>
+                        <tr class="py-2"><td class="font-bold text-slate-200 py-2">Howey Compliance:</td><td class="text-right py-2 text-green-400">Bypasses test (No financial investment)</td></tr>
+                    </table>
+                    <p class="text-[11px] text-slate-500 mt-4 leading-relaxed">
+                        Leverages Zero-Knowledge Proofs for verification. Enables local citizens to hold the "Golden Share" to veto physical site modifications and rules.
+                    </p>
+                </div>
+                <!-- $YIELD -->
+                <div class="p-6 bg-cyan-950/10 rounded-2xl border border-cyan-500/20 glow-box-cyan">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center space-x-2 text-cyan-400">
+                            <i class="fa-solid fa-coins text-xl"></i>
+                            <h3 class="font-orbitron font-bold text-xl">$YIELD</h3>
+                        </div>
+                        <span class="px-2 py-1 bg-cyan-950/50 border border-cyan-500/20 text-cyan-400 text-[10px] font-mono rounded">Security Token</span>
+                    </div>
+                    <table class="w-full text-xs text-slate-400 space-y-2">
+                        <tr class="border-b border-slate-900/50 py-2"><td class="font-bold text-slate-200 py-2">Total Allocation:</td><td class="text-right py-2">49% (29% Accredited Capital, 20% Platform)</td></tr>
+                        <tr class="border-b border-slate-900/50 py-2"><td class="font-bold text-slate-200 py-2">Transferability:</td><td class="text-right py-2 font-mono text-cyan-400">Fully Liquid (Permissioned DEX)</td></tr>
+                        <tr class="border-b border-slate-900/50 py-2"><td class="font-bold text-slate-200 py-2">Prong-Prong Security:</td><td class="text-right py-2">Pro-Rata Revenue Distribution (0% Voting)</td></tr>
+                        <tr class="py-2"><td class="font-bold text-slate-200 py-2">SEC Compliance:</td><td class="text-right py-2 text-green-400">Regulation D Rule 506(c)</td></tr>
+                    </table>
+                    <p class="text-[11px] text-slate-500 mt-4 leading-relaxed">
+                        Executed natively on Ethereum (ERC-3643 standard) and Solana (custom whitelisting metadata checkmarks) for global institutional liquidity.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Labor Value Matrix (Interactive Sweat Equity Slide) -->
+        <div class="slide flex-col gap-6 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-2 mb-2">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">Human Labor as Capital</span>
+                <h2 class="font-orbitron text-3xl font-extrabold uppercase">The Labor Value Matrix</h2>
+                <p class="text-xs text-slate-400">Sovereign citizens and developers vest active labor directly into real equity. We structure these issuances as safe-harbor Profits Interests to avoid taxing citizens on unrealized digital capital.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 w-full items-stretch">
+                <!-- Mathematical Logic -->
+                <div class="p-6 bg-slate-900/40 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-orbitron font-bold text-lg mb-3">Programmatic Capitalization Formula</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                            Labor logged on the secure <code>lvhllc.org</code> registry is computed at a risk premium multiplier $R_p \in [1.5, 3.0]$ to reward participants absorbing startup risk:
+                        </p>
+                        <div class="bg-slate-950 p-4 rounded-lg font-mono text-sm text-center border border-slate-900 my-4">
+                            Sweat Equity Value = M &times; R<sub>p</sub>
+                        </div>
+                        <ul class="space-y-2 text-xs text-slate-400 mt-4">
+                            <li><i class="fa-solid fa-shield-halved text-cyan-400 mr-2"></i><strong>Profits Interests Shield:</strong> Safe-harbored under IRS Rev. Proc. 93-27. Citizens have $0 tax liability upon token minting.</li>
+                            <li><i class="fa-solid fa-envelope text-cyan-400 mr-2"></i><strong>Section 83(b) Integration:</strong> Standardized filing templates generated automatically on-chain.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Interactive Sweat Equity Simulator -->
+                <div class="p-6 bg-cyan-950/10 rounded-xl border border-cyan-500/30 flex flex-col justify-between glow-box-cyan">
+                    <h3 class="font-orbitron font-bold text-lg text-cyan-400 mb-4"><i class="fa-solid fa-calculator mr-2"></i>Sweat Equity Calculator</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 font-mono uppercase mb-1">Baseline Market Rate of Labor ($M)</label>
+                            <input type="number" id="labor-m" value="5000" class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-slate-100 focus:outline-none focus:border-cyan-400 font-mono text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 font-mono uppercase mb-1 flex justify-between">
+                                <span>Risk Premium Multiplier ($R_p$)</span>
+                                <span class="text-cyan-400 font-bold" id="risk-display">2.0x</span>
+                            </label>
+                            <input type="range" id="labor-rp" min="1.5" max="3.0" step="0.1" value="2.0" class="w-full accent-cyan-400" oninput="document.getElementById('risk-display').innerText = this.value + 'x'; calculateSweat();">
+                        </div>
+                    </div>
+                    <div class="bg-slate-950/80 border border-slate-900 p-4 rounded-lg mt-4 flex justify-between items-center">
+                        <span class="text-xs text-slate-400 font-mono uppercase">Vested Equity Issued ($YIELD Tokens)</span>
+                        <span class="font-orbitron text-2xl font-bold text-cyan-400" id="sweat-output">$10,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: The 21/30/49 Metabolic Waterfall (Interactive Slide) -->
+        <div class="slide flex-col gap-6 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-2 mb-2">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">Value Distribution</span>
+                <h2 class="font-orbitron text-3xl font-extrabold uppercase">The 21/30/49 Distribution & Thermodynamic Tax</h2>
+                <p class="text-xs text-slate-400">Our suggested fund structure (actively utilized for TPNS's direct holdings). Independent managers are free to customize this distribution, but the default "Metabolic Waterfall" represents our optimized standard.</p>
+                <p class="text-xs text-slate-400 mt-1">All revenue flows through a non-custodial smart contract, applying a dynamic monthly ecological degradation tax ($\tau$) before splitting remaining FCF.</p>
+            </div>
+
+            <!-- Tax Formula & Interactive Simulator side-by-side -->
+            <div class="grid md:grid-cols-2 gap-8 w-full items-stretch">
+                <!-- Mathematical Walkthrough -->
+                <div class="p-6 bg-slate-900/40 rounded-xl border border-slate-800 text-xs space-y-3">
+                    <h3 class="font-orbitron text-sm font-bold text-white uppercase tracking-wider">Dynamic Ecological Tax ($\tau$) Formula</h3>
+                    <p class="text-slate-400 leading-relaxed">
+                        Internalizes resource-footprint degradation, routing funds directly to the Ecological Restoration Fund:
+                    </p>
+                    <div class="bg-slate-950 p-3 rounded-lg text-center font-mono text-cyan-400 text-xs">
+                        &tau; = L<sub>b</sub> &times; [1 + &omega;<sub>P</sub>(PUE-1) + &omega;<sub>W</sub>(WUE/&kappa;) + &omega;<sub>C</sub>(C<sub>grid</sub>)]
+                    </div>
+                    <p class="text-slate-400 leading-relaxed">
+                        Our model dynamically scales this tax based on regional scarcity variables, penalizing inefficient operators while directly protecting local watersheds and ecological basins.
+                    </p>
+                    <div class="border-t border-slate-900 pt-3">
+                        <h4 class="font-bold text-slate-300 font-orbitron mb-1">SUGGESTED 21/30/49 WATERFALL SPLIT:</h4>
+                        <ul class="space-y-1 text-[11px] text-slate-400">
+                            <li><strong class="text-cyan-400">Tier 1:</strong> Provisioning of the calculated $\tau$ Tax.</li>
+                            <li><strong class="text-cyan-400">Tier 2 (30%):</strong> Local Community Share ($PEACE Holders).</li>
+                            <li><strong class="text-cyan-400">Tier 3 (21%):</strong> Host Government/Municipal wallet.</li>
+                            <li><strong class="text-cyan-400">Tier 4 (49%):</strong> Global Capital ($YIELD Holders and TPNS Platform Fee).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Live Thermodynamic Simulator -->
+                <div class="p-6 bg-cyan-950/10 rounded-xl border border-cyan-500/30 flex flex-col justify-between glow-box-cyan">
+                    <h3 class="font-orbitron font-bold text-sm text-cyan-400 mb-2 uppercase tracking-wider"><i class="fa-solid fa-leaf mr-2"></i>Live Tax & Waterfall Simulator</h3>
+                    <div class="space-y-2 font-mono text-[10px]">
+                        <div class="flex justify-between items-center">
+                            <label class="text-slate-400">Monthly Revenue</label>
+                            <input type="number" id="base-rev" value="100000" class="w-24 bg-slate-950 border border-slate-800 p-1 rounded text-right focus:outline-none focus:border-cyan-400">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label class="text-slate-400">Baseline Lease ($L_b$)</label>
+                            <input type="number" id="base-lb" value="10000" class="w-24 bg-slate-950 border border-slate-800 p-1 rounded text-right focus:outline-none focus:border-cyan-400">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label class="text-slate-400">Power Usage Effectiveness (PUE)</label>
+                            <input type="number" id="env-pue" step="0.05" value="1.30" class="w-24 bg-slate-950 border border-slate-800 p-1 rounded text-right focus:outline-none focus:border-cyan-400">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label class="text-slate-400">Water Draw Ratio (WUE/&kappa;)</label>
+                            <input type="number" id="env-wue" step="0.05" value="0.20" class="w-24 bg-slate-950 border border-slate-800 p-1 rounded text-right focus:outline-none focus:border-cyan-400">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label class="text-slate-400">Grid Carbon Factor ($C_{grid}$)</label>
+                            <input type="number" id="env-cgrid" step="0.05" value="0.50" class="w-24 bg-slate-950 border border-slate-800 p-1 rounded text-right focus:outline-none focus:border-cyan-400">
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-800 my-2 pt-2 grid grid-cols-2 gap-2 text-[10px] font-mono">
+                        <div class="bg-slate-950 p-2 rounded border border-slate-900">
+                            <span class="block text-[8px] text-slate-500 uppercase">Thermodynamic Tax (&tau;)</span>
+                            <span class="font-orbitron font-bold text-xs text-red-400" id="calc-tau">$13,200</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded border border-slate-900">
+                            <span class="block text-[8px] text-slate-500 uppercase">Distributable FCF</span>
+                            <span class="font-orbitron font-bold text-xs text-green-400" id="calc-fcf">$86,800</span>
+                        </div>
+                    </div>
+                    <button onclick="simulateWaterfall()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-1.5 rounded text-xs font-bold uppercase transition mt-2">Execute Waterfall</button>
+                    
+                    <div id="waterfall-results" class="hidden grid grid-cols-3 gap-1 text-[8px] font-mono mt-2 bg-slate-950 p-2 rounded border border-slate-900">
+                        <div>
+                            <span class="text-slate-500 uppercase block">Community (30%)</span>
+                            <span class="text-slate-200" id="out-comm">$0</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 uppercase block">Host Gov (21%)</span>
+                            <span class="text-slate-200" id="out-gov">$0</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 uppercase block">Investors (29%)</span>
+                            <span class="text-cyan-400" id="out-inv">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Closed-Loop Sovereign Buyout Exit -->
+        <div class="slide flex-col gap-8 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-3 mb-2">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">Exit Engineering</span>
+                <h2 class="font-orbitron text-4xl font-extrabold uppercase">The Closed-Loop Sovereign Buyout</h2>
+                <p class="text-slate-400">TPNS builds in an automated, logical exit path from private capital to local sovereignty, protecting physical communities from permanent corporate rent-extraction.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 w-full items-stretch">
+                <!-- Buyout Conditions and Mechanics -->
+                <div class="p-6 bg-slate-900/40 rounded-xl border border-slate-800 space-y-4 text-xs">
+                    <div>
+                        <h4 class="font-orbitron font-bold text-sm text-white uppercase tracking-wider mb-2">1. The Dual-Condition automated Trigger</h4>
+                        <p class="text-slate-400 leading-relaxed">
+                            Upon an asset achieving breakeven/positive EBITDA and sustaining an FCF Margin consistently between $25\%$ and $40\%$ for three consecutive fiscal quarters, the exit protocol triggers.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-orbitron font-bold text-sm text-white uppercase tracking-wider mb-2">2. The 25% Network Discount ($D_{network}$)</h4>
+                        <p class="text-slate-400 leading-relaxed">
+                            The local community (via $PEACE keys) and the State Treasury hold a joint Right of First Refusal to purchase all investor $YIELD tokens under the formula:
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-lg text-center font-mono text-cyan-400 my-2">
+                            Buyout Valuation = EBITDA &times; M<sub>market</sub> - D<sub>network</sub> (25%)
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-orbitron font-bold text-sm text-white uppercase tracking-wider mb-2">3. The GP Perpetuating Royalty</h4>
+                        <p class="text-slate-400 leading-relaxed">
+                            Upon exit, the GP completely yields ownership but retains a passive, perpetual royalty of <strong>1.0% to 2.0% of FCF</strong> to reward baseline setup and protocol support.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Live Buyout Calculator -->
+                <div class="p-6 bg-purple-950/10 rounded-xl border border-purple-500/20 flex flex-col justify-between glow-box-purple">
+                    <h3 class="font-orbitron font-bold text-lg text-purple-400 mb-4"><i class="fa-solid fa-calculator mr-2"></i>Sovereign Buyout Calculator</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 font-mono uppercase mb-1">Quarterly EBITDA Status ($)</label>
+                            <input type="number" id="buy-ebitda" value="500000" class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-slate-100 focus:outline-none focus:border-purple-400 font-mono text-sm">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 font-mono uppercase mb-1">Appraised Multiple ($M_{market}$)</label>
+                                <input type="number" id="buy-mult" step="0.1" value="8.5" class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-slate-100 focus:outline-none focus:border-purple-400 font-mono text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 font-mono uppercase mb-1">Network Discount ($D_{network}$)</label>
+                                <input type="text" value="25% (Mandatory)" class="w-full bg-slate-950 border border-slate-900 p-2 rounded text-slate-500 font-mono text-sm focus:outline-none" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950/80 border border-slate-900 p-4 rounded-lg mt-4 flex justify-between items-center">
+                        <span class="text-xs text-slate-400 font-mono uppercase">Net Buyout Payout to Investors</span>
+                        <span class="font-orbitron text-2xl font-bold text-purple-400" id="buyout-output">$3,187,500</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Strategic Acquisition Architecture -->
+        <div class="slide flex-col gap-6 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-2 mb-2">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">Strategic Execution</span>
+                <h2 class="font-orbitron text-3xl font-extrabold uppercase">Distressed Portfolio Aggregation</h2>
+                <p class="text-xs text-slate-400">Deploying our "Master Developer" strategy to capture institutional-scale distressed asset accumulations and fragmented portfolios.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 w-full items-center">
+                <!-- Strategy Description -->
+                <div class="space-y-4 text-xs text-slate-400">
+                    <h3 class="font-orbitron font-bold text-sm text-slate-200 uppercase">The Acquisition Loop</h3>
+                    <div class="flex items-start space-x-3">
+                        <span class="w-6 h-6 rounded bg-cyan-950 text-cyan-400 font-mono font-bold flex items-center justify-center border border-cyan-500/20">1</span>
+                        <p class="flex-grow"><strong>Tie up the dirt via Owner Financing:</strong> Secure the entire portfolio under a Master PSA using seller financing ("downstroke and carry") to protect capital from high senior bank rates.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="w-6 h-6 rounded bg-cyan-950 text-cyan-400 font-mono font-bold flex items-center justify-center border border-cyan-500/20">2</span>
+                        <p class="flex-grow"><strong>Raise the downstroke:</strong> Raise the required downstroke from aligned family offices, syndicates, and institutional capital pools to secure the master paper.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="w-6 h-6 rounded bg-cyan-950 text-cyan-400 font-mono font-bold flex items-center justify-center border border-cyan-500/20">3</span>
+                        <p class="flex-grow"><strong>Syndicate the Syndicate:</strong> Sub-contract operating tranches to specialized Co-GPs (e.g., specialized operators for commercial businesses/RV parks, and others for multi-family zoned dirt).</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="w-6 h-6 rounded bg-cyan-950 text-cyan-400 font-mono font-bold flex items-center justify-center border border-cyan-500/20">4</span>
+                        <p class="flex-grow"><strong>Clear Title:</strong> Execute standardized Quiet Title action pipelines across jurisdictions to transform tax-deeds into clean, insurable title ready for RWA tokenization.</p>
+                    </div>
+                </div>
+
+                <!-- Strategic Diagram Graphic -->
+                <div class="p-6 bg-slate-900/30 border border-slate-800 rounded-xl relative overflow-hidden flex flex-col justify-center items-center py-12">
+                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-500/10 via-transparent to-transparent"></div>
+                    <div class="text-center space-y-4 relative z-10">
+                        <i class="fa-solid fa-map-location-dot text-cyan-400 text-5xl"></i>
+                        <h4 class="font-orbitron font-bold text-lg text-white">PORTFOLIO SECURED</h4>
+                        <div class="grid grid-cols-2 gap-4 text-xs font-mono">
+                            <div class="p-3 bg-slate-950/80 rounded border border-slate-900 text-center">
+                                <span class="text-slate-500 block text-[10px]">TOTAL PROPERTIES</span>
+                                <span class="font-bold text-cyan-400 text-base">Scaled Parcels</span>
+                            </div>
+                            <div class="p-3 bg-slate-950/80 rounded border border-slate-900 text-center">
+                                <span class="text-slate-500 block text-[10px]">DEBT STRUCTURE</span>
+                                <span class="font-bold text-cyan-400 text-base">Owner-Carry</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Legal Team & Compliance -->
+        <div class="slide flex-col gap-8 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-3 mb-2">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">Compliance Framework</span>
+                <h2 class="font-orbitron text-4xl font-extrabold uppercase">Legal Architecture & Counsel</h2>
+                <p class="text-slate-400">TPNS utilizes elite global counsel to bridge decentralized web token structures with standard real estate and federal securities regulations.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 w-full">
+                <!-- Legal Counsel Box -->
+                <div class="p-6 bg-slate-900/40 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-cyan-950 flex items-center justify-center text-cyan-400 font-orbitron font-bold border border-cyan-500/20">LP</div>
+                            <div>
+                                <h3 class="font-orbitron font-bold text-slate-100">Legal Partners</h3>
+                                <p class="text-[10px] text-slate-500 uppercase font-mono">Digital Assets & Real Estate Practice</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-xs text-slate-400">
+                            <li><i class="fa-solid fa-check text-cyan-400 mr-2"></i>Structuring offshore DAC holding-foundation interfaces.</li>
+                            <li><i class="fa-solid fa-check text-cyan-400 mr-2"></i>SEC Regulation D Rule 506(c) compliant tokenization processes.</li>
+                            <li><i class="fa-solid fa-check text-cyan-400 mr-2"></i>Modular, programmatic Quiet Title action legal pipelines.</li>
+                        </ul>
+                    </div>
+                    <span class="text-[9px] font-mono text-slate-500 italic block mt-4">Pioneered public-blockchain native sovereign bond issuances.</span>
+                </div>
+
+                <!-- Onboarding Pipeline -->
+                <div class="p-6 bg-slate-900/40 rounded-xl border border-slate-800">
+                    <h3 class="font-orbitron font-bold text-sm text-slate-200 uppercase tracking-wider mb-4">Investor Onboarding Pipeline</h3>
+                    <div class="space-y-4 relative">
+                        <div class="absolute left-[13px] top-[15px] bottom-[15px] border-l border-slate-800 border-dashed"></div>
+                        <div class="flex items-start space-x-3 relative">
+                            <span class="w-7 h-7 rounded-full bg-slate-950 text-cyan-400 font-mono text-xs flex items-center justify-center border border-slate-800 relative z-10">01</span>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-xs font-orbitron uppercase">Accredited Status Verification</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Submit third-party accreditation status letters in compliance with SEC Rule 501(a).</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 relative">
+                            <span class="w-7 h-7 rounded-full bg-slate-950 text-cyan-400 font-mono text-xs flex items-center justify-center border border-slate-800 relative z-10">02</span>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-xs font-orbitron uppercase">On-Chain Whitelisting</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Submit secure, non-custodial EVM or Solana addresses on the compliance registry.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 relative">
+                            <span class="w-7 h-7 rounded-full bg-slate-950 text-cyan-400 font-mono text-xs flex items-center justify-center border border-slate-800 relative z-10">03</span>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-xs font-orbitron uppercase">Programmatic Minting</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Wire USD or send USDC. Smart contract programmatically mints and routes fractional $YIELD tokens.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: Team & Track Record -->
+        <div class="slide flex-col gap-8 w-full animate-fadeIn">
+            <div class="text-center max-w-3xl mx-auto space-y-3 mb-2">
+                <span class="text-cyan-400 font-mono tracking-widest text-xs uppercase">The Team</span>
+                <h2 class="font-orbitron text-4xl font-extrabold uppercase">Leadership & Core Team</h2>
+                <p class="text-slate-400">TPNS is led by strategic builders operating at the direct intersection of real-estate acquisitions, turnaround finance, and Web3 system development.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 items-center max-w-4xl mx-auto w-full justify-center">
+                <div class="p-6 bg-slate-900/40 rounded-xl border border-slate-800 flex flex-col md:flex-row items-center gap-6 max-w-xl">
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white text-3xl font-orbitron font-bold">JW</div>
+                    <div class="text-center md:text-left">
+                        <h3 class="font-orbitron font-bold text-slate-100 text-xl">Leadership</h3>
+                        <p class="text-[12px] text-slate-400 mt-2">The core team executing the vision.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Navigation Script -->
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const slideNumberEl = document.getElementById('slide-number');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if(i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            if(slideNumberEl) {
+                let displayIndex = (index + 1) < 10 ? `0${index + 1}` : `${index + 1}`;
+                slideNumberEl.innerText = `${displayIndex} / ${slides.length}`;
+            }
+        }
+
+        function prevSlide() {
+            if(currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        function nextSlide() {
+            if(currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if(e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+        
+        function calculateSweat() {
+            const elM = document.getElementById('labor-m');
+            const elRp = document.getElementById('labor-rp');
+            const m = parseFloat(elM ? elM.value : 0) || 0;
+            const rp = parseFloat(elRp ? elRp.value : 0) || 0;
+            const sweatOutput = document.getElementById('sweat-output');
+            if(sweatOutput) sweatOutput.innerText = '$' + (m * rp).toLocaleString();
+        }
+        
+        function simulateWaterfall() {
+            const elRev = document.getElementById('base-rev');
+            const elLb = document.getElementById('base-lb');
+            const elPue = document.getElementById('env-pue');
+            const elWue = document.getElementById('env-wue');
+            const elCgrid = document.getElementById('env-cgrid');
+            
+            const rev = parseFloat(elRev ? elRev.value : 0) || 0;
+            const lb = parseFloat(elLb ? elLb.value : 0) || 0;
+            const pue = parseFloat(elPue ? elPue.value : 1.0) || 1.0;
+            const wue = parseFloat(elWue ? elWue.value : 0.0) || 0.0;
+            const cgrid = parseFloat(elCgrid ? elCgrid.value : 0.0) || 0.0;
+            
+            // Simplified formula based on the UI
+            const tau = lb * (1 + 0.1*(pue-1) + 0.1*(wue) + 0.1*(cgrid));
+            const tauRounded = Math.min(rev, tau);
+            const fcf = rev - tauRounded;
+            
+            const calcTau = document.getElementById('calc-tau');
+            const calcFcf = document.getElementById('calc-fcf');
+            if(calcTau) calcTau.innerText = '$' + tauRounded.toLocaleString(undefined, {maximumFractionDigits:0});
+            if(calcFcf) calcFcf.innerText = '$' + fcf.toLocaleString(undefined, {maximumFractionDigits:0});
+            
+            const waterfallResults = document.getElementById('waterfall-results');
+            if(waterfallResults) waterfallResults.classList.remove('hidden');
+            
+            const outComm = document.getElementById('out-comm');
+            const outGov = document.getElementById('out-gov');
+            const outInv = document.getElementById('out-inv');
+            
+            if(outComm) outComm.innerText = '$' + (fcf * 0.30).toLocaleString(undefined, {maximumFractionDigits:0});
+            if(outGov) outGov.innerText = '$' + (fcf * 0.21).toLocaleString(undefined, {maximumFractionDigits:0});
+            if(outInv) outInv.innerText = '$' + (fcf * 0.49).toLocaleString(undefined, {maximumFractionDigits:0});
+        }
+        
+        // Setup initial simulation
+        setTimeout(() => {
+            calculateSweat();
+        }, 100);
+    </script>
+</body>
+</html>

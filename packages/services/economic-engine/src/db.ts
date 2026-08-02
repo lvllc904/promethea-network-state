@@ -102,6 +102,8 @@ class SQLiteAdapter implements StorageAdapter {
             CREATE TABLE IF NOT EXISTS votes (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS sovereign_settings (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
             CREATE TABLE IF NOT EXISTS substrate (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS series_spvs (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, complianceStatus TEXT, timestamp DATETIME);
+            CREATE TABLE IF NOT EXISTS compliance_status (id TEXT PRIMARY KEY, orgId TEXT, data TEXT, timestamp DATETIME);
         `);
 
         await this.db.run(`

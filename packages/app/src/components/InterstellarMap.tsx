@@ -5,200 +5,11 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Stars, Html, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import { useHUD, POIDetails, defaultPOI } from '../lib/hud-store';
+import { PlanetData, CELESTIAL_DB, getCelestialById } from '../lib/celestial-data';
 import { DTNManager, BundlePacket } from '../lib/dtn-manager';
 import { Orbit, Radio, Navigation, Zap, Network, Database, Layers, ArrowDownCircle, ShieldAlert } from 'lucide-react';
 
-// Static celestial database
-interface PlanetData {
-    id: 'SOL' | 'MERCURY' | 'VENUS' | 'EARTH' | 'LUNA' | 'MARS' | 'JUPITER' | 'SATURN' | 'URANUS' | 'NEPTUNE';
-    name: string;
-    radius: number;
-    orbitDistance: number;
-    orbitSpeed: number;
-    color: string;
-    details: {
-        type: string;
-        atmosphere: string;
-        temp: string;
-        governance: string;
-        nodesActive: number;
-        scannedRegions: string;
-        networkStatus: string;
-    };
-}
 
-const CELESTIAL_DB: PlanetData[] = [
-    {
-        id: 'SOL',
-        name: 'Sol (Sun)',
-        radius: 2.8,
-        orbitDistance: 0,
-        orbitSpeed: 0,
-        color: '#f59e0b',
-        details: {
-            type: 'G-Type Main-Sequence Star',
-            atmosphere: 'Hydrogen/Helium Plasma',
-            temp: '5,500 °C (Surface)',
-            governance: 'Sovereign Physical Commons',
-            nodesActive: 0,
-            scannedRegions: 'Uninhabitable (100% Coronal Scanned)',
-            networkStatus: 'High Solar Interference'
-        }
-    },
-    {
-        id: 'MERCURY',
-        name: 'Mercury',
-        radius: 0.4,
-        orbitDistance: 6,
-        orbitSpeed: 0.04,
-        color: '#a1a1aa',
-        details: {
-            type: 'Terrestrial Planet',
-            atmosphere: 'Exosphere (Trace Helium/Sodium)',
-            temp: '-180 °C to 430 °C',
-            governance: 'Unclaimed Baseline',
-            nodesActive: 0,
-            scannedRegions: '24% Caloris Basin Scanned',
-            networkStatus: 'No Comm Relay'
-        }
-    },
-    {
-        id: 'VENUS',
-        name: 'Venus',
-        radius: 0.7,
-        orbitDistance: 9,
-        orbitSpeed: 0.028,
-        color: '#e3bb76',
-        details: {
-            type: 'Terrestrial Planet',
-            atmosphere: '96.5% Carbon Dioxide (Dense)',
-            temp: '460 °C (Supercritical)',
-            governance: 'Automated Atmospheric Monitor',
-            nodesActive: 0,
-            scannedRegions: 'Maxwell Montes Synthetic Aperture Scan',
-            networkStatus: 'Thermal Absorption Mode'
-        }
-    },
-    {
-        id: 'EARTH',
-        name: 'Earth (Terra)',
-        radius: 1.1,
-        orbitDistance: 15,
-        orbitSpeed: 0.015,
-        color: '#d97706',
-        details: {
-            type: 'Sovereign Capital Basin',
-            atmosphere: 'Nitrogen/Oxygen (Bio-Stable)',
-            temp: '15 °C (Mean)',
-            governance: 'Promethean Network State (DAC)',
-            nodesActive: 342,
-            scannedRegions: '100% High-Fidelity 3D Photorealistic Tiles',
-            networkStatus: 'Core Fiber Sync // GCS Active'
-        }
-    },
-    {
-        id: 'LUNA',
-        name: 'Luna (Moon)',
-        radius: 0.35,
-        orbitDistance: 2.2, // Dist from Earth
-        orbitSpeed: 0.06,
-        color: '#cbd5e1',
-        details: {
-            type: 'Sovereign Mining Outpost',
-            atmosphere: 'Vacuum Exosphere',
-            temp: '-130 °C to 120 °C',
-            governance: 'Selenographic Transport Logistics',
-            nodesActive: 14,
-            scannedRegions: '94% Clavius & Shackleton Basins Scanned',
-            networkStatus: 'Laser Telemetry Uplink (RFC 5050)'
-        }
-    },
-    {
-        id: 'MARS',
-        name: 'Mars (Ares)',
-        radius: 0.85,
-        orbitDistance: 21,
-        orbitSpeed: 0.01,
-        color: '#f97316',
-        details: {
-            type: 'Agricultural Outpost Core',
-            atmosphere: '95% Carbon Dioxide (Thin)',
-            temp: '-60 °C (Mean)',
-            governance: 'Areocentre Mining Corp Hub',
-            nodesActive: 28,
-            scannedRegions: 'Olympus Mons & Gale Crater Active Descents',
-            networkStatus: 'Delay-Tolerant Laser Link (~12s)'
-        }
-    },
-    {
-        id: 'JUPITER',
-        name: 'Jupiter',
-        radius: 2.1,
-        orbitDistance: 28,
-        orbitSpeed: 0.006,
-        color: '#d97706',
-        details: {
-            type: 'Gas Giant',
-            atmosphere: 'Hydrogen/Helium (Metallic Mantle)',
-            temp: '-110 °C (Cloud Tops)',
-            governance: 'Joint Magnetospheric Reserve',
-            nodesActive: 0,
-            scannedRegions: 'Great Red Spot Volumetric Feed',
-            networkStatus: 'Passive Radiotelescope Sync'
-        }
-    },
-    {
-        id: 'SATURN',
-        name: 'Saturn',
-        radius: 1.7,
-        orbitDistance: 36,
-        orbitSpeed: 0.004,
-        color: '#f59e0b',
-        details: {
-            type: 'Gas Giant // Ring Subsystem',
-            atmosphere: 'Dense Hydrogen/Helium',
-            temp: '-140 °C',
-            governance: 'Decentralized Asteroid Ring Lease',
-            nodesActive: 0,
-            scannedRegions: 'Ring Particle Distribution Grid',
-            networkStatus: 'Relay Beacon Pending'
-        }
-    },
-    {
-        id: 'URANUS',
-        name: 'Uranus',
-        radius: 1.2,
-        orbitDistance: 43,
-        orbitSpeed: 0.002,
-        color: '#b45309',
-        details: {
-            type: 'Ice Giant',
-            atmosphere: 'Hydrogen/Helium/Methane',
-            temp: '-195 °C',
-            governance: 'Polar Sovereign Sanctuary',
-            nodesActive: 0,
-            scannedRegions: 'Magnetic Axis Volumetric Model',
-            networkStatus: 'Offline'
-        }
-    },
-    {
-        id: 'NEPTUNE',
-        name: 'Neptune',
-        radius: 1.1,
-        orbitDistance: 50,
-        orbitSpeed: 0.001,
-        color: '#991b1b',
-        details: {
-            type: 'Ice Giant',
-            atmosphere: 'Hydrogen/Helium/Methane (High Winds)',
-            temp: '-200 °C',
-            governance: 'Deep-Space Telemetry Outpost',
-            nodesActive: 0,
-            scannedRegions: 'Triton Gravitational Field Map',
-            networkStatus: 'Passive Deep Space Sync'
-        }
-    }
-];
 
 // Helper to keep tracks of planet positions inside React Three Fiber
 interface PlanetPosRegistry {
@@ -775,9 +586,9 @@ const DeepFieldPoints = ({ data, onHoverBody, onClickBody }: DeepFieldPointsProp
 
 // Main Interstellar Map component
 export const InterstellarMap = () => {
-    const { activePOI, setHUDState, celestialMesh } = useHUD();
-    const [selectedPlanet, setSelectedPlanet] = useState<PlanetData | null>(null);
-    const [selectedBody, setSelectedBody] = useState<any | null>(null);
+    const { activePOI, setHUDState, celestialMesh, selectedCelestialId, selectedDeepFieldBody, interstellarTransitioning } = useHUD();
+    const selectedPlanet = selectedCelestialId ? getCelestialById(selectedCelestialId) ?? null : null;
+    const selectedBody = selectedDeepFieldBody;
     const [telemetryFeatures, setTelemetryFeatures] = useState<any[]>([]);
 
     useEffect(() => {
@@ -807,18 +618,15 @@ export const InterstellarMap = () => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
-                setSelectedPlanet(null);
-                setSelectedBody(null);
+                setHUDState({ selectedCelestialId: null, selectedDeepFieldBody: null });
             }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, []);
+    }, [setHUDState]);
     const [hoveredBody, setHoveredBody] = useState<any | null>(null);
     const [celestialData, setCelestialData] = useState<any[]>([]);
     const controlsRef = useRef<any>(null);
-    const [transitioning, setTransitioning] = useState<PlanetData | null>(null);
-    const [transitionTimer, setTransitionTimer] = useState(0);
 
     // WebGL support probe
     const [hasWebGL, setHasWebGL] = useState<boolean>(true);
@@ -968,85 +776,28 @@ export const InterstellarMap = () => {
     // Default selection centers around active POV reference frame
     useEffect(() => {
         const frame = activePOI?.referenceFrame || 'EARTH';
-        const defaultMatch = CELESTIAL_DB.find(p => p.id === frame);
-        if (defaultMatch) {
-            setSelectedPlanet(defaultMatch);
-        }
-    }, [activePOI?.referenceFrame]);
+        setHUDState({ selectedCelestialId: frame });
+    }, [activePOI?.referenceFrame, setHUDState]);
 
     const handlePlanetSelect = (planet: PlanetData) => {
-        setSelectedPlanet(planet);
-        setSelectedBody(null);
+        setHUDState({ selectedCelestialId: planet.id, selectedDeepFieldBody: null });
     };
 
-    // Camera Flight Descent Initiator
+    // Camera Flight Descent Initiator — signals HUD store, page.tsx handles the overlay
     const handleDescent = (planet: PlanetData) => {
         if (planet.id !== 'EARTH' && planet.id !== 'LUNA' && planet.id !== 'MARS') {
-            return; // Only active mesh nodes allow standard terminal landings
+            return;
         }
-        setTransitioning(planet);
-        setTransitionTimer(100);
+        setHUDState({ interstellarTransitioning: planet.id });
     };
 
-    // Count-down ticker simulation during warp descent
-    useEffect(() => {
-        if (!transitioning) return;
-        let elapsed = 100;
-        const interval = setInterval(() => {
-            elapsed -= 4;
-            setTransitionTimer(elapsed);
-            if (elapsed <= 0) {
-                clearInterval(interval);
-                setTransitioning(null);
-                
-                // Complete handshake transition down to surface maps
-                const targetPOI: POIDetails = transitioning.id === 'EARTH' ? defaultPOI : transitioning.id === 'LUNA' ? {
-                    name: "Clavius Crater Hub",
-                    formattedAddress: "Clavius Crater, Selenographic Coord Frame, Luna",
-                    website: "https://clavius.luna.lvhllc.org",
-                    rating: 4.9,
-                    photos: ["https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&w=600&q=80"],
-                    coordinates: { lat: -58.4, lng: -14.4, alt: -1200 },
-                    referenceFrame: 'LUNA',
-                    ownership: {
-                        ownerDid: "did:sovereign:luna:0x7c4e2b8a3e1c0d4f",
-                        ownerName: "Luna Transport Logistics",
-                        stakedSovereignUnits: 32000
-                    },
-                    publicPlans: "Phase 1: Excavate sub-surface lava tubes. Phase 2: Deploy solar collectors on crater rim.",
-                    metrics: { solar: 95, wind: 0, water: 30, zoning: 40 }
-                } : {
-                    name: "Arsia Mons Outpost",
-                    formattedAddress: "Arsia Mons Caldera, Areocentric Coord Frame, Mars",
-                    website: "https://arsia-mons.mars.lvhllc.org",
-                    rating: 4.7,
-                    photos: ["https://images.unsplash.com/photo-1612892483236-42d68a57623d?auto=format&fit=crop&w=600&q=80"],
-                    coordinates: { lat: -8.4, lng: -120.0, alt: 16000 },
-                    referenceFrame: 'MARS',
-                    ownership: {
-                        ownerDid: "did:sovereign:mars:0x3a8e2b8f1c0d4f5e",
-                        ownerName: "Areocentre Mining Corp",
-                        stakedSovereignUnits: 45000
-                    },
-                    publicPlans: "Phase 1: Erect localized aerostat weather beacons. Phase 2: Expand geothermal water reservoirs.",
-                    metrics: { solar: 40, wind: 65, water: 15, zoning: 55 }
-                };
-
-                setHUDState({
-                    activePOI: targetPOI,
-                    mapMode: 'SURFACE'
-                });
-            }
-        }, 100);
-
-        return () => clearInterval(interval);
-    }, [transitioning, setHUDState]);
+    // Descent countdown is now managed by page.tsx (atmospheric entry overlay at page level)
 
     return (
-        <div className="absolute inset-0 z-0 bg-black flex flex-row items-stretch select-none overflow-hidden">
+        <div className="absolute inset-0 z-0 bg-black select-none overflow-hidden">
             
             {/* The 3D Canvas Viewport or 2D SVG Fallback */}
-            <div className="flex-1 h-full relative">
+            <div className="absolute inset-0 relative">
                 {hasWebGL ? (
                     <Canvas camera={{ position: [0, 22, 35], fov: 50 }}>
                         <color attach="background" args={['#0c0a09']} />
@@ -1059,8 +810,8 @@ export const InterstellarMap = () => {
                                 data={celestialData} 
                                 onHoverBody={setHoveredBody} 
                                 onClickBody={(body) => {
-                                    setSelectedPlanet(null);
-                                    setSelectedBody(body);
+                                    setHUDState({ selectedCelestialId: null });
+                                    setHUDState({ selectedDeepFieldBody: body });
                                 }} 
                             />
                         ) : (
@@ -1344,267 +1095,7 @@ export const InterstellarMap = () => {
                         })}
                     </svg>
                 )}
-
-                {/* Cyberpunk Top Bar Overlay */}
-                <div className="absolute top-4 left-4 right-4 pointer-events-none flex flex-row justify-between items-start font-mono z-10">
-                    <div className="glass-panel px-4 py-2 border border-amber-500/20 bg-black/60 rounded-xl flex flex-row items-center gap-3">
-                        <Orbit className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: '6s' }} />
-                        <div className="flex flex-col">
-                            <span className="text-[10px] font-black tracking-widest text-amber-400">CELESTIAL ORBITAL VIEWPORT</span>
-                            <span className="text-[6px] text-zinc-400 tracking-wider">UNIVERSAL MATRIX / REGISTRY FEED ACTIVE</span>
-                        </div>
-                    </div>
-
-                    <div className="glass-panel px-4 py-2 border border-amber-500/20 bg-black/60 rounded-xl flex flex-col items-end">
-                        <span className="text-[8px] text-amber-400 tracking-wider">STABILIZATION CODE: TR-0x4FA3</span>
-                        <span className="text-[6px] text-zinc-500">LATENCY JITTER: +/- 0.05ms (TERRESTRIAL LOOP)</span>
-                    </div>
-                </div>
-
-                {/* Cyberpunk Ambient Compass Watermark */}
-                <div className="absolute bottom-4 left-4 pointer-events-none font-mono opacity-20 text-[8px] tracking-widest text-amber-400 flex flex-col gap-0.5 select-none z-10">
-                    <span>FRAME RATE: 60.0 FPS [STABLE]</span>
-                    <span>PROJECTION: ORTHOGRAPHIC SPATIAL</span>
-                    <span>COGNITIVE MATRIX: INTERCONNECTED</span>
-                </div>
             </div>
-
-            {/* The Right Hand Holographic Control Sidebar */}
-            <div className="w-80 border-l border-amber-400/20 bg-stone-950/60 relative z-10 flex flex-col items-stretch p-4 gap-4 overflow-y-auto select-none font-mono">
-                
-                {/* Header title */}
-                <div className="flex flex-col gap-1 border-b border-amber-400/20 pb-3">
-                    <div className="flex flex-row items-center gap-2">
-                        <Radio className="w-4 h-4 text-zinc-400" />
-                        <span className="text-xs font-black tracking-widest text-white">SYSTEM SELECTOR</span>
-                    </div>
-                    <span className="text-[7px] text-zinc-400">TELEMETRY LINK STATUS AND COGNITIVE TRANSCEIVERS</span>
-                </div>
-
-                {/* Celestial Mesh Toggle Section */}
-                <div className="glass-panel p-3 border border-amber-500/10 bg-black/40 rounded-xl flex flex-col gap-2 shrink-0">
-                    <div className="flex flex-row justify-between items-center">
-                        <div className="flex flex-col">
-                            <span className="text-[9px] font-black text-white uppercase tracking-wider">CELESTIAL OVERLAY</span>
-                            <span className="text-[6px] text-zinc-400">COSMOS & DESI DEEP FIELD</span>
-                        </div>
-                        <button
-                            onClick={() => {
-                                const nextVal = !celestialMesh;
-                                setHUDState({ celestialMesh: nextVal });
-                                if (!nextVal) setSelectedBody(null);
-                            }}
-                            className={`px-2.5 py-1 border text-[8px] font-black uppercase tracking-widest rounded transition-all duration-300 cursor-pointer ${
-                                celestialMesh 
-                                    ? 'bg-amber-500/20 border-amber-400 text-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.4)]' 
-                                    : 'bg-zinc-950/40 border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'
-                            }`}
-                        >
-                            {celestialMesh ? 'ACTIVE' : 'OFFLINE'}
-                        </button>
-                    </div>
-                </div>
-
-                {/* Dynamic selected planet information card */}
-                {selectedPlanet ? (
-                    <div className="flex flex-col gap-3 flex-1">
-                        
-                        {/* Planet header and color node */}
-                        <div className="glass-panel p-3 border border-amber-500/10 bg-black/40 rounded-xl flex flex-row items-center gap-3">
-                            <div 
-                                className="w-4 h-4 rounded-full border border-black/40 shrink-0"
-                                style={{ backgroundColor: selectedPlanet.color, boxShadow: `0 0 10px ${selectedPlanet.color}` }}
-                            />
-                            <div className="flex flex-col flex-1">
-                                <div className="flex flex-row justify-between items-center">
-                                    <span className="text-[11px] font-black text-white uppercase tracking-wider">{selectedPlanet.name}</span>
-                                    <button 
-                                        onClick={() => setSelectedPlanet(null)}
-                                        className="text-[8px] text-zinc-500 hover:text-amber-400 font-bold uppercase cursor-pointer transition-colors duration-200"
-                                        title="Deselect Planet & Reset Focus"
-                                    >
-                                        [Reset System Focus]
-                                    </button>
-                                </div>
-                                <span className="text-[6px] text-zinc-400 uppercase tracking-widest">{selectedPlanet.details.type}</span>
-                            </div>
-                        </div>
-
-                        {/* Interactive Stats Table */}
-                        <div className="glass-panel p-3 border border-amber-500/10 bg-black/40 rounded-xl flex flex-col gap-2">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">ATMOSPHERE</span>
-                                <span className="text-[8px] text-zinc-300 font-bold uppercase">{selectedPlanet.details.atmosphere}</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">SURFACE TEMPERATURE</span>
-                                <span className="text-[8px] text-zinc-300 font-bold uppercase">{selectedPlanet.details.temp}</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">GOVERNANCE ENTITY</span>
-                                <span className="text-[8px] text-amber-500 font-bold uppercase tracking-wide">{selectedPlanet.details.governance}</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">REGISTRY SCAN DENSITY</span>
-                                <span className="text-[8px] text-zinc-300 font-bold uppercase">{selectedPlanet.details.scannedRegions}</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">RF-5050 NETWORKING CONFIG</span>
-                                <span className="text-[8px] text-orange-400 font-black tracking-wide uppercase">{selectedPlanet.details.networkStatus}</span>
-                            </div>
-                        </div>
-
-                        {/* Node Telemetry summary */}
-                        <div className="glass-panel p-3 border border-amber-500/10 bg-black/40 rounded-xl flex flex-col gap-2">
-                            <div className="flex flex-row justify-between items-center text-[7px] tracking-widest text-zinc-400 border-b border-amber-400/10 pb-1.5">
-                                <span>SOVEREIGN MESH NODES</span>
-                                <span className="text-amber-400 font-black">{selectedPlanet.details.nodesActive} ACTIVE</span>
-                            </div>
-                            <div className="flex flex-row justify-between items-center text-[8px] text-zinc-300">
-                                <span className="flex flex-row items-center gap-1.5">
-                                    <Database className="w-3 h-3 text-amber-400" /> DB SUBSYSTEM
-                                </span>
-                                <span className="text-[7px] text-zinc-400 font-bold">{selectedPlanet.details.nodesActive > 0 ? 'SQLITE COMPATIBLE' : 'NONE'}</span>
-                            </div>
-                            <div className="flex flex-row justify-between items-center text-[8px] text-zinc-300">
-                                <span className="flex flex-row items-center gap-1.5">
-                                    <Network className="w-3 h-3 text-amber-400" /> ROUTER STATUS
-                                </span>
-                                <span className="text-[7px] text-amber-400 font-bold">{selectedPlanet.details.nodesActive > 0 ? 'RFC 5050 DELAY SYNC' : 'OFFLINE'}</span>
-                            </div>
-                        </div>
-
-                        {/* Interactive Descent Flight Launcher */}
-                        {selectedPlanet.details.nodesActive > 0 ? (
-                            <button
-                                onClick={() => handleDescent(selectedPlanet)}
-                                disabled={transitioning !== null}
-                                className="mt-auto px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-zinc-300 hover:text-white text-[10px] font-bold rounded-lg uppercase tracking-widest transition-all duration-300 flex flex-row items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                <ArrowDownCircle className="w-4 h-4 animate-bounce" />
-                                Initiate Surface Descent
-                            </button>
-                        ) : (
-                            <div className="mt-auto glass-panel p-3 border border-amber-500/20 bg-amber-950/10 rounded-xl flex flex-row items-start gap-2">
-                                <ShieldAlert className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                                <div className="flex flex-col gap-0.5">
-                                    <span className="text-[8px] font-black text-amber-400 uppercase tracking-wider">Descent Restrained</span>
-                                    <span className="text-[6px] text-zinc-400 leading-normal">
-                                        No active Promethean substrate mesh has been authorized on this celestial body. High-fidelity terrain descent files are locked.
-                                    </span>
-                                </div>
-                            </div>
-                        )}
-
-                    </div>
-                ) : selectedBody ? (
-                    <div className="flex flex-col gap-3 flex-1">
-                        
-                        {/* Deep Space Body header */}
-                        <div className="glass-panel p-3 border border-pink-500/20 bg-black/40 rounded-xl flex flex-row items-center gap-3">
-                            <div 
-                                className={`w-3.5 h-3.5 rounded-full border border-black/40 shrink-0 ${
-                                    selectedBody.type === 'star' ? 'bg-yellow-200' : selectedBody.type === 'galaxy' ? 'bg-amber-400' : 'bg-rose-500'
-                                }`}
-                                style={{ 
-                                    boxShadow: `0 0 10px ${selectedBody.type === 'star' ? '#fef08a' : selectedBody.type === 'galaxy' ? '#22d3ee' : '#f43f5e'}`
-                                }}
-                            />
-                            <div className="flex flex-col flex-1">
-                                <div className="flex flex-row justify-between items-center">
-                                    <span className="text-[11px] font-black text-white uppercase tracking-wider">{selectedBody.id}</span>
-                                    <button 
-                                        onClick={() => setSelectedBody(null)}
-                                        className="text-[8px] text-zinc-500 hover:text-zinc-300 font-bold uppercase cursor-pointer"
-                                    >
-                                        [ESC]
-                                    </button>
-                                </div>
-                                <span className="text-[6px] text-zinc-400 uppercase tracking-widest">Deep Field {selectedBody.type}</span>
-                            </div>
-                        </div>
-
-                        {/* Interactive Stats Table */}
-                        <div className="glass-panel p-3 border border-amber-500/10 bg-black/40 rounded-xl flex flex-col gap-2">
-                            <div className="flex flex-col gap-0.5">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">RIGHT ASCENSION (RA)</span>
-                                <span className="text-[8px] text-zinc-300 font-bold uppercase">{selectedBody.ra}°</span>
-                            </div>
-                            <div className="flex flex-col gap-0.5">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">DECLINATION (DEC)</span>
-                                <span className="text-[8px] text-zinc-300 font-bold uppercase">{selectedBody.dec}°</span>
-                            </div>
-                            <div className="flex flex-col gap-0.5">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">PHOTOMETRIC MAGNITUDE</span>
-                                <span className="text-[8px] text-zinc-300 font-bold uppercase">{selectedBody.mag} mag</span>
-                            </div>
-                            <div className="flex flex-col gap-0.5">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">SPECTRAL REDSHIFT (z)</span>
-                                <span className="text-[8px] text-rose-400 font-black tracking-wide uppercase">{selectedBody.z}</span>
-                            </div>
-                            <div className="flex flex-col gap-0.5">
-                                <span className="text-[6px] text-zinc-500 tracking-widest uppercase">COSMOLOGICAL CLASSIFICATION</span>
-                                <span className="text-[8px] text-amber-400 font-bold uppercase tracking-wider">
-                                    {selectedBody.type === 'star' ? 'Milky Way Foreground Star' : selectedBody.type === 'galaxy' ? 'Luminous Red Galaxy (LRG)' : 'Active Galactic Nucleus (Quasar)'}
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Lightyear distance estimation */}
-                        <div className="glass-panel p-3 border border-amber-500/10 bg-black/40 rounded-xl flex flex-col gap-1 text-[7px] text-zinc-400 leading-normal">
-                            <span className="font-bold text-zinc-300 uppercase tracking-wider text-[8px] mb-1">COSMIC SCALE SPECIFICATION</span>
-                            <span>Calculated radial distance from solar barycenter is approximately <strong className="text-amber-400">{(selectedBody.z * 13.8 * 3.26).toFixed(2)} Billion LY</strong>.</span>
-                            <span className="mt-1 text-zinc-500 text-[6px]">COSMOS Field coordinates calibrated by HST observations.</span>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="flex-1 flex items-center justify-center text-center text-zinc-500 text-[9px] uppercase tracking-widest leading-relaxed">
-                        Hover or Select a Planet Mesh in the cosmic grid to center telemetry trackers.
-                    </div>
-                )}
-            </div>
-
-            {/* Cinematic Telemetry Warp Overlap during transitions */}
-            {transitioning && (
-                <div 
-                    className="absolute inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center font-mono select-none"
-                    style={{ animation: 'glitch-flicker 0.2s infinite' }}
-                >
-                    <div className="relative flex flex-col items-center max-w-sm w-full p-6 text-center gap-6">
-                        
-                        {/* Entry Radar/Compass ring */}
-                        <div className="relative flex items-center justify-center w-24 h-24">
-                            <div className="absolute inset-0 border border-dashed border-amber-400/40 rounded-full animate-spin" style={{ animationDuration: '8s' }} />
-                            <div className="absolute inset-2 border border-amber-400/20 rounded-full animate-spin" style={{ animationDuration: '4s', animationDirection: 'reverse' }} />
-                            <Layers className="w-8 h-8 text-zinc-400" />
-                        </div>
-
-                        {/* Flight computer readouts */}
-                        <div className="space-y-1">
-                            <h3 className="text-sm font-black text-amber-400 tracking-[0.25em] uppercase">ATMOSPHERIC ENTRY INTERFACE</h3>
-                            <p className="text-[7px] text-zinc-500 tracking-widest uppercase">PROMETHEAN COGNITIVE TELEMETRY COUPLING</p>
-                        </div>
-
-                        {/* Real-time progression stats */}
-                        <div className="w-full space-y-2">
-                            <div className="flex flex-row justify-between text-[7px] text-zinc-400 tracking-widest">
-                                <span>WARP COEFFICIENT: {((100 - transitionTimer) * 0.1).toFixed(1)}c</span>
-                                <span>ALTITUDE: {(transitionTimer * 125).toLocaleString()} KM</span>
-                            </div>
-                            <div className="w-full h-1 bg-zinc-900 border border-zinc-800 rounded-full overflow-hidden">
-                                <div 
-                                    className="h-full bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_8px_#f59e0b]"
-                                    style={{ width: `${100 - transitionTimer}%` }}
-                                />
-                            </div>
-                            <div className="flex flex-row justify-between text-[6px] text-zinc-500 tracking-wider">
-                                <span>COGNITIVE BRAIN RE-GRIDDING...</span>
-                                <span>LOCKING REFERENCE FRAME: {transitioning.id}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

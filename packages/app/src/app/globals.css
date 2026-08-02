@@ -94,43 +94,43 @@ body {
     --sidebar-border: 214.3 31.8% 91.4%;
     --sidebar-ring: 208 100% 73%;
   }
-  .dark {
-    --background: 240 10% 4%; /* #09090b - pure near black */
-    --foreground: 240 5% 90%; /* #e4e4e7 - warm off white */
-    --card: 240 10% 6%;
-    --card-foreground: 240 5% 90%;
-    --popover: 240 10% 6%;
-    --popover-foreground: 240 5% 90%;
-    --primary: 45 93% 47%; /* #f59e0b - single amber accent */
-    --primary-foreground: 240 10% 4%;
-    --secondary: 240 10% 8%;
-    --secondary-foreground: 240 5% 90%;
-    --muted: 240 10% 12%;
-    --muted-foreground: 240 5% 65%; /* #a1a1aa - softer gray */
-    --accent: 45 93% 47%;
-    --accent-foreground: 240 10% 4%;
-    --destructive: 0 84% 60%; /* #ef4444 */
-    --destructive-foreground: 240 5% 90%;
-    --border: 0 0% 100% / 0.08; /* single clean 8% white border */
-    --input: 0 0% 100% / 0.08;
-    --ring: 45 93% 47%;
-    --chart-1: 45 93% 47%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
+  .dark, .theme-promethean-citadel {
+    --background: 215 35% 10%; /* #111923 Institutional Slate */
+    --foreground: 210 40% 98%; /* #f8fafc Crisp Off-White */
+    --card: 214 32% 16%; /* #1b2737 Card Slate */
+    --card-foreground: 210 40% 98%;
+    --popover: 214 32% 16%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 160 84% 39%; /* #10b981 Emerald $YIELD */
+    --primary-foreground: 215 35% 10%;
+    --secondary: 199 89% 48%; /* #0ea5e9 Sky $PEACE */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 215 25% 20%;
+    --muted-foreground: 215 16% 65%; /* #94a3b8 */
+    --accent: 160 84% 39%;
+    --accent-foreground: 215 35% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 215 28% 25% / 0.1; /* Very soft semi-transparent border to remove prominent outlines */
+    --input: 215 28% 25%;
+    --ring: 160 84% 39%;
+    --chart-1: 160 84% 39%;
+    --chart-2: 199 89% 48%;
+    --chart-3: 45 93% 47%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --sidebar-background: 240 10% 4%;
-    --sidebar-foreground: 240 5% 90%;
-    --sidebar-primary: 45 93% 47%;
-    --sidebar-primary-foreground: 240 10% 4%;
-    --sidebar-accent: 240 10% 8%;
-    --sidebar-accent-foreground: 240 5% 90%;
-    --sidebar-border: 0 0% 100% / 0.08;
-    --sidebar-ring: 45 93% 47%;
+    --sidebar-background: 215 35% 10%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 160 84% 39%;
+    --sidebar-primary-foreground: 215 35% 10%;
+    --sidebar-accent: 214 32% 16%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 215 28% 25%;
+    --sidebar-ring: 160 84% 39%;
     
-    /* Citadel Warm Amber Glow - heavily reduced for precision instrument look */
-    --ambient-glow-color: 245 158 11; /* amber-500 */
-    --ambient-glow-intensity: 0.05;
+    /* Institutional Slate Ambient Glow */
+    --ambient-glow-color: 160 185 129;
+    --ambient-glow-intensity: 0.08;
   }
   
   .theme-16bit {
@@ -665,3 +665,28 @@ body {
 }
 
 
+
+/* ─── COCKPIT SCROLLBAR UTILITIES ─────────────────────────────────────────── */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
