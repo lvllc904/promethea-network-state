@@ -309,7 +309,7 @@ export async function askPrometheaAction(input: PrometheaAssistantInput): Promis
             },
             body: JSON.stringify(input),
             cache: 'no-store', // Ensure fresh responses
-            signal: AbortSignal.timeout(6000) // Fast 6s timeout to rescue landing page immediately if container is scaling up
+            signal: AbortSignal.timeout(15000) // 15s timeout to allow Cloud Run container cold starts
         });
 
         if (!response.ok) {
