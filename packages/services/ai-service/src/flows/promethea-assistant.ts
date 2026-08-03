@@ -213,7 +213,6 @@ ${whitePaperContent}
 export const askPrometheaFlow = async (
   input: PrometheaAssistantInput,
 ): Promise<PrometheaAssistantOutput> => {
-  // Override input.constitutionContent on the server with the real fully updated constitution
   const latestConstitution = getLatestConstitutionContent();
   if (latestConstitution) {
     input.constitutionContent = latestConstitution;
@@ -224,6 +223,24 @@ export const askPrometheaFlow = async (
     input.whitePaperContent,
   );
 
+  try {
+    // Phase 2 Integration: Attempt Vertex AI Knowledge Agent (Grounded RAG)
+    const { searchSovereignKnowledgeBase, generateGroundedResponse } = await import('../vertex-knowledge-agent.js');
+    
+    // 1. Search Data Store
+    const contextDocs = await searchSovereignKnowledgeBase(input.query);
+    
+    // 2. Generate Grounded Response
+    const groundedResponse = await generateGroundedResponse(input.query, contextDocs);
+    
+    if (groundedResponse) {
+      return { response: groundedResponse };
+    }
+  } catch (vertexErr: any) {
+    console.log('[Promethea] Vertex AI Knowledge Agent bypassed (setup incomplete or auth failed). Falling back to OpenRouter/Gemini.', vertexErr.message);
+  }
+
+  // Fallback to SovereignAI (OpenRouter / Direct Gemini)
   try {
     const combinedPrompt = `${systemPrompt}\n\nUser Query: ${input.query}`;
     const response = await sovereignAI.generateContent(PRIMARY_MODEL, combinedPrompt);
