@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useHUD } from '@/lib/hud-store';
+import { useUiVersionStore } from '@/lib/ui-version-store';
+import { GuildhallCockpit } from '@/components/cockpit/GuildhallCockpit';
 import { SovereignHeaderTicker } from '@/components/hud/SovereignHeaderTicker';
 import { ControlDock } from '@/components/cockpit/ControlDock';
 import { OperationalPanel } from '@/components/cockpit/OperationalPanel';
@@ -114,8 +116,14 @@ function AtmosphericEntryOverlay() {
 }
 
 export default function CockpitPage() {
-    const { mapMode, competencyLevel } = useHUD();
+    const { uiVersion } = useUiVersionStore();
+    const { mapMode, competencyLevel, setHUDState } = useHUD();
     const [showOnboardModal, setShowOnboardModal] = useState(false);
+    const [showArchitectConcierge, setShowArchitectConcierge] = useState(false);
+
+    if (uiVersion === 'NEXTGEN') {
+        return <GuildhallCockpit />;
+    }
 
     return (
         <div className="relative w-screen h-screen overflow-hidden bg-slate-950 font-sans select-none">
@@ -141,15 +149,15 @@ export default function CockpitPage() {
             {/* TICKER BAR (Top Ambient Context) */}
             <SovereignHeaderTicker />
 
-            {/* SPATIAL HUD OVERLAYS */}
-            <div className="absolute inset-x-0 top-8 bottom-16 px-4 flex justify-between items-stretch pointer-events-none z-10">
+            {/* SPATIAL HUD OVERLAYS - Responsive safe layout */}
+            <div className="absolute inset-x-0 top-10 bottom-16 px-4 flex justify-between items-stretch pointer-events-none z-10 gap-2 max-w-[1920px] mx-auto">
                 {/* Left Panel: Operational State (Auto-expands in Operator & Architect modes) */}
-                <div className={`flex items-start pt-2 transition-all duration-500 ${competencyLevel === 'NOVICE' ? 'opacity-30 hover:opacity-100 scale-95 origin-top-left' : 'opacity-100'}`}>
+                <div className={`hidden md:flex items-start pt-2 shrink-0 transition-all duration-500 ${competencyLevel === 'NOVICE' ? 'opacity-30 hover:opacity-100 scale-95 origin-top-left' : 'opacity-100'}`}>
                     <OperationalPanel />
                 </div>
 
                 {/* Center Action Hub — competency-gated */}
-                <div className="flex-1 flex flex-col items-center justify-start pt-10 relative gap-3.5 max-h-[calc(100vh-6.5rem)] overflow-y-auto custom-scrollbar px-2 pb-6">
+                <div className="flex-1 flex flex-col items-center justify-start pt-4 relative gap-3 max-h-[calc(100vh-6.5rem)] overflow-y-auto custom-scrollbar px-2 pb-6">
                     <CommandCenter />
 
                     {/* NOVICE: Full Concierge hero — Exchange is hidden (agent handles all actions) */}
@@ -165,24 +173,55 @@ export default function CockpitPage() {
                         </>
                     )}
 
-                    {/* ARCHITECT: Full raw HUD — Concierge collapsed to a floating restore button */}
+                    {/* ARCHITECT: Full raw HUD — Concierge accessed via non-destructive floating drawer */}
                     {competencyLevel === 'ARCHITECT' && (
                         <>
                             <ExchangeOverlay />
-                            {/* Restore Promethea Concierge button */}
+                            {/* Non-destructive Architect Concierge Consultation Trigger */}
                             <button
-                                onClick={() => setHUDState({ competencyLevel: 'OPERATOR' })}
-                                className="fixed bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-data font-bold tracking-widest hover:bg-emerald-500/20 transition-all z-50"
+                                onClick={() => setShowArchitectConcierge(true)}
+                                className="fixed bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-xs font-data font-bold tracking-widest hover:bg-emerald-900/60 transition-all z-50 shadow-lg cursor-pointer"
                             >
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                <span className="w-2 h-2 rounded-full bg-emerald-400" />
                                 PROMETHEA ONLINE — TAP TO CONSULT
                             </button>
+
+                            {/* Architect Mode Concierge Drawer Overlay */}
+                            <AnimatePresence>
+                                {showArchitectConcierge && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md pointer-events-auto"
+                                    >
+                                        <div className="relative max-w-2xl w-full max-h-[85vh] overflow-y-auto custom-scrollbar bg-slate-950 border border-emerald-500/30 rounded-2xl p-4 shadow-2xl">
+                                            <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                                    <span className="font-command font-semibold text-sm text-emerald-300">Promethea Concierge · Architect Drawer</span>
+                                                </div>
+                                                <button
+                                                    onClick={() => setShowArchitectConcierge(false)}
+                                                    className="px-2.5 py-1 rounded bg-white/10 text-xs text-zinc-300 hover:bg-white/20 hover:text-white font-data transition-colors cursor-pointer"
+                                                >
+                                                    CLOSE [ESC]
+                                                </button>
+                                            </div>
+                                            <PrometheaConcierge onLaunchAssetModal={() => {
+                                                setShowArchitectConcierge(false);
+                                                setShowOnboardModal(true);
+                                            }} />
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </>
                     )}
                 </div>
 
                 {/* Right Panel: Financial State (Auto-expands in Operator & Architect modes) */}
-                <div className={`flex items-start pt-2 transition-all duration-500 ${competencyLevel === 'NOVICE' ? 'opacity-30 hover:opacity-100 scale-95 origin-top-right' : 'opacity-100'}`}>
+                <div className={`hidden md:flex items-start pt-2 shrink-0 transition-all duration-500 ${competencyLevel === 'NOVICE' ? 'opacity-30 hover:opacity-100 scale-95 origin-top-right' : 'opacity-100'}`}>
                     <HoldingsPanel />
                 </div>
             </div>

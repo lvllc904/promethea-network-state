@@ -225,19 +225,25 @@ export const askPrometheaFlow = async (
 
   try {
     // Phase 2 Integration: Attempt Vertex AI Knowledge Agent (Grounded RAG)
+    console.log(`[Promethea:Vertex] Querying Knowledge Agent for: "${input.query.substring(0, 80)}"`);
     const { searchSovereignKnowledgeBase, generateGroundedResponse } = await import('../vertex-knowledge-agent.js');
     
     // 1. Search Data Store
     const contextDocs = await searchSovereignKnowledgeBase(input.query);
+    console.log(`[Promethea:Vertex] Knowledge Base returned ${contextDocs.length} grounded document(s).`);
     
     // 2. Generate Grounded Response
     const groundedResponse = await generateGroundedResponse(input.query, contextDocs);
+    console.log(`[Promethea:Vertex] Grounded response length: ${groundedResponse?.length || 0}`);
     
     if (groundedResponse) {
+      console.log('[Promethea:Vertex] ✅ Returning grounded Vertex AI response.');
       return { response: groundedResponse };
     }
+    console.log('[Promethea:Vertex] No grounded response generated. Falling back to SovereignAI.');
   } catch (vertexErr: any) {
-    console.log('[Promethea] Vertex AI Knowledge Agent bypassed (setup incomplete or auth failed). Falling back to OpenRouter/Gemini.', vertexErr.message);
+    console.error('[Promethea:Vertex] ❌ Knowledge Agent failed. Error:', vertexErr.message);
+    console.error('[Promethea:Vertex] Stack:', vertexErr.stack?.substring(0, 500));
   }
 
   // Fallback to SovereignAI (OpenRouter / Direct Gemini)

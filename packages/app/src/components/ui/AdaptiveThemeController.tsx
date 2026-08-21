@@ -27,7 +27,7 @@ export function AdaptiveThemeController() {
         const checkMeshDaemonTelemetry = async () => {
             try {
                 const startTime = Date.now();
-                const res = await fetch('http://localhost:4005/api/mesh/status', {
+                const res = await fetch('/api/mesh/status', {
                     cache: 'no-store',
                     signal: AbortSignal.timeout(2000)
                 });

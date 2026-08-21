@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { useSolanaCitizen } from '@promethea/hooks';
+import { UiVersionToggle } from '@/components/layout/UiVersionToggle';
 
 interface TickerItem {
     label: string;
@@ -179,6 +180,9 @@ export function SovereignHeaderTicker() {
                 >
                     {doubled.map((item, i) => <TickerItem key={i} item={item} />)}
                 </div>
+            </div>
+            <div className="flex-shrink-0 px-2 flex items-center h-full pointer-events-auto border-l border-white/10 bg-black/60">
+                <UiVersionToggle className="scale-90" />
             </div>
             <style>{`
                 @keyframes ticker-scroll {

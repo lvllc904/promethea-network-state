@@ -34,8 +34,8 @@ export default function RootLayout({
                 <ClientProviders>
                     {children}
                 </ClientProviders>
-                <Script src="https://www.googletagmanager.com/gtag/js?id=G-4FY05TBFRM" strategy="afterInteractive" />
-                <Script id="google-tag" strategy="afterInteractive" dangerouslySetInnerHTML={{
+                <Script src="https://www.googletagmanager.com/gtag/js?id=G-4FY05TBFRM" strategy="lazyOnload" />
+                <Script id="google-tag" strategy="lazyOnload" dangerouslySetInnerHTML={{
                     __html: `
                         window.dataLayer = window.dataLayer || [];
                         function gtag(){dataLayer.push(arguments);}
@@ -44,7 +44,7 @@ export default function RootLayout({
                         gtag('config', 'G-4FY05TBFRM');
                     `
                 }} />
-                <Script src="/wasm_exec.js" strategy="beforeInteractive" />
+                <Script src="/wasm_exec.js" strategy="afterInteractive" />
                 <Script id="wasm-loader" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `
                     if (typeof window !== 'undefined' && window.Go) {
                         const go = new Go();

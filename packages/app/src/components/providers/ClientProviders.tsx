@@ -2,7 +2,8 @@
 
 
 import { Toaster } from "@promethea/ui";
-import { AIAssistant } from "@/components/ai/AIAssistant";
+import { PrometheaProvider } from "@/components/ai/PrometheaProvider";
+import { PrometheaSurface } from "@/components/ai/PrometheaSurface";
 import { MeshProvider } from "@/components/providers/mesh-provider";
 import { ThemeController } from "@/components/ui/ThemeController";
 import { HUDProvider } from '@/lib/hud-store';
@@ -202,21 +203,18 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    if (!mounted) {
-        return null;
-    }
-
     return (
         <HUDProvider>
             {/* <HUDStateSync /> Disabled to prevent BroadcastChannel looping and extension crashes */}
             <MeshProvider>
-                <TelemetryNode>
-                    {children}
-                </TelemetryNode>
-                {pathname && !pathname.startsWith('/dashboard') && <AIAssistant />}
-
-                <Toaster />
-                {pathname && pathname !== '/' && !pathname.startsWith('/dashboard') && <ThemeController />}
+                <PrometheaProvider>
+                    <TelemetryNode>
+                        {children}
+                    </TelemetryNode>
+                    <PrometheaSurface />
+                    <Toaster />
+                    {pathname && pathname !== '/' && !pathname.startsWith('/dashboard') && pathname !== '/lpa' && <ThemeController />}
+                </PrometheaProvider>
             </MeshProvider>
         </HUDProvider>
     );

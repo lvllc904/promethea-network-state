@@ -1,692 +1,458 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Press+Start+2P&family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── COCKPIT TYPOGRAPHY SYSTEM ─────────────────────────────────────────────
-   Three-tier type stack for the Sovereign HUD:
-   --font-data    → JetBrains Mono  (all numeric values, live telemetry, logs)
-   --font-label   → Inter           (labels, badges, section headers)
-   --font-command → Space Grotesk   (OmniBar, primary CTAs, headings)
-   ──────────────────────────────────────────────────────────────────────── */
 :root {
-  --font-data: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
-  --font-label: 'Inter', system-ui, sans-serif;
-  --font-command: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --guildhall-bg: #0b0d10;
+  --guildhall-bg-rgb: 11 13 16;
+  --guildhall-panel: #12151a;
+  --guildhall-panel-rgb: 18 21 26;
+  --guildhall-panel-raised: #161a20;
+  --guildhall-panel-raised-rgb: 22 26 32;
+  --guildhall-line: #272a30;
+  --guildhall-line-rgb: 39 42 48;
+  --guildhall-text: #f3f4f6;
+  --guildhall-text-rgb: 243 244 246;
+  --guildhall-muted: #9ca3af;
+  --guildhall-muted-rgb: 156 163 175;
+  --guildhall-subtle: #66707d;
+  --guildhall-subtle-rgb: 102 112 125;
+  --guildhall-identity: #f59e0b;
+  --guildhall-identity-rgb: 245 158 11;
+  --guildhall-treasury: #10b981;
+  --guildhall-treasury-rgb: 16 185 129;
+  --guildhall-consensus: #06b6d4;
+  --guildhall-consensus-rgb: 6 182 212;
+  --guildhall-danger: #f87171;
+  --guildhall-danger-rgb: 248 113 113;
+
+  --font-data: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-label: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-command: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --background: 220 25% 5%;
+  --foreground: 210 20% 96%;
+  --card: 216 20% 9%;
+  --card-foreground: 210 20% 96%;
+  --popover: 216 20% 9%;
+  --popover-foreground: 210 20% 96%;
+  --primary: 160 84% 39%;
+  --primary-foreground: 220 25% 5%;
+  --secondary: 215 18% 14%;
+  --secondary-foreground: 210 20% 96%;
+  --muted: 215 18% 14%;
+  --muted-foreground: 215 12% 64%;
+  --accent: 188 91% 43%;
+  --accent-foreground: 220 25% 5%;
+  --destructive: 0 86% 71%;
+  --destructive-foreground: 220 25% 5%;
+  --border: 216 10% 18%;
+  --input: 216 10% 18%;
+  --ring: 188 91% 43%;
+  --radius: 0.75rem;
+  --sidebar-background: 220 25% 5%;
+  --sidebar-foreground: 210 20% 96%;
+  --sidebar-primary: 160 84% 39%;
+  --sidebar-primary-foreground: 220 25% 5%;
+  --sidebar-accent: 215 18% 14%;
+  --sidebar-accent-foreground: 210 20% 96%;
+  --sidebar-border: 216 10% 18%;
+  --sidebar-ring: 188 91% 43%;
+}
+
+.dark,
+.theme-promethean-citadel {
+  --guildhall-bg: #0b0d10;
+  --guildhall-bg-rgb: 11 13 16;
+  --guildhall-panel: #12151a;
+  --guildhall-panel-rgb: 18 21 26;
+  --guildhall-panel-raised: #161a20;
+  --guildhall-panel-raised-rgb: 22 26 32;
+  --guildhall-line: #272a30;
+  --guildhall-line-rgb: 39 42 48;
+  --guildhall-text: #f3f4f6;
+  --guildhall-text-rgb: 243 244 246;
+  --guildhall-muted: #9ca3af;
+  --guildhall-muted-rgb: 156 163 175;
+  --guildhall-subtle: #66707d;
+  --guildhall-subtle-rgb: 102 112 125;
+  --guildhall-identity: #f59e0b;
+  --guildhall-identity-rgb: 245 158 11;
+  --guildhall-treasury: #10b981;
+  --guildhall-treasury-rgb: 16 185 129;
+  --guildhall-consensus: #06b6d4;
+  --guildhall-consensus-rgb: 6 182 212;
+  --guildhall-danger: #f87171;
+  --guildhall-danger-rgb: 248 113 113;
+  --background: 220 25% 5%;
+  --foreground: 210 20% 96%;
+  --card: 216 20% 9%;
+  --card-foreground: 210 20% 96%;
+  --popover: 216 20% 9%;
+  --popover-foreground: 210 20% 96%;
+  --primary: 160 84% 39%;
+  --primary-foreground: 220 25% 5%;
+  --secondary: 215 18% 14%;
+  --secondary-foreground: 210 20% 96%;
+  --muted: 215 18% 14%;
+  --muted-foreground: 215 12% 64%;
+  --accent: 188 91% 43%;
+  --accent-foreground: 220 25% 5%;
+  --border: 216 10% 18%;
+  --input: 216 10% 18%;
+  --ring: 188 91% 43%;
+}
+
+.theme-latex {
+  --guildhall-bg: #fdfcf7;
+  --guildhall-bg-rgb: 253 252 247;
+  --guildhall-panel: #f7f4e9;
+  --guildhall-panel-rgb: 247 244 233;
+  --guildhall-panel-raised: #eee9dc;
+  --guildhall-panel-raised-rgb: 238 233 220;
+  --guildhall-line: #d3cdbe;
+  --guildhall-line-rgb: 211 205 190;
+  --guildhall-text: #1a1a1a;
+  --guildhall-text-rgb: 26 26 26;
+  --guildhall-muted: #57534e;
+  --guildhall-muted-rgb: 87 83 78;
+  --guildhall-subtle: #78716c;
+  --guildhall-subtle-rgb: 120 113 108;
+  --guildhall-identity: #8c1d1d;
+  --guildhall-identity-rgb: 140 29 29;
+  --guildhall-treasury: #115e59;
+  --guildhall-treasury-rgb: 17 94 89;
+  --guildhall-consensus: #854d0e;
+  --guildhall-consensus-rgb: 133 77 14;
+  --guildhall-danger: #b91c1c;
+  --guildhall-danger-rgb: 185 28 28;
+  --background: 48 38% 98%;
+  --foreground: 25 10% 10%;
+  --card: 48 30% 96%;
+  --card-foreground: 25 10% 10%;
+  --popover: 48 30% 96%;
+  --popover-foreground: 25 10% 10%;
+  --primary: 153 28% 28%;
+  --primary-foreground: 48 38% 98%;
+  --secondary: 48 15% 90%;
+  --secondary-foreground: 25 10% 10%;
+  --muted: 48 10% 85%;
+  --muted-foreground: 25 10% 35%;
+  --accent: 153 28% 28%;
+  --accent-foreground: 48 38% 98%;
+  --border: 48 20% 80%;
+  --input: 48 20% 80%;
+  --ring: 153 28% 28%;
+}
+
+.theme-16bit {
+  --guildhall-bg: #1d2228;
+  --guildhall-bg-rgb: 29 34 40;
+  --guildhall-panel: #252c33;
+  --guildhall-panel-rgb: 37 44 51;
+  --guildhall-panel-raised: #303941;
+  --guildhall-panel-raised-rgb: 48 57 65;
+  --guildhall-line: #765d2e;
+  --guildhall-line-rgb: 118 93 46;
+  --guildhall-text: #fff7d6;
+  --guildhall-text-rgb: 255 247 214;
+  --guildhall-muted: #d0c49d;
+  --guildhall-muted-rgb: 208 196 157;
+  --guildhall-subtle: #a89567;
+  --guildhall-subtle-rgb: 168 149 103;
+  --guildhall-identity: #facc15;
+  --guildhall-identity-rgb: 250 204 21;
+  --guildhall-treasury: #22c55e;
+  --guildhall-treasury-rgb: 34 197 94;
+  --guildhall-consensus: #38bdf8;
+  --guildhall-consensus-rgb: 56 189 248;
+  --guildhall-danger: #ef4444;
+  --guildhall-danger-rgb: 239 68 68;
+  --background: 210 15% 14%;
+  --foreground: 45 100% 95%;
+  --card: 210 15% 18%;
+  --card-foreground: 45 100% 95%;
+  --popover: 210 15% 18%;
+  --popover-foreground: 45 100% 95%;
+  --primary: 142 75% 42%;
+  --primary-foreground: 210 15% 10%;
+  --secondary: 25 55% 20%;
+  --secondary-foreground: 45 100% 95%;
+  --muted: 210 12% 22%;
+  --muted-foreground: 45 15% 70%;
+  --accent: 48 100% 50%;
+  --accent-foreground: 210 15% 10%;
+  --border: 45 40% 30%;
+  --input: 210 12% 22%;
+  --ring: 48 100% 50%;
+}
+
+.theme-phosphor {
+  --guildhall-bg: #061009;
+  --guildhall-bg-rgb: 6 16 9;
+  --guildhall-panel: #0b1a0f;
+  --guildhall-panel-rgb: 11 26 15;
+  --guildhall-panel-raised: #102516;
+  --guildhall-panel-raised-rgb: 16 37 22;
+  --guildhall-line: #1c5c2c;
+  --guildhall-line-rgb: 28 92 44;
+  --guildhall-text: #b6f7c1;
+  --guildhall-text-rgb: 182 247 193;
+  --guildhall-muted: #7fbd89;
+  --guildhall-muted-rgb: 127 189 137;
+  --guildhall-subtle: #4a8154;
+  --guildhall-subtle-rgb: 74 129 84;
+  --guildhall-identity: #62e878;
+  --guildhall-identity-rgb: 98 232 120;
+  --guildhall-treasury: #62e878;
+  --guildhall-treasury-rgb: 98 232 120;
+  --guildhall-consensus: #62e878;
+  --guildhall-consensus-rgb: 98 232 120;
+  --guildhall-danger: #f87171;
+  --guildhall-danger-rgb: 248 113 113;
+  --background: 142 40% 3%;
+  --foreground: 142 80% 80%;
+  --card: 142 30% 7%;
+  --card-foreground: 142 80% 80%;
+  --popover: 142 30% 7%;
+  --popover-foreground: 142 80% 80%;
+  --primary: 142 70% 55%;
+  --primary-foreground: 142 40% 3%;
+  --secondary: 142 20% 11%;
+  --secondary-foreground: 142 80% 80%;
+  --muted: 142 20% 11%;
+  --muted-foreground: 142 35% 55%;
+  --accent: 142 70% 55%;
+  --accent-foreground: 142 40% 3%;
+  --border: 142 40% 22%;
+  --input: 142 40% 22%;
+  --ring: 142 70% 55%;
 }
 
 html {
-  font-size: 100%; /* Reset from 115% — cockpit sizing is controlled at component level */
+  background: var(--guildhall-bg);
+  color-scheme: dark;
 }
 
-/* 
-  ELEGANT TYPOGRAPHY SCALING BRIDGE
-  Override hardcoded absolute-pixel Tailwind text classes used across cockpit drawers (e.g. ContextChat.tsx)
-  to map to relative rem units. This allows the text to scale up beautifully with the root HTML font size.
-*/
-.text-\[4px\] { font-size: 0.5rem !important; }
-.text-\[4\.5px\] { font-size: 0.525rem !important; }
-.text-\[5px\] { font-size: 0.55rem !important; }
-.text-\[5\.5px\] { font-size: 0.575rem !important; }
-.text-\[6px\] { font-size: 0.6rem !important; }
-.text-\[6\.5px\] { font-size: 0.65rem !important; }
-.text-\[7px\] { font-size: 0.7rem !important; }
-.text-\[7\.5px\] { font-size: 0.725rem !important; }
-.text-\[8px\] { font-size: 0.75rem !important; }
-.text-\[8\.5px\] { font-size: 0.775rem !important; }
-.text-\[9px\] { font-size: 0.8rem !important; }
-.text-\[9\.5px\] { font-size: 1.05rem !important; } /* Keeps chat bubble text highly readable (~19.3px) */
-.text-\[10px\] { font-size: 0.85rem !important; } /* Keeps data tables, lists, and sidebar items beautifully compact (~15.6px) */
-.text-\[10\.5px\] { font-size: 0.875rem !important; }
-.text-\[11px\] { font-size: 0.9rem !important; }
-.text-\[11\.5px\] { font-size: 0.925rem !important; }
-.text-\[12px\] { font-size: 0.95rem !important; }
-.text-\[13px\] { font-size: 1.0rem !important; }
-.text-\[14px\] { font-size: 1.1rem !important; }
-.text-\[15px\] { font-size: 1.2rem !important; }
-
+html.theme-latex {
+  color-scheme: light;
+}
 
 body {
+  min-width: 320px;
+  background: var(--guildhall-bg);
+  color: var(--guildhall-text);
   font-family: var(--font-label);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-/* Cockpit font utility classes */
-.font-data    { font-family: var(--font-data) !important; }
-.font-label   { font-family: var(--font-label) !important; }
-.font-command { font-family: var(--font-command) !important; }
-
-@layer base {
-  :root {
-    --background: 206 100% 97%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 208 100% 73%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 282 100% 41%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 208 100% 73%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222.2 84% 4.9%;
-    --sidebar-primary: 208 100% 73%;
-    --sidebar-primary-foreground: 222.2 47.4% 11.2%;
-    --sidebar-accent: 210 40% 96.1%;
-    --sidebar-accent-foreground: 222.2 47.4% 11.2%;
-    --sidebar-border: 214.3 31.8% 91.4%;
-    --sidebar-ring: 208 100% 73%;
-  }
-  .dark, .theme-promethean-citadel {
-    --background: 215 35% 10%; /* #111923 Institutional Slate */
-    --foreground: 210 40% 98%; /* #f8fafc Crisp Off-White */
-    --card: 214 32% 16%; /* #1b2737 Card Slate */
-    --card-foreground: 210 40% 98%;
-    --popover: 214 32% 16%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 160 84% 39%; /* #10b981 Emerald $YIELD */
-    --primary-foreground: 215 35% 10%;
-    --secondary: 199 89% 48%; /* #0ea5e9 Sky $PEACE */
-    --secondary-foreground: 210 40% 98%;
-    --muted: 215 25% 20%;
-    --muted-foreground: 215 16% 65%; /* #94a3b8 */
-    --accent: 160 84% 39%;
-    --accent-foreground: 215 35% 10%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 215 28% 25% / 0.1; /* Very soft semi-transparent border to remove prominent outlines */
-    --input: 215 28% 25%;
-    --ring: 160 84% 39%;
-    --chart-1: 160 84% 39%;
-    --chart-2: 199 89% 48%;
-    --chart-3: 45 93% 47%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 215 35% 10%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 160 84% 39%;
-    --sidebar-primary-foreground: 215 35% 10%;
-    --sidebar-accent: 214 32% 16%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 215 28% 25%;
-    --sidebar-ring: 160 84% 39%;
-    
-    /* Institutional Slate Ambient Glow */
-    --ambient-glow-color: 160 185 129;
-    --ambient-glow-intensity: 0.08;
-  }
-  
-  .theme-16bit {
-    --background: 210 15% 10%; /* Slate NES Grey */
-    --foreground: 45 100% 95%; /* Zelda Gold-Parchment */
-    --card: 210 15% 14%; /* NES controller frame grey */
-    --card-foreground: 45 100% 95%;
-    --popover: 210 15% 14%;
-    --popover-foreground: 45 100% 95%;
-    --primary: 142 75% 42%; /* Mario Emerald Green */
-    --primary-foreground: 210 15% 10%;
-    --secondary: 25 55% 20%; /* NES Brick Brown */
-    --secondary-foreground: 45 100% 95%;
-    --muted: 210 12% 18%;
-    --muted-foreground: 45 15% 70%;
-    --accent: 48 100% 50%; /* Zelda Triforce Gold */
-    --accent-foreground: 210 15% 10%;
-    --destructive: 355 80% 50%; /* Mario Heart Red */
-    --destructive-foreground: 45 100% 95%;
-    --border: 45 40% 30%; /* Pixel gold-brown border */
-    --input: 210 12% 18%;
-    --ring: 48 100% 50%;
-    
-    /* Vintage CRT Ambient Glow */
-    --ambient-glow-color: 234 179 8; /* Zelda Gold */
-    --ambient-glow-intensity: 0.35;
-  }
-
-  .theme-16bit *:not(.animate-ticker):not(.animate-ticker *) {
-    font-family: 'Press Start 2P', monospace !important;
-    border-radius: 0 !important;
-    transition: none !important;
-    animation-duration: 0.1s !important;
-  }
-
-  /* Double-Border retro game box style for all panels in 16-Bit Nintendo theme */
-  .theme-16bit .glass-panel,
-  .theme-16bit [class*="glass-panel"],
-  .theme-16bit [class*="bg-black/"],
-  .theme-16bit [class*="bg-zinc-950/"],
-  .theme-16bit [class*="bg-gray-950/"],
-  .theme-16bit [class*="bg-stone-950/"] {
-    border: 4px double hsl(var(--border)) !important;
-    background-color: hsl(var(--card)) !important;
-    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.5) !important;
-    backdrop-filter: none !important;
-    color: hsl(var(--card-foreground)) !important;
-  }
-  
-  .theme-16bit canvas,
-  .theme-16bit .gm-style {
-    image-rendering: pixelated !important;
-    filter: saturate(1.3) contrast(1.15) !important;
-  }
-
-  .theme-phosphor {
-    --background: 142 40% 1.5%;
-    --foreground: 142 100% 50%; /* Phosphor Green */
-    --card: 142 30% 2%;
-    --card-foreground: 142 100% 50%;
-    --popover: 142 30% 2%;
-    --popover-foreground: 142 100% 50%;
-    --primary: 142 100% 50%; /* Pure Green */
-    --primary-foreground: 142 100% 1%;
-    --secondary: 142 50% 5%;
-    --secondary-foreground: 142 100% 50%;
-    --muted: 142 20% 4%;
-    --muted-foreground: 142 50% 40%;
-    --accent: 142 100% 50%;
-    --accent-foreground: 142 100% 1%;
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 0 0% 0%;
-    --border: 142 100% 20%;
-    --input: 142 100% 20%;
-    --ring: 142 100% 50%;
-    
-    /* Phosphor Green Glow */
-    --ambient-glow-color: 34 197 94; /* green-500 */
-    --ambient-glow-intensity: 0.5;
-  }
-
-  .theme-latex {
-    --background: 48 38% 98%;      /* #fdfcf7 warm parchment */
-    --foreground: 25 10% 10%;      /* #1a1a1a solid ink black */
-    --card: 48 30% 96%;            /* #f9f7eb slightly darker parchment */
-    --card-foreground: 25 10% 10%;
-    --popover: 48 30% 96%;
-    --popover-foreground: 25 10% 10%;
-    --primary: 153 28% 28%;        /* #335c49 deep forest green accent instead of bright crimson */
-    --primary-foreground: 48 38% 98%;
-    --secondary: 48 15% 90%;       
-    --secondary-foreground: 25 10% 10%;
-    --muted: 48 10% 85%;           
-    --muted-foreground: 25 10% 35%; /* #555 - readable dark grey */
-    --accent: 153 28% 28%;         
-    --accent-foreground: 48 38% 98%;
-    --destructive: 0 65% 45%;      /* muted red */
-    --destructive-foreground: 48 38% 98%;
-    --border: 48 20% 80%;          /* #d3cdbe delicate paper border */
-    --input: 48 20% 80%;
-    --ring: 153 28% 28%;
-    --sidebar-background: 48 38% 98%;
-    --sidebar-foreground: 25 10% 10%;
-    
-    /* LaTeX Sepia Ambient Glow - disabled */
-    --ambient-glow-color: 140 120 100;
-    --ambient-glow-intensity: 0;
-  }
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
 }
 
-@layer base {
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--guildhall-consensus) 60%, transparent);
+  outline-offset: 3px;
+}
 
-  body {
-    @apply bg-background text-foreground;
+.font-data,
+.font-code { font-family: var(--font-data) !important; }
+.font-label,
+.font-body { font-family: var(--font-label) !important; }
+.font-command,
+.font-headline { font-family: var(--font-command) !important; }
+
+@layer components {
+  .guildhall-panel {
+    background: var(--guildhall-panel);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 16px rgb(0 0 0 / 0.25);
   }
-  .prose-numbered {
-    counter-reset: article;
+
+  .guildhall-kicker,
+  .guildhall-label {
+    color: var(--guildhall-muted);
+    font-family: var(--font-data);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
   }
-  .prose-numbered .prose-article {
-    counter-increment: article;
-    counter-reset: section;
+
+  .guildhall-kicker { color: var(--guildhall-identity); }
+
+  .guildhall-nav-link,
+  .guildhall-control {
+    align-items: center;
+    border: 1px solid color-mix(in srgb, var(--guildhall-line) 60%, transparent);
+    border-radius: 0.5rem;
+    color: var(--guildhall-text);
+    display: inline-flex;
+    font-size: 0.875rem;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
   }
-  .prose-numbered .prose-section {
-    counter-increment: section;
-    counter-reset: sentence;
+
+  .guildhall-nav-link:hover,
+  .guildhall-control:hover { background: var(--guildhall-panel-raised); border-color: color-mix(in srgb, var(--guildhall-muted) 50%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--guildhall-consensus) 8%, transparent); }
+
+  .guildhall-text-link,
+  .guildhall-link-row {
+    align-items: center;
+    color: var(--guildhall-consensus);
+    display: inline-flex;
+    font-size: 0.875rem;
+    gap: 0.5rem;
+    transition: color 160ms ease;
   }
-  .prose-numbered .prose-section p {
-    text-indent: 0;
+
+  .guildhall-text-link:hover,
+  .guildhall-link-row:hover { color: var(--guildhall-text); }
+
+  .guildhall-link-row {
+    border: 1px solid color-mix(in srgb, var(--guildhall-line) 50%, transparent);
+    border-radius: 0.625rem;
+    justify-content: space-between;
+    padding: 0.75rem;
   }
-  .prose-numbered .sentence {
-    position: relative;
-    display: block;
-    margin-bottom: 0.5rem; /* Add some space between sentences */
+
+  .guildhall-status-tag {
+    border-width: 1px;
+    display: inline-flex;
+    font-family: var(--font-data);
+    font-size: 0.75rem;
+    padding: 0.35rem 0.55rem;
+    text-transform: uppercase;
   }
-  .prose-numbered .sentence::before {
-    counter-increment: sentence;
-    content: counter(article) "." counter(section) "." counter(sentence);
-    position: absolute;
-    left: -3rem; /* Adjust as needed */
-    top: -0.25rem; /* Adjust as needed */
-    font-size: 0.6rem;
-    vertical-align: super;
-    color: hsl(var(--muted-foreground));
-    opacity: 0.7;
+
+  .guildhall-prose {
+    color: var(--guildhall-muted);
+    font-family: var(--font-label);
+    font-size: 1rem;
+    line-height: 1.7;
   }
+
+  .guildhall-prose h2 {
+    color: var(--guildhall-text);
+    font-family: var(--font-command);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 3.5rem 0 1rem;
+  }
+
+  .guildhall-prose h2:first-child { margin-top: 0; }
+  .guildhall-prose p { margin: 0 0 1.25rem; }
+  .guildhall-prose ul { display: grid; gap: 0.75rem; list-style: disc; margin: 1.5rem 0 2rem; padding-left: 1.25rem; }
+  .guildhall-prose li::marker { color: var(--guildhall-consensus); }
+  .guildhall-prose strong { color: var(--guildhall-text); font-weight: 600; }
+  .guildhall-prose code { background: var(--guildhall-panel-raised); border: 1px solid var(--guildhall-line); color: var(--guildhall-consensus); font-family: var(--font-data); font-size: 0.875em; padding: 0.15rem 0.35rem; }
+
+  .guildhall-icon-button {
+    align-items: center;
+    border: 1px solid color-mix(in srgb, var(--guildhall-line) 55%, transparent);
+    border-radius: 0.5rem;
+    color: var(--guildhall-muted);
+    display: inline-flex;
+    height: 2rem;
+    justify-content: center;
+    width: 2rem;
+    transition: background-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
+  }
+
+  .guildhall-icon-button:hover { background: var(--guildhall-panel-raised); color: var(--guildhall-text); box-shadow: 0 0 0 3px color-mix(in srgb, var(--guildhall-consensus) 10%, transparent); }
+
+  .guildhall-table-head {
+    color: var(--guildhall-muted);
+    font-family: var(--font-data);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.875rem 1rem;
+    text-transform: uppercase;
+  }
+
+  .guildhall-table-cell { padding: 1rem; }
 }
 
 @layer utilities {
-  /* Hyper-Realistic Z-Axis Physics & Amber/Orange Fire Glass (removed excessive glows) */
-  .glass-panel {
-    @apply bg-stone-950/50 backdrop-blur-3xl border border-white/10;
-  }
+  .bg-guildhall-bg { background-color: var(--guildhall-bg); }
+  .bg-guildhall-panel { background-color: var(--guildhall-panel); }
+  .bg-guildhall-panel-raised { background-color: var(--guildhall-panel-raised); }
+  .text-guildhall-text { color: var(--guildhall-text); }
+  .text-guildhall-muted { color: var(--guildhall-muted); }
+  .text-guildhall-subtle { color: var(--guildhall-subtle); }
+  .text-guildhall-identity { color: var(--guildhall-identity); }
+  .text-guildhall-treasury { color: var(--guildhall-treasury); }
+  .text-guildhall-consensus { color: var(--guildhall-consensus); }
+  .text-guildhall-danger { color: var(--guildhall-danger); }
+  .border-guildhall-line { border-color: var(--guildhall-line); }
+  .border-guildhall-identity { border-color: var(--guildhall-identity); }
+  .border-guildhall-treasury { border-color: var(--guildhall-treasury); }
+  .border-guildhall-consensus { border-color: var(--guildhall-consensus); }
+  .border-guildhall-danger { border-color: var(--guildhall-danger); }
+  .bg-guildhall-identity { background-color: var(--guildhall-identity); }
+  .bg-guildhall-treasury { background-color: var(--guildhall-treasury); }
+  .bg-guildhall-consensus { background-color: var(--guildhall-consensus); }
+  .bg-guildhall-danger { background-color: var(--guildhall-danger); }
+  .custom-scrollbar { scrollbar-color: var(--guildhall-line) transparent; scrollbar-width: thin; }
+  .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--guildhall-line); }
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+  .glass-panel { background: var(--guildhall-panel); border: 1px solid color-mix(in srgb, var(--guildhall-line) 50%, transparent); border-radius: 0.75rem; box-shadow: 0 4px 24px rgb(0 0 0 / 0.2); }
+  .rim-highlight { border-top: 1px solid var(--guildhall-line); }
+  .ambient-glow,
+  .ambient-glow-text { box-shadow: none; text-shadow: none; }
 
-  /* Physical Rim Highlights (The 1px top edge) */
-  .rim-highlight {
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  /* ── 3-Body Reality Boundaries Spectrum ───────────────────────────────── */
+  .reality-live-ledger {
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.4);
+    background-color: rgba(16, 185, 129, 0.08);
   }
-
-  .rim-highlight-economics { box-shadow: inset 0 1px 0 0 theme('colors.economics.DEFAULT'); }
-  .rim-highlight-governance { box-shadow: inset 0 1px 0 0 theme('colors.governance.DEFAULT'); }
-  .rim-highlight-narrative { box-shadow: inset 0 1px 0 0 theme('colors.narrative.DEFAULT'); }
-  .rim-highlight-diplomatic { box-shadow: inset 0 1px 0 0 theme('colors.diplomatic.DEFAULT'); }
-
-  /* Focus Mechanics (Depth of Field) */
-  .hud-eclipse-active {
-    @apply transition-all duration-500 ease-out;
+  .reality-metabolic-sim {
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.4);
+    background-color: rgba(245, 158, 11, 0.08);
   }
-  
-  .hud-eclipse-background {
-    @apply transition-all duration-500 ease-out;
-    /* Map remains fully crisp, colorful, bright, and interactive even when HUD trays are open */
-  }
-
-  /* --- SOVEREIGN REALITY BOUNDARY UTILITIES --- */
-  @keyframes sim-breath {
-    0%, 100% {
-      opacity: 0.7;
-      filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.4));
-    }
-    50% {
-      opacity: 1;
-      filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8));
-    }
-  }
-
-  @keyframes ai-breath {
-    0%, 100% {
-      opacity: 0.8;
-      filter: drop-shadow(0 0 2px rgba(234, 88, 12, 0.4));
-    }
-    50% {
-      opacity: 1;
-      filter: drop-shadow(0 0 8px rgba(234, 88, 12, 0.8));
-    }
-  }
-
-  .animate-reality-sim-pulse {
-    animation: sim-breath 3s ease-in-out infinite;
-  }
-
-  .animate-reality-ai-pulse {
-    animation: ai-breath 3s ease-in-out infinite;
-  }
-
-  /* Reality Spectrum Borders & Glows */
-  .rim-highlight-reality-live {
-    box-shadow: inset 0 1px 0 0 #10b981;
-    border-color: rgba(245, 158, 11, 0.2);
-  }
-
-  .rim-highlight-reality-cached {
-    box-shadow: inset 0 1px 0 0 #ea580c;
-    border-color: rgba(234, 88, 12, 0.2);
-  }
-
-  .rim-highlight-reality-sim {
-    box-shadow: inset 0 1px 0 0 #f59e0b;
-    border-color: rgba(245, 158, 11, 0.2);
-    @apply animate-reality-sim-pulse;
-  }
-
-  .rim-highlight-reality-ai {
-    box-shadow: inset 0 1px 0 0 #f59e0b;
-    border-color: rgba(245, 158, 11, 0.2);
-    @apply animate-reality-ai-pulse;
-  }
-
-  /* Reality Spectrum Ambient Glows */
-  .ambient-glow {
-    box-shadow: 0 0 100px 20px rgba(var(--ambient-glow-color), var(--ambient-glow-intensity));
-    transition: box-shadow 0.5s ease-out;
-  }
-  
-  .ambient-glow-text {
-    text-shadow: 0 0 10px rgba(var(--ambient-glow-color), var(--ambient-glow-intensity));
-    transition: text-shadow 0.5s ease-out;
+  .reality-asgi-concert {
+    color: #38bdf8;
+    border-color: rgba(6, 182, 212, 0.4);
+    background-color: rgba(6, 182, 212, 0.08);
   }
 }
 
-/* Ensure Rnd resize handles are interactive even when the outer container is pointer-events-none */
-.react-resizable-handle,
-[class^="react-resizable-handle"] {
-  pointer-events: auto !important;
-}
+.theme-16bit .guildhall-panel { border-width: 2px; border-style: double; }
+.theme-16bit .guildhall-panel,
+.theme-16bit .guildhall-control,
+.theme-16bit .guildhall-nav-link { border-radius: 0; }
+.theme-phosphor .guildhall-panel { border-color: var(--guildhall-line); }
 
-/* ==========================================================================
-   SITEWIDE LATEX SCHOLARLY THEME OVERRIDES
-   ========================================================================== */
-.theme-latex {
-  font-family: 'EB Garamond', Georgia, serif;
-}
-
-/* Serif Contrast typography rules (keeping monospace for coordinates, code, edits, numbers) */
-.theme-latex *:not(.font-mono):not(code):not(pre):not(kbd):not(samp):not(.font-sans):not(.font-mono *):not(code *):not(pre *):not(.gm-style *) {
-  font-family: 'EB Garamond', Georgia, serif !important;
-}
-
-/* Glass panel and background panel parchment paper styling */
-.theme-latex .glass-panel,
-.theme-latex [class*="glass-panel"],
-.theme-latex [class*="bg-black/"],
-.theme-latex [class*="bg-amber-950/"] {
-  background-color: rgba(251, 250, 240, 0.78) !important;
-  backdrop-filter: blur(16px) !important;
-  border-color: rgba(140, 29, 29, 0.15) !important; /* Scholastic crimson */
-  color: #1a1a1a !important;
-  box-shadow: 0 4px 30px rgba(140, 29, 29, 0.05), 0 10px 50px rgba(140, 29, 29, 0.02) !important;
-}
-
-/* Side trays, drawers, and console cards light-mode parchment mapping */
-.theme-latex [class*="bg-zinc-950/"],
-.theme-latex [class*="bg-gray-950/"],
-.theme-latex [class*="bg-stone-950/"] {
-  background-color: rgba(251, 250, 240, 0.85) !important;
-  border-color: rgba(140, 29, 29, 0.15) !important;
-  color: #1a1a1a !important;
-}
-
-/* Rim highlight adaptation to soft warm crimson ink lines */
-.theme-latex .rim-highlight,
-.theme-latex .rim-highlight-economics,
-.theme-latex .rim-highlight-governance,
-.theme-latex .rim-highlight-narrative,
-.theme-latex .rim-highlight-diplomatic {
-  box-shadow: inset 0 1px 0 0 rgba(140, 29, 29, 0.25) !important;
-}
-
-/* Subpage centered workspace overlays dark transparent dimming backdrop */
-.theme-latex .fixed.inset-0.bg-black\/45 {
-  background-color: rgba(140, 29, 29, 0.12) !important; /* Soft warm reddish wash */
-  backdrop-filter: blur(4px) !important;
-}
-
-/* Text coloring overrides for optimal light theme parchment-paper readability */
-.theme-latex [class*="text-amber-"],
-.theme-latex [class*="text-amber-"],
-.theme-latex [class*="text-amber-"],
-.theme-latex [class*="text-amber-"],
-.theme-latex [class*="text-orange-"] {
-  color: #8c1d1d !important; /* Map neon cyan, green, amber, orange to elegant deep crimson */
-}
-
-.theme-latex [class*="text-zinc-"],
-.theme-latex [class*="text-gray-"],
-.theme-latex [class*="text-slate-"] {
-  color: #48443c !important; /* Map gray labels to soft charcoal ink */
-}
-
-.theme-latex [class*="text-white"] {
-  color: #1a1a1a !important; /* Ensure white titles display in solid ink */
-}
-
-.theme-latex [class*="border-amber-"],
-.theme-latex [class*="border-amber-"],
-.theme-latex [class*="border-orange-"],
-.theme-latex [class*="border-white/"] {
-  border-color: rgba(140, 29, 29, 0.22) !important;
-}
-
-.theme-latex [class*="bg-amber-"],
-.theme-latex [class*="bg-amber-"],
-.theme-latex [class*="bg-amber-"],
-.theme-latex [class*="bg-orange-"] {
-  background-color: rgba(140, 29, 29, 0.08) !important;
-}
-
-/* Interactive elements and input forms parchment mapping */
-.theme-latex input,
-.theme-latex textarea,
-.theme-latex select {
-  background-color: #faf9f0 !important;
-  color: #1a1a1a !important;
-  border-color: #d3cdbe !important;
-}
-
-.theme-latex input:focus,
-.theme-latex textarea:focus,
-.theme-latex select:focus {
-  border-color: #8c1d1d !important;
-  box-shadow: 0 0 0 2px rgba(140, 29, 29, 0.1) !important;
-}
-
-/* Scrollbar adaptation to warm paper aesthetics */
-.theme-latex ::-webkit-scrollbar {
-  width: 6px !important;
-  height: 6px !important;
-}
-
-.theme-latex ::-webkit-scrollbar-track {
-  background: #fdfcf7 !important;
-}
-
-.theme-latex ::-webkit-scrollbar-thumb {
-  background: #dbd7cb !important;
-  border-radius: 3px !important;
-}
-
-.theme-latex ::-webkit-scrollbar-thumb:hover {
-  background: #c7c2b5 !important;
-}
-
-/* Debossed Letterpress Headers & Watercolor Highlights */
-.theme-latex .scholarly-title,
-.theme-latex h1,
-.theme-latex h2,
-.theme-latex h3,
-.theme-latex h4,
-.theme-latex h5,
-.theme-latex h6,
-.theme-latex article h1,
-.theme-latex article h2,
-.theme-latex article h3,
-.theme-latex .prose h1,
-.theme-latex .prose h2,
-.theme-latex .prose h3 {
-  color: #1c1917 !important;
-  font-family: 'EB Garamond', Georgia, serif !important;
-  background-clip: unset !important;
-  -webkit-background-clip: unset !important;
-  background-image: none !important;
-  background-color: transparent !important;
-  text-shadow: 0 -1px 1px rgba(28, 25, 23, 0.15), 0 1px 0px rgba(255, 255, 255, 0.8) !important;
-}
-
-.theme-latex h1 *,
-.theme-latex h2 *,
-.theme-latex h3 *,
-.theme-latex h4 *,
-.theme-latex h5 *,
-.theme-latex h6 * {
-  color: inherit !important;
-  background-clip: unset !important;
-  -webkit-background-clip: unset !important;
-  background-image: none !important;
-  background-color: transparent !important;
-  text-shadow: inherit !important;
-}
-
-/* Scholarly Letterpress Navigation Links & Logo Engraving */
-.theme-latex header a,
-.theme-latex header span:not(.font-black) {
-  color: #8c1d1d !important;
-  text-shadow: 0 -1.5px 1.5px rgba(140, 29, 29, 0.35), 0 1px 0px rgba(255, 255, 255, 0.9) !important;
-  transition: all 0.2s ease-in-out !important;
-}
-
-.theme-latex header a:hover {
-  color: #b91c1c !important; /* Brighter crimson on hover */
-  text-shadow: 0 -1.5px 2px rgba(185, 28, 28, 0.45), 0 1px 0px rgba(255, 255, 255, 0.95) !important;
-}
-
-.theme-latex header span.font-black {
-  text-shadow: 0 -1px 1px rgba(28, 25, 23, 0.15), 0 1px 0px rgba(255, 255, 255, 0.8) !important;
-}
-
-
-.theme-latex .watercolor-red {
-  color: #781a1a !important;
-  background: hsla(0, 75%, 50%, 0.05) !important;
-  box-shadow: 0 0 12px 2px hsla(0, 75%, 50%, 0.04) !important;
-}
-
-.theme-latex .watercolor-green {
-  color: #115e59 !important;
-  background: hsla(160, 60%, 45%, 0.06) !important;
-  box-shadow: 0 0 12px 2px hsla(160, 60%, 45%, 0.04) !important;
-}
-
-.theme-latex .watercolor-yellow {
-  color: #854d0e !important;
-  background: hsla(38, 90%, 45%, 0.06) !important;
-  box-shadow: 0 0 12px 2px hsla(38, 90%, 45%, 0.04) !important;
-}
-
-/* Mapping badges, state variables, and timelines to soft, bleeding watercolor underglows */
-.theme-latex .text-amber-400,
-.theme-latex .text-sky-400,
-.theme-latex .text-blue-400 {
-  color: #8c1d1d !important; /* Elegant crimson ink */
-}
-
-.theme-latex .text-amber-400,
-.theme-latex .text-amber-400 {
-  color: #115e59 !important; /* Scholar watercolor green */
-}
-
-.theme-latex .text-amber-400,
-.theme-latex .text-yellow-400,
-.theme-latex .text-fuchsia-400,
-.theme-latex .text-pink-400 {
-  color: #854d0e !important; /* Scholar watercolor yellow/ochre */
-}
-
-/* Background underglows mapped to organic diluted washes */
-.theme-latex [class*="bg-amber-"],
-.theme-latex [class*="bg-sky-"],
-.theme-latex [class*="bg-blue-"],
-.theme-latex .bg-amber-500\/10,
-.theme-latex .bg-amber-500\/5 {
-  background-color: hsla(0, 75%, 50%, 0.05) !important;
-  box-shadow: 0 0 12px 2px hsla(0, 75%, 50%, 0.04) !important;
-}
-
-.theme-latex [class*="bg-amber-"],
-.theme-latex [class*="bg-amber-"],
-.theme-latex .bg-amber-500\/10,
-.theme-latex .bg-amber-500\/5,
-.theme-latex .bg-amber-500\/10 {
-  background-color: hsla(160, 60%, 45%, 0.06) !important;
-  box-shadow: 0 0 12px 2px hsla(160, 60%, 45%, 0.04) !important;
-}
-
-.theme-latex [class*="bg-amber-"],
-.theme-latex [class*="bg-yellow-"],
-.theme-latex [class*="bg-fuchsia-"],
-.theme-latex [class*="bg-pink-"],
-.theme-latex .bg-amber-500\/10,
-.theme-latex .bg-amber-500\/5 {
-  background-color: hsla(38, 90%, 45%, 0.06) !important;
-  box-shadow: 0 0 12px 2px hsla(38, 90%, 45%, 0.04) !important;
-}
-
-/* Borders mapped to delicate ink-line transitions (removed) */
-
-/* ==========================================================================
-   PREMIUM CITADEL DARK MODE DESIGN OVERRIDES (BORDERLESS + SOFT UNDERGLOWS)
-   ========================================================================== */
-.dark .glass-panel,
-.dark [class*="glass-panel"],
-.dark [class*="bg-black/80"],
-.dark [class*="bg-zinc-950/"] {
-  background-color: rgba(9, 9, 11, 0.7) !important; /* #09090b */
-  backdrop-filter: blur(32px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-/* Redefine active state highlights */
-.dark .rim-highlight {
-  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-.dark .rim-highlight-governance {
-  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-.dark .rim-highlight-economics {
-  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-.dark .rim-highlight-narrative {
-  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-.dark .rim-highlight-diplomatic {
-  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-.dark .rim-highlight-reality-live {
-  border-top: 1px solid #10b981 !important;
-}
-
-.dark .rim-highlight-reality-cached {
-  border-top: 1px solid #ea580c !important;
-}
-
-.dark .rim-highlight-reality-sim {
-  border-top: 1px solid #f59e0b !important;
-}
-
-.dark .rim-highlight-reality-ai {
-  border-top: 1px solid #ca8a04 !important;
-}
-
-
-
-/* ─── COCKPIT SCROLLBAR UTILITIES ─────────────────────────────────────────── */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
-}
-.custom-scrollbar::-webkit-scrollbar {
-  width: 3px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-radius: 99px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-.scrollbar-none {
-  scrollbar-width: none;
-}
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

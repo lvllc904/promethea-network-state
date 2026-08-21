@@ -36,7 +36,7 @@ export function MainNav() {
     <Sidebar>
       <SidebarHeader className="flex-grow-0 justify-center p-2">
         <Link href="/" prefetch={false}>
-          <SidebarMenuButton tooltip={{ children: "Home" }} className="h-auto">
+          <SidebarMenuButton tooltip="Home" className="h-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -63,7 +63,7 @@ export function MainNav() {
               <Link href={item.href}>
                 <SidebarMenuButton
                   isActive={!!pathname && pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}
-                  tooltip={{ children: item.label }}
+                  tooltip={item.label}
                 >
                   <item.icon />
                   <span>{item.label}</span>

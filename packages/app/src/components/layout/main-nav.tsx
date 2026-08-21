@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { UiVersionToggle } from "@/components/layout/UiVersionToggle";
 import {
   Sidebar,
   SidebarHeader,
@@ -57,7 +58,7 @@ export function MainNav() {
     <Sidebar>
       <SidebarHeader className="flex-grow-0 justify-center p-2">
         <Link href="/" prefetch={false}>
-          <SidebarMenuButton tooltip={{ children: "Home" }} className="h-auto">
+          <SidebarMenuButton tooltip="Home" className="h-auto">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.4)]">
                 <span className="font-black text-black text-xs tracking-tighter">PNS</span>
@@ -74,7 +75,7 @@ export function MainNav() {
               <Link href={item.href}>
                 <SidebarMenuButton
                   isActive={!!pathname && pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}
-                  tooltip={{ children: item.label }}
+                  tooltip={item.label}
                 >
                   <item.icon />
                   <span>{item.label}</span>
@@ -84,10 +85,11 @@ export function MainNav() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="p-2 flex-grow-0">
+      <SidebarFooter className="p-2 flex-grow-0 flex flex-col gap-2">
+        <UiVersionToggle className="w-full justify-between scale-95" />
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip={{ children: "Settings" }}>
+            <SidebarMenuButton tooltip="Settings">
               <Settings />
               <span>Settings</span>
             </SidebarMenuButton>

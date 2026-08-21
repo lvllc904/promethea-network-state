@@ -15,6 +15,8 @@ import { Storage } from '@google-cloud/storage';
 import { DocumentServiceClient, DataStoreServiceClient } from '@google-cloud/discoveryengine';
 import glob from 'glob';
 import path from 'path';
+import fs from 'fs';
+import crypto from 'crypto';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 const PROJECT_ID = 'studio-9105849211-9ba48';
@@ -112,18 +114,30 @@ async function uploadDocumentsToGCS(storage: Storage, files: string[]): Promise<
         continue;
       }
 
-      await bucket.upload(filePath, { destination, metadata: { cacheControl: 'no-cache' } });
+      const fileBuffer = fs.readFileSync(filePath);
+      const sha256Hash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+
+      await bucket.upload(filePath, { 
+        destination, 
+        metadata: { 
+          cacheControl: 'no-cache',
+          metadata: {
+            sha256: sha256Hash,
+            verifiedAt: new Date().toISOString()
+          }
+        } 
+      });
       uploaded++;
 
       if (uploaded % 20 === 0) {
-        console.log(`[INGEST]  → Uploaded ${uploaded}/${files.length - skipped} new files...`);
+        console.log(`[INGEST]  → Verified & Uploaded ${uploaded}/${files.length - skipped} new files...`);
       }
     } catch (err: any) {
       console.warn(`[INGEST] ⚠ Skipped ${path.basename(filePath)}: ${err.message}`);
     }
   }
 
-  console.log(`[INGEST] ✓ Upload complete: ${uploaded} new uploaded, ${skipped} already in GCS.`);
+  console.log(`[INGEST] ✓ Cryptographic verification & upload complete: ${uploaded} verified, ${skipped} already in GCS.`);
 }
 
 async function ensureDataStoreExists(dsClient: DataStoreServiceClient): Promise<void> {

@@ -35,7 +35,7 @@ export const WorkspaceViewport = () => {
         const fetchDaemonStatus = async () => {
             setIsLoadingDaemon(true);
             try {
-                const res = await fetch('http://localhost:4005/api/mesh/status');
+                const res = await fetch('/api/mesh/status');
                 if (res.ok) {
                     const data = await res.json();
                     setDaemonStatus(data);

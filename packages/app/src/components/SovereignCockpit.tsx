@@ -11,6 +11,11 @@ import { SovereignCommandMatrix } from './SovereignCommandMatrix';
 import { useMesh } from '@/components/providers/mesh-provider';
 import { motion } from 'framer-motion';
 
+import { usePromethea } from '@/components/ai/PrometheaProvider';
+import { ACOMContinuumCard } from './cockpit/ACOMContinuumCard';
+import { SOPHealthMatrix } from './cockpit/SOPHealthMatrix';
+import { DistressedAssetReceivershipCard } from './cockpit/DistressedAssetReceivershipCard';
+
 interface SovereignCockpitProps {
     title: string;
     description: string;
@@ -26,6 +31,7 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
     actions,
     tabs
 }) => {
+    const { toggleSurface } = usePromethea();
     const { executeIntent, isProcessing } = useBodyHandshake();
     const { layout, isLoading } = useSovereignLayout();
     const [activeTab, setActiveTab] = useState(tabs?.[0]?.id);
@@ -202,13 +208,13 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
                         </button>
                     </div>
 
-                    {/* The Omni-Matrix Trigger - Elevated to a sleek FAB-style button in the header */}
+                    {/* The Omni-Matrix Trigger - Universal Promethea Surface */}
                     <button 
-                        onClick={() => setIsMatrixOpen(true)}
+                        onClick={toggleSurface}
                         className={`px-4 py-2 bg-gradient-to-r hover:opacity-95 text-[10px] font-extrabold uppercase tracking-widest rounded-full flex items-center gap-2 transition-all duration-300 ${engineCtrlClass}`}
                     >
                         <Terminal className="w-3.5 h-3.5" />
-                        Command Matrix
+                        Promethea Command Surface
                     </button>
                 </div>
             </div>
@@ -240,34 +246,42 @@ export const SovereignCockpit: React.FC<SovereignCockpitProps> = ({
             )}
 
             {/* Main Command Viewport */}
-            <div className={`flex-1 overflow-y-auto p-6 ${viewportBgClass}`}>
+            <div className={`flex-1 overflow-y-auto p-6 space-y-6 ${viewportBgClass}`}>
                 {tabs ? (
-                    <div className="h-full">
+                    <div className="h-full space-y-6">
                         {currentTabContent || (tabs.length > 0 ? tabs[0].content : null)}
+                        <ACOMContinuumCard />
+                        <DistressedAssetReceivershipCard />
+                        <SOPHealthMatrix />
                     </div>
                 ) : isLoading ? (
                     <div className={`flex items-center justify-center h-64 text-xs font-black uppercase tracking-[0.3em] animate-pulse ${isLatex ? 'text-amber-800' : 'text-emerald-500'}`}>
                         Synchronizing Sovereign Layout...
                     </div>
                 ) : (
-                    <div className="grid grid-cols-12 gap-4">
-                        {layout?.widgets.map((widget) => (
-                            <div 
-                                key={widget.id} 
-                                className="col-span-12"
-                                style={{ gridColumn: `span ${widget.position.w}` }}
-                            >
-                                <div className={`p-4 border rounded-2xl transition-all duration-300 ${widgetCardClass}`}>
-                                    <div className="flex justify-between items-center mb-3 px-1">
-                                        <span className={`text-[8px] font-mono font-bold uppercase tracking-widest ${widgetLabelClass}`}>{widget.pillar} // {widget.title}</span>
-                                        <span className={`flex items-center gap-1 text-[8px] font-mono font-bold tracking-wider ${widgetSyncClass}`}>
-                                            <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${widgetBlinkerClass}`} /> SYNCED
-                                        </span>
+                    <div className="space-y-6">
+                        <ACOMContinuumCard />
+                        <DistressedAssetReceivershipCard />
+                        <SOPHealthMatrix />
+                        <div className="grid grid-cols-12 gap-4">
+                            {layout?.widgets.map((widget) => (
+                                <div 
+                                    key={widget.id} 
+                                    className="col-span-12"
+                                    style={{ gridColumn: `span ${widget.position.w}` }}
+                                >
+                                    <div className={`p-4 border rounded-2xl transition-all duration-300 ${widgetCardClass}`}>
+                                        <div className="flex justify-between items-center mb-3 px-1">
+                                            <span className={`text-[8px] font-mono font-bold uppercase tracking-widest ${widgetLabelClass}`}>{widget.pillar} // {widget.title}</span>
+                                            <span className={`flex items-center gap-1 text-[8px] font-mono font-bold tracking-wider ${widgetSyncClass}`}>
+                                                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${widgetBlinkerClass}`} /> SYNCED
+                                            </span>
+                                        </div>
+                                        <WidgetRenderer config={widget} />
                                     </div>
-                                    <WidgetRenderer config={widget} />
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 )}
             </div>
