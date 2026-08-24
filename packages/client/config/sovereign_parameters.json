@@ -1,0 +1,66 @@
+{
+  "project_metadata": {
+    "name": "The Promethean Network State (TPNS)",
+    "framework": "Anchor Community Operating Model (ACOM)",
+    "git_commit": "46202e5",
+    "git_branch": "Testing-stabilization-and-launch"
+  },
+  "tokenomics": {
+    "dual_class_matrix": {
+      "voting_veto_peace": 0.51,
+      "economic_equity_yield": 0.49
+    },
+    "metabolic_waterfall_pct": {
+      "host_fiscal_yield": 0.21,
+      "community_wealth_fund": 0.30,
+      "operational_opex": 0.49
+    }
+  },
+  "compliance_and_regulatory": {
+    "sec_regulation_d": {
+      "rule": "506(c)",
+      "accreditation_attestation_required": true,
+      "micro_fractional_minimum_usd": 1.00
+    },
+    "sec_section_12_g": {
+      "max_direct_holders_of_record": 2000,
+      "consolidation_vehicle": "Feeder SPV/Nominee Trust",
+      "aggregation_trigger_threshold": 1900
+    },
+    "irs_tax_safe_harbor": {
+      "profits_interest_revenue_procedure": "93-27 / 2001-43",
+      "section_83b_election_filing_window_days": 30
+    }
+  },
+  "platform_fees": {
+    "complexity_matrix": {
+      "tier_1_simple_cre": 0.01,
+      "tier_2_mixed_use_operating": 0.02,
+      "tier_3_high_touch_deep_tech": 0.03
+    },
+    "tier_classifications": {
+      "stabilized_nnn_ground_leases": 1,
+      "standard_operating_multifamily": 2,
+      "off_grid_enclaves_aircraft_fleets_marine_vessels": 3
+    }
+  },
+  "labor_value_matrix_lvm": {
+    "sweat_equity_formula": "Value = Hours * PPP_Labor_Rate * Risk_Premium",
+    "risk_premiums": {
+      "standard_operations": 1.5,
+      "hazardous_deep_tech_operations": 3.0
+    }
+  },
+  "thermodynamic_tax_exergy": {
+    "precision_factor": 1000000,
+    "weights": {
+      "power_pue_weight": 0.30,
+      "water_wue_weight": 0.40,
+      "carbon_intensity_weight": 0.30
+    },
+    "constants": {
+      "water_table_coefficient_kappa": 10.0
+    },
+    "routing_destination": "On-Chain Ecological Restoration Fund"
+  }
+}
