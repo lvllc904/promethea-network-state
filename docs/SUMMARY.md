@@ -3,6 +3,15 @@
 * [Welcome to TPNS](README.md)
 * [Blueprint & Vision](blueprint.md)
 
+## 📋 Master Global Operating Playbook (ACOM / TPNS)
+* [SOP-100: Global Ecosystem Integration & Multi-Domain Governance](playbook/sop-100-master-playbook.md)
+* [Domain A: Foundation-Establishing Concerns](playbook/SOP-Domain-A-Foundation-Establishing-Concerns.md)
+* [Domain B: Control Concerns & Receivership](playbook/SOP-Domain-B-Control-Concerns-and-Receivership.md)
+* [Domain C: Stabilization & Thermodynamic Engineering](playbook/SOP-Domain-C-Stabilization-and-Thermodynamic-Engineering.md)
+* [Domain D: Autonomous Logistics](playbook/SOP-Domain-D-Autonomous-Logistics.md)
+* [Domain E: Tokenomics & Sovereign Exit](playbook/SOP-Domain-E-Tokenomics-and-Sovereign-Exit.md)
+* [Domain F: Support Apparatus](playbook/SOP-Domain-F-Support-Apparatus.md)
+
 ## 🏛️ Genesis & Governance
 * [The Promethean Constitution](governance/constitution.md)
 * [The Sovereign Roadmap](governance/roadmap.md)
@@ -18,6 +27,7 @@
 * [UCS-ADM: Stateless Authorization](architecture/ucs-adm.md)
 
 ## 💸 Economic Engines & Real-World Assets (RWAs)
+* [Optimism Superchain Mission Grant Application](economics/optimism-mission-grant.md)
 * [Pro Forma & Economic Runways](economics/pro-forma.md)
 * [2026 Sovereign Funding Playbook](economics/funding-guide.md)
 * [Carry Trade Synthesis & Wealth Funnel](economics/carry-trade.md)
