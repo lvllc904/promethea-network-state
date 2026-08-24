@@ -11,6 +11,18 @@ const BirdsBackground = dynamic(() => import('../../components/ui/BirdsBackgroun
 
 const PAPERS = [
   {
+    title: "SOVEREIGN SUBSTRATE & HOLOGRAPHIC CHAIN",
+    subtitle: "Zero-Trust P2P Compute, Biometrics & Metabolic Settlement",
+    description: "The core Layer 0 architectural specification for the Promethean Network State. Details on Merkle DAG local projections, EIP-7212 key blending, edge zkVM thermodynamic computing, and the 21/30/49 Metabolic Waterfall.",
+    version: "v1.0.0 (Sovereign)",
+    href: "/sovereign-substrate-whitepaper",
+    icon: Shield,
+    colorClass: "text-amber-400 group-hover:text-amber-300",
+    borderClass: "border-amber-500/30 hover:border-amber-500/60 hover:shadow-[0_0_40px_rgba(245,158,11,0.25)]",
+    bgGradient: "from-amber-500/10 to-transparent",
+    badgeBg: "bg-amber-500/15 text-amber-300 border-amber-500/40"
+  },
+  {
     title: "CONVERSATIONAL PIVOT PROTOCOL (CPP)",
     subtitle: "Directed Semantic Graphs & Mind Map Canvas",
     description: "Architectural specification for non-linear, multi-threaded human-AI dialog. Highlights asynchronous mid-stream interruption-pivoting, retroactive historical anchoring, and interactive spatial mind mapping.",

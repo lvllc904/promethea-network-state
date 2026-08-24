@@ -1,0 +1,14 @@
+[package]
+name = "tpns-zk-prover"
+version = "0.1.0"
+edition = "2021"
+description = "Edge zkVM Verifiable Compute Plane for Promethean Thermodynamic Tax and Labor Value Matrix"
+authors = ["Promethean Network State <dev@lvhllc.org>"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[lib]
+name = "tpns_zk_prover"
+path = "src/lib.rs"

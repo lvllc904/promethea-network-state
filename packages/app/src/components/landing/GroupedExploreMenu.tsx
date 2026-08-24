@@ -17,6 +17,7 @@ const groups = [
     label: 'Understand',
     items: [
       { label: 'Our vision', detail: 'Why the network exists.', href: '/about', icon: Info },
+      { label: 'Substrate whitepaper', detail: 'Holographic P2P architecture.', href: '/sovereign-substrate-whitepaper', icon: ShieldCheck },
       { label: 'Constitution', detail: 'The founding digital law.', href: '/constitution', icon: FileText },
       { label: 'Press kit', detail: 'Official media resources.', href: '/press', icon: BookOpen },
     ],
