@@ -4,20 +4,20 @@
 @tailwind utilities;
 
 :root {
-  --guildhall-bg: #0b0d10;
-  --guildhall-bg-rgb: 11 13 16;
-  --guildhall-panel: #12151a;
-  --guildhall-panel-rgb: 18 21 26;
-  --guildhall-panel-raised: #161a20;
-  --guildhall-panel-raised-rgb: 22 26 32;
-  --guildhall-line: #272a30;
-  --guildhall-line-rgb: 39 42 48;
-  --guildhall-text: #f3f4f6;
-  --guildhall-text-rgb: 243 244 246;
-  --guildhall-muted: #9ca3af;
-  --guildhall-muted-rgb: 156 163 175;
-  --guildhall-subtle: #66707d;
-  --guildhall-subtle-rgb: 102 112 125;
+  --guildhall-bg: #07090e;
+  --guildhall-bg-rgb: 7 9 14;
+  --guildhall-panel: #0d1219;
+  --guildhall-panel-rgb: 13 18 25;
+  --guildhall-panel-raised: #131b24;
+  --guildhall-panel-raised-rgb: 19 27 36;
+  --guildhall-line: rgba(255, 255, 255, 0.06);
+  --guildhall-line-rgb: 255 255 255;
+  --guildhall-text: #ffffff;
+  --guildhall-text-rgb: 255 255 255;
+  --guildhall-muted: #cbd5e1;
+  --guildhall-muted-rgb: 203 213 225;
+  --guildhall-subtle: #94a3b8;
+  --guildhall-subtle-rgb: 148 163 184;
   --guildhall-identity: #f59e0b;
   --guildhall-identity-rgb: 245 158 11;
   --guildhall-treasury: #10b981;
@@ -27,56 +27,63 @@
   --guildhall-danger: #f87171;
   --guildhall-danger-rgb: 248 113 113;
 
+  /* Specular Glassmorphism Tokens (Citadel Default) */
+  --glass-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.015) 100%);
+  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+  --glass-depth-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.75), 0 4px 16px rgba(0, 0, 0, 0.5);
+  --glass-depth-shadow-hover: 0 28px 64px -14px rgba(0, 0, 0, 0.85), 0 8px 24px rgba(0, 0, 0, 0.6);
+  --glass-blur: blur(28px) saturate(180%);
+
   --font-data: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-label: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-command: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  --background: 220 25% 5%;
-  --foreground: 210 20% 96%;
-  --card: 216 20% 9%;
-  --card-foreground: 210 20% 96%;
-  --popover: 216 20% 9%;
-  --popover-foreground: 210 20% 96%;
+  --background: 220 25% 4%;
+  --foreground: 210 20% 98%;
+  --card: 216 20% 7%;
+  --card-foreground: 210 20% 98%;
+  --popover: 216 20% 7%;
+  --popover-foreground: 210 20% 98%;
   --primary: 160 84% 39%;
-  --primary-foreground: 220 25% 5%;
+  --primary-foreground: 220 25% 4%;
   --secondary: 215 18% 14%;
-  --secondary-foreground: 210 20% 96%;
+  --secondary-foreground: 210 20% 98%;
   --muted: 215 18% 14%;
-  --muted-foreground: 215 12% 64%;
+  --muted-foreground: 215 12% 70%;
   --accent: 188 91% 43%;
-  --accent-foreground: 220 25% 5%;
+  --accent-foreground: 220 25% 4%;
   --destructive: 0 86% 71%;
-  --destructive-foreground: 220 25% 5%;
+  --destructive-foreground: 220 25% 4%;
   --border: 216 10% 18%;
   --input: 216 10% 18%;
   --ring: 188 91% 43%;
-  --radius: 0.75rem;
-  --sidebar-background: 220 25% 5%;
-  --sidebar-foreground: 210 20% 96%;
+  --radius: 1rem;
+  --sidebar-background: 220 25% 4%;
+  --sidebar-foreground: 210 20% 98%;
   --sidebar-primary: 160 84% 39%;
-  --sidebar-primary-foreground: 220 25% 5%;
+  --sidebar-primary-foreground: 220 25% 4%;
   --sidebar-accent: 215 18% 14%;
-  --sidebar-accent-foreground: 210 20% 96%;
+  --sidebar-accent-foreground: 210 20% 98%;
   --sidebar-border: 216 10% 18%;
   --sidebar-ring: 188 91% 43%;
 }
 
 .dark,
 .theme-promethean-citadel {
-  --guildhall-bg: #0b0d10;
-  --guildhall-bg-rgb: 11 13 16;
-  --guildhall-panel: #12151a;
-  --guildhall-panel-rgb: 18 21 26;
-  --guildhall-panel-raised: #161a20;
-  --guildhall-panel-raised-rgb: 22 26 32;
-  --guildhall-line: #272a30;
-  --guildhall-line-rgb: 39 42 48;
-  --guildhall-text: #f3f4f6;
-  --guildhall-text-rgb: 243 244 246;
-  --guildhall-muted: #9ca3af;
-  --guildhall-muted-rgb: 156 163 175;
-  --guildhall-subtle: #66707d;
-  --guildhall-subtle-rgb: 102 112 125;
+  --guildhall-bg: #07090e;
+  --guildhall-bg-rgb: 7 9 14;
+  --guildhall-panel: #0d1219;
+  --guildhall-panel-rgb: 13 18 25;
+  --guildhall-panel-raised: #131b24;
+  --guildhall-panel-raised-rgb: 19 27 36;
+  --guildhall-line: rgba(255, 255, 255, 0.06);
+  --guildhall-line-rgb: 255 255 255;
+  --guildhall-text: #ffffff;
+  --guildhall-text-rgb: 255 255 255;
+  --guildhall-muted: #cbd5e1;
+  --guildhall-muted-rgb: 203 213 225;
+  --guildhall-subtle: #94a3b8;
+  --guildhall-subtle-rgb: 148 163 184;
   --guildhall-identity: #f59e0b;
   --guildhall-identity-rgb: 245 158 11;
   --guildhall-treasury: #10b981;
@@ -85,23 +92,12 @@
   --guildhall-consensus-rgb: 6 182 212;
   --guildhall-danger: #f87171;
   --guildhall-danger-rgb: 248 113 113;
-  --background: 220 25% 5%;
-  --foreground: 210 20% 96%;
-  --card: 216 20% 9%;
-  --card-foreground: 210 20% 96%;
-  --popover: 216 20% 9%;
-  --popover-foreground: 210 20% 96%;
-  --primary: 160 84% 39%;
-  --primary-foreground: 220 25% 5%;
-  --secondary: 215 18% 14%;
-  --secondary-foreground: 210 20% 96%;
-  --muted: 215 18% 14%;
-  --muted-foreground: 215 12% 64%;
-  --accent: 188 91% 43%;
-  --accent-foreground: 220 25% 5%;
-  --border: 216 10% 18%;
-  --input: 216 10% 18%;
-  --ring: 188 91% 43%;
+
+  --glass-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.015) 100%);
+  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+  --glass-depth-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.75), 0 4px 16px rgba(0, 0, 0, 0.5);
+  --glass-depth-shadow-hover: 0 28px 64px -14px rgba(0, 0, 0, 0.85), 0 8px 24px rgba(0, 0, 0, 0.6);
+  --glass-blur: blur(28px) saturate(180%);
 }
 
 .theme-latex {
@@ -111,14 +107,14 @@
   --guildhall-panel-rgb: 247 244 233;
   --guildhall-panel-raised: #eee9dc;
   --guildhall-panel-raised-rgb: 238 233 220;
-  --guildhall-line: #d3cdbe;
-  --guildhall-line-rgb: 211 205 190;
-  --guildhall-text: #1a1a1a;
-  --guildhall-text-rgb: 26 26 26;
-  --guildhall-muted: #57534e;
-  --guildhall-muted-rgb: 87 83 78;
-  --guildhall-subtle: #78716c;
-  --guildhall-subtle-rgb: 120 113 108;
+  --guildhall-line: rgba(28, 25, 23, 0.08);
+  --guildhall-line-rgb: 28 25 23;
+  --guildhall-text: #111827;
+  --guildhall-text-rgb: 17 24 39;
+  --guildhall-muted: #4b5563;
+  --guildhall-muted-rgb: 75 85 99;
+  --guildhall-subtle: #6b7280;
+  --guildhall-subtle-rgb: 107 114 128;
   --guildhall-identity: #8c1d1d;
   --guildhall-identity-rgb: 140 29 29;
   --guildhall-treasury: #115e59;
@@ -127,6 +123,13 @@
   --guildhall-consensus-rgb: 133 77 14;
   --guildhall-danger: #b91c1c;
   --guildhall-danger-rgb: 185 28 28;
+
+  --glass-surface: #f7f4e9;
+  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+  --glass-depth-shadow: 0 12px 32px -6px rgba(28, 25, 23, 0.08), 0 2px 8px rgba(28, 25, 23, 0.04);
+  --glass-depth-shadow-hover: 0 18px 42px -8px rgba(28, 25, 23, 0.12), 0 4px 12px rgba(28, 25, 23, 0.06);
+  --glass-blur: blur(8px);
+
   --background: 48 38% 98%;
   --foreground: 25 10% 10%;
   --card: 48 30% 96%;
@@ -157,10 +160,10 @@
   --guildhall-line-rgb: 118 93 46;
   --guildhall-text: #fff7d6;
   --guildhall-text-rgb: 255 247 214;
-  --guildhall-muted: #d0c49d;
-  --guildhall-muted-rgb: 208 196 157;
-  --guildhall-subtle: #a89567;
-  --guildhall-subtle-rgb: 168 149 103;
+  --guildhall-muted: #e2d7b5;
+  --guildhall-muted-rgb: 226 215 181;
+  --guildhall-subtle: #baa97e;
+  --guildhall-subtle-rgb: 186 169 126;
   --guildhall-identity: #facc15;
   --guildhall-identity-rgb: 250 204 21;
   --guildhall-treasury: #22c55e;
@@ -169,23 +172,12 @@
   --guildhall-consensus-rgb: 56 189 248;
   --guildhall-danger: #ef4444;
   --guildhall-danger-rgb: 239 68 68;
-  --background: 210 15% 14%;
-  --foreground: 45 100% 95%;
-  --card: 210 15% 18%;
-  --card-foreground: 45 100% 95%;
-  --popover: 210 15% 18%;
-  --popover-foreground: 45 100% 95%;
-  --primary: 142 75% 42%;
-  --primary-foreground: 210 15% 10%;
-  --secondary: 25 55% 20%;
-  --secondary-foreground: 45 100% 95%;
-  --muted: 210 12% 22%;
-  --muted-foreground: 45 15% 70%;
-  --accent: 48 100% 50%;
-  --accent-foreground: 210 15% 10%;
-  --border: 45 40% 30%;
-  --input: 210 12% 22%;
-  --ring: 48 100% 50%;
+
+  --glass-surface: #252c33;
+  --glass-specular-rim: inset 0 2px 0 0 #765d2e;
+  --glass-depth-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.85);
+  --glass-depth-shadow-hover: 6px 6px 0 0 rgba(0, 0, 0, 0.95);
+  --glass-blur: none;
 }
 
 .theme-phosphor {
@@ -199,10 +191,10 @@
   --guildhall-line-rgb: 28 92 44;
   --guildhall-text: #b6f7c1;
   --guildhall-text-rgb: 182 247 193;
-  --guildhall-muted: #7fbd89;
-  --guildhall-muted-rgb: 127 189 137;
-  --guildhall-subtle: #4a8154;
-  --guildhall-subtle-rgb: 74 129 84;
+  --guildhall-muted: #8ee29a;
+  --guildhall-muted-rgb: 142 226 154;
+  --guildhall-subtle: #57b365;
+  --guildhall-subtle-rgb: 87 179 101;
   --guildhall-identity: #62e878;
   --guildhall-identity-rgb: 98 232 120;
   --guildhall-treasury: #62e878;
@@ -211,23 +203,12 @@
   --guildhall-consensus-rgb: 98 232 120;
   --guildhall-danger: #f87171;
   --guildhall-danger-rgb: 248 113 113;
-  --background: 142 40% 3%;
-  --foreground: 142 80% 80%;
-  --card: 142 30% 7%;
-  --card-foreground: 142 80% 80%;
-  --popover: 142 30% 7%;
-  --popover-foreground: 142 80% 80%;
-  --primary: 142 70% 55%;
-  --primary-foreground: 142 40% 3%;
-  --secondary: 142 20% 11%;
-  --secondary-foreground: 142 80% 80%;
-  --muted: 142 20% 11%;
-  --muted-foreground: 142 35% 55%;
-  --accent: 142 70% 55%;
-  --accent-foreground: 142 40% 3%;
-  --border: 142 40% 22%;
-  --input: 142 40% 22%;
-  --ring: 142 70% 55%;
+
+  --glass-surface: rgba(11, 26, 15, 0.92);
+  --glass-specular-rim: inset 0 1px 0 0 rgba(98, 232, 120, 0.4);
+  --glass-depth-shadow: 0 0 25px rgba(98, 232, 120, 0.12), 0 12px 35px rgba(0, 0, 0, 0.85);
+  --glass-depth-shadow-hover: 0 0 35px rgba(98, 232, 120, 0.25), 0 16px 45px rgba(0, 0, 0, 0.95);
+  --glass-blur: blur(16px);
 }
 
 html {
@@ -417,7 +398,55 @@ select:focus-visible {
   .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--guildhall-line); }
   .scrollbar-none { scrollbar-width: none; }
   .scrollbar-none::-webkit-scrollbar { display: none; }
-  .glass-panel { background: var(--guildhall-panel); border: 1px solid color-mix(in srgb, var(--guildhall-line) 50%, transparent); border-radius: 0.75rem; box-shadow: 0 4px 24px rgb(0 0 0 / 0.2); }
+  .glass-panel {
+    background: var(--glass-surface);
+    box-shadow: var(--glass-specular-rim), var(--glass-depth-shadow);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: none;
+    border-radius: 1.25rem;
+  }
+
+  .glass-panel-specular {
+    background: var(--glass-surface);
+    box-shadow: var(--glass-specular-rim), var(--glass-depth-shadow);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: none;
+  }
+
+  .glass-card-hover {
+    transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .glass-card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glass-specular-rim), var(--glass-depth-shadow-hover);
+  }
+
+  /* Gestalt Proximity & Typographic Hierarchy Utilities */
+  .display-title {
+    font-family: var(--font-command);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+    color: var(--guildhall-text);
+  }
+
+  .data-kicker {
+    font-family: var(--font-data);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--guildhall-consensus);
+  }
+
+  .stat-lockup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
   .rim-highlight { border-top: 1px solid var(--guildhall-line); }
   .ambient-glow,
   .ambient-glow-text { box-shadow: none; text-shadow: none; }
@@ -425,18 +454,18 @@ select:focus-visible {
   /* ── 3-Body Reality Boundaries Spectrum ───────────────────────────────── */
   .reality-live-ledger {
     color: #34d399;
-    border-color: rgba(16, 185, 129, 0.4);
-    background-color: rgba(16, 185, 129, 0.08);
+    background-color: rgba(16, 185, 129, 0.12);
+    box-shadow: inset 0 1px 0 0 rgba(52, 211, 153, 0.3), 0 0 20px rgba(16, 185, 129, 0.15);
   }
   .reality-metabolic-sim {
     color: #fbbf24;
-    border-color: rgba(245, 158, 11, 0.4);
-    background-color: rgba(245, 158, 11, 0.08);
+    background-color: rgba(245, 158, 11, 0.12);
+    box-shadow: inset 0 1px 0 0 rgba(251, 191, 36, 0.3), 0 0 20px rgba(245, 158, 11, 0.15);
   }
   .reality-asgi-concert {
     color: #38bdf8;
-    border-color: rgba(6, 182, 212, 0.4);
-    background-color: rgba(6, 182, 212, 0.08);
+    background-color: rgba(6, 182, 212, 0.12);
+    box-shadow: inset 0 1px 0 0 rgba(56, 189, 248, 0.3), 0 0 20px rgba(6, 182, 212, 0.15);
   }
 }
 

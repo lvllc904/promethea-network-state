@@ -24,7 +24,7 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
   return (
     <div className="relative min-h-[100dvh] bg-[#07090e] text-white overflow-hidden flex flex-col">
       {/* Top Sovereign Bar */}
-      <header className="relative z-40 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl shrink-0">
+      <header className="relative z-40 bg-white/[0.02] backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_-1px_0_0_rgba(255,255,255,0.06)] shrink-0">
         <div className="mx-auto flex h-16 max-w-[1920px] items-center justify-between gap-4 px-4 sm:px-6">
           <div className="flex items-center space-x-3">
             <Link 
@@ -34,11 +34,11 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 font-command text-xs font-black text-slate-950 shadow-[0_0_15px_rgba(0,242,254,0.3)]">
                 PNS
               </span>
-              <div className="hidden sm:block">
-                <span className="font-command text-sm font-bold tracking-wider text-white">
+              <div className="hidden sm:block stat-lockup">
+                <span className="font-command text-sm font-bold tracking-tight text-white">
                   Promethean Sovereign Cockpit
                 </span>
-                <span className="text-[10px] font-mono text-cyan-400 block -mt-1">
+                <span className="data-kicker text-cyan-400">
                   3-BODY SPATIAL OS
                 </span>
               </div>
@@ -46,13 +46,13 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
           </div>
 
           {/* Center Quick Toggles for View Panels */}
-          <div className="flex items-center space-x-2 bg-slate-900/80 border border-white/10 p-1 rounded-2xl backdrop-blur-md">
+          <div className="flex items-center space-x-1.5 glass-panel-specular p-1 rounded-2xl">
             <button
               onClick={() => setIsMarketplaceOpen(!isMarketplaceOpen)}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition ${
+              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
                 isMarketplaceOpen
-                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-emerald-500 text-slate-950 shadow-[0_2px_10px_rgba(16,185,129,0.3)]'
+                  : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
               }`}
             >
               <SlidersHorizontal className="h-3.5 w-3.5" />
@@ -61,10 +61,10 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
 
             <button
               onClick={() => setIsCockpitOpen(!isCockpitOpen)}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition ${
+              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
                 isCockpitOpen
-                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-cyan-500 text-slate-950 shadow-[0_2px_10px_rgba(6,182,212,0.3)]'
+                  : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
               }`}
             >
               <Bot className="h-3.5 w-3.5" />

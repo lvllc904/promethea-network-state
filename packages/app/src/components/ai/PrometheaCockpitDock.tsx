@@ -136,27 +136,27 @@ export function PrometheaCockpitDock() {
 
   return (
     <aside 
-      className="fixed top-20 right-6 bottom-8 w-[440px] max-w-[calc(100vw-3rem)] z-30 flex flex-col bg-slate-950/92 border border-cyan-500/30 rounded-3xl shadow-[0_16px_60px_rgba(0,242,254,0.12)] backdrop-blur-2xl overflow-hidden transition-all duration-300"
+      className="fixed top-20 right-6 bottom-8 w-[440px] max-w-[calc(100vw-3rem)] z-30 flex flex-col glass-panel-specular rounded-3xl overflow-hidden transition-all duration-300"
       aria-label="Promethea Sovereign Concierge Cockpit"
     >
       {/* Cockpit Header */}
-      <div className="p-4 border-b border-cyan-500/20 bg-slate-900/80 flex flex-col gap-3">
+      <div className="p-4 bg-white/[0.02] flex flex-col gap-3 shadow-[inset_0_-1px_0_0_rgba(255,255,255,0.06)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
             <div className="relative flex h-3.5 w-3.5 items-center justify-center">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
             </div>
-            <div>
+            <div className="stat-lockup">
               <div className="flex items-center space-x-1.5">
-                <h2 className="text-sm font-command font-bold text-white tracking-wider uppercase">
+                <h2 className="text-sm font-command font-bold text-white tracking-tight uppercase">
                   Promethea Prime
                 </h2>
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-950 border border-cyan-700 text-cyan-300">
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-md bg-cyan-950 text-cyan-300 shadow-[inset_0_1px_0_rgba(6,182,212,0.3)]">
                   CONCIERGE
                 </span>
               </div>
-              <p className="text-[10px] font-mono text-zinc-400">
+              <p className="text-[10px] font-mono text-slate-400">
                 {activeItem ? `Focus: ${activeItem.title}` : 'Universal Substrate Controller'}
               </p>
             </div>
@@ -165,14 +165,14 @@ export function PrometheaCockpitDock() {
           <div className="flex items-center space-x-1.5">
             <button
               onClick={clearThread}
-              className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[10px] font-mono text-zinc-400 hover:text-white transition"
+              className="px-2.5 py-1 rounded-xl bg-white/[0.04] hover:bg-white/10 text-[10px] font-mono font-medium text-slate-400 hover:text-white transition"
               title="Reset Conversation"
             >
               Reset
             </button>
             <button
               onClick={() => setIsCockpitOpen(false)}
-              className="p-1.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition"
+              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition"
               title="Minimize Cockpit"
             >
               <ChevronRight className="h-4 w-4" />
@@ -181,16 +181,16 @@ export function PrometheaCockpitDock() {
         </div>
 
         {/* Control Spectrum Toggle (Full Automation -> Supervised -> Manual) */}
-        <div className="grid grid-cols-3 gap-1 bg-slate-950/80 p-1 rounded-xl border border-white/10 text-[11px] font-mono">
+        <div className="grid grid-cols-3 gap-1 bg-black/40 p-1 rounded-2xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.6)] text-[11px] font-mono">
           <button
             onClick={() => {
               setCockpitControlMode('CONVERSATIONAL');
               setActiveTab('CHAT');
             }}
-            className={`py-1.5 rounded-lg font-medium transition flex items-center justify-center space-x-1 ${
+            className={`py-1.5 rounded-xl font-semibold transition flex items-center justify-center space-x-1 ${
               cockpitControlMode === 'CONVERSATIONAL' && activeTab === 'CHAT'
-                ? 'bg-cyan-500 text-slate-950 font-bold shadow'
-                : 'text-zinc-400 hover:text-white'
+                ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(6,182,212,0.4)]'
+                : 'text-slate-300 hover:text-white'
             }`}
           >
             <Bot className="h-3 w-3" />
@@ -199,10 +199,10 @@ export function PrometheaCockpitDock() {
 
           <button
             onClick={() => setActiveTab('ACTION_CARDS')}
-            className={`py-1.5 rounded-lg font-medium transition flex items-center justify-center space-x-1 ${
+            className={`py-1.5 rounded-xl font-semibold transition flex items-center justify-center space-x-1 ${
               activeTab === 'ACTION_CARDS'
-                ? 'bg-amber-500 text-slate-950 font-bold shadow'
-                : 'text-zinc-400 hover:text-white'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(245,158,11,0.4)]'
+                : 'text-slate-300 hover:text-white'
             }`}
           >
             <Zap className="h-3 w-3" />
@@ -214,10 +214,10 @@ export function PrometheaCockpitDock() {
               setCockpitControlMode('MANUAL');
               setActiveTab('MANUAL_DECK');
             }}
-            className={`py-1.5 rounded-lg font-medium transition flex items-center justify-center space-x-1 ${
+            className={`py-1.5 rounded-xl font-semibold transition flex items-center justify-center space-x-1 ${
               activeTab === 'MANUAL_DECK'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow'
-                : 'text-zinc-400 hover:text-white'
+                ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(16,185,129,0.4)]'
+                : 'text-slate-300 hover:text-white'
             }`}
           >
             <Sliders className="h-3 w-3" />
@@ -289,17 +289,17 @@ export function PrometheaCockpitDock() {
         {activeTab === 'ACTION_CARDS' && (
           <div className="space-y-4">
             {/* Card A: Forensic Watermarked Vault Document */}
-            <div className="rounded-2xl border border-white/10 bg-slate-900/80 p-4 space-y-3">
+            <div className="rounded-2xl bg-white/[0.03] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_10px_25px_-5px_rgba(0,0,0,0.5)] p-4 space-y-3 glass-card-hover">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-white flex items-center gap-1.5">
+                <span className="text-xs font-command font-bold text-white flex items-center gap-1.5">
                   <FileText className="h-4 w-4 text-cyan-400" />
                   Forensic Legal Vault Stream
                 </span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-600">
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-emerald-950 text-emerald-300 shadow-[inset_0_1px_0_rgba(52,211,153,0.4)]">
                   WATERMARKED
                 </span>
               </div>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans">
+              <p className="text-xs text-slate-300 leading-relaxed font-sans">
                 Dynamic, anti-leak forensic streaming directly from the sovereign private archive.
               </p>
               <div className="flex items-center space-x-2">
@@ -307,7 +307,7 @@ export function PrometheaCockpitDock() {
                   href="/api/vault/private/Promethea_Sovereign_Operating_Agreement.pdf?watermark=CITIZEN_0x82f1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center space-x-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono font-bold text-xs py-2 rounded-xl transition"
+                  className="flex-1 flex items-center justify-center space-x-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono font-bold text-xs py-2.5 rounded-xl shadow-[0_2px_12px_rgba(6,182,212,0.3)] transition-all"
                 >
                   <span>Open Watermarked Document</span>
                   <ExternalLink className="h-3.5 w-3.5" />
@@ -316,26 +316,26 @@ export function PrometheaCockpitDock() {
             </div>
 
             {/* Card B: Biometric EIP-7212 Passkey Signer */}
-            <div className="rounded-2xl border border-amber-500/30 bg-amber-950/20 p-4 space-y-3">
+            <div className="rounded-2xl bg-amber-950/20 shadow-[inset_0_1px_0_0_rgba(245,158,11,0.25),0_10px_25px_-5px_rgba(0,0,0,0.5)] p-4 space-y-3 glass-card-hover">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-amber-300 flex items-center gap-1.5">
+                <span className="text-xs font-command font-bold text-amber-300 flex items-center gap-1.5">
                   <Key className="h-4 w-4 text-amber-400" />
                   EIP-7212 Biometric Passkey Gate
                 </span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-600">
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-amber-950 text-amber-300 shadow-[inset_0_1px_0_rgba(245,158,11,0.4)]">
                   secp256r1
                 </span>
               </div>
-              <p className="text-xs text-amber-200/80 leading-relaxed font-sans">
+              <p className="text-xs text-amber-200/90 leading-relaxed font-sans">
                 Cryptographic authorization via hardware Secure Enclave. Zero seed phrases required.
               </p>
               <button
                 onClick={handlePasskeySign}
                 disabled={signingStatus === 'SIGNING'}
-                className={`w-full flex items-center justify-center space-x-2 py-2.5 rounded-xl font-mono text-xs font-bold transition ${
+                className={`w-full flex items-center justify-center space-x-2 py-2.5 rounded-xl font-mono text-xs font-bold transition-all ${
                   signingStatus === 'VERIFIED'
-                    ? 'bg-emerald-500 text-slate-950'
-                    : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+                    ? 'bg-emerald-500 text-slate-950 shadow-[0_2px_12px_rgba(16,185,129,0.4)]'
+                    : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-[0_2px_12px_rgba(245,158,11,0.3)]'
                 }`}
               >
                 {signingStatus === 'SIGNING' ? (
@@ -358,24 +358,24 @@ export function PrometheaCockpitDock() {
             </div>
 
             {/* Card C: Basic Information Timestamp (BIT) Genesis */}
-            <div className="rounded-2xl border border-cyan-500/30 bg-cyan-950/20 p-4 space-y-3">
+            <div className="rounded-2xl bg-cyan-950/20 shadow-[inset_0_1px_0_0_rgba(6,182,212,0.25),0_10px_25px_-5px_rgba(0,0,0,0.5)] p-4 space-y-3 glass-card-hover">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-cyan-300 flex items-center gap-1.5">
+                <span className="text-xs font-command font-bold text-cyan-300 flex items-center gap-1.5">
                   <Clock className="h-4 w-4 text-cyan-400" />
                   Basic Information Timestamp (BIT)
                 </span>
-                <span className="text-[9px] font-mono text-zinc-400">P2P Mesh</span>
+                <span className="text-[9px] font-mono font-semibold text-slate-400">P2P Mesh</span>
               </div>
               {generatedBit ? (
-                <div className="bg-slate-950/80 rounded-xl p-3 border border-cyan-500/20 font-mono text-[10px] space-y-1 text-cyan-200">
-                  <div>CID: <span className="text-white">{generatedBit.cid}</span></div>
-                  <div>NODE: <span className="text-white">{generatedBit.node}</span></div>
-                  <div>SIG: <span className="text-emerald-400">{generatedBit.validatorSignature}</span></div>
+                <div className="bg-black/40 rounded-xl p-3 shadow-[inset_0_1px_2px_rgba(0,0,0,0.6)] font-mono text-[10px] space-y-1 text-cyan-200">
+                  <div>CID: <span className="text-white font-semibold">{generatedBit.cid}</span></div>
+                  <div>NODE: <span className="text-white font-semibold">{generatedBit.node}</span></div>
+                  <div>SIG: <span className="text-emerald-400 font-semibold">{generatedBit.validatorSignature}</span></div>
                 </div>
               ) : (
                 <button
                   onClick={handleGenerateBit}
-                  className="w-full py-2 bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-700/50 text-cyan-300 rounded-xl text-xs font-mono font-bold transition"
+                  className="w-full py-2.5 bg-cyan-500/15 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 shadow-[inset_0_1px_0_rgba(6,182,212,0.4)] rounded-xl text-xs font-mono font-bold transition-all"
                 >
                   Generate & Sign BIT for Active Focus
                 </button>
@@ -387,9 +387,9 @@ export function PrometheaCockpitDock() {
         {/* TAB 3: Direct Manual Controls Mode */}
         {activeTab === 'MANUAL_DECK' && (
           <div className="space-y-4">
-            <div className="rounded-2xl border border-white/10 bg-slate-900/80 p-4 space-y-4">
+            <div className="rounded-2xl bg-white/[0.03] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_10px_25px_-5px_rgba(0,0,0,0.5)] p-4 space-y-4 glass-card-hover">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-white flex items-center gap-1.5">
+                <span className="text-xs font-command font-bold text-white flex items-center gap-1.5">
                   <Sliders className="h-4 w-4 text-emerald-400" />
                   Direct Capital & Yield Dispatch
                 </span>
@@ -398,8 +398,8 @@ export function PrometheaCockpitDock() {
                 </span>
               </div>
 
-              <div>
-                <label className="text-[10px] font-mono text-zinc-400 flex justify-between mb-1">
+              <div className="stat-lockup">
+                <label className="text-[10px] font-mono text-slate-400 flex justify-between mb-1.5">
                   <span>Allocation Level</span>
                   <span>Max: 10,000 PTNS</span>
                 </label>
@@ -415,12 +415,12 @@ export function PrometheaCockpitDock() {
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-center font-mono">
-                <div className="p-2 rounded-xl bg-slate-950/60 border border-white/5">
-                  <div className="text-[9px] text-zinc-500">EST. DAILY ENERGY</div>
+                <div className="p-2.5 rounded-xl bg-black/30 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)] stat-lockup">
+                  <div className="text-[9px] text-slate-400">EST. DAILY ENERGY</div>
                   <div className="text-xs font-bold text-cyan-400">{(stakeAmount * 0.08).toFixed(1)} kWh</div>
                 </div>
-                <div className="p-2 rounded-xl bg-slate-950/60 border border-white/5">
-                  <div className="text-[9px] text-zinc-500">PROJECTED APY</div>
+                <div className="p-2.5 rounded-xl bg-black/30 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)] stat-lockup">
+                  <div className="text-[9px] text-slate-400">PROJECTED APY</div>
                   <div className="text-xs font-bold text-emerald-400">9.4%</div>
                 </div>
               </div>

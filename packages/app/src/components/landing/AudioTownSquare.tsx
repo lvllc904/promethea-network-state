@@ -201,33 +201,33 @@ export const AudioTownSquare: React.FC = () => {
           </div>
 
           {/* Public Telemetry Panel */}
-          <div className="bg-[#182035] border border-gray-800 rounded-2xl p-6 space-y-4 shadow-xl">
-            <div className="flex justify-between items-center border-b border-gray-800 pb-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">
+          <div className="glass-panel-specular rounded-3xl p-6 space-y-4">
+            <div className="flex justify-between items-center shadow-[inset_0_-1px_0_0_rgba(255,255,255,0.06)] pb-3">
+              <h3 className="data-kicker text-slate-300">
                 🌱 Public Community Telemetry (Anonymous Read Access)
               </h3>
               <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F59E0B] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F59E0B]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
               </span>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-[#111625] p-3.5 rounded-xl text-center border border-gray-900">
-                <span className="block text-xs text-gray-500 uppercase">Solar Array</span>
-                <span className="text-base md:text-lg font-bold text-white">{systemMetrics.solarOutputKw} kW</span>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="bg-black/30 p-3.5 rounded-2xl text-center stat-lockup shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Solar Array</span>
+                <span className="text-base md:text-lg font-command font-bold text-white">{systemMetrics.solarOutputKw} kW</span>
               </div>
-              <div className="bg-[#111625] p-3.5 rounded-xl text-center border border-gray-900">
-                <span className="block text-xs text-gray-500 uppercase">Water Loop</span>
-                <span className="text-base md:text-lg font-bold text-white">{systemMetrics.waterReclaimedLiters} L</span>
+              <div className="bg-black/30 p-3.5 rounded-2xl text-center stat-lockup shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Water Loop</span>
+                <span className="text-base md:text-lg font-command font-bold text-white">{systemMetrics.waterReclaimedLiters} L</span>
               </div>
-              <div className="bg-[#111625] p-3.5 rounded-xl text-center border border-gray-900">
-                <span className="block text-xs text-gray-500 uppercase">Greenhouse</span>
-                <span className="text-base md:text-lg font-bold text-white">{systemMetrics.activeGreenhouseTempC}°C</span>
+              <div className="bg-black/30 p-3.5 rounded-2xl text-center stat-lockup shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Greenhouse</span>
+                <span className="text-base md:text-lg font-command font-bold text-white">{systemMetrics.activeGreenhouseTempC}°C</span>
               </div>
-              <div className="bg-[#111625] p-3.5 rounded-xl text-center border border-gray-900">
-                <span className="block text-xs text-gray-500 uppercase">Active Nodes</span>
-                <span className="text-base md:text-lg font-bold text-white">{systemMetrics.globalAcomNodes}</span>
+              <div className="bg-black/30 p-3.5 rounded-2xl text-center stat-lockup shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Active Nodes</span>
+                <span className="text-base md:text-lg font-command font-bold text-white">{systemMetrics.globalAcomNodes}</span>
               </div>
             </div>
           </div>
@@ -235,13 +235,13 @@ export const AudioTownSquare: React.FC = () => {
 
         {/* RIGHT COLUMN: INTERACTIVE WEBRTC VOICE COMMONS */}
         <div className="lg:col-span-5 flex flex-col justify-center">
-          <div className="bg-[#1e2942] border border-[#F59E0B]/30 rounded-3xl p-6 shadow-2xl space-y-6 relative overflow-hidden">
+          <div className="glass-panel-specular rounded-3xl p-6 space-y-6 relative overflow-hidden">
             
             {/* Glowing Accent Ambient Gradient */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#F59E0B]/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
             
             {/* Header Status */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center shadow-[inset_0_-1px_0_0_rgba(255,255,255,0.06)] pb-3">
               <div className="flex items-center space-x-2">
                 <span className={`h-2.5 w-2.5 rounded-full ${inRoom ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
                 <span className="text-xs uppercase tracking-wider text-gray-400 font-semibold">

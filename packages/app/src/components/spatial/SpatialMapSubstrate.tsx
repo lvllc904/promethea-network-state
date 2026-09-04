@@ -222,51 +222,51 @@ export function SpatialMapSubstrate() {
 
       {/* Top Floating Spatial HUD Overlay */}
       <div className="absolute top-5 left-6 right-6 flex items-center justify-between pointer-events-none z-20">
-        <div className="flex items-center space-x-3 pointer-events-auto bg-slate-950/80 border border-white/10 px-4 py-2.5 rounded-2xl backdrop-blur-xl shadow-2xl">
-          <div className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
-          <div>
+        <div className="flex items-center space-x-3 pointer-events-auto glass-panel-specular px-4 py-2.5 rounded-2xl">
+          <div className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
+          <div className="stat-lockup">
             <div className="flex items-center space-x-2">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+              <span className="text-xs font-command font-bold tracking-tight text-white">
                 Sovereign Spatial Substrate
               </span>
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/90 text-emerald-300 border border-emerald-500/40">
+              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-emerald-950/90 text-emerald-300 shadow-[inset_0_1px_0_rgba(52,211,153,0.3)]">
                 L1 VERIFIED
               </span>
             </div>
-            <div className="text-[10px] font-mono text-zinc-400">
-              LAT: {mapTarget.lat.toFixed(4)}° • LNG: {mapTarget.lng.toFixed(4)}° • ZOOM: {currentZoom}x
+            <div className="text-[10px] font-mono text-slate-300 tracking-wide">
+              LAT {mapTarget.lat.toFixed(4)}° • LNG {mapTarget.lng.toFixed(4)}° • ZOOM {currentZoom}x
             </div>
           </div>
         </div>
 
         {/* View Mode & Reality Filters */}
-        <div className="flex items-center space-x-2 pointer-events-auto bg-slate-950/80 border border-white/10 p-1 rounded-2xl backdrop-blur-xl shadow-2xl">
+        <div className="flex items-center space-x-1.5 pointer-events-auto glass-panel-specular p-1 rounded-2xl">
           <button
             onClick={() => setMapMode('SURFACE')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
               mapMode === 'SURFACE'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md'
-                : 'text-zinc-400 hover:text-white'
+                ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(16,185,129,0.3)]'
+                : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Surface GIS
           </button>
           <button
             onClick={() => setMapMode('ORBITAL')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
               mapMode === 'ORBITAL'
-                ? 'bg-cyan-500 text-slate-950 font-bold shadow-md'
-                : 'text-zinc-400 hover:text-white'
+                ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(6,182,212,0.3)]'
+                : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Orbital
           </button>
           <button
             onClick={() => setMapMode('TOPOLOGY')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
               mapMode === 'TOPOLOGY'
-                ? 'bg-amber-500 text-slate-950 font-bold shadow-md'
-                : 'text-zinc-400 hover:text-white'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(245,158,11,0.3)]'
+                : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Topology
@@ -276,18 +276,18 @@ export function SpatialMapSubstrate() {
 
       {/* Bottom Floating Map Zoom & Orientation Controls */}
       <div className="absolute bottom-8 left-6 flex items-center space-x-2 pointer-events-auto z-20">
-        <div className="flex flex-col bg-slate-950/85 border border-white/10 rounded-2xl p-1 backdrop-blur-xl shadow-2xl">
+        <div className="flex flex-col glass-panel-specular rounded-2xl p-1">
           <button
             onClick={() => setCurrentZoom((z) => Math.min(z + 1, 20))}
-            className="p-2 text-zinc-300 hover:text-white hover:bg-white/10 rounded-xl transition"
+            className="p-2 text-slate-200 hover:text-white hover:bg-white/10 rounded-xl transition"
             title="Zoom In"
           >
             <Plus className="h-4 w-4" />
           </button>
-          <div className="h-px bg-white/10 my-0.5" />
+          <div className="h-px bg-white/10 my-0.5 mx-1" />
           <button
             onClick={() => setCurrentZoom((z) => Math.max(z - 1, 8))}
-            className="p-2 text-zinc-300 hover:text-white hover:bg-white/10 rounded-xl transition"
+            className="p-2 text-slate-200 hover:text-white hover:bg-white/10 rounded-xl transition"
             title="Zoom Out"
           >
             <Minus className="h-4 w-4" />
@@ -299,7 +299,7 @@ export function SpatialMapSubstrate() {
             setPanOffset({ x: 0, y: 0 });
             setCurrentZoom(15);
           }}
-          className="flex items-center space-x-1.5 px-3 py-2 bg-slate-950/85 border border-white/10 text-zinc-300 hover:text-cyan-300 rounded-2xl backdrop-blur-xl text-xs font-mono shadow-2xl transition"
+          className="flex items-center space-x-2 px-3.5 py-2 glass-panel-specular text-slate-200 hover:text-cyan-300 rounded-2xl text-xs font-mono font-medium transition"
           title="Recenter Map Viewport"
         >
           <Compass className="h-4 w-4 text-cyan-400" />
