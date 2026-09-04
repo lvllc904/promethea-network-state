@@ -211,7 +211,7 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
                     <TelemetryNode>
                         {children}
                     </TelemetryNode>
-                    <PrometheaSurface />
+                    {pathname && !pathname.startsWith('/dashboard') && !pathname.startsWith('/cockpit') && <PrometheaSurface />}
                     <Toaster />
                     {pathname && pathname !== '/' && !pathname.startsWith('/dashboard') && pathname !== '/lpa' && <ThemeController />}
                 </PrometheaProvider>

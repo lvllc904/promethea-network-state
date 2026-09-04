@@ -105,7 +105,7 @@ export function SpatialMapSubstrate() {
 
   return (
     <div 
-      className="relative w-full h-full min-h-screen overflow-hidden select-none bg-[#07090e] cursor-grab active:cursor-grabbing"
+      className="relative w-full h-full overflow-hidden select-none bg-[#07090e] cursor-grab active:cursor-grabbing"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
@@ -220,30 +220,28 @@ export function SpatialMapSubstrate() {
         })}
       </div>
 
-      {/* Top Floating Spatial HUD Overlay */}
-      <div className="absolute top-5 left-6 right-6 flex items-center justify-between pointer-events-none z-20">
-        <div className="flex items-center space-x-3 pointer-events-auto glass-panel-specular px-4 py-2.5 rounded-2xl">
-          <div className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
-          <div className="stat-lockup">
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-command font-bold tracking-tight text-white">
-                Sovereign Spatial Substrate
-              </span>
-              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-emerald-950/90 text-emerald-300 shadow-[inset_0_1px_0_rgba(52,211,153,0.3)]">
-                L1 VERIFIED
-              </span>
-            </div>
-            <div className="text-[10px] font-mono text-slate-300 tracking-wide">
-              LAT {mapTarget.lat.toFixed(4)}° • LNG {mapTarget.lng.toFixed(4)}° • ZOOM {currentZoom}x
-            </div>
+      {/* Top Center Floating Spatial HUD Overlay */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-wrap items-center justify-center gap-2.5 pointer-events-none z-20">
+        <div className="flex items-center space-x-2.5 pointer-events-auto glass-panel-specular px-3.5 py-2 rounded-2xl shadow-lg">
+          <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+          <div className="flex items-center space-x-2">
+            <span className="text-xs font-command font-bold tracking-tight text-white whitespace-nowrap">
+              Spatial Substrate
+            </span>
+            <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-emerald-950/90 text-emerald-300 shadow-[inset_0_1px_0_rgba(52,211,153,0.3)]">
+              L1
+            </span>
+          </div>
+          <div className="hidden xl:block text-[10px] font-mono text-slate-300 whitespace-nowrap">
+            LAT {mapTarget.lat.toFixed(4)}° • LNG {mapTarget.lng.toFixed(4)}° • {currentZoom}x
           </div>
         </div>
 
         {/* View Mode & Reality Filters */}
-        <div className="flex items-center space-x-1.5 pointer-events-auto glass-panel-specular p-1 rounded-2xl">
+        <div className="flex items-center space-x-1 pointer-events-auto glass-panel-specular p-1 rounded-2xl shadow-lg">
           <button
             onClick={() => setMapMode('SURFACE')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
               mapMode === 'SURFACE'
                 ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(16,185,129,0.3)]'
                 : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
@@ -253,7 +251,7 @@ export function SpatialMapSubstrate() {
           </button>
           <button
             onClick={() => setMapMode('ORBITAL')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
               mapMode === 'ORBITAL'
                 ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(6,182,212,0.3)]'
                 : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
@@ -263,7 +261,7 @@ export function SpatialMapSubstrate() {
           </button>
           <button
             onClick={() => setMapMode('TOPOLOGY')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
               mapMode === 'TOPOLOGY'
                 ? 'bg-amber-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(245,158,11,0.3)]'
                 : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'

@@ -22,20 +22,21 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
   const { isMarketplaceOpen, isCockpitOpen, setIsMarketplaceOpen, setIsCockpitOpen } = useSpatialBus();
 
   return (
-    <div className="relative min-h-[100dvh] bg-[#07090e] text-white overflow-hidden flex flex-col">
+    <div className="relative h-[100dvh] max-h-[100dvh] w-full bg-[#07090e] text-white overflow-hidden flex flex-col select-none">
       {/* Top Sovereign Bar */}
-      <header className="relative z-40 bg-white/[0.02] backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_-1px_0_0_rgba(255,255,255,0.06)] shrink-0">
+      <header className="sticky top-0 z-50 w-full bg-slate-950/95 backdrop-blur-2xl border-b border-white/10 shadow-[0_4px_24px_rgba(0,0,0,0.6)] shrink-0">
         <div className="mx-auto flex h-16 max-w-[1920px] items-center justify-between gap-4 px-4 sm:px-6">
           <div className="flex items-center space-x-3">
             <Link 
               href="/" 
-              className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+              className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 group"
+              title="Return to Landing Page"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 font-command text-xs font-black text-slate-950 shadow-[0_0_15px_rgba(0,242,254,0.3)]">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 font-command text-xs font-black text-slate-950 shadow-[0_0_15px_rgba(0,242,254,0.3)] group-hover:scale-105 transition-transform">
                 PNS
               </span>
               <div className="hidden sm:block stat-lockup">
-                <span className="font-command text-sm font-bold tracking-tight text-white">
+                <span className="font-command text-sm font-bold tracking-tight text-white group-hover:text-cyan-300 transition-colors">
                   Promethean Sovereign Cockpit
                 </span>
                 <span className="data-kicker text-cyan-400">
@@ -54,6 +55,7 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
                   ? 'bg-emerald-500 text-slate-950 shadow-[0_2px_10px_rgba(16,185,129,0.3)]'
                   : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
               }`}
+              title="Toggle Marketplace Feed Drawer"
             >
               <SlidersHorizontal className="h-3.5 w-3.5" />
               <span className="hidden md:inline">Marketplace</span>
@@ -66,6 +68,7 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
                   ? 'bg-cyan-500 text-slate-950 shadow-[0_2px_10px_rgba(6,182,212,0.3)]'
                   : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
               }`}
+              title="Toggle Promethea AI Dock"
             >
               <Bot className="h-3.5 w-3.5" />
               <span className="hidden md:inline">Promethea</span>
@@ -82,13 +85,13 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
               <span>+ Onboard Asset</span>
             </button>
 
-            <GuildhallThemeMenu />
+            <GuildhallThemeMenu className="px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 border border-white/10 shadow-sm transition" />
             <UiVersionToggle />
 
-            <Button asChild variant="outline" size="sm" className="border-white/10 bg-transparent text-zinc-300 hover:text-white hover:bg-white/10 rounded-xl">
+            <Button asChild variant="outline" size="sm" className="border-white/10 bg-white/[0.05] text-zinc-200 hover:text-white hover:bg-white/10 rounded-xl px-3 py-1.5 text-xs font-mono font-semibold shadow-sm">
               <Link href="/">
-                <ArrowRight className="h-3.5 w-3.5 rotate-180 mr-1" />
-                Exit
+                <ArrowRight className="h-3.5 w-3.5 rotate-180 mr-1.5 text-cyan-400" />
+                <span>Exit to Landing</span>
               </Link>
             </Button>
           </div>

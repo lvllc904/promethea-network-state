@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useSpatialBus, SpatialCategory, SpatialItem } from '@/context/SpatialBusContext';
 import { 
   Building2, 
@@ -17,11 +17,12 @@ import {
   ChevronRight,
   TrendingUp,
   MapPin,
-  FileText
+  FileText,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
-import { AudioTownSquare } from '@/components/landing/AudioTownSquare';
-import { LandingVideoShowcase } from '@/components/landing/LandingVideoShowcase';
-import { LandingMediaGrid } from '@/components/landing/LandingMediaGrid';
 
 export function TownhallMarketplaceDrawer() {
   const { 
@@ -40,13 +41,21 @@ export function TownhallMarketplaceDrawer() {
   const itemRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const listContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // Auto-scroll to selected item when activeItemId changes externally (e.g., via Map click)
+  // Auto-scroll to selected item when activeItemId changes externally (e.g., via Map click) without scrolling window
   useEffect(() => {
-    if (activeItemId && itemRefs.current[activeItemId]) {
-      itemRefs.current[activeItemId]?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest'
-      });
+    if (activeItemId && itemRefs.current[activeItemId] && listContainerRef.current) {
+      const element = itemRefs.current[activeItemId];
+      const container = listContainerRef.current;
+      if (element && container) {
+        const elementRect = element.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        if (elementRect.top < containerRect.top || elementRect.bottom > containerRect.bottom) {
+          container.scrollTo({
+            top: container.scrollTop + (elementRect.top - containerRect.top) - 20,
+            behavior: 'smooth'
+          });
+        }
+      }
     }
   }, [activeItemId]);
 
@@ -164,23 +173,27 @@ export function TownhallMarketplaceDrawer() {
       >
         {/* Special Embedded Sub-Views when in dedicated categories */}
         {activeCategory === 'TOWNHALL' && (
-          <div className="mb-4 rounded-2xl p-4 glass-panel-specular shadow-lg">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-command font-bold text-amber-300 flex items-center gap-1.5">
-                <Radio className="h-3.5 w-3.5 animate-pulse text-amber-400" />
-                Live Spatial Commons
-              </span>
-              <span className="text-[10px] font-mono text-slate-400 font-semibold">WebRTC Mesh</span>
-            </div>
-            <AudioTownSquare />
-          </div>
+          <CompactTownSquareAudio 
+            onSpeak={() => {
+              const townhallItem = items.find(i => i.category === 'TOWNHALL') || filteredItems[0];
+              if (townhallItem) {
+                selectItem(townhallItem);
+                triggerAgentAction('TOWNHALL_SPEAK', townhallItem);
+              }
+            }} 
+          />
         )}
 
         {activeCategory === 'MEDIA' && (
-          <div className="mb-4 space-y-4">
-            <LandingVideoShowcase />
-            <LandingMediaGrid />
-          </div>
+          <CompactMediaShowcase 
+            onQueryPromethea={() => {
+              const mediaItem = items.find(i => i.category === 'MEDIA') || filteredItems[0];
+              if (mediaItem) {
+                selectItem(mediaItem);
+                triggerAgentAction('VAULT_VIEW', mediaItem);
+              }
+            }} 
+          />
         )}
 
         {/* Standard Card List (CBRE / Realtor.com style) */}
@@ -292,3 +305,203 @@ export function TownhallMarketplaceDrawer() {
     </aside>
   );
 }
+
+function CompactTownSquareAudio({ onSpeak }: { onSpeak: () => void }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [levels, setLevels] = useState([20, 45, 70, 35, 60, 85, 40, 25]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setLevels(prev => prev.map(() => Math.floor(Math.random() * 70) + 20));
+      }, 150);
+    } else {
+      setLevels([15, 20, 15, 25, 20, 15, 20, 15]);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isPlaying]);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(true));
+      }
+    } else {
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+    }
+    setIsMuted(!isMuted);
+  };
+
+  return (
+    <div className="mb-4 rounded-2xl p-4 glass-panel-specular shadow-lg border border-amber-500/20 bg-amber-950/20 space-y-3">
+      <audio
+        ref={audioRef}
+        src="/media/How_Sovereign_Smarthoods_reclaim_community_wealth.m4a"
+        onEnded={() => setIsPlaying(false)}
+        preload="metadata"
+      />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className="relative flex h-3 w-3 items-center justify-center">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
+          </div>
+          <span className="text-xs font-command font-bold text-amber-300">
+            Live Sovereign Commons
+          </span>
+        </div>
+        <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/30">
+          42 Connected
+        </span>
+      </div>
+
+      <div className="bg-black/40 rounded-xl p-3 border border-white/5 space-y-2.5">
+        <div className="flex items-center justify-between text-xs">
+          <span className="font-command font-bold text-white text-xs truncate">
+            Sovereign Smarthoods &amp; Wealth
+          </span>
+          <span className="text-[10px] font-mono text-amber-300 ml-2 shrink-0">WebRTC Mesh</span>
+        </div>
+
+        {/* Audio Visualizer Equalizer */}
+        <div className="flex items-end justify-center space-x-1.5 h-9 py-1 bg-black/60 rounded-lg px-2">
+          {levels.map((lvl, idx) => (
+            <div
+              key={idx}
+              className="w-2 rounded-t bg-gradient-to-t from-amber-500 to-emerald-400 transition-all duration-150"
+              style={{ height: `${lvl}%` }}
+            />
+          ))}
+        </div>
+
+        <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center space-x-1.5 text-[10px] font-mono text-slate-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span>Citizen #402 (Speaking)</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={toggleMute}
+              className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition"
+              title={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted ? <VolumeX className="h-3.5 w-3.5 text-rose-400" /> : <Volume2 className="h-3.5 w-3.5 text-slate-300" />}
+            </button>
+            <button
+              onClick={togglePlay}
+              className="flex items-center space-x-1 px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs font-mono transition shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+            >
+              {isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3 fill-current" />}
+              <span>{isPlaying ? 'Pause' : 'Listen Live'}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={onSpeak}
+        className="w-full flex items-center justify-center space-x-2 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-mono font-bold transition"
+      >
+        <Sparkles className="h-3.5 w-3.5" />
+        <span>Request Mic with Promethea</span>
+      </button>
+    </div>
+  );
+}
+
+function CompactMediaShowcase({ onQueryPromethea }: { onQueryPromethea: () => void }) {
+  const [selectedStream, setSelectedStream] = useState<'KEYNOTE' | 'RECON'>('KEYNOTE');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  return (
+    <div className="mb-4 rounded-2xl p-4 glass-panel-specular shadow-lg border border-cyan-500/20 bg-slate-950/40 space-y-3">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-command font-bold text-cyan-300 flex items-center gap-1.5">
+          <PlaySquare className="h-3.5 w-3.5 text-cyan-400" />
+          Sovereign Media Stream
+        </span>
+        <span className="text-[10px] font-mono text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded-full border border-cyan-500/30">
+          IPFS P2P
+        </span>
+      </div>
+
+      {/* Stream Tabs */}
+      <div className="grid grid-cols-2 gap-1.5 p-1 bg-black/40 rounded-xl">
+        <button
+          onClick={() => {
+            setSelectedStream('KEYNOTE');
+            setIsPlaying(false);
+          }}
+          className={`py-1 text-[11px] font-mono rounded-lg font-bold transition ${
+            selectedStream === 'KEYNOTE'
+              ? 'bg-cyan-500 text-slate-950 shadow-sm'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          Master Keynote (4K)
+        </button>
+        <button
+          onClick={() => {
+            setSelectedStream('RECON');
+            setIsPlaying(false);
+          }}
+          className={`py-1 text-[11px] font-mono rounded-lg font-bold transition ${
+            selectedStream === 'RECON'
+              ? 'bg-cyan-500 text-slate-950 shadow-sm'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          Drone Recon (GIS)
+        </button>
+      </div>
+
+      {/* Video Viewport */}
+      <div className="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/10 group">
+        <video
+          ref={videoRef}
+          src="/media/Promethean_Sovereign_Substrate.mp4"
+          poster={selectedStream === 'KEYNOTE' ? '/media/Local_Wealth_Sovereignty_Pillars.png' : '/media/tripartite_capital_stack_leverage.jpg'}
+          controls
+          className="w-full h-full object-cover"
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+        />
+      </div>
+
+      <div className="flex items-center justify-between pt-0.5">
+        <div className="stat-lockup">
+          <div className="text-xs font-command font-bold text-white truncate max-w-[280px]">
+            {selectedStream === 'KEYNOTE' ? 'The Sovereign Substrate Master Keynote' : 'Cascadia Drone Aerial GIS Recon'}
+          </div>
+          <div className="text-[10px] font-mono text-slate-400">
+            {selectedStream === 'KEYNOTE' ? 'Duration: 22:15 • 1080p MP4' : 'Duration: 14:02 • Real-time Orthomosaic'}
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={onQueryPromethea}
+        className="w-full flex items-center justify-center space-x-2 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-200 hover:text-white text-xs font-mono font-semibold transition"
+      >
+        <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
+        <span>Analyze Footage with Promethea</span>
+      </button>
+    </div>
+  );
+}
+
