@@ -115,14 +115,16 @@ export function GuildhallLanding() {
 
         {/* Network feed */}
         <section className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 lg:px-12" aria-labelledby="feed-title">
-          <div className="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-            <div>
-              <p className="guildhall-kicker text-guildhall-consensus">Network state feed</p>
-              <h2 id="feed-title" className="mt-3 font-command text-3xl font-semibold tracking-tight sm:text-4xl">Read the signal, then inspect the source.</h2>
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+              <div>
+                <p className="guildhall-kicker text-guildhall-consensus">Network state feed</p>
+                <h2 id="feed-title" className="mt-3 font-command text-3xl font-semibold tracking-tight sm:text-4xl">Read the signal, then inspect the source.</h2>
+              </div>
+              <Link href="/news" className="guildhall-text-link shrink-0">Open full news hub <ArrowUpRight className="h-4 w-4" /></Link>
             </div>
-            <Link href="/news" className="guildhall-text-link">Open full news hub <ArrowUpRight className="h-4 w-4" /></Link>
+            <NetworkFeedTable signals={signals} status={feedStatus} onRetry={() => void loadSignals()} />
           </div>
-          <NetworkFeedTable signals={signals} status={feedStatus} onRetry={() => void loadSignals()} />
         </section>
 
         {/* Soft divider */}
