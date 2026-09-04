@@ -260,7 +260,7 @@ export function PrometheaCockpitDock() {
                 key={msg.id}
                 className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
-                <div className="text-[9px] font-mono text-zinc-500 mb-1 px-1">
+                <div suppressHydrationWarning className="text-[9px] font-mono text-zinc-500 mb-1 px-1">
                   {msg.sender === 'user' ? 'CITIZEN' : 'PROMETHEA AI'} • {msg.timestamp}
                 </div>
                 <div

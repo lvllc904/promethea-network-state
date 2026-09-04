@@ -229,7 +229,7 @@ export function PrometheaSurface({ overrideMode }: { overrideMode?: PrometheaVie
             key={msg.id}
             className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
           >
-            <div className="text-[10px] font-mono text-slate-500 mb-1 px-1">
+            <div suppressHydrationWarning className="text-[10px] font-mono text-slate-500 mb-1 px-1">
               {msg.sender === 'user' ? 'CITIZEN' : 'PROMETHEA AI'} • {msg.timestamp}
             </div>
 

@@ -43,7 +43,7 @@ const INITIAL_WELCOME: PrometheaMessage = {
   text: `Greetings, Citizen. I am **Promethea** (\`promethea-ai\`), resident AI and Sovereign Steward of the Promethea Network State (**lvhllc.org**).
 
 How may I assist you today across our network infrastructure, DRULPA Series SPVs, or foundational principles?`,
-  timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+  timestamp: 'GENESIS',
 };
 
 export function PrometheaProvider({ children }: { children: React.ReactNode }) {
