@@ -53,17 +53,17 @@ export function GuildhallLanding() {
   return (
     <div className="min-h-[100dvh] bg-guildhall-bg text-guildhall-text">
       {/* Sticky nav - borderless, shadow-only */}
-      <header className="sticky top-0 z-50 bg-guildhall-bg/90 backdrop-blur-md" style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.04)' }}>
+      <header className="sticky top-0 z-50 bg-guildhall-bg/90 backdrop-blur-md border-b border-guildhall-line">
         <div className="mx-auto flex h-[4.5rem] max-w-[1440px] items-center justify-between gap-6 px-5 sm:px-8">
           <Link href="/" className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-guildhall-identity/50 rounded-xl">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-guildhall-identity font-command text-xs font-bold text-guildhall-bg" style={{ boxShadow: '0 0 20px rgba(245,158,11,0.3)' }}>PNS</span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-guildhall-identity font-command text-xs font-bold text-guildhall-bg shadow-sm">PNS</span>
             <span className="hidden font-command text-sm font-semibold tracking-[0.16em] sm:inline">Promethean</span>
           </Link>
           <nav className="flex items-center gap-2" aria-label="Primary navigation">
             <GroupedExploreMenu />
             <GuildhallThemeMenu className="hidden md:inline-flex" />
             <UiVersionToggle />
-            <Button asChild size="sm" className="rounded-xl bg-guildhall-text text-guildhall-bg hover:bg-white shadow-md"><Link href="/dashboard">Enter the cockpit <ArrowRight className="h-4 w-4" /></Link></Button>
+            <Button asChild size="sm" className="rounded-xl bg-guildhall-panel-raised text-guildhall-text hover:bg-guildhall-panel border border-guildhall-line shadow-sm"><Link href="/dashboard">Enter the cockpit <ArrowRight className="h-4 w-4" /></Link></Button>
           </nav>
         </div>
       </header>
@@ -71,18 +71,18 @@ export function GuildhallLanding() {
       <main className="space-y-0">
         {/* Hero - rounded card, shadow-only separation */}
         <section className="mx-auto max-w-[1440px] px-5 pt-12 pb-16 sm:px-8 sm:pt-16 sm:pb-20 lg:px-12">
-          <div className="grid gap-6 lg:grid-cols-2 rounded-3xl overflow-hidden" style={{ boxShadow: '0 8px 64px rgba(0,0,0,0.5)' }}>
+          <div className="grid gap-6 lg:grid-cols-2 rounded-3xl overflow-hidden border border-guildhall-line shadow-2xl">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="bg-guildhall-bg px-8 py-16 sm:px-10 sm:py-20 lg:px-14 lg:py-24">
               <p className="guildhall-kicker">Network state platform</p>
               <h1 className="mt-6 max-w-2xl font-command text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-guildhall-text sm:text-7xl">Sovereignty is <span className="text-guildhall-identity">computable.</span></h1>
               <p className="mt-7 max-w-xl text-lg leading-8 text-guildhall-muted">A verifiable operating surface for identity, real-world assets, treasury, and governance.</p>
               <div className="mt-9 flex flex-wrap gap-3">
-                <Button asChild size="lg" className="rounded-xl bg-guildhall-identity text-guildhall-bg hover:bg-amber-300" style={{ boxShadow: '0 0 24px rgba(245,158,11,0.25)' }}><Link href="/dashboard">Enter the cockpit <ArrowRight className="h-4 w-4" /></Link></Button>
-                <Button asChild size="lg" variant="outline" className="rounded-xl bg-transparent text-guildhall-text hover:bg-guildhall-panel/60 backdrop-blur-sm" style={{ border: '1px solid rgba(255,255,255,0.1)' }}><Link href="/constitution">Read the constitution</Link></Button>
+                <Button asChild size="lg" className="rounded-xl bg-guildhall-identity text-guildhall-bg hover:brightness-110 shadow-sm font-medium"><Link href="/dashboard">Enter the cockpit <ArrowRight className="h-4 w-4" /></Link></Button>
+                <Button asChild size="lg" variant="outline" className="rounded-xl bg-transparent text-guildhall-text hover:bg-guildhall-panel border border-guildhall-line"><Link href="/constitution">Read the constitution</Link></Button>
               </div>
               <div className="mt-14 grid max-w-xl grid-cols-1 sm:grid-cols-3 gap-3">
                 {[['Identity', 'Keys and proof'], ['Treasury', 'Assets and yield'], ['Consensus', 'Proposals and votes']].map(([label, detail]) => (
-                  <div key={label} className="rounded-2xl p-4 backdrop-blur-sm" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.04)' }}>
+                  <div key={label} className="rounded-2xl p-4 backdrop-blur-sm bg-guildhall-panel border border-guildhall-line">
                     <p className="guildhall-label">{label}</p>
                     <p className="mt-2 text-sm text-guildhall-muted">{detail}</p>
                   </div>
@@ -92,7 +92,7 @@ export function GuildhallLanding() {
             <div className="relative min-h-[30rem] overflow-hidden bg-guildhall-panel lg:min-h-0">
               <HeroTelemetryBackdrop />
               <div className="relative flex h-full min-h-[30rem] flex-col justify-between p-6 sm:p-8">
-                <div className="flex items-center justify-between pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="flex items-center justify-between pb-4 border-b border-guildhall-line">
                   <div>
                     <p className="guildhall-kicker text-guildhall-consensus">Telemetry window</p>
                     <p className="mt-1 text-sm text-guildhall-muted">A restrained view of the network signal layer.</p>
@@ -101,7 +101,7 @@ export function GuildhallLanding() {
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {[['Signal layer', 'Network feed'], ['Data posture', 'Source-labelled'], ['Map substrate', 'Atlas / orbital'], ['Access mode', 'Guest preview']].map(([label, value]) => (
-                    <div key={label} className="rounded-xl p-4 backdrop-blur-sm" style={{ background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.04)' }}>
+                    <div key={label} className="rounded-xl p-4 backdrop-blur-sm bg-guildhall-panel-raised border border-guildhall-line">
                       <p className="guildhall-label">{label}</p>
                       <p className="mt-2 font-code text-sm text-guildhall-text">{value}</p>
                     </div>
@@ -129,7 +129,7 @@ export function GuildhallLanding() {
 
         {/* Soft divider */}
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)' }} />
+          <div className="h-px bg-guildhall-line opacity-50" />
         </div>
 
         {/* News media grid */}
@@ -139,7 +139,7 @@ export function GuildhallLanding() {
 
         {/* Soft divider */}
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)' }} />
+          <div className="h-px bg-guildhall-line opacity-50" />
         </div>
 
         {/* Video showcase */}
@@ -149,7 +149,7 @@ export function GuildhallLanding() {
 
         {/* Soft divider */}
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)' }} />
+          <div className="h-px bg-guildhall-line opacity-50" />
         </div>
 
         {/* Spatial Audio Commons & Town Square */}
@@ -169,7 +169,7 @@ export function GuildhallLanding() {
 
         {/* Soft divider */}
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)' }} />
+          <div className="h-px bg-guildhall-line opacity-50" />
         </div>
 
         {/* Infographic */}
@@ -183,9 +183,9 @@ export function GuildhallLanding() {
             <div>
               <p className="guildhall-kicker text-guildhall-treasury">Start here</p>
               <h2 id="guidance-title" className="mt-3 font-command text-3xl font-semibold tracking-tight sm:text-4xl">A clear first route for every participant.</h2>
-              <div className="mt-8" style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="mt-8 border-t border-b border-guildhall-line">
                 {guidance.map(([number, title, detail, Icon]) => (
-                  <div key={number} className="grid gap-4 py-6 sm:grid-cols-[3rem_1fr_auto] sm:items-start" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div key={number} className="grid gap-4 py-6 sm:grid-cols-[3rem_1fr_auto] sm:items-start border-b border-guildhall-line last:border-b-0">
                     <span className="font-code text-sm text-guildhall-subtle">{number}</span>
                     <div>
                       <h3 className="font-command text-xl font-semibold">{title}</h3>
@@ -196,7 +196,7 @@ export function GuildhallLanding() {
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl p-6 sm:p-8 backdrop-blur-sm" style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 4px 32px rgba(0,0,0,0.3)' }}>
+            <div className="rounded-2xl p-6 sm:p-8 backdrop-blur-sm bg-guildhall-panel border border-guildhall-line shadow-lg">
               <BookOpen className="h-6 w-6 text-guildhall-consensus" aria-hidden="true" />
               <p className="guildhall-kicker mt-8 text-guildhall-consensus">Reference library</p>
               <h3 className="mt-3 font-command text-2xl font-semibold">Read the mechanics, not just the promise.</h3>
@@ -233,7 +233,7 @@ export function GuildhallLanding() {
             </div>
             <div>
               {releases.map(([version, title, detail]) => (
-                <div key={version} className="grid gap-3 py-5 sm:grid-cols-[6rem_1fr]" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div key={version} className="grid gap-3 py-5 sm:grid-cols-[6rem_1fr] border-b border-guildhall-line last:border-b-0">
                   <span className="font-code text-xs text-guildhall-identity">{version}</span>
                   <div>
                     <h3 className="font-medium text-guildhall-text">{title}</h3>
@@ -246,7 +246,7 @@ export function GuildhallLanding() {
         </section>
       </main>
 
-      <footer className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-10 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-12" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <footer className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-10 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-12 border-t border-guildhall-line">
         <div>
           <Link href="/" className="font-command font-semibold tracking-[0.14em]">Promethean Network State</Link>
           <p className="mt-2 text-xs text-guildhall-subtle">An institutional interface for identity, assets, treasury, and governance.</p>

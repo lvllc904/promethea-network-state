@@ -11,7 +11,7 @@ export interface ThemeControllerProps {
 }
 
 export function ThemeController({ variant = 'fixed' }: ThemeControllerProps) {
-    const { doc, themeState } = useMesh();
+    const { doc, themeState, setTheme } = useMesh();
     const { activateFocusPanel } = useHUD();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -20,21 +20,28 @@ export function ThemeController({ variant = 'fixed' }: ThemeControllerProps) {
         if (themeState?.theme) {
             const html = document.documentElement;
             // Clean up existing theme classes first
-            html.classList.remove('dark', 'theme-latex', 'theme-16bit', 'theme-phosphor');
+            html.classList.remove('dark', 'theme-latex', 'theme-16bit', 'theme-phosphor', 'theme-promethean-citadel', 'theme-citadel');
             // If the theme is "dark", next/tailwind needs class "dark". For custom ones, add them
-            if (themeState.theme === 'dark') {
-                html.classList.add('dark');
+            if (themeState.theme === 'dark' || themeState.theme === 'theme-citadel') {
+                html.classList.add('dark', 'theme-promethean-citadel');
             } else {
                 html.classList.add(themeState.theme);
+                if (themeState.theme === 'theme-16bit' || themeState.theme === 'theme-phosphor') {
+                    html.classList.add('dark');
+                }
             }
         }
     }, [themeState]);
 
     const changeTheme = (newTheme: string) => {
-        if (!doc) return;
-        const ymap = doc.getMap('ui-theme');
-        ymap.set('theme', newTheme);
-        ymap.set('isAdaptive', false);
+        if (setTheme) setTheme(newTheme);
+        if (doc) {
+            try {
+                const ymap = doc.getMap('ui-theme');
+                ymap.set('theme', newTheme);
+                ymap.set('isAdaptive', false);
+            } catch {}
+        }
         
         if (newTheme === 'theme-phosphor') {
             activateFocusPanel('PHOSPHOR');

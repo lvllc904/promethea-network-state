@@ -181,16 +181,16 @@ export function PrometheaCockpitDock() {
         </div>
 
         {/* Control Spectrum Toggle (Full Automation -> Supervised -> Manual) */}
-        <div className="grid grid-cols-3 gap-1 bg-black/40 p-1 rounded-2xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.6)] text-[11px] font-mono">
+        <div className="grid grid-cols-3 gap-1 bg-black/40 p-1 rounded-2xl border border-white/5 text-[11px] font-mono">
           <button
             onClick={() => {
               setCockpitControlMode('CONVERSATIONAL');
               setActiveTab('CHAT');
             }}
-            className={`py-1.5 rounded-xl font-semibold transition flex items-center justify-center space-x-1 ${
+            className={`py-1.5 rounded-xl font-medium transition flex items-center justify-center space-x-1 ${
               cockpitControlMode === 'CONVERSATIONAL' && activeTab === 'CHAT'
-                ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(6,182,212,0.4)]'
-                : 'text-slate-300 hover:text-white'
+                ? 'bg-white/10 text-white border border-white/20 shadow-sm'
+                : 'text-zinc-400 hover:text-white'
             }`}
           >
             <Bot className="h-3 w-3" />
@@ -199,10 +199,10 @@ export function PrometheaCockpitDock() {
 
           <button
             onClick={() => setActiveTab('ACTION_CARDS')}
-            className={`py-1.5 rounded-xl font-semibold transition flex items-center justify-center space-x-1 ${
+            className={`py-1.5 rounded-xl font-medium transition flex items-center justify-center space-x-1 ${
               activeTab === 'ACTION_CARDS'
-                ? 'bg-amber-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(245,158,11,0.4)]'
-                : 'text-slate-300 hover:text-white'
+                ? 'bg-white/10 text-white border border-white/20 shadow-sm'
+                : 'text-zinc-400 hover:text-white'
             }`}
           >
             <Zap className="h-3 w-3" />
@@ -214,10 +214,10 @@ export function PrometheaCockpitDock() {
               setCockpitControlMode('MANUAL');
               setActiveTab('MANUAL_DECK');
             }}
-            className={`py-1.5 rounded-xl font-semibold transition flex items-center justify-center space-x-1 ${
+            className={`py-1.5 rounded-xl font-medium transition flex items-center justify-center space-x-1 ${
               activeTab === 'MANUAL_DECK'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(16,185,129,0.4)]'
-                : 'text-slate-300 hover:text-white'
+                ? 'bg-white/10 text-white border border-white/20 shadow-sm'
+                : 'text-zinc-400 hover:text-white'
             }`}
           >
             <Sliders className="h-3 w-3" />
@@ -427,10 +427,10 @@ export function PrometheaCockpitDock() {
 
               <button
                 onClick={() => setIsStakingConfirmed(true)}
-                className={`w-full py-2.5 rounded-xl font-mono text-xs font-bold transition ${
+                className={`w-full py-2.5 rounded-xl font-mono text-xs font-semibold transition ${
                   isStakingConfirmed
-                    ? 'bg-emerald-500 text-slate-950'
-                    : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950'
+                    ? 'bg-emerald-500/25 text-emerald-200 border border-emerald-500/50'
+                    : 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)]'
                 }`}
               >
                 {isStakingConfirmed ? '✓ Allocation Dispatched' : `Confirm Stake of ${stakeAmount} PTNS`}
@@ -443,19 +443,19 @@ export function PrometheaCockpitDock() {
       {/* Cockpit Input Console (Conversational) */}
       <form 
         onSubmit={handleSendMessage}
-        className="p-3 border-t border-cyan-500/20 bg-slate-900/90 flex items-center space-x-2"
+        className="p-3 border-t border-white/10 bg-slate-950/90 flex items-center space-x-2"
       >
         <input
           type="text"
           placeholder="Command Promethea (e.g. 'Underwrite Taos solar', 'Stake 500 PTNS')..."
           value={inputQuery}
           onChange={(e) => setInputQuery(e.target.value)}
-          className="flex-1 bg-slate-950/80 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 font-sans"
+          className="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white/20 font-sans"
         />
         <button
           type="submit"
           disabled={isThinking || !inputQuery.trim()}
-          className="p-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 disabled:opacity-40 text-slate-950 font-bold transition"
+          className="p-2 rounded-xl bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white border border-white/10 font-semibold transition"
         >
           <Send className="h-4 w-4" />
         </button>

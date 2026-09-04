@@ -11,13 +11,13 @@ export function ControlDock() {
     const { themeState, setTheme } = useMesh();
 
     const themes = [
-        { id: 'theme-citadel', label: 'CITADEL' },
+        { id: 'dark', label: 'CITADEL' },
         { id: 'theme-latex', label: 'LATEX' },
         { id: 'theme-16bit', label: '16-BIT' },
         { id: 'theme-phosphor', label: 'PHOSPHOR' }
     ];
 
-    const currentTheme = themeState?.theme || 'theme-citadel';
+    const currentTheme = themeState?.theme === 'theme-citadel' ? 'dark' : (themeState?.theme || 'dark');
 
     return (
         <div className="fixed bottom-0 left-0 w-full px-6 pb-4 pt-10 pointer-events-none flex justify-center z-50">

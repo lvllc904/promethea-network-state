@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "NODE_OPTIONS='--max-old-space-size=4096' ../../node_modules/.bin/next build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' ./node_modules/.bin/next build",
     "build:static": "NEXT_STATIC_EXPORT=true next build",
     "export": "npm run build:static && next export",
     "start": "next start -p 3001",

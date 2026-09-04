@@ -39,7 +39,7 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
                 <span className="font-command text-sm font-bold tracking-tight text-white group-hover:text-cyan-300 transition-colors">
                   Promethean Sovereign Cockpit
                 </span>
-                <span className="data-kicker text-cyan-400">
+                <span className="data-kicker text-zinc-400">
                   3-BODY SPATIAL OS
                 </span>
               </div>
@@ -50,27 +50,27 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
           <div className="flex items-center space-x-1.5 glass-panel-specular p-1 rounded-2xl">
             <button
               onClick={() => setIsMarketplaceOpen(!isMarketplaceOpen)}
-              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
                 isMarketplaceOpen
-                  ? 'bg-emerald-500 text-slate-950 shadow-[0_2px_10px_rgba(16,185,129,0.3)]'
-                  : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
+                  ? 'bg-white/10 text-white border border-white/20 shadow-sm'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
               }`}
               title="Toggle Marketplace Feed Drawer"
             >
-              <SlidersHorizontal className="h-3.5 w-3.5" />
+              <SlidersHorizontal className="h-3.5 w-3.5 text-zinc-300" />
               <span className="hidden md:inline">Marketplace</span>
             </button>
 
             <button
               onClick={() => setIsCockpitOpen(!isCockpitOpen)}
-              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
                 isCockpitOpen
-                  ? 'bg-cyan-500 text-slate-950 shadow-[0_2px_10px_rgba(6,182,212,0.3)]'
-                  : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
+                  ? 'bg-white/10 text-white border border-white/20 shadow-sm'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
               }`}
               title="Toggle Promethea AI Dock"
             >
-              <Bot className="h-3.5 w-3.5" />
+              <Bot className="h-3.5 w-3.5 text-zinc-300" />
               <span className="hidden md:inline">Promethea</span>
             </button>
           </div>
@@ -79,18 +79,18 @@ function CockpitViewInner({ children }: { children?: ReactNode }) {
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => setShowAssetModal(true)}
-              className="hidden lg:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 border border-emerald-500/30 text-xs font-mono font-bold transition"
+              className="hidden lg:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white border border-white/10 text-xs font-mono font-medium transition"
             >
-              <Sparkles className="h-3.5 w-3.5" />
+              <Sparkles className="h-3.5 w-3.5 text-amber-400/80" />
               <span>+ Onboard Asset</span>
             </button>
 
             <GuildhallThemeMenu className="px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 border border-white/10 shadow-sm transition" />
             <UiVersionToggle />
 
-            <Button asChild variant="outline" size="sm" className="border-white/10 bg-white/[0.05] text-zinc-200 hover:text-white hover:bg-white/10 rounded-xl px-3 py-1.5 text-xs font-mono font-semibold shadow-sm">
+            <Button asChild variant="outline" size="sm" className="border-white/10 bg-white/[0.05] text-zinc-300 hover:text-white hover:bg-white/10 rounded-xl px-3 py-1.5 text-xs font-mono font-medium shadow-sm">
               <Link href="/">
-                <ArrowRight className="h-3.5 w-3.5 rotate-180 mr-1.5 text-cyan-400" />
+                <ArrowRight className="h-3.5 w-3.5 rotate-180 mr-1.5 text-zinc-400" />
                 <span>Exit to Landing</span>
               </Link>
             </Button>

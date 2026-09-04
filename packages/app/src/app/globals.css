@@ -69,7 +69,8 @@
 }
 
 .dark,
-.theme-promethean-citadel {
+.theme-promethean-citadel,
+.theme-citadel {
   --guildhall-bg: #07090e;
   --guildhall-bg-rgb: 7 9 14;
   --guildhall-panel: #0d1219;

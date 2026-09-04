@@ -16,6 +16,7 @@ import {
     Terminal,
     Palette,
     FileText,
+    Gamepad2,
     ChevronUp,
     Command,
     X
@@ -141,7 +142,7 @@ function SettingsPanel({ onClose, isLatex }: { onClose: () => void; isLatex: boo
             activeBg: 'bg-emerald-500/20 border-emerald-500/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]',
         },
         {
-            id: 'latex',
+            id: 'theme-latex',
             label: 'LaTeX',
             description: 'Print Medium · Document Interface',
             icon: FileText,
@@ -150,27 +151,36 @@ function SettingsPanel({ onClose, isLatex }: { onClose: () => void; isLatex: boo
             activeBg: 'bg-amber-800/20 border-amber-700/60 shadow-[0_0_20px_rgba(180,120,40,0.2)]',
         },
         {
-            id: 'phosphor',
+            id: 'theme-16bit',
+            label: '16-Bit',
+            description: 'Retro Substrate · Pixel Command',
+            icon: Gamepad2,
+            color: 'text-yellow-400',
+            bg: 'bg-yellow-500/10 border-yellow-500/30',
+            activeBg: 'bg-yellow-500/20 border-yellow-500/60 shadow-[0_0_20px_rgba(234,179,8,0.2)]',
+        },
+        {
+            id: 'theme-phosphor',
             label: 'Phosphor',
-            description: 'CLI Only · Red Terminal Interface',
+            description: 'CRT Terminal · Green Monochrome',
             icon: Terminal,
-            color: 'text-red-500',
-            bg: 'bg-red-950/20 border-red-900/30',
-            activeBg: 'bg-red-900/30 border-red-500/60 shadow-[0_0_20px_rgba(239,68,68,0.2)]',
+            color: 'text-emerald-400',
+            bg: 'bg-emerald-950/20 border-emerald-900/30',
+            activeBg: 'bg-emerald-900/30 border-emerald-500/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]',
         },
     ];
 
     const handleThemeSelect = (id: string) => {
-        if (id === 'phosphor') {
+        if (id === 'theme-phosphor' || id === 'phosphor') {
             togglePhosphorMode();
-        } else {
-            if (isPhosphorMode) togglePhosphorMode(); // exit phosphor first
-            if (setTheme) setTheme(id);
+        } else if (isPhosphorMode) {
+            togglePhosphorMode(); // exit phosphor first
         }
+        if (setTheme) setTheme(id);
         onClose();
     };
 
-    const activeTheme = isPhosphorMode ? 'phosphor' : currentTheme;
+    const activeTheme = isPhosphorMode ? 'theme-phosphor' : (currentTheme === 'dark' ? 'dark' : currentTheme);
 
     return (
         <motion.div
@@ -186,13 +196,9 @@ function SettingsPanel({ onClose, isLatex }: { onClose: () => void; isLatex: boo
         >
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-                <div>
-                    <p className={`text-xs font-mono font-black uppercase tracking-widest ${isLatex ? 'text-stone-900' : 'text-white'}`}>
-                        Interface Mode
-                    </p>
-                    <p className={`text-[9px] font-mono uppercase tracking-wider mt-0.5 ${isLatex ? 'text-stone-400' : 'text-zinc-500'}`}>
-                        Select your command interface
-                    </p>
+                <div className="flex items-center space-x-2">
+                    <Palette className={`w-4 h-4 ${isLatex ? 'text-stone-700' : 'text-zinc-400'}`} />
+                    <h3 className={`text-xs font-bold uppercase tracking-wider ${isLatex ? 'text-stone-900' : 'text-white'}`}>Substrate Visual Theme</h3>
                 </div>
                 <button onClick={onClose} className={`p-1.5 rounded-lg transition-colors ${isLatex ? 'hover:bg-stone-100 text-stone-400' : 'hover:bg-white/10 text-zinc-500'}`}>
                     <X className="w-3.5 h-3.5" />
@@ -220,7 +226,7 @@ function SettingsPanel({ onClose, isLatex }: { onClose: () => void; isLatex: boo
                                 <p className={`text-[9px] font-mono mt-0.5 ${isLatex ? 'text-stone-400' : 'text-zinc-500'}`}>{theme.description}</p>
                             </div>
                             {isActive && (
-                                <div className={`w-2 h-2 rounded-full ${theme.id === 'phosphor' ? 'bg-red-500' : theme.id === 'latex' ? 'bg-amber-600' : 'bg-emerald-500'}`} />
+                                <div className={`w-2 h-2 rounded-full ${theme.id === 'theme-phosphor' ? 'bg-emerald-500' : theme.id === 'theme-latex' ? 'bg-amber-600' : theme.id === 'theme-16bit' ? 'bg-yellow-400' : 'bg-emerald-400'}`} />
                             )}
                         </button>
                     );

@@ -238,33 +238,33 @@ export function SpatialMapSubstrate() {
         </div>
 
         {/* View Mode & Reality Filters */}
-        <div className="flex items-center space-x-1 pointer-events-auto glass-panel-specular p-1 rounded-2xl shadow-lg">
+        <div className="flex items-center space-x-1 pointer-events-auto glass-panel-specular p-1 rounded-2xl shadow-lg border border-white/10">
           <button
             onClick={() => setMapMode('SURFACE')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
               mapMode === 'SURFACE'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(16,185,129,0.3)]'
-                : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.15)]'
+                : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Surface GIS
           </button>
           <button
             onClick={() => setMapMode('ORBITAL')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
               mapMode === 'ORBITAL'
-                ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(6,182,212,0.3)]'
-                : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
+                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.15)]'
+                : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Orbital
           </button>
           <button
             onClick={() => setMapMode('TOPOLOGY')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
               mapMode === 'TOPOLOGY'
-                ? 'bg-amber-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(245,158,11,0.3)]'
-                : 'text-slate-300 hover:text-white hover:bg-white/[0.06]'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.15)]'
+                : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Topology

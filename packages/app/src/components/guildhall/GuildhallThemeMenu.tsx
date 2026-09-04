@@ -23,16 +23,22 @@ const themes: Array<{ key: ThemeKey; label: string; description: string; icon: t
 ];
 
 export function GuildhallThemeMenu({ className = '' }: { className?: string }) {
-  const { doc, themeState } = useMesh();
+  const { doc, themeState, setTheme } = useMesh();
   const { activateFocusPanel } = useHUD();
   const currentTheme = (themeState?.theme || 'dark') as ThemeKey;
 
   const changeTheme = (value: string) => {
-    if (!doc) return;
     const theme = value as ThemeKey;
-    const ymap = doc.getMap('ui-theme');
-    ymap.set('theme', theme);
-    ymap.set('isAdaptive', false);
+    if (setTheme) {
+      setTheme(theme);
+    }
+    if (doc) {
+      try {
+        const ymap = doc.getMap('ui-theme');
+        ymap.set('theme', theme);
+        ymap.set('isAdaptive', false);
+      } catch {}
+    }
     activateFocusPanel(theme === 'theme-phosphor' ? 'PHOSPHOR' : theme === 'theme-16bit' ? '16BIT' : null);
   };
 

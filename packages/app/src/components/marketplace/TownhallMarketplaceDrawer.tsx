@@ -154,8 +154,8 @@ export function TownhallMarketplaceDrawer() {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-[11px] font-mono whitespace-nowrap transition-all ${
                   isActive
-                    ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_2px_10px_rgba(16,185,129,0.3)]'
-                    : 'bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08]'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm font-semibold'
+                    : 'bg-white/[0.04] text-zinc-400 hover:text-white hover:bg-white/[0.08] border border-white/5'
                 }`}
               >
                 {cat.icon}
@@ -218,55 +218,46 @@ export function TownhallMarketplaceDrawer() {
                     <span 
                       className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md uppercase ${
                         item.realityBoundary === 'LIVE'
-                          ? 'bg-emerald-950/90 text-emerald-300 shadow-[inset_0_1px_0_rgba(52,211,153,0.3)]'
-                          : item.realityBoundary === 'SIM'
-                          ? 'bg-amber-950/90 text-amber-300 shadow-[inset_0_1px_0_rgba(251,191,36,0.3)]'
-                          : 'bg-cyan-950/90 text-cyan-300 shadow-[inset_0_1px_0_rgba(56,189,248,0.3)]'
+                          ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-500/30'
+                          : 'bg-amber-950/80 text-amber-300 border border-amber-500/30'
                       }`}
                     >
                       {item.realityBoundary}
                     </span>
-                    <span className="text-[10px] font-mono font-medium text-slate-400">
-                      {item.status}
+                    <span className="text-[10px] font-mono text-slate-400">
+                      {item.subtitle}
                     </span>
                   </div>
-                  <h3 className="text-sm font-command font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
+                  <h3 className="text-sm font-command font-bold text-white mt-1 group-hover:text-cyan-300 transition-colors">
                     {item.title}
                   </h3>
                 </div>
 
-                {item.yieldRate && (
-                  <div className="text-right stat-lockup">
-                    <div className="data-kicker text-slate-400">Yield</div>
-                    <div className="text-sm font-mono font-bold text-emerald-400 flex items-center justify-end">
-                      <TrendingUp className="h-3 w-3 mr-1" />
-                      {item.yieldRate}
-                    </div>
+                <div className="text-right shrink-0 stat-lockup">
+                  <div className="text-xs font-mono font-bold text-emerald-400">
+                    {item.metrics.primary}
                   </div>
-                )}
+                  <div className="text-[9px] font-mono text-slate-400">
+                    {item.metrics.secondary}
+                  </div>
+                </div>
               </div>
 
-              {item.subtitle && (
-                <p className="mt-1 text-xs text-slate-300 flex items-center gap-1 font-sans">
-                  <MapPin className="h-3 w-3 text-cyan-400 shrink-0" />
-                  <span>{item.subtitle}</span>
-                </p>
-              )}
+              {/* Card Description */}
+              <p className="mt-2 text-xs text-slate-300 leading-relaxed line-clamp-2">
+                {item.description}
+              </p>
 
-              {item.description && (
-                <p className="mt-2 text-xs text-slate-300 line-clamp-2 leading-relaxed font-sans">
-                  {item.description}
-                </p>
-              )}
-
-              {/* Stats Grid with strict Gestalt proximity */}
-              {item.stats && item.stats.length > 0 && (
-                <div className="mt-3 grid grid-cols-3 gap-2 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] pt-3">
-                  {item.stats.map((stat, idx) => (
-                    <div key={idx} className="bg-black/30 rounded-xl p-2 text-center stat-lockup shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-                      <div className="text-[9px] font-mono uppercase tracking-wider text-slate-400 truncate">{stat.label}</div>
-                      <div className={`text-xs font-mono font-bold ${stat.color || 'text-white'}`}>
-                        {stat.value}
+              {/* Data Badges Grid */}
+              {item.specs && (
+                <div className="mt-3 grid grid-cols-2 gap-2 bg-black/40 rounded-xl p-2.5 border border-white/5">
+                  {Object.entries(item.specs).slice(0, 2).map(([key, val]) => (
+                    <div key={key} className="stat-lockup">
+                      <div className="text-[9px] font-mono uppercase text-slate-400">
+                        {key}
+                      </div>
+                      <div className="text-[11px] font-mono font-semibold text-white truncate">
+                        {val}
                       </div>
                     </div>
                   ))}
@@ -281,9 +272,9 @@ export function TownhallMarketplaceDrawer() {
                     selectItem(item);
                     triggerAgentAction(item.actionType || 'INSPECT', item);
                   }}
-                  className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 shadow-[inset_0_1px_0_rgba(6,182,212,0.4)] text-xs font-mono font-bold transition-all"
+                  className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-zinc-200 hover:text-white text-xs font-mono font-medium transition-all"
                 >
-                  <Sparkles className="h-3 w-3" />
+                  <Sparkles className="h-3 w-3 text-cyan-400/80" />
                   <span>Execute with Promethea</span>
                 </button>
 
@@ -347,7 +338,7 @@ function CompactTownSquareAudio({ onSpeak }: { onSpeak: () => void }) {
   };
 
   return (
-    <div className="mb-4 rounded-2xl p-4 glass-panel-specular shadow-lg border border-amber-500/20 bg-amber-950/20 space-y-3">
+    <div className="mb-4 rounded-2xl p-4 glass-panel-specular shadow-lg border border-white/10 bg-white/[0.02] space-y-3">
       <audio
         ref={audioRef}
         src="/media/How_Sovereign_Smarthoods_reclaim_community_wealth.m4a"
@@ -360,11 +351,11 @@ function CompactTownSquareAudio({ onSpeak }: { onSpeak: () => void }) {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
           </div>
-          <span className="text-xs font-command font-bold text-amber-300">
+          <span className="text-xs font-command font-bold text-amber-300/90">
             Live Sovereign Commons
           </span>
         </div>
-        <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/30">
+        <span className="text-[10px] font-mono text-emerald-400 font-medium bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
           42 Connected
         </span>
       </div>
@@ -374,7 +365,7 @@ function CompactTownSquareAudio({ onSpeak }: { onSpeak: () => void }) {
           <span className="font-command font-bold text-white text-xs truncate">
             Sovereign Smarthoods &amp; Wealth
           </span>
-          <span className="text-[10px] font-mono text-amber-300 ml-2 shrink-0">WebRTC Mesh</span>
+          <span className="text-[10px] font-mono text-amber-400/80 ml-2 shrink-0">WebRTC Mesh</span>
         </div>
 
         {/* Audio Visualizer Equalizer */}
@@ -403,7 +394,7 @@ function CompactTownSquareAudio({ onSpeak }: { onSpeak: () => void }) {
             </button>
             <button
               onClick={togglePlay}
-              className="flex items-center space-x-1 px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs font-mono transition shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+              className="flex items-center space-x-1 px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-mono font-medium transition shadow-sm"
             >
               {isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3 fill-current" />}
               <span>{isPlaying ? 'Pause' : 'Listen Live'}</span>
@@ -414,9 +405,9 @@ function CompactTownSquareAudio({ onSpeak }: { onSpeak: () => void }) {
 
       <button
         onClick={onSpeak}
-        className="w-full flex items-center justify-center space-x-2 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-mono font-bold transition"
+        className="w-full flex items-center justify-center space-x-2 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-zinc-200 hover:text-white text-xs font-mono font-medium transition"
       >
-        <Sparkles className="h-3.5 w-3.5" />
+        <Sparkles className="h-3.5 w-3.5 text-amber-400/80" />
         <span>Request Mic with Promethea</span>
       </button>
     </div>
@@ -429,28 +420,28 @@ function CompactMediaShowcase({ onQueryPromethea }: { onQueryPromethea: () => vo
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   return (
-    <div className="mb-4 rounded-2xl p-4 glass-panel-specular shadow-lg border border-cyan-500/20 bg-slate-950/40 space-y-3">
+    <div className="mb-4 rounded-2xl p-4 glass-panel-specular shadow-lg border border-white/10 bg-white/[0.02] space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-command font-bold text-cyan-300 flex items-center gap-1.5">
-          <PlaySquare className="h-3.5 w-3.5 text-cyan-400" />
+        <span className="text-xs font-command font-bold text-zinc-200 flex items-center gap-1.5">
+          <PlaySquare className="h-3.5 w-3.5 text-zinc-400" />
           Sovereign Media Stream
         </span>
-        <span className="text-[10px] font-mono text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded-full border border-cyan-500/30">
+        <span className="text-[10px] font-mono text-cyan-300/90 font-medium bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20">
           IPFS P2P
         </span>
       </div>
 
       {/* Stream Tabs */}
-      <div className="grid grid-cols-2 gap-1.5 p-1 bg-black/40 rounded-xl">
+      <div className="grid grid-cols-2 gap-1.5 p-1 bg-black/40 rounded-xl border border-white/5">
         <button
           onClick={() => {
             setSelectedStream('KEYNOTE');
             setIsPlaying(false);
           }}
-          className={`py-1 text-[11px] font-mono rounded-lg font-bold transition ${
+          className={`py-1 text-[11px] font-mono rounded-lg font-medium transition ${
             selectedStream === 'KEYNOTE'
-              ? 'bg-cyan-500 text-slate-950 shadow-sm'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-white/10 text-white border border-white/15 shadow-sm'
+              : 'text-zinc-400 hover:text-white'
           }`}
         >
           Master Keynote (4K)
@@ -460,10 +451,10 @@ function CompactMediaShowcase({ onQueryPromethea }: { onQueryPromethea: () => vo
             setSelectedStream('RECON');
             setIsPlaying(false);
           }}
-          className={`py-1 text-[11px] font-mono rounded-lg font-bold transition ${
+          className={`py-1 text-[11px] font-mono rounded-lg font-medium transition ${
             selectedStream === 'RECON'
-              ? 'bg-cyan-500 text-slate-950 shadow-sm'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-white/10 text-white border border-white/15 shadow-sm'
+              : 'text-zinc-400 hover:text-white'
           }`}
         >
           Drone Recon (GIS)
