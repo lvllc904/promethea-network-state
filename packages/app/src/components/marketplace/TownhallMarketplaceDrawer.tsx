@@ -233,31 +233,32 @@ export function TownhallMarketplaceDrawer() {
                   </h3>
                 </div>
 
-                <div className="text-right shrink-0 stat-lockup">
-                  <div className="text-xs font-mono font-bold text-emerald-400">
-                    {item.metrics.primary}
+                {item.yieldRate && (
+                  <div className="text-right shrink-0 stat-lockup">
+                    <div className="text-[9px] font-mono uppercase text-slate-400">Yield</div>
+                    <div className="text-xs font-mono font-bold text-emerald-400 flex items-center justify-end">
+                      <TrendingUp className="h-3 w-3 mr-1" />
+                      {item.yieldRate}
+                    </div>
                   </div>
-                  <div className="text-[9px] font-mono text-slate-400">
-                    {item.metrics.secondary}
-                  </div>
-                </div>
+                )}
               </div>
 
               {/* Card Description */}
-              <p className="mt-2 text-xs text-slate-300 leading-relaxed line-clamp-2">
-                {item.description}
-              </p>
+              {item.description && (
+                <p className="mt-2 text-xs text-slate-300 leading-relaxed line-clamp-2 font-sans">
+                  {item.description}
+                </p>
+              )}
 
               {/* Data Badges Grid */}
-              {item.specs && (
-                <div className="mt-3 grid grid-cols-2 gap-2 bg-black/40 rounded-xl p-2.5 border border-white/5">
-                  {Object.entries(item.specs).slice(0, 2).map(([key, val]) => (
-                    <div key={key} className="stat-lockup">
-                      <div className="text-[9px] font-mono uppercase text-slate-400">
-                        {key}
-                      </div>
-                      <div className="text-[11px] font-mono font-semibold text-white truncate">
-                        {val}
+              {item.stats && item.stats.length > 0 && (
+                <div className="mt-3 grid grid-cols-3 gap-2 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] pt-3">
+                  {item.stats.map((stat, idx) => (
+                    <div key={idx} className="bg-black/30 rounded-xl p-2 text-center stat-lockup shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                      <div className="text-[9px] font-mono uppercase tracking-wider text-slate-400 truncate">{stat.label}</div>
+                      <div className={`text-xs font-mono font-bold ${stat.color || 'text-white'}`}>
+                        {stat.value}
                       </div>
                     </div>
                   ))}
