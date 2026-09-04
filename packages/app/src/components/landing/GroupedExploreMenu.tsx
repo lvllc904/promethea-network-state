@@ -25,6 +25,7 @@ const groups = [
   {
     label: 'Operate',
     items: [
+      { label: 'Audio town square', detail: 'Open-air spatial voice commons.', href: '#audio-commons', icon: ShieldCheck },
       { label: 'Enter cockpit', detail: 'Identity, treasury, and governance.', href: '/dashboard', icon: ShieldCheck },
       { label: 'Org chart', detail: 'Credentialed offices and stewards.', href: '/org-chart', icon: Building2 },
       { label: 'Pitch deck', detail: 'Capital mechanics and architecture.', href: '/pitch-deck.html', icon: BookOpen, external: true },

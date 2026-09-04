@@ -3,46 +3,120 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Command, ExternalLink, Search, Settings2, ShieldCheck, Sparkles } from 'lucide-react';
-import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@promethea/ui';
+import { ArrowRight, ShieldCheck, Sparkles, SlidersHorizontal, Bot, Map } from 'lucide-react';
+import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@promethea/ui';
 import { useHUD } from '@/lib/hud-store';
-import { NetworkStateAccordion } from './NetworkStateAccordion';
-import { MapViewport } from './MapViewport';
-import { CockpitStatusBar } from './CockpitStatusBar';
 import { GuildhallThemeMenu } from '@/components/guildhall/GuildhallThemeMenu';
 import { UiVersionToggle } from '@/components/layout/UiVersionToggle';
-import { GuildhallPanel } from '@/components/guildhall/GuildhallPanel';
-import { CommandCenter } from './CommandCenter';
-import { OperationalPanel } from './OperationalPanel';
-import { HoldingsPanel } from './HoldingsPanel';
-import { PrometheaConcierge } from './PrometheaConcierge';
-import { AssetListingModal } from './AssetListingModal';
 import { OneClickLister } from '@promethea/components';
 
-export function GuildhallCockpit({ children }: { children?: ReactNode }) {
+// 3-Pillar Spatial Cockpit Components
+import { SpatialBusProvider, useSpatialBus } from '@/context/SpatialBusContext';
+import { SpatialMapSubstrate } from '@/components/spatial/SpatialMapSubstrate';
+import { TownhallMarketplaceDrawer } from '@/components/marketplace/TownhallMarketplaceDrawer';
+import { PrometheaCockpitDock } from '@/components/ai/PrometheaCockpitDock';
+
+function CockpitViewInner({ children }: { children?: ReactNode }) {
   const { assets, setHUDState } = useHUD();
-  const [operatorToolsOpen, setOperatorToolsOpen] = useState(false);
   const [showAssetModal, setShowAssetModal] = useState(false);
+  const { isMarketplaceOpen, isCockpitOpen, setIsMarketplaceOpen, setIsCockpitOpen } = useSpatialBus();
 
   return (
-    <div className="min-h-[100dvh] bg-guildhall-bg text-guildhall-text">
-      <header className="sticky top-0 z-40 border-b border-guildhall-line bg-guildhall-bg/95 backdrop-blur-sm">
-        <div className="mx-auto flex min-h-[4.5rem] max-w-[1800px] items-center justify-between gap-4 px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-guildhall-consensus"><span className="flex h-9 w-9 items-center justify-center bg-guildhall-identity font-command text-xs font-bold text-guildhall-bg">PNS</span><span className="hidden font-command text-sm font-semibold tracking-[0.14em] sm:inline">Sovereign cockpit</span></Link>
-          <div className="flex items-center gap-2"><span className="hidden items-center gap-2 text-xs text-guildhall-muted lg:flex"><ShieldCheck className="h-4 w-4 text-guildhall-treasury" />Guest-safe operator view</span><GuildhallThemeMenu /><UiVersionToggle /><Button asChild variant="outline" size="sm" className="border-guildhall-line bg-transparent text-guildhall-text hover:bg-guildhall-panel-raised"><Link href="/"><ArrowRight className="h-4 w-4 rotate-180" />Exit</Link></Button></div>
+    <div className="relative min-h-[100dvh] bg-[#07090e] text-white overflow-hidden flex flex-col">
+      {/* Top Sovereign Bar */}
+      <header className="relative z-40 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl shrink-0">
+        <div className="mx-auto flex h-16 max-w-[1920px] items-center justify-between gap-4 px-4 sm:px-6">
+          <div className="flex items-center space-x-3">
+            <Link 
+              href="/" 
+              className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+            >
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 font-command text-xs font-black text-slate-950 shadow-[0_0_15px_rgba(0,242,254,0.3)]">
+                PNS
+              </span>
+              <div className="hidden sm:block">
+                <span className="font-command text-sm font-bold tracking-wider text-white">
+                  Promethean Sovereign Cockpit
+                </span>
+                <span className="text-[10px] font-mono text-cyan-400 block -mt-1">
+                  3-BODY SPATIAL OS
+                </span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Center Quick Toggles for View Panels */}
+          <div className="flex items-center space-x-2 bg-slate-900/80 border border-white/10 p-1 rounded-2xl backdrop-blur-md">
+            <button
+              onClick={() => setIsMarketplaceOpen(!isMarketplaceOpen)}
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition ${
+                isMarketplaceOpen
+                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              <SlidersHorizontal className="h-3.5 w-3.5" />
+              <span className="hidden md:inline">Marketplace</span>
+            </button>
+
+            <button
+              onClick={() => setIsCockpitOpen(!isCockpitOpen)}
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition ${
+                isCockpitOpen
+                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              <Bot className="h-3.5 w-3.5" />
+              <span className="hidden md:inline">Promethea</span>
+            </button>
+          </div>
+
+          {/* Right Header Actions */}
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setShowAssetModal(true)}
+              className="hidden lg:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 border border-emerald-500/30 text-xs font-mono font-bold transition"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>+ Onboard Asset</span>
+            </button>
+
+            <GuildhallThemeMenu />
+            <UiVersionToggle />
+
+            <Button asChild variant="outline" size="sm" className="border-white/10 bg-transparent text-zinc-300 hover:text-white hover:bg-white/10 rounded-xl">
+              <Link href="/">
+                <ArrowRight className="h-3.5 w-3.5 rotate-180 mr-1" />
+                Exit
+              </Link>
+            </Button>
+          </div>
         </div>
       </header>
 
-      <main className="mx-auto grid max-w-[1800px] gap-px bg-guildhall-line lg:grid-cols-[minmax(22rem,35%)_minmax(0,65%)]">
-        <aside className="flex min-h-[calc(100dvh-4.5rem)] flex-col bg-guildhall-panel px-4 py-5 sm:px-6">
-          <div className="mb-5"><p className="guildhall-kicker text-guildhall-treasury">3-body network state</p><h1 className="mt-2 font-command text-3xl font-semibold tracking-tight">Command column</h1><p className="mt-2 text-sm leading-6 text-guildhall-muted">Use the three primary sections for identity, treasury, and consensus. Advanced tools remain available below.</p></div>
-          <div className="mb-5 border border-guildhall-line bg-guildhall-bg p-3"><div className="flex items-center gap-3"><Search className="h-4 w-4 text-guildhall-muted" /><input aria-label="Search operator actions" placeholder="Search operator actions" className="min-w-0 flex-1 bg-transparent text-sm text-guildhall-text placeholder:text-guildhall-subtle focus:outline-none" /><kbd className="hidden border border-guildhall-line px-2 py-1 font-code text-[11px] text-guildhall-subtle sm:inline">⌘K</kbd></div><div className="mt-3 flex flex-wrap gap-2"><button type="button" onClick={() => setHUDState({ activePillar: 'PASSPORT' })} className="guildhall-control min-h-0 px-2 py-1 text-xs">Citizens</button><button type="button" onClick={() => setHUDState({ cockpitHoldingsTab: 'FINANCIALS' })} className="guildhall-control min-h-0 px-2 py-1 text-xs">Treasury</button><button type="button" onClick={() => setHUDState({ activePillar: 'GOVERNANCE' })} className="guildhall-control min-h-0 px-2 py-1 text-xs">Governance</button><button type="button" onClick={() => setHUDState({ activePillar: 'PULSE' })} className="guildhall-control min-h-0 px-2 py-1 text-xs">Telemetry</button></div></div>
-          <NetworkStateAccordion />
-          {children && <GuildhallPanel className="mt-5" padded={false}><p className="guildhall-label">Route workspace</p><div className="mt-3 text-sm text-guildhall-muted">{children}</div></GuildhallPanel>}
-          <div className="mt-auto space-y-3 pt-6"><div className="flex items-center justify-between border-t border-guildhall-line pt-4"><div><p className="guildhall-label">Operator tools</p><p className="mt-1 text-sm text-guildhall-muted">Agents, chat, exchange, logs, and command palette.</p></div><Settings2 className="h-5 w-5 text-guildhall-muted" aria-hidden="true" /></div><Dialog open={operatorToolsOpen} onOpenChange={setOperatorToolsOpen}><DialogTrigger asChild><Button type="button" variant="outline" className="w-full justify-between border-guildhall-line bg-transparent text-guildhall-text hover:bg-guildhall-panel-raised">Open operator tools <ExternalLink className="h-4 w-4" /></Button></DialogTrigger><DialogContent hiddenTitle="Operator tools" className="max-h-[85dvh] max-w-5xl overflow-y-auto border-guildhall-line bg-guildhall-panel text-guildhall-text"><DialogHeader><DialogTitle className="font-command text-2xl">Operator tools</DialogTitle><DialogDescription className="text-guildhall-muted">Advanced capabilities remain available without competing with the primary three-body state.</DialogDescription></DialogHeader><div className="grid gap-5 lg:grid-cols-2"><GuildhallPanel padded={false}><p className="guildhall-label mb-4">Command palette</p><CommandCenter /></GuildhallPanel><GuildhallPanel padded={false}><p className="guildhall-label mb-4">Concierge</p><PrometheaConcierge onLaunchAssetModal={() => setShowAssetModal(true)} /></GuildhallPanel><GuildhallPanel padded={false}><p className="guildhall-label mb-4">Operational state</p><OperationalPanel /></GuildhallPanel><GuildhallPanel padded={false}><p className="guildhall-label mb-4">Holdings and financials</p><HoldingsPanel /></GuildhallPanel></div></DialogContent></Dialog><Button type="button" onClick={() => setShowAssetModal(true)} className="w-full bg-guildhall-treasury text-guildhall-bg hover:bg-emerald-300"><Sparkles className="h-4 w-4" />Onboard an asset</Button></div>
-        </aside>
-        <section className="flex min-h-[calc(100dvh-4.5rem)] flex-col bg-guildhall-bg p-3 sm:p-5"><MapViewport /><CockpitStatusBar /></section>
+      {/* Main Full-Viewport Spatial Stage */}
+      <main className="relative flex-1 w-full h-[calc(100dvh-4rem)] overflow-hidden">
+        {/* Pillar 1: Spatial Map Substrate (The Canvas Background) */}
+        <SpatialMapSubstrate />
+
+        {/* Pillar 2: Townhall / Marketplace Overlay Feed (Left Drawer) */}
+        <TownhallMarketplaceDrawer />
+
+        {/* Pillar 3: Promethea Sovereign Concierge Cockpit (Right Dock) */}
+        <PrometheaCockpitDock />
+
+        {/* Route Workspace Overlay (if sub-routes are opened) */}
+        {children && (
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 max-w-4xl w-[90%] pointer-events-none">
+            <div className="pointer-events-auto bg-slate-950/90 border border-white/10 rounded-2xl p-4 backdrop-blur-xl shadow-2xl">
+              {children}
+            </div>
+          </div>
+        )}
       </main>
+
+      {/* Sovereign 1-Click Asset Ingress Modal */}
       {showAssetModal && (
         <Dialog open={showAssetModal} onOpenChange={setShowAssetModal}>
           <DialogContent hiddenTitle="One-Click Asset Ingress" className="max-w-2xl border-white/10 bg-slate-950 text-white">
@@ -71,7 +145,7 @@ export function GuildhallCockpit({ children }: { children?: ReactNode }) {
                 });
                 setShowAssetModal(false);
               }}
-              onAutoList={async (file) => {
+              onAutoList={async () => {
                 return { error: 'fallback_active' };
               }}
             />
@@ -79,5 +153,13 @@ export function GuildhallCockpit({ children }: { children?: ReactNode }) {
         </Dialog>
       )}
     </div>
+  );
+}
+
+export function GuildhallCockpit({ children }: { children?: ReactNode }) {
+  return (
+    <SpatialBusProvider>
+      <CockpitViewInner>{children}</CockpitViewInner>
+    </SpatialBusProvider>
   );
 }

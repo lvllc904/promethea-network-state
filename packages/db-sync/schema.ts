@@ -4,15 +4,7 @@
  * Replaces centralized relational databases with verifiable, asynchronous event streams.
  */
 
-export interface BasicInformationTimestamp {
-  cid: string; // IPFS Content Identifier
-  parentCids: string[]; // Parent node pointers forming the Merkle DAG
-  authorDid: string; // Author's Decentralized Identifier
-  actionType: 'CITIZEN_REGISTRATION' | 'LAND_CLAIM' | 'EXERGY_METRIC_REPORT' | 'YIELD_DISBURSEMENT' | 'GOVERNANCE_VOTE';
-  payload: Record<string, unknown>;
-  timestamp: number;
-  signature: string; // Cryptographically signed by author's private key
-}
+export * from './src/schema';
 
 export interface StateRootProjection {
   stateRootHash: string; // Global State Root Ψ

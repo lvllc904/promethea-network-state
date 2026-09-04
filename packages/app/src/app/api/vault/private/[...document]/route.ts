@@ -65,9 +65,34 @@ export async function GET(
   const timestamp = new Date().toISOString();
 
   try {
-    // 5. Generate Base Document Buffer
+    // 5. Generate or Load Base Document Buffer
+    let basePdfBytes: Uint8Array;
     const seriesName = req.nextUrl.searchParams.get('series') || 'Series-Wadi-Ham';
-    const basePdfBytes = await createSamplePpmDocument(seriesName);
+    
+    // Map document alias to physical files in the New directory
+    const fs = await import('fs');
+    const path = await import('path');
+    const newDir = path.resolve(process.cwd(), '../../New');
+    const docMap: Record<string, string> = {
+      'substrate': 'The_Sovereign_Substrate.pdf',
+      'the-sovereign-substrate': 'The_Sovereign_Substrate.pdf',
+      'tactical': 'Promethea_Tactical_Substrate.pdf',
+      'promethea-tactical-substrate': 'Promethea_Tactical_Substrate.pdf',
+      'lvhllc-specs': 'tpns-lvhllc-onboarding-specs.pdf',
+      'miri-homes': 'tpns-miri-homes-briefing-memo.pdf',
+      'banking-compliance': 'tpns-banking-compliance-cover-letter.pdf',
+      'valuation-report': 'tpns-institutional-valuation-report.pdf',
+      'wadi-pitch-deck': 'tpns-wadi-sovereign-pitch-deck-v5.pdf',
+    };
+
+    const targetFileName = docMap[documentPath.toLowerCase()];
+    const physicalPath = targetFileName ? path.join(newDir, targetFileName) : null;
+
+    if (physicalPath && fs.existsSync(physicalPath)) {
+      basePdfBytes = new Uint8Array(fs.readFileSync(physicalPath));
+    } else {
+      basePdfBytes = await createSamplePpmDocument(seriesName);
+    }
 
     // 6. Hard-Stamp Dynamic Forensic Watermark (Section 7.0)
     const watermarkedBytes = await watermarkPdfBytes(basePdfBytes, {

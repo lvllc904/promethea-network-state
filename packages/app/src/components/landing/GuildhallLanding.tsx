@@ -13,6 +13,7 @@ import { TruthfulMetrics } from './TruthfulMetrics';
 import { LandingMediaGrid } from './LandingMediaGrid';
 import { LandingVideoShowcase } from './LandingVideoShowcase';
 import { LandingInfographic } from './LandingInfographic';
+import { AudioTownSquare } from './AudioTownSquare';
 import { GuildhallThemeMenu } from '@/components/guildhall/GuildhallThemeMenu';
 import { UiVersionToggle } from '@/components/layout/UiVersionToggle';
 import { fetchNetworkSignals } from '@/lib/guildhall-data';
@@ -142,6 +143,16 @@ export function GuildhallLanding() {
         {/* Video showcase */}
         <section className="mx-auto max-w-[1440px] px-2 sm:px-4 py-4 sm:py-6">
           <LandingVideoShowcase />
+        </section>
+
+        {/* Soft divider */}
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)' }} />
+        </div>
+
+        {/* Spatial Audio Commons & Town Square */}
+        <section id="audio-commons" className="mx-auto max-w-[1440px] px-2 sm:px-4 py-4 sm:py-6">
+          <AudioTownSquare />
         </section>
 
         {/* Foundation / protocol bento */}
